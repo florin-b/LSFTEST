@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Lite SFA Test</string>
+    <string name="title">Lite SFA</string>
+    <string name="menu_settings">Settings</string>
+    <string name="img_content_desc">abc</string>
+
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="headerColor">#0E7E0E</color>
+    <color name="artRowColor">#636363</color>
+    <color name="antetColor1">#008B8B</color>
+    <color name="detColor1">#218868</color>
+    <color name="rowColor1">#A67D17</color>
+    <color name="statusCmdColor">#009ACD</color>
+    <color name="discountColor1">#007CA6</color>
+    <color name="cmpColor1">#208722</color>
+    <color name="agentiColor">#4A708B</color>
+    <color name="spinnerOptions2">#b8860b</color>
+    <color name="customColor2">#8b8989</color>
+    <color name="spinnerOptions3">#00A86B</color>
+    <color name="warningColor2">#006B3C</color>
+    
+    <color name="listArticol">#9E5510</color>
+    <color name="listCodArticol">#C4B014</color>
+    
+   
+
+    <string name="strCauta">Caut\u0103</string>
+    <string name="strDistrib">Client distribu\u0163ie</string>
+    <string name="strCmdAngaj">Cmd angaj</string>
+	<string name="strAdrNou">Adres\u0103 de livrare nou\u0103:</string>
+
+    <color name="editTextColor1">#01796F</color>
+
+    <string name="strSelecteaza">Selecteaz\u0103</string>
+
+    <color name="detColor2">#4682b4</color>
+    <color name="dropColor1">#CCE0B9</color>
+    <color name="dropColor2">#339900</color>
+
+    <string name="strPret">Pre\u021B</string>
+    <string name="strSalveaza">Salveaz\u0103</string>
+    <string name="strSalveazaComanda">Salveaz\u0103 comanda</string>
+    <string name="strRevenire">Revenire</string>
+
+    <color name="detColor4">#1560BD</color>
+
+    <string name="strClienti">Clien\u021Bi</string>
+    <string name="strGrupClnt">Grup clien\u0163i</string>
+    <string name="strAproba">Aprob\u0103</string>
+    <string name="strConditii">Condi\u021Bii</string>
+    <string name="strInapoi">\u00CEnapoi</string>
+
+    <color name="detColor5">#B8860B</color>
+    <color name="detColor6">#8DB600</color>
+    <color name="detColor7">#6D8F00</color>
+    <color name="backColorCmdList">#DEDEDE</color>
+    <color name="backColorArtList">#E6E6E6</color>
+    <color name="backColorCond">#EEF3E2</color>
+    <color name="detColor9">#1874CD</color>
+    <color name="detColor10">#4B0082</color>
+    <color name="detColor11">#C1CDC1</color>
+    <color name="marjaColor1">#16C916</color>
+    <color name="marjaAlert1">#CC7700</color>
+
+    <string name="strGliseaza">Gliseaz\u0103 pentru acces</string>
+    <string name="strAdauga">Adaug\u0103</string>
+    <string name="strAfisRaport">Afi\u015Feaz\u0103 raport</string>
+    <string name="strAfis">Afi\u015Feaz\u0103</string>
+    <string name="strMail">Expediaz\u0103 mail</string>
+
+    <color name="pressed_item_color">#7DCBE7</color>
+    <color name="backColorObiective1">#ADD8E6</color>
+    <color name="foreColorObiective1">#36648B</color>
+    <color name="foreColorText1">#CD6600</color>
+    <color name="artRowColor1">#5C87AB</color>
+    <string name="salveaza">Salveaz\u0103</string>
+    <string name="nr_inreg_reg_comertului">Nr. inreg. reg. comertului</string>
+    <string name="afiseaza">Afi\u015Feaz\u0103</string>
+    
+    <color name="rounded_shape_bkg">#F0F0F0</color>
+    <color name="color_light_green">#008100</color>
+    <color name="color_light_blue">#3C838B</color>
+    
+    
+    
+
+</resources>

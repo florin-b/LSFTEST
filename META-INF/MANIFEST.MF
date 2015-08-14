@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: LogonScreen
+Bundle-SymbolicName: LogonScreen
+Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: LogonScreen.jar,
+ Android/Tableta LITE REPORTS/activation.jar,
+ Android/Tableta LITE REPORTS/additionnal.jar,
+ Android/Tableta LITE REPORTS/mail.jar,
+ Eclipse/commons-net-3.0.1.jar,
+ Eclipse/ksoap2-android-assembly-2.6.0-jar-with-dependencies.jar,
+ Eclipse/android-zoom-view.jar,
+ Eclipse/android-support-v4.jar,
+ Eclipse/poi-3.9-20121203.jar,
+ Android/android-sdk/platforms/android-15/android.jar,
+ libs/butterknife-5.1.2.jar
+Export-Package: adapters,
+ beans,
+ dialogs,
+ enums,
+ listeners,
+ lite.sfa.test,
+ model,
+ utils
+Require-Bundle: LogonScreen
+Import-Package: lite.sfa.test

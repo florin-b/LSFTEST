@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_new_form"
+        android:showAsAction="ifRoom|withText"
+        android:title="Optiuni">
+        <menu>
+            <item
+                android:id="@+id/menuCreare"
+                android:title="Creare"/>
+            <item
+                android:id="@+id/menuModificare"
+                android:title="Modificare"/>
+            <item
+                android:id="@+id/menuUrmarire"
+                android:title="Urmarire"/>
+        </menu>
+    </item>
+
+</menu>
