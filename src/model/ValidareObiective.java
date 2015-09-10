@@ -13,6 +13,11 @@ public class ValidareObiective {
 			Toast.makeText(context, "Completati numele obiectivului", Toast.LENGTH_SHORT).show();
 			return false;
 		}
+		
+		if (obiectiv.getStadiuObiectiv().toString().trim().equals("-1")) {
+			Toast.makeText(context, "Completati starea obiectivului", Toast.LENGTH_SHORT).show();
+			return false;
+		}
 
 		if (obiectiv.getAdresaSer().toString().trim().length() == 0) {
 			Toast.makeText(context, "Completati adresa obiectivului", Toast.LENGTH_SHORT).show();
@@ -34,12 +39,7 @@ public class ValidareObiective {
 			return false;
 		}
 
-		/*
-		if (obiectiv.getListConstructori().size() == 0) {
-			Toast.makeText(context, "Adaugati cel putin un client", Toast.LENGTH_SHORT).show();
-			return false;
-		}
-		*/
+		
 
 		return true;
 	}

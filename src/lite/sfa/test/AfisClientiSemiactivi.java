@@ -5,6 +5,7 @@
 package lite.sfa.test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import listeners.AsyncTaskListener;
@@ -12,17 +13,22 @@ import model.HandleJSONData;
 import model.UserInfo;
 import adapters.ClientiSemiactiviAdapter;
 import android.app.Fragment;
-import android.app.LauncherActivity.ListItem;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import beans.BeanClientSemiactiv;
+import dialogs.IstoricSemiactiviDialog;
 
-public class AfisClientiSemiactivi extends Fragment implements AsyncTaskListener {
+public class AfisClientiSemiactivi extends Fragment implements AsyncTaskListener, OnClickListener {
 
 	private String reportParams = "0";
 	static ListView listViewClSemiactivi;
@@ -34,11 +40,19 @@ public class AfisClientiSemiactivi extends Fragment implements AsyncTaskListener
 	Integer listViewSelPos = -1;
 	String selectedDocument = "-1";
 
-	public static String[] rapHeader = { "nrCrt", "numeClient", "codClient", "numeAgent", "stare" };
+	private enum ENUM_SORT_BY {
+		NUME_CLIENT, JUDET, LOCALITATE, VANZARI_MEDII
+	};
 
 	public static String upload = " ";
 	public static String GalleryImage;
-	private ArrayList<ListItem> myItems = new ArrayList<ListItem>();
+
+	private TextView textNumeClient, textJudet, textLocalitate, textVanzMed;
+
+	private boolean sortAscNumeClient = true, sortAscJudet = true, sortAscLocalitate = true, sortAscVanzMed = true;
+	private ArrayList<BeanClientSemiactiv> clientiList;
+	private HandleJSONData objClientList;
+	private BeanClientSemiactiv clientSelected;
 
 	public static final AfisClientiSemiactivi newInstance() {
 
@@ -56,6 +70,7 @@ public class AfisClientiSemiactivi extends Fragment implements AsyncTaskListener
 		try {
 
 			listViewClSemiactivi = (ListView) v.findViewById(R.id.listClientiInactivi);
+			setListenerClSemiactivi();
 
 			this.layoutArtDoc = (LinearLayout) v.findViewById(R.id.layout_artvmd_vanz);
 
@@ -67,16 +82,53 @@ public class AfisClientiSemiactivi extends Fragment implements AsyncTaskListener
 			if (ClientiSemiactivi.selectedFiliala.equals("-1")) {
 				Toast.makeText(getActivity(), "Selectati agentul sau filiala!", Toast.LENGTH_SHORT).show();
 			} else {
-
 				performGetRaportData();
-
 			}
+
+			addLayoutComponents(v);
 
 		} catch (Exception e) {
 			Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
 		}
 
 		return v;
+
+	}
+
+	private void setListenerClSemiactivi() {
+		listViewClSemiactivi.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				clientSelected = (BeanClientSemiactiv) parent.getAdapter().getItem(position);
+				getIstoricClient(clientSelected.getCodClient());
+
+				return false;
+			}
+		});
+
+	}
+
+	private void getIstoricClient(String codClient) {
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("codClient", codClient);
+
+		AsyncTaskListener contextListener = (AsyncTaskListener) AfisClientiSemiactivi.this;
+		AsyncTaskWSCall call = new AsyncTaskWSCall(getActivity(), contextListener, "getIstoricClientSemiactiv", params);
+		call.getCallResultsFromFragment();
+	}
+
+	private void addLayoutComponents(View v) {
+		textNumeClient = (TextView) v.findViewById(R.id.textNumeClient);
+		textNumeClient.setOnClickListener(this);
+
+		textJudet = (TextView) v.findViewById(R.id.textJudet);
+		textJudet.setOnClickListener(this);
+
+		textLocalitate = (TextView) v.findViewById(R.id.textLocalitate);
+		textLocalitate.setOnClickListener(this);
+
+		textVanzMed = (TextView) v.findViewById(R.id.textVanzMed);
+		textVanzMed.setOnClickListener(this);
 
 	}
 
@@ -105,23 +157,25 @@ public class AfisClientiSemiactivi extends Fragment implements AsyncTaskListener
 
 	}
 
+	private void afisIstoric(String reportData) {
+		objClientList = new HandleJSONData(getActivity(), reportData);
+		objClientList.decodeIstoricSemiactivi();
+		IstoricSemiactiviDialog dialog = new IstoricSemiactiviDialog(getActivity(), objClientList.decodeIstoricSemiactivi(), clientSelected.getNumeClient());
+		dialog.show();
+
+	}
+
 	private void fillRaportData(String reportData) {
 
-		try {
+		objClientList = new HandleJSONData(getActivity(), reportData);
+		clientiList = objClientList.decodeJSONClientiSemiactivi();
 
-			HandleJSONData objClientList = new HandleJSONData(getActivity(), reportData);
-			ArrayList<BeanClientSemiactiv> clientiArray = objClientList.decodeJSONClientiSemiactivi();
+		if (clientiList.size() > 0) {
+			adapterClSemiactivi = new ClientiSemiactiviAdapter(getActivity(), clientiList);
+			listViewClSemiactivi.setAdapter(adapterClSemiactivi);
 
-			if (clientiArray.size() > 0) {
-				adapterClSemiactivi = new ClientiSemiactiviAdapter(getActivity(), clientiArray);
-				listViewClSemiactivi.setAdapter(adapterClSemiactivi);
-
-			} else {
-				Toast.makeText(getActivity(), "Nu exista date!", Toast.LENGTH_LONG).show();
-			}
-
-		} catch (Exception e) {
-			Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
+		} else {
+			Toast.makeText(getActivity(), "Nu exista date!", Toast.LENGTH_LONG).show();
 		}
 
 	}
@@ -129,6 +183,127 @@ public class AfisClientiSemiactivi extends Fragment implements AsyncTaskListener
 	public void onTaskComplete(String methodName, Object result) {
 		if (methodName.equals("getClientiSemiactivi")) {
 			fillRaportData((String) result);
+		}
+
+		if (methodName.equals("getIstoricClientSemiactiv")) {
+			afisIstoric((String) result);
+		}
+
+	}
+
+	private void populateListClienti(ArrayList<BeanClientSemiactiv> listaClienti) {
+
+		if (listaClienti != null) {
+			ClientiSemiactiviAdapter adapter = new ClientiSemiactiviAdapter(getActivity(), listaClienti);
+			listViewClSemiactivi.setAdapter(adapter);
+		}
+
+	}
+
+	private void sortNumeClient() {
+		setHeaderFontStyle();
+		setTextIcon(textNumeClient, sortAscNumeClient);
+
+		populateListClienti(sortList(clientiList, !sortAscNumeClient, ENUM_SORT_BY.NUME_CLIENT));
+
+		sortAscNumeClient = !sortAscNumeClient;
+		textNumeClient.setTypeface(Typeface.DEFAULT_BOLD);
+	}
+
+	private void sortJudet() {
+		setHeaderFontStyle();
+		setTextIcon(textJudet, sortAscJudet);
+
+		populateListClienti(sortList(clientiList, !sortAscJudet, ENUM_SORT_BY.JUDET));
+
+		sortAscJudet = !sortAscJudet;
+		textJudet.setTypeface(Typeface.DEFAULT_BOLD);
+	}
+
+	private void sortLocalitate() {
+		setHeaderFontStyle();
+		setTextIcon(textLocalitate, sortAscLocalitate);
+
+		populateListClienti(sortList(clientiList, !sortAscLocalitate, ENUM_SORT_BY.LOCALITATE));
+
+		sortAscLocalitate = !sortAscLocalitate;
+		textLocalitate.setTypeface(Typeface.DEFAULT_BOLD);
+	}
+
+	private void sortVanzariMedii() {
+		setHeaderFontStyle();
+		setTextIcon(textVanzMed, sortAscVanzMed);
+
+		populateListClienti(sortList(clientiList, !sortAscVanzMed, ENUM_SORT_BY.VANZARI_MEDII));
+
+		sortAscVanzMed = !sortAscVanzMed;
+		textVanzMed.setTypeface(Typeface.DEFAULT_BOLD);
+	}
+
+	private void setTextIcon(TextView textView, boolean tipSort) {
+		if (tipSort) {
+			textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.sort_down_green, 0, 0, 0);
+		} else {
+			textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.sort_up_green, 0, 0, 0);
+		}
+	}
+
+	private ArrayList<BeanClientSemiactiv> sortList(ArrayList<BeanClientSemiactiv> listaClienti, boolean ascending, ENUM_SORT_BY tipSort) {
+
+		switch (tipSort) {
+		case NUME_CLIENT:
+			Collections.sort(listaClienti, new BeanClientSemiactiv.CompareNumeClient(ascending));
+			break;
+
+		case JUDET:
+			Collections.sort(listaClienti, new BeanClientSemiactiv.CompareJudet(ascending));
+			break;
+
+		case LOCALITATE:
+			Collections.sort(listaClienti, new BeanClientSemiactiv.CompareLocalitate(ascending));
+			break;
+
+		case VANZARI_MEDII:
+			Collections.sort(listaClienti, new BeanClientSemiactiv.CompareVanzMed(ascending));
+			break;
+
+		default:
+			break;
+
+		}
+
+		return listaClienti;
+	}
+
+	private void setHeaderFontStyle() {
+		textNumeClient.setTypeface(Typeface.DEFAULT);
+		textJudet.setTypeface(Typeface.DEFAULT);
+		textLocalitate.setTypeface(Typeface.DEFAULT);
+		textVanzMed.setTypeface(Typeface.DEFAULT);
+
+	}
+
+	public void onClick(View v) {
+
+		switch (v.getId()) {
+		case R.id.textNumeClient:
+			sortNumeClient();
+			break;
+
+		case R.id.textJudet:
+			sortJudet();
+			break;
+
+		case R.id.textLocalitate:
+			sortLocalitate();
+			break;
+
+		case R.id.textVanzMed:
+			sortVanzariMedii();
+			break;
+
+		default:
+			break;
 		}
 
 	}

@@ -39,7 +39,7 @@ public class ClientiSemiactivi extends Activity {
 	public static ArrayList<String> artSelListName = new ArrayList<String>();
 	public static ArrayList<String> artSelListCode = new ArrayList<String>();
 
-	private static String tipArticol = "A";
+	
 
 	private static ArrayList<String> docSelList = new ArrayList<String>();
 

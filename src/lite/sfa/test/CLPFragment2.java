@@ -176,9 +176,9 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		listArtCmdClp = (ListView) v.findViewById(R.id.listArtCmdClp);
 
 		listArtSelClp = new ArrayList<HashMap<String, String>>();
-		adapterListArtClp = new SimpleAdapter(getActivity(), listArtSelClp, R.layout.articol_row_clp, new String[] { "nrCrt", "numeArt", "codArt",
-				"cantArt", "depozit", "Umb", "sintetic", "greutate", "umgreutate" }, new int[] { R.id.textNrCrt, R.id.textNumeArt, R.id.textCodArt,
-				R.id.textCantArt, R.id.textDepozit, R.id.textCantUmb, R.id.textSintetic, R.id.textGreutate, R.id.textUmGreutate }
+		adapterListArtClp = new SimpleAdapter(getActivity(), listArtSelClp, R.layout.articol_row_clp, new String[] { "nrCrt", "numeArt", "codArt", "cantArt",
+				"depozit", "Umb", "sintetic", "greutate", "umgreutate" }, new int[] { R.id.textNrCrt, R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt,
+				R.id.textDepozit, R.id.textCantUmb, R.id.textSintetic, R.id.textGreutate, R.id.textUmGreutate }
 
 		);
 
@@ -208,8 +208,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		spinnerUMClp = (Spinner) v.findViewById(R.id.spinnerUMClp);
 
 		listUmVanz = new ArrayList<HashMap<String, String>>();
-		adapterUmVanz = new SimpleAdapter(getActivity(), listUmVanz, R.layout.simplerowlayout, new String[] { "rowText" },
-				new int[] { R.id.textRowName });
+		adapterUmVanz = new SimpleAdapter(getActivity(), listUmVanz, R.layout.simplerowlayout, new String[] { "rowText" }, new int[] { R.id.textRowName });
 		spinnerUMClp.setAdapter(adapterUmVanz);
 		spinnerUMClp.setVisibility(View.GONE);
 		spinnerUMClp.setOnItemSelectedListener(new OnSelectUnitMas());
@@ -924,18 +923,6 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 				return retVal;
 			}
 
-			if (CreareClp.tipMarfa.trim().toString().equalsIgnoreCase("")) {
-				retVal = "Completati tipul de marfa!";
-				return retVal;
-			}
-
-			if (CreareClp.masaMarfa.trim().toString().equalsIgnoreCase("")) {
-				retVal = "Completati masa !";
-				return retVal;
-			}
-
-			
-
 			if (CLPFragment1.spinnerAgentiCLP.getVisibility() == View.VISIBLE) {
 				if (CLPFragment1.spinnerAgentiCLP.getSelectedItemId() == 0) {
 					retVal = "Selectati agentul!";
@@ -945,6 +932,17 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 		}
 
+		if (CreareClp.tipTransport.toUpperCase().equals("TRAP")) {
+			if (CreareClp.tipMarfa.trim().toString().equalsIgnoreCase("")) {
+				retVal = "Completati tipul de marfa!";
+				return retVal;
+			}
+
+			if (CreareClp.masaMarfa.trim().toString().equalsIgnoreCase("")) {
+				retVal = "Completati masa !";
+				return retVal;
+			}
+		}
 		if (CreareClp.codFilialaDest.trim().toString().equalsIgnoreCase("")) {
 			retVal = "Selectati filiala!";
 			return retVal;
@@ -1011,10 +1009,10 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 			}
 
-			CreareClp.comandaFinala = localCodClient + "#" + CreareClp.codJudet + "#" + CreareClp.oras + "#" + CreareClp.strada + "#"
-					+ CreareClp.persCont + "#" + CreareClp.telefon + "#" + CreareClp.codFilialaDest + "#" + CreareClp.dataLivrare + "#"
-					+ CreareClp.tipPlata + "#" + CreareClp.tipTransport + "#" + depozDest + "#" + CreareClp.selectedAgent + "#" + cmdFasonate + "#"
-					+ numeClientCV + "#" + observatiiCLP + "#" + CreareClp.tipMarfa + "#" + CreareClp.masaMarfa + "#"
+			CreareClp.comandaFinala = localCodClient + "#" + CreareClp.codJudet + "#" + CreareClp.oras + "#" + CreareClp.strada + "#" + CreareClp.persCont
+					+ "#" + CreareClp.telefon + "#" + CreareClp.codFilialaDest + "#" + CreareClp.dataLivrare + "#" + CreareClp.tipPlata + "#"
+					+ CreareClp.tipTransport + "#" + depozDest + "#" + CreareClp.selectedAgent + "#" + cmdFasonate + "#" + numeClientCV + "#" + observatiiCLP
+					+ "#" + CreareClp.tipMarfa + "#" + CreareClp.masaMarfa + "#"
 					+ CLPFragment1.spinnerTipCamion.getSelectedItem().toString().toUpperCase(Locale.getDefault()) + "#"
 					+ CLPFragment1.spinnerTipIncarcare.getSelectedItem().toString().toUpperCase(Locale.getDefault()) + "@" + articoleFinale;
 

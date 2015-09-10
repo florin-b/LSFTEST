@@ -31,6 +31,8 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 	private ListView listClientiObiective;
 	private CautaClientDialogListener listener;
 	private Context context;
+	private boolean isMeserias;
+	private boolean isClientObiectivKA;
 
 	public CautaClientDialog(Context context) {
 		super(context);
@@ -75,7 +77,11 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 		btnCautaClient.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				ScreenUtils.hideSoftKeyboard(context, textNumeClient);
-				cautaClient();
+				if (isMeserias()) {
+					cautaMeserias();
+				} else {
+					cautaClient();
+				}
 
 			}
 		});
@@ -103,13 +109,28 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 	private void cautaClient() {
 		String numeClient = textNumeClient.getText().toString().trim().replace('*', '%');
 
+		String localUnitLog = UserInfo.getInstance().getUnitLog();
+
+		if (isClientObiectivKA)
+			localUnitLog = "NN10";
+
 		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 		params.put("numeClient", numeClient);
 		params.put("depart", "00");
 		params.put("departAg", UserInfo.getInstance().getCodDepart());
-		params.put("unitLog", UserInfo.getInstance().getUnitLog());
+		params.put("unitLog", localUnitLog);
 
 		opClient.getListClienti(params);
+	}
+
+	private void cautaMeserias() {
+		String numeClient = textNumeClient.getText().toString().trim().replace('*', '%');
+
+		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
+		params.put("numeClient", numeClient);
+		params.put("unitLog", UserInfo.getInstance().getUnitLog());
+
+		opClient.getListMeseriasi(params);
 	}
 
 	private void afisListClienti(List<BeanClient> listClienti) {
@@ -120,12 +141,29 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 	public void operationComplete(EnumClienti methodName, Object result) {
 		switch (methodName) {
 		case GET_LISTA_CLIENTI:
+		case GET_LISTA_MESERIASI:
 			afisListClienti(opClient.deserializeListClienti((String) result));
 			break;
 		default:
 			break;
 		}
 
+	}
+
+	public boolean isMeserias() {
+		return isMeserias;
+	}
+
+	public void setMeserias(boolean isMeserias) {
+		this.isMeserias = isMeserias;
+	}
+
+	public boolean isClientObiectivKA() {
+		return isClientObiectivKA;
+	}
+
+	public void setClientObiectivKA(boolean isClientObiectivKA) {
+		this.isClientObiectivKA = isClientObiectivKA;
 	}
 
 }

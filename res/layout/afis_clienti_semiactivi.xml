@@ -25,15 +25,17 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="0.02"
             android:gravity="left"
-            android:text="Nr.crt."
+            android:text="Nr"
             android:textColor="#A66D33"
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/textNumeClient"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.2"
+            android:drawableLeft="@drawable/sort_up_green"
             android:gravity="left"
             android:text="Nume client"
             android:textColor="#A66D33"
@@ -50,22 +52,26 @@
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/textJudet"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.05"
+            android:layout_weight="0.06"
+            android:drawableLeft="@drawable/sort_up_green"
             android:gravity="left"
-            android:text="Judet"
+            android:text="Jud"
             android:textColor="#A66D33"
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/textLocalitate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.08"
-            android:gravity="right"
-            android:text="Localitate"
+            android:drawableLeft="@drawable/sort_up_green"
+            android:gravity="left"
+            android:text="Loc"
             android:textColor="#A66D33" />
 
         <TextView
@@ -83,7 +89,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="0.08"
             android:gravity="right"
-            android:text="Nume pers. contact"
+            android:text="Pers. contact"
             android:textColor="#A66D33" />
 
         <TextView
@@ -92,15 +98,17 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="0.08"
             android:gravity="right"
-            android:text="Tel. pers. contact"
+            android:text="Telefon"
             android:textColor="#A66D33" />
 
         <TextView
+            android:id="@+id/textVanzMed"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.08"
-            android:gravity="right"
+            android:layout_weight="0.075"
+            android:drawableLeft="@drawable/sort_up_green"
+            android:gravity="left"
             android:text="Vanz medie"
             android:textColor="#A66D33" />
 
@@ -108,7 +116,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.08"
+            android:layout_weight="0.075"
             android:gravity="right"
             android:text="Vanz 03"
             android:textColor="#A66D33" />
@@ -117,7 +125,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.08"
+            android:layout_weight="0.075"
             android:gravity="right"
             android:text="Vanz 06"
             android:textColor="#A66D33" />
@@ -126,7 +134,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.08"
+            android:layout_weight="0.075"
             android:gravity="right"
             android:text="Vanz 07"
             android:textColor="#A66D33" />
@@ -135,7 +143,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.08"
+            android:layout_weight="0.075"
             android:gravity="right"
             android:text="Vanz 09"
             android:textColor="#A66D33" />
@@ -144,7 +152,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.08"
+            android:layout_weight="0.075"
             android:gravity="right"
             android:text="Vanz 040"
             android:textColor="#A66D33" />
@@ -154,14 +162,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="5dip"
-            android:layout_weight="0.08"
+            android:layout_weight="0.075"
             android:gravity="right"
             android:text="Vanz 041"
             android:textColor="#A66D33" />
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/layoutRapVanzAg"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"

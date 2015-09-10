@@ -235,7 +235,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		listUmVanz = new ArrayList<HashMap<String, String>>();
 		adapterUmVanz = new SimpleAdapter(this, listUmVanz, R.layout.simplerowlayout, new String[] { "rowText" }, new int[] { R.id.textRowName });
 		spinnerUnitMas.setVisibility(View.GONE);
-		// spinnerUnitMas.setOnItemSelectedListener(new OnSelectUnitMas());
 
 		textNumeArticol.setVisibility(View.INVISIBLE);
 		textCodArticol.setVisibility(View.INVISIBLE);
@@ -246,7 +245,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		labelCant.setVisibility(View.INVISIBLE);
 
-		// txtPretArt.setVisibility(View.INVISIBLE);
 		labelStoc.setVisibility(View.INVISIBLE);
 		saveArtBtn.setVisibility(View.INVISIBLE);
 
@@ -652,11 +650,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		String tipUser;
 
-		if (UserInfo.getInstance().getTipUserSap().equals("KA3"))
-			tipUser = "KA3";
-		else
-			tipUser = "CV";
-
 		tipUser = UserInfo.getInstance().getTipUser();
 
 		BeanParametruPretGed paramPret = new BeanParametruPretGed();
@@ -860,8 +853,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						}
 					}
 
-					if (Double.parseDouble(textCant.getText().toString().trim()) > Double.parseDouble(textStoc.getText().toString()
-							.replaceAll(",", ""))) {
+					if (Double.parseDouble(textCant.getText().toString().trim()) > Double.parseDouble(textStoc.getText().toString().replaceAll(",", ""))) {
 						if (tipComanda.equalsIgnoreCase("S") && !rezervStoc) {
 
 						} else {
@@ -1232,9 +1224,9 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 				double pret2 = (Double.parseDouble(pretArticol.getPretArticolPromo()) / Double.parseDouble(pretArticol.getCantitateArticolPromo()))
 						* valMultiplu;
 
-				artPromoText = "Din cantitatea comandata " + pretArticol.getCantitate() + " " + pretArticol.getUm() + " au pretul de "
-						+ nf2.format(pret1) + " RON/" + pretArticol.getUm() + " si " + pretArticol.getCantitateArticolPromo() + " "
-						+ pretArticol.getUmArticolPromo() + " au pretul de " + nf2.format(pret2) + " RON/" + pretArticol.getUmArticolPromo() + ".";
+				artPromoText = "Din cantitatea comandata " + pretArticol.getCantitate() + " " + pretArticol.getUm() + " au pretul de " + nf2.format(pret1)
+						+ " RON/" + pretArticol.getUm() + " si " + pretArticol.getCantitateArticolPromo() + " " + pretArticol.getUmArticolPromo()
+						+ " au pretul de " + nf2.format(pret2) + " RON/" + pretArticol.getUmArticolPromo() + ".";
 			}
 
 		} else {
@@ -1261,8 +1253,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						// verificare cod articol promotie
 						// art. promo = art. din comanda
 						if (codArticol.equals(pretArticol.getCodArticolPromo())) {
-							artPromoText = pretArticol.getCantitateArticolPromo() + " " + pretArticol.getUmArticolPromo() + " x " + numeArticol
-									+ " gratuit. ";
+							artPromoText = pretArticol.getCantitateArticolPromo() + " " + pretArticol.getUmArticolPromo() + " x " + numeArticol + " gratuit. ";
 						} else// art. promo diferit de art. din cmd.
 						{
 							artPromoText = pretArticol.getCantitateArticolPromo() + " " + pretArticol.getUmArticolPromo() + " x "

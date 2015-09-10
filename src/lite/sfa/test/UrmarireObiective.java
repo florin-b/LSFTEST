@@ -73,15 +73,13 @@ public class UrmarireObiective extends Fragment implements InputTextDialogListen
 		textCurrentPage.setText("Urmarire obiectiv " + BeanObiectiveGenerale.getInstance().getNumeObiectiv());
 
 		spinnerClienti = (Spinner) v.findViewById(R.id.spinnerClienti);
-		AdapterClientiObiective adapter = new AdapterClientiObiective(getActivity(), BeanObiectiveGenerale
-				.getInstance().getListConstructori());
+		AdapterClientiObiective adapter = new AdapterClientiObiective(getActivity(), BeanObiectiveGenerale.getInstance().getListConstructori());
 		spinnerClienti.setAdapter(adapter);
 		setSpinnerClientiListener();
 
 		listEvenimente = new ArrayList<BeanLinieUrmarire>();
 
-		adapterObiective = new AdapterObiectiveUrmarire(BeanObiectiveGenerale.getInstance(), getActivity(),
-				listEvenimente);
+		adapterObiective = new AdapterObiectiveUrmarire(BeanObiectiveGenerale.getInstance(), getActivity(), listEvenimente);
 
 		loadListEvenimente(new ArrayList<BeanLinieUrmarire>());
 		spinnerOptiuniUrmarire = (Spinner) v.findViewById(R.id.spinnerUrmarireObiective);
@@ -89,8 +87,9 @@ public class UrmarireObiective extends Fragment implements InputTextDialogListen
 		setListenerSpinnerUrmarire();
 
 		textDataEveniment = (TextView) v.findViewById(R.id.textDataEveniment);
-		setListenerTextData();
+		// setListenerTextData();
 		btnModificaData = (ImageButton) v.findViewById(R.id.btnModificaData);
+		btnModificaData.setVisibility(View.INVISIBLE);
 		setCurrentDate(textDataEveniment);
 		setListenerBtnModificaData();
 
@@ -149,8 +148,7 @@ public class UrmarireObiective extends Fragment implements InputTextDialogListen
 	}
 
 	private void getEvenimenteClient() {
-		BeanObiectiveConstructori client = (BeanObiectiveConstructori) spinnerClienti.getItemAtPosition(spinnerClienti
-				.getSelectedItemPosition() - 1);
+		BeanObiectiveConstructori client = (BeanObiectiveConstructori) spinnerClienti.getItemAtPosition(spinnerClienti.getSelectedItemPosition() - 1);
 
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("idObiectiv", BeanObiectiveGenerale.getInstance().getId());
@@ -257,8 +255,7 @@ public class UrmarireObiective extends Fragment implements InputTextDialogListen
 		evenimentObiectiv = new BeanUrmarireObiectiv();
 		evenimentObiectiv.setIdObiectiv(BeanObiectiveGenerale.getInstance().getId());
 
-		BeanObiectiveConstructori client = (BeanObiectiveConstructori) spinnerClienti.getItemAtPosition(spinnerClienti
-				.getSelectedItemPosition() - 1);
+		BeanObiectiveConstructori client = (BeanObiectiveConstructori) spinnerClienti.getItemAtPosition(spinnerClienti.getSelectedItemPosition() - 1);
 
 		evenimentObiectiv.setCodClient(client.getCodClient());
 		evenimentObiectiv.setCodDepart(client.getCodDepart());
@@ -298,8 +295,7 @@ public class UrmarireObiective extends Fragment implements InputTextDialogListen
 		int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
 		int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 
-		String formattedData = String.format("%02d", day) + "." + String.format("%02d", month) + "."
-				+ String.format("%02d", year);
+		String formattedData = String.format("%02d", day) + "." + String.format("%02d", month) + "." + String.format("%02d", year);
 
 		textData.setText(formattedData);
 	}
@@ -362,8 +358,8 @@ public class UrmarireObiective extends Fragment implements InputTextDialogListen
 	}
 
 	private void showInputTextDialog() {
-		InputTextDialog dialog = new InputTextDialog(EnumUrmarireObiective.getNumeEveniment(spinnerOptiuniUrmarire
-				.getSelectedItemPosition() - 1), textObservatii.getText().toString(), getActivity());
+		InputTextDialog dialog = new InputTextDialog(EnumUrmarireObiective.getNumeEveniment(spinnerOptiuniUrmarire.getSelectedItemPosition() - 1),
+				textObservatii.getText().toString(), getActivity());
 		dialog.setModificaObiectivListener(UrmarireObiective.this);
 		dialog.show();
 	}

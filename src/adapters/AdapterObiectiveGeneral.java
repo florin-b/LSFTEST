@@ -176,6 +176,7 @@ public class AdapterObiectiveGeneral extends BaseAdapter implements InputTextDia
 	private void showCautaClientDialog() {
 		CautaClientDialog clientDialog = new CautaClientDialog(context);
 		clientDialog.setClientSelectedListener(AdapterObiectiveGeneral.this);
+		clientDialog.setClientObiectivKA(true);
 		clientDialog.show();
 	}
 

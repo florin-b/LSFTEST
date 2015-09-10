@@ -30,8 +30,7 @@ import enums.EnumFiliale;
 
 public class NecesarArticoleActivity extends Activity implements NecesarArticoleListener, OnClickListener {
 
-	TextView textNumeMaterial, textCodMaterial, textNumeSintetic, textCodSintetic, textCons30, textStoc, textPropunere,
-			intrariI1, intrariI2, intrariI3;
+	TextView textNumeMaterial, textCodMaterial, textNumeSintetic, textCodSintetic, textCons30, textStoc, textPropunere, intrariI1, intrariI2, intrariI3;
 	boolean sortAscNumeMaterial = true;
 	boolean sortAscCodMaterial = true;
 	boolean sortAscNumeSintetic = true;
@@ -94,8 +93,7 @@ public class NecesarArticoleActivity extends Activity implements NecesarArticole
 	}
 
 	private void populateListFiliale() {
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(),
-				android.R.layout.simple_spinner_dropdown_item, EnumFiliale.getFiliale());
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item, EnumFiliale.getFiliale());
 
 		LayoutInflater mInflater = LayoutInflater.from(this);
 		View mCustomView = mInflater.inflate(R.layout.spinner_layout, null);
@@ -121,13 +119,13 @@ public class NecesarArticoleActivity extends Activity implements NecesarArticole
 
 		textNumeMaterial = (TextView) findViewById(R.id.textNumeMaterial);
 		textNumeMaterial.setOnClickListener(this);
-		
+
 		textNumeSintetic = (TextView) findViewById(R.id.textNumeSintetic);
 		textNumeSintetic.setOnClickListener(this);
-		
+
 		textCodSintetic = (TextView) findViewById(R.id.textCodSintetic);
-		textCodSintetic.setOnClickListener(this);		
-		
+		textCodSintetic.setOnClickListener(this);
+
 		textCodMaterial = (TextView) findViewById(R.id.textCodMaterial);
 		textCodMaterial.setOnClickListener(this);
 
@@ -141,6 +139,7 @@ public class NecesarArticoleActivity extends Activity implements NecesarArticole
 		textPropunere.setOnClickListener(this);
 
 		listMaterialeNecesar = (ListView) findViewById(R.id.listMaterialeNecesar);
+		
 
 		intrariI1 = (TextView) findViewById(R.id.intrariI1);
 		intrariI2 = (TextView) findViewById(R.id.intrariI2);
@@ -169,6 +168,8 @@ public class NecesarArticoleActivity extends Activity implements NecesarArticole
 
 	}
 
+	
+
 	private void loadListaMateriale(String filiala) {
 		necesarArticole.getListaMateriale(filiala, UserInfo.getInstance().getCodDepart(), this);
 	}
@@ -189,7 +190,7 @@ public class NecesarArticoleActivity extends Activity implements NecesarArticole
 		textNumeMaterial.setTypeface(Typeface.DEFAULT);
 		textCodMaterial.setTypeface(Typeface.DEFAULT);
 		textNumeSintetic.setTypeface(Typeface.DEFAULT);
-		textCodSintetic.setTypeface(Typeface.DEFAULT);		
+		textCodSintetic.setTypeface(Typeface.DEFAULT);
 		textCons30.setTypeface(Typeface.DEFAULT);
 		textStoc.setTypeface(Typeface.DEFAULT);
 		textPropunere.setTypeface(Typeface.DEFAULT);
@@ -204,8 +205,7 @@ public class NecesarArticoleActivity extends Activity implements NecesarArticole
 			textNumeMaterial.setCompoundDrawablesWithIntrinsicBounds(R.drawable.sort_up_green, 0, 0, 0);
 		}
 
-		populateListMateriale(necesarArticole.sortByNumeArticol(necesarArticole.getListaMateriale(),
-				!sortAscNumeMaterial));
+		populateListMateriale(necesarArticole.sortByNumeArticol(necesarArticole.getListaMateriale(), !sortAscNumeMaterial));
 
 		sortAscNumeMaterial = !sortAscNumeMaterial;
 		textNumeMaterial.setTypeface(Typeface.DEFAULT_BOLD);
@@ -220,13 +220,12 @@ public class NecesarArticoleActivity extends Activity implements NecesarArticole
 			textCodMaterial.setCompoundDrawablesWithIntrinsicBounds(R.drawable.sort_up_green, 0, 0, 0);
 		}
 
-		populateListMateriale(necesarArticole
-				.sortByCodArticol(necesarArticole.getListaMateriale(), !sortAscCodMaterial));
+		populateListMateriale(necesarArticole.sortByCodArticol(necesarArticole.getListaMateriale(), !sortAscCodMaterial));
 
 		sortAscCodMaterial = !sortAscCodMaterial;
 		textCodMaterial.setTypeface(Typeface.DEFAULT_BOLD);
 	}
-	
+
 	private void sortNumeSintetic() {
 		setHeaderFontStyle();
 
@@ -236,13 +235,11 @@ public class NecesarArticoleActivity extends Activity implements NecesarArticole
 			textNumeSintetic.setCompoundDrawablesWithIntrinsicBounds(R.drawable.sort_up_green, 0, 0, 0);
 		}
 
-		populateListMateriale(necesarArticole.sortByNumeSintetic(necesarArticole.getListaMateriale(),
-				!sortAscNumeSintetic));
+		populateListMateriale(necesarArticole.sortByNumeSintetic(necesarArticole.getListaMateriale(), !sortAscNumeSintetic));
 
 		sortAscNumeSintetic = !sortAscNumeSintetic;
 		textNumeSintetic.setTypeface(Typeface.DEFAULT_BOLD);
-	}	
-	
+	}
 
 	private void sortCodSintetic() {
 		setHeaderFontStyle();
@@ -253,14 +250,12 @@ public class NecesarArticoleActivity extends Activity implements NecesarArticole
 			textCodSintetic.setCompoundDrawablesWithIntrinsicBounds(R.drawable.sort_up_green, 0, 0, 0);
 		}
 
-		populateListMateriale(necesarArticole.sortByCodSintetic(necesarArticole.getListaMateriale(),
-				!sortAscCodSintetic));
+		populateListMateriale(necesarArticole.sortByCodSintetic(necesarArticole.getListaMateriale(), !sortAscCodSintetic));
 
 		sortAscCodSintetic = !sortAscCodSintetic;
 		textCodSintetic.setTypeface(Typeface.DEFAULT_BOLD);
-	}		
-	
-	
+	}
+
 	private void sortCons30() {
 		setHeaderFontStyle();
 		if (sortAscCons30) {
@@ -300,7 +295,6 @@ public class NecesarArticoleActivity extends Activity implements NecesarArticole
 		textPropunere.setTypeface(Typeface.DEFAULT_BOLD);
 	}
 
-	
 	public void onBackPressed() {
 
 		UserInfo.getInstance().setParentScreen("");
@@ -309,9 +303,8 @@ public class NecesarArticoleActivity extends Activity implements NecesarArticole
 
 		finish();
 		return;
-	}	
-	
-	
+	}
+
 	public void onClick(View v) {
 
 		switch (v.getId()) {
@@ -334,14 +327,14 @@ public class NecesarArticoleActivity extends Activity implements NecesarArticole
 		case R.id.textCodMaterial:
 			sortCodMaterial();
 			break;
-			
+
 		case R.id.textCodSintetic:
 			sortCodSintetic();
-			break;			
-			
+			break;
+
 		case R.id.textNumeSintetic:
 			sortNumeSintetic();
-			break;			
+			break;
 
 		}
 

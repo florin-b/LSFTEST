@@ -63,6 +63,9 @@ public class ClientiSemiactiviAdapter extends BaseAdapter {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 
+		
+		
+		
 		BeanClientSemiactiv client = getItem(position);
 
 		viewHolder.textNrCrt.setText(String.valueOf(position + 1) + ".");

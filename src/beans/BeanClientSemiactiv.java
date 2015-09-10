@@ -1,5 +1,7 @@
 package beans;
 
+import java.util.Comparator;
+
 public class BeanClientSemiactiv {
 
 	private String numeClient;
@@ -127,6 +129,70 @@ public class BeanClientSemiactiv {
 
 	public void setVanz03(String vanz03) {
 		this.vanz03 = vanz03;
+	}
+
+	public static class CompareNumeClient implements Comparator<BeanClientSemiactiv> {
+
+		private int mod = -1;
+
+		public CompareNumeClient(boolean asc) {
+			if (asc)
+				mod = 1;
+		}
+
+		public int compare(BeanClientSemiactiv client1, BeanClientSemiactiv client2) {
+			return mod * client1.getNumeClient().compareToIgnoreCase(client2.getNumeClient());
+
+		}
+
+	}
+
+	public static class CompareJudet implements Comparator<BeanClientSemiactiv> {
+
+		private int mod = -1;
+
+		public CompareJudet(boolean asc) {
+			if (asc)
+				mod = 1;
+		}
+
+		public int compare(BeanClientSemiactiv client1, BeanClientSemiactiv client2) {
+			return mod * client1.getJudet().compareToIgnoreCase(client2.getJudet());
+
+		}
+
+	}
+
+	public static class CompareLocalitate implements Comparator<BeanClientSemiactiv> {
+
+		private int mod = -1;
+
+		public CompareLocalitate(boolean asc) {
+			if (asc)
+				mod = 1;
+		}
+
+		public int compare(BeanClientSemiactiv client1, BeanClientSemiactiv client2) {
+			return mod * client1.getLocalitate().compareToIgnoreCase(client2.getLocalitate());
+
+		}
+
+	}
+
+	public static class CompareVanzMed implements Comparator<BeanClientSemiactiv> {
+
+		private int mod = -1;
+
+		public CompareVanzMed(boolean asc) {
+			if (asc)
+				mod = 1;
+		}
+
+		public int compare(BeanClientSemiactiv client1, BeanClientSemiactiv client2) {
+			return mod * (int) (Double.valueOf(client1.getVanzMedie()) - Double.valueOf(client1.getVanzMedie()));
+
+		}
+
 	}
 
 }

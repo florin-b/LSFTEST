@@ -36,8 +36,7 @@ public class BeanStadiuObiectiv implements Comparable<BeanStadiuObiectiv> {
 
 	@Override
 	public String toString() {
-		return "BeanStadiuObiectiv [codDepart=" + codDepart + ", codStadiu=" + codStadiu + ", numeStadiu=" + numeStadiu
-				+ "]";
+		return "BeanStadiuObiectiv [codDepart=" + codDepart + ", codStadiu=" + codStadiu + ", numeStadiu=" + numeStadiu + "]";
 	}
 
 }

@@ -22,157 +22,153 @@ import enums.EnumClienti;
 
 public class OperatiiClient implements AsyncTaskListener {
 
-    Context context;
-    OperatiiClientListener listener;
-    EnumClienti numeComanda;
+	Context context;
+	OperatiiClientListener listener;
+	EnumClienti numeComanda;
 
-    public OperatiiClient(Context context) {
-        this.context = context;
-    }
+	public OperatiiClient(Context context) {
+		this.context = context;
+	}
 
-    public void getListClienti(HashMap<String, String> params) {
-        numeComanda = EnumClienti.GET_LISTA_CLIENTI;
-        AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(),
-                params, (AsyncTaskListener) this, context);
-        call.getCallResultsFromFragment();
+	public void getListClienti(HashMap<String, String> params) {
+		numeComanda = EnumClienti.GET_LISTA_CLIENTI;
+		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
+		call.getCallResultsFromFragment();
 
-    }
+	}
 
-    public void getListClientiCV(HashMap<String, String> params) {
-        numeComanda = EnumClienti.GET_LISTA_CLIENTI_CV;
-        AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(),
-                params, (AsyncTaskListener) this, context);
-        call.getCallResultsFromFragment();
+	public void getListMeseriasi(HashMap<String, String> params) {
+		numeComanda = EnumClienti.GET_LISTA_MESERIASI;
+		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
+		call.getCallResultsFromFragment();
 
-    }
+	}
 
-    public void getDetaliiClient(HashMap<String, String> params) {
-        numeComanda = EnumClienti.GET_DETALII_CLIENT;
-        AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(),
-                params, (AsyncTaskListener) this, context);
-        call.getCallResultsFromFragment();
-    }
+	public void getListClientiCV(HashMap<String, String> params) {
+		numeComanda = EnumClienti.GET_LISTA_CLIENTI_CV;
+		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
+		call.getCallResultsFromFragment();
 
-    public void getAdreseLivrareClient(HashMap<String, String> params) {
-        numeComanda = EnumClienti.GET_ADRESE_LIVRARE;
-        AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(),
-                params, (AsyncTaskListener) this, context);
-        call.getCallResultsFromFragment();
-    }
+	}
 
-    public ArrayList<BeanClient> deserializeListClienti(
-            String serializedListClienti) {
-        BeanClient client = null;
-        ArrayList<BeanClient> listClienti = new ArrayList<BeanClient>();
+	public void getDetaliiClient(HashMap<String, String> params) {
+		numeComanda = EnumClienti.GET_DETALII_CLIENT;
+		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
+		call.getCallResultsFromFragment();
+	}
 
-        try {
-            Object json = new JSONTokener(serializedListClienti).nextValue();
+	public void getAdreseLivrareClient(HashMap<String, String> params) {
+		numeComanda = EnumClienti.GET_ADRESE_LIVRARE;
+		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
+		call.getCallResultsFromFragment();
+	}
 
-            if (json instanceof JSONArray) {
+	public ArrayList<BeanClient> deserializeListClienti(String serializedListClienti) {
+		BeanClient client = null;
+		ArrayList<BeanClient> listClienti = new ArrayList<BeanClient>();
 
-                JSONArray jsonArray = new JSONArray(serializedListClienti);
+		try {
+			Object json = new JSONTokener(serializedListClienti).nextValue();
 
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject object = jsonArray.getJSONObject(i);
+			if (json instanceof JSONArray) {
 
-                    client = new BeanClient();
-                    client.setCodClient(object.getString("codClient"));
-                    client.setNumeClient(object.getString("numeClient"));
-                    client.setTipClient(object.getString("tipClient"));
-                    listClienti.add(client);
+				JSONArray jsonArray = new JSONArray(serializedListClienti);
 
-                }
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject object = jsonArray.getJSONObject(i);
 
-            }
-        } catch (JSONException e) {
-            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
-        }
+					client = new BeanClient();
+					client.setCodClient(object.getString("codClient"));
+					client.setNumeClient(object.getString("numeClient"));
+					client.setTipClient(object.getString("tipClient"));
+					listClienti.add(client);
 
-        return listClienti;
-    }
+				}
 
-    public DetaliiClient deserializeDetaliiClient(String serializedDetaliiClient) {
-        DetaliiClient detaliiClient = new DetaliiClient();
+			}
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
 
-        try {
-            JSONObject jsonObject = new JSONObject(serializedDetaliiClient);
+		return listClienti;
+	}
 
-            if (jsonObject instanceof JSONObject) {
+	public DetaliiClient deserializeDetaliiClient(String serializedDetaliiClient) {
+		DetaliiClient detaliiClient = new DetaliiClient();
 
-                detaliiClient.setRegiune(jsonObject.getString("regiune"));
-                detaliiClient.setOras(jsonObject.getString("oras"));
-                detaliiClient.setStrada(jsonObject.getString("strada"));
-                detaliiClient.setNrStrada(jsonObject.getString("nrStrada"));
-                detaliiClient.setLimitaCredit(jsonObject
-                        .getString("limitaCredit"));
-                detaliiClient.setRestCredit(jsonObject.getString("restCredit"));
-                detaliiClient.setStare(jsonObject.getString("stare"));
-                detaliiClient.setPersContact(jsonObject
-                        .getString("persContact"));
-                detaliiClient.setTelefon(jsonObject.getString("telefon"));
-                detaliiClient.setFiliala(jsonObject.getString("filiala"));
-                detaliiClient.setMotivBlocare(jsonObject
-                        .getString("motivBlocare"));
-                detaliiClient.setCursValutar(jsonObject
-                        .getString("cursValutar"));
-                detaliiClient.setTermenPlata(jsonObject
-                        .getString("termenPlata"));
-                detaliiClient.setTipClient(InfoStrings.getTipClient(jsonObject
-                        .getString("tipClient")));
+		try {
+			JSONObject jsonObject = new JSONObject(serializedDetaliiClient);
 
-            }
+			if (jsonObject instanceof JSONObject) {
 
-        } catch (JSONException e) {
-            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
-        }
+				detaliiClient.setRegiune(jsonObject.getString("regiune"));
+				detaliiClient.setOras(jsonObject.getString("oras"));
+				detaliiClient.setStrada(jsonObject.getString("strada"));
+				detaliiClient.setNrStrada(jsonObject.getString("nrStrada"));
+				detaliiClient.setLimitaCredit(jsonObject.getString("limitaCredit"));
+				detaliiClient.setRestCredit(jsonObject.getString("restCredit"));
+				detaliiClient.setStare(jsonObject.getString("stare"));
+				detaliiClient.setPersContact(jsonObject.getString("persContact"));
+				detaliiClient.setTelefon(jsonObject.getString("telefon"));
+				detaliiClient.setFiliala(jsonObject.getString("filiala"));
+				detaliiClient.setMotivBlocare(jsonObject.getString("motivBlocare"));
+				detaliiClient.setCursValutar(jsonObject.getString("cursValutar"));
+				detaliiClient.setTermenPlata(jsonObject.getString("termenPlata"));
+				detaliiClient.setTipClient(InfoStrings.getTipClient(jsonObject.getString("tipClient")));
 
-        return detaliiClient;
+			}
 
-    }
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
 
-    public List<BeanAdresaLivrare> deserializeAdreseLivrare(String adreseLivrare) {
-        BeanAdresaLivrare oAdresa = null;
-        ArrayList<BeanAdresaLivrare> objectsList = new ArrayList<BeanAdresaLivrare>();
+		return detaliiClient;
 
-        JSONArray jsonObject = null;
+	}
 
-        try {
+	public List<BeanAdresaLivrare> deserializeAdreseLivrare(String adreseLivrare) {
+		BeanAdresaLivrare oAdresa = null;
+		ArrayList<BeanAdresaLivrare> objectsList = new ArrayList<BeanAdresaLivrare>();
 
-            Object json = new JSONTokener(adreseLivrare).nextValue();
+		JSONArray jsonObject = null;
 
-            if (json instanceof JSONArray) {
-                jsonObject = new JSONArray(adreseLivrare);
+		try {
 
-                for (int i = 0; i < jsonObject.length(); i++) {
-                    JSONObject clienObject = jsonObject.getJSONObject(i);
+			Object json = new JSONTokener(adreseLivrare).nextValue();
 
-                    oAdresa = new BeanAdresaLivrare();
-                    oAdresa.setOras(clienObject.getString("oras"));
-                    oAdresa.setStrada(clienObject.getString("strada"));
-                    oAdresa.setNrStrada(clienObject.getString("nrStrada"));
-                    oAdresa.setCodJudet(clienObject.getString("codJudet"));
-                    oAdresa.setCodAdresa(clienObject.getString("codAdresa"));
+			if (json instanceof JSONArray) {
+				jsonObject = new JSONArray(adreseLivrare);
 
-                    objectsList.add(oAdresa);
+				for (int i = 0; i < jsonObject.length(); i++) {
+					JSONObject clienObject = jsonObject.getJSONObject(i);
 
-                }
-            }
+					oAdresa = new BeanAdresaLivrare();
+					oAdresa.setOras(clienObject.getString("oras"));
+					oAdresa.setStrada(clienObject.getString("strada"));
+					oAdresa.setNrStrada(clienObject.getString("nrStrada"));
+					oAdresa.setCodJudet(clienObject.getString("codJudet"));
+					oAdresa.setCodAdresa(clienObject.getString("codAdresa"));
 
-        } catch (JSONException e) {
-            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
-        }
+					objectsList.add(oAdresa);
 
-        return objectsList;
-    }
+				}
+			}
 
-    public void onTaskComplete(String methodName, Object result) {
-        if (listener != null) {
-            listener.operationComplete(numeComanda, result);
-        }
-    }
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
 
-    public void setOperatiiClientListener(OperatiiClientListener listener) {
-        this.listener = listener;
-    }
+		return objectsList;
+	}
+
+	public void onTaskComplete(String methodName, Object result) {
+		if (listener != null) {
+			listener.operationComplete(numeComanda, result);
+		}
+	}
+
+	public void setOperatiiClientListener(OperatiiClientListener listener) {
+		this.listener = listener;
+	}
 
 }

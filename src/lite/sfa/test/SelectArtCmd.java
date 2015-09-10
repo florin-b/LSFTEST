@@ -361,7 +361,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		}
 
 		public void onNothingSelected(AdapterView<?> parent) {
-			// TODO
+
 		}
 	}
 

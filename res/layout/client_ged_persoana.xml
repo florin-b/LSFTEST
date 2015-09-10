@@ -46,7 +46,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.4"
             android:background="@drawable/edittext_style_1"
-            android:inputType="text"
+            android:inputType=""
             android:maxLength="30"
             android:singleLine="true"
             android:textColor="@color/editTextColor1"

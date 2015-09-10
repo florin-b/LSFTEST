@@ -1,7 +1,6 @@
 package beans;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import utils.UtilsFormatting;
@@ -37,6 +36,7 @@ public class BeanObiectiveGenerale {
 	private String valoareFundatie = " ";
 	private List<BeanStadiuObiectiv> listStadii;
 	private List<BeanObiectiveConstructori> listConstructori;
+	private List<BeanStadiuObiectiv> stadiiDepart;
 	private AdapterObiectiveGeneral adapterObiective;
 	private String id = " ";
 	private boolean inchis = false;
@@ -49,6 +49,7 @@ public class BeanObiectiveGenerale {
 		categorieObiectiv = new BeanCategorieObiectiv();
 		primariaEmitenta = new BeanAdresaGenerica();
 		listConstructori = new ArrayList<BeanObiectiveConstructori>();
+		stadiiDepart = new ArrayList<BeanStadiuObiectiv>();
 	}
 
 	public static BeanObiectiveGenerale getInstance() {
@@ -134,13 +135,10 @@ public class BeanObiectiveGenerale {
 
 		}
 
-		// eliminare constructori din stadiu terminat
-		if (stadiuNou.getCodStadiu() == 0) {
-
-			Iterator<BeanObiectiveConstructori> iterator = listConstructori.iterator();
-			while (iterator.hasNext()) {
-				if (iterator.next().getCodDepart().equals(codDepart))
-					iterator.remove();
+		for (BeanStadiuObiectiv stadiu : stadiiDepart) {
+			if (stadiu.getCodDepart().equals(codDepart)) {
+				stadiiDepart.remove(stadiu);
+				break;
 			}
 
 		}
@@ -150,6 +148,8 @@ public class BeanObiectiveGenerale {
 		objStadiu.setCodStadiu(stadiuNou.getCodStadiu());
 		objStadiu.setCodDepart(codDepart);
 		listStadii.add(objStadiu);
+
+		stadiiDepart.add(objStadiu);
 
 	}
 
@@ -284,6 +284,16 @@ public class BeanObiectiveGenerale {
 	}
 
 	private String getNumeStadiu(String codStadiu) {
+		for (BeanStadiuObiectiv stadiu : stadiiDepart) {
+			if (stadiu.getCodDepart().equals(codStadiu))
+				return stadiu.getNumeStadiu();
+
+		}
+
+		return "";
+	}
+
+	private String getNumeStadiu1(String codStadiu) {
 		for (BeanStadiuObiectiv stadiu : listStadii) {
 			if (stadiu.getCodDepart().equals(codStadiu))
 				return stadiu.getNumeStadiu();
@@ -543,6 +553,7 @@ public class BeanObiectiveGenerale {
 		valoareFundatie = "";
 		listStadii.clear();
 		listConstructori.clear();
+		stadiiDepart.clear();
 		inchis = false;
 		if (this.adapterObiective != null)
 			this.adapterObiective.notifyDataSetChanged();
@@ -566,6 +577,14 @@ public class BeanObiectiveGenerale {
 
 	public void setCodMotivSuspendare(String codMotivSuspendare) {
 		this.codMotivSuspendare = codMotivSuspendare;
+	}
+
+	public List<BeanStadiuObiectiv> getStadiiDepart() {
+		return stadiiDepart;
+	}
+
+	public void setStadiiDepart(List<BeanStadiuObiectiv> stadiiDepart) {
+		this.stadiiDepart = stadiiDepart;
 	}
 
 }

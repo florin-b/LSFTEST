@@ -185,6 +185,7 @@ public class CreareObiectiveFundatie extends Fragment implements ObiectiveListen
 			public void onClick(View v) {
 				CautaClientDialog dialogClient = new CautaClientDialog(getActivity());
 				dialogClient.setClientSelectedListener(CreareObiectiveFundatie.this);
+				dialogClient.setClientObiectivKA(true);
 				dialogClient.show();
 
 			}
@@ -205,7 +206,8 @@ public class CreareObiectiveFundatie extends Fragment implements ObiectiveListen
 
 	private void setRadioButtonsVisibility() {
 
-		List<BeanStadiuObiectiv> listStadii = BeanObiectiveGenerale.getInstance().getListStadii();
+		List<BeanStadiuObiectiv> listStadii = BeanObiectiveGenerale.getInstance().getStadiiDepart();
+
 		boolean isFundatieVisible = false;
 		boolean isFinisajeVisible = false;
 
@@ -257,7 +259,8 @@ public class CreareObiectiveFundatie extends Fragment implements ObiectiveListen
 
 	private void addSpinnerFinisajValues() {
 		List<String> finisajValues = new ArrayList<String>();
-		List<BeanStadiuObiectiv> listStadii = BeanObiectiveGenerale.getInstance().getListStadii();
+
+		List<BeanStadiuObiectiv> listStadii = BeanObiectiveGenerale.getInstance().getStadiiDepart();
 
 		for (EnumDepartFinisaje departFin : EnumDepartFinisaje.values()) {
 			for (BeanStadiuObiectiv stadiu : listStadii) {
@@ -285,8 +288,7 @@ public class CreareObiectiveFundatie extends Fragment implements ObiectiveListen
 
 		spinnerFinisaj.setVisibility(View.VISIBLE);
 
-		ArrayAdapter<String> finisajAdapter = new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_spinner_item, finisajValues);
+		ArrayAdapter<String> finisajAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, finisajValues);
 
 		finisajAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -332,8 +334,7 @@ public class CreareObiectiveFundatie extends Fragment implements ObiectiveListen
 			interioareValues.add(depInt.name());
 		}
 
-		ArrayAdapter<String> interioareAdapter = new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_spinner_item, interioareValues);
+		ArrayAdapter<String> interioareAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, interioareValues);
 
 		interioareAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerInterior.setAdapter(interioareAdapter);
@@ -349,8 +350,7 @@ public class CreareObiectiveFundatie extends Fragment implements ObiectiveListen
 					dealWithFinisaje();
 				} else {
 					spinnerInterior.setVisibility(View.INVISIBLE);
-					EnumDepartFinisaje enumDepartFin = EnumDepartFinisaje.valueOf(spinnerFinisaj.getSelectedItem()
-							.toString());
+					EnumDepartFinisaje enumDepartFin = EnumDepartFinisaje.valueOf(spinnerFinisaj.getSelectedItem().toString());
 					adapter.setCodDepart(enumDepartFin.getCodDepart());
 					selectedDepartament = enumDepartFin.getCodDepart();
 
@@ -375,10 +375,8 @@ public class CreareObiectiveFundatie extends Fragment implements ObiectiveListen
 
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
-				if (spinnerFinisaj.getSelectedItem() != null
-						&& spinnerFinisaj.getSelectedItem().toString().equalsIgnoreCase("interioare")) {
-					EnumDepartInterioare enumInterior = EnumDepartInterioare.valueOf(spinnerInterior.getSelectedItem()
-							.toString());
+				if (spinnerFinisaj.getSelectedItem() != null && spinnerFinisaj.getSelectedItem().toString().equalsIgnoreCase("interioare")) {
+					EnumDepartInterioare enumInterior = EnumDepartInterioare.valueOf(spinnerInterior.getSelectedItem().toString());
 					adapter.setCodDepart(enumInterior.getCodDepart());
 					selectedDepartament = enumInterior.getCodDepart();
 				}

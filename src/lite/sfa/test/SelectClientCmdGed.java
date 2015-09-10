@@ -8,6 +8,7 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 
+import listeners.CautaClientDialogListener;
 import listeners.OperatiiClientListener;
 import model.DateLivrare;
 import model.InfoStrings;
@@ -35,9 +36,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import beans.BeanClient;
 import beans.DetaliiClient;
+import dialogs.CautaClientDialog;
 import enums.EnumClienti;
 
-public class SelectClientCmdGed extends Activity implements OperatiiClientListener {
+public class SelectClientCmdGed extends Activity implements OperatiiClientListener, CautaClientDialogListener {
 
 	Button cautaClientBtn, saveClntBtn;
 	String filiala = "", nume = "", cod = "";
@@ -50,8 +52,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 	private EditText txtNumeClientGed, txtNumeClientDistrib, txtCNPClient, txtCodJ;
 
-	RadioButton radioClDistrib, radioClPF, radioClPJ, radioCmdNormala, radioCmdSimulata, radioRezervStocDa,
-			radioRezervStocNu;
+	RadioButton radioClDistrib, radioClPF, radioClPJ, radioCmdNormala, radioCmdSimulata, radioRezervStocDa, radioRezervStocNu;
 	LinearLayout layoutRezervStocLabel, layoutRezervStocBtn, layoutDetaliiClientDistrib;
 	private OperatiiClient operatiiClient;
 
@@ -60,9 +61,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	private LinearLayout layoutClientPersoana, layoutClientDistrib;
 	private ListView listViewClienti;
 	private BeanClient selectedClient;
-	private TextView textNumeClientDistrib, textCodClientDistrib, textAdrClient, textLimitaCredit, textRestCredit,
-			tipClient, clientBlocat, filialaClient;
+	private TextView textNumeClientDistrib, textCodClientDistrib, textAdrClient, textLimitaCredit, textRestCredit, tipClient, clientBlocat, filialaClient;
 
+	private RadioButton radioClMeserias;
 	private NumberFormat numberFormat;
 
 	@Override
@@ -131,10 +132,14 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		radioClDistrib = (RadioButton) findViewById(R.id.radioClDistrib);
 		radioClPJ = (RadioButton) findViewById(R.id.radioClPJ);
 		radioClPF = (RadioButton) findViewById(R.id.radioClPF);
+		radioClMeserias = (RadioButton) findViewById(R.id.radioClMeserias);
+
+		setVisibilityRadioClMeserias(radioClMeserias);
 
 		addListenerRadioClDistrib();
 		addListenerRadioCLPF();
 		addListenerRadioCLPJ();
+		addListenerRadioMeseriasi();
 
 		radioClDistrib.setChecked(false);
 		radioClDistrib.setVisibility(View.GONE);
@@ -183,6 +188,14 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		}
 	}
 
+	private void setVisibilityRadioClMeserias(RadioButton radioClMeserias) {
+		if (UserInfo.getInstance().getTipUserSap().contains("CAG"))
+			radioClMeserias.setVisibility(View.VISIBLE);
+		else
+			radioClMeserias.setVisibility(View.INVISIBLE);
+
+	}
+
 	private void getListaClienti() {
 		String numeClient = txtNumeClientDistrib.getText().toString().trim().replace('*', '%');
 
@@ -205,8 +218,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					layoutClientPersoana.setVisibility(View.GONE);
 					layoutClientDistrib.setVisibility(View.VISIBLE);
 
-					if (ListaArticoleComandaGed.getInstance().getListArticoleComanda().size() == 0)
-						DateLivrare.getInstance().resetAll();
+					clearDateLivrare();
 
 				} else {
 					layoutClientPersoana.setVisibility(View.VISIBLE);
@@ -224,9 +236,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				if (arg1) {
 					layoutLabelJ.setVisibility(View.VISIBLE);
 					layoutTextJ.setVisibility(View.VISIBLE);
-
-					if (ListaArticoleComandaGed.getInstance().getListArticoleComanda().size() == 0)
-						DateLivrare.getInstance().resetAll();
+					setTextNumeClientEnabled(true);
+					clearDateLivrare();
 				}
 
 			}
@@ -241,13 +252,55 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					layoutLabelJ.setVisibility(View.GONE);
 					layoutTextJ.setVisibility(View.GONE);
 
-					if (ListaArticoleComandaGed.getInstance().getListArticoleComanda().size() == 0)
-						DateLivrare.getInstance().resetAll();
+					setTextNumeClientEnabled(true);
+					clearDateLivrare();
 				}
 
 			}
 		});
 
+	}
+
+	private void addListenerRadioMeseriasi() {
+
+		radioClMeserias.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				layoutLabelJ.setVisibility(View.GONE);
+				layoutTextJ.setVisibility(View.GONE);
+
+				setTextNumeClientEnabled(false);
+
+				CautaClientDialog clientDialog = new CautaClientDialog(SelectClientCmdGed.this);
+				clientDialog.setMeserias(true);
+				clientDialog.setClientSelectedListener(SelectClientCmdGed.this);
+				clientDialog.show();
+
+				clearDateLivrare();
+
+			}
+		});
+
+	}
+
+	private void setTextNumeClientEnabled(boolean isEnabled) {
+
+		txtNumeClientGed.setText("");
+		txtCNPClient.setText("");
+
+		if (!isEnabled) {
+			txtNumeClientGed.setFocusable(false);
+			txtCNPClient.setFocusable(false);
+		} else {
+			txtNumeClientGed.setFocusableInTouchMode(true);
+			txtCNPClient.setFocusableInTouchMode(true);
+			txtNumeClientGed.requestFocus();
+		}
+
+	}
+
+	private void clearDateLivrare() {
+		if (ListaArticoleComandaGed.getInstance().getListArticoleComanda().size() == 0)
+			DateLivrare.getInstance().resetAll();
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -294,29 +347,25 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 				if (!radioClDistrib.isChecked()) {
 					if (txtNumeClientGed.getText().toString().trim().length() == 0) {
-						Toast.makeText(getApplicationContext(), "Completati numele clientului!", Toast.LENGTH_SHORT)
-								.show();
+						Toast.makeText(getApplicationContext(), "Completati numele clientului!", Toast.LENGTH_SHORT).show();
 						return;
 					}
 
 					if (txtCNPClient.getText().toString().trim().length() == 0) {
-						Toast.makeText(getApplicationContext(), "Completati CNP / CUI client!", Toast.LENGTH_SHORT)
-								.show();
+						Toast.makeText(getApplicationContext(), "Completati CNP / CUI client!", Toast.LENGTH_SHORT).show();
 						return;
 					}
 
 					if (radioClPF.isChecked()) {
 						CreareComandaGed.tipClient = "PF";
 						DateLivrare.getInstance().setTipPersClient("PF");
-						CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance()
-								.getUnitLog(), "PF");
+						CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PF");
 					}
 
 					if (radioClPJ.isChecked()) {
 						CreareComandaGed.tipClient = "PJ";
 						DateLivrare.getInstance().setTipPersClient("PJ");
-						CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance()
-								.getUnitLog(), "PJ");
+						CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PJ");
 					}
 
 					if (radioCmdNormala.isChecked())
@@ -341,8 +390,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				if (radioClDistrib.isChecked()) {
 
 					if (selectedClient == null) {
-						Toast.makeText(getApplicationContext(), "Completati numele clientului!", Toast.LENGTH_SHORT)
-								.show();
+						Toast.makeText(getApplicationContext(), "Completati numele clientului!", Toast.LENGTH_SHORT).show();
 						return;
 					}
 
@@ -393,8 +441,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		textNumeClientDistrib.setText(selectedClient.getNumeClient());
 		textCodClientDistrib.setText(selectedClient.getCodClient());
 
-		textAdrClient.setText(detaliiClient.getOras() + " " + detaliiClient.getStrada() + " "
-				+ detaliiClient.getNrStrada());
+		textAdrClient.setText(detaliiClient.getOras() + " " + detaliiClient.getStrada() + " " + detaliiClient.getNrStrada());
 
 		textLimitaCredit.setText(numberFormat.format(Double.valueOf(detaliiClient.getLimitaCredit())));
 		textRestCredit.setText(numberFormat.format(Double.valueOf(detaliiClient.getRestCredit())));
@@ -432,5 +479,12 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			break;
 		}
 
+	}
+
+	public void clientSelected(BeanClient client) {
+		txtNumeClientGed.setText(client.getNumeClient());
+		txtCNPClient.setText(client.getCodClient());
+		CreareComandaGed.codClientVar = client.getCodClient();
+		CreareComandaGed.tipClient = client.getTipClient();
 	}
 }

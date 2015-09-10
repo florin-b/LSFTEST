@@ -20,6 +20,7 @@ import beans.BeanFacturaNeincasata;
 import beans.BeanFurnizor;
 import beans.BeanFurnizorProduse;
 import beans.BeanInfoVenituri;
+import beans.BeanIstoricSemiactiv;
 import beans.BeanObiectivKA;
 
 public class HandleJSONData {
@@ -493,6 +494,43 @@ public class HandleJSONData {
 		}
 
 		return materialeList;
+	}
+
+	public ArrayList<BeanIstoricSemiactiv> decodeIstoricSemiactivi() {
+		BeanIstoricSemiactiv istoric = null;
+		ArrayList<BeanIstoricSemiactiv> istoricList = new ArrayList<BeanIstoricSemiactiv>();
+
+		try {
+
+			Object json = new JSONTokener(JSONString).nextValue();
+
+			if (json instanceof JSONArray) {
+				jsonObject = new JSONArray(JSONString);
+
+				for (int i = 0; i < jsonObject.length(); i++) {
+					JSONObject istoricObject = jsonObject.getJSONObject(i);
+
+					istoric = new BeanIstoricSemiactiv();
+					istoric.setCodClient(istoricObject.getString("codClient"));
+					istoric.setAn(istoricObject.getString("an"));
+					istoric.setLuna(istoricObject.getString("luna"));
+					istoric.setVanz03(istoricObject.getString("vanz03"));
+					istoric.setVanz06(istoricObject.getString("vanz06"));
+					istoric.setVanz07(istoricObject.getString("vanz07"));
+					istoric.setVanz09(istoricObject.getString("vanz09"));
+					istoric.setVanz040(istoricObject.getString("vanz040"));
+					istoric.setVanz041(istoricObject.getString("vanz041"));
+
+					istoricList.add(istoric);
+
+				}
+			}
+
+		} catch (JSONException e) {
+			Toast.makeText(context, "JSON: " + e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		return istoricList;
 	}
 
 }

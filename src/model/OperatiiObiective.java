@@ -169,6 +169,24 @@ public class OperatiiObiective implements AsyncTaskListener {
 			obiectiv.setListConstructori(listConstructori);
 			obiectiv.setListStadii(listStadii);
 
+			jsonArray = new JSONArray(jsonObject.getString("stadii"));
+
+			BeanStadiuObiectiv stadiuDepart = null;
+			List<BeanStadiuObiectiv> listStadiiDepart = new ArrayList<BeanStadiuObiectiv>();
+
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject object = jsonArray.getJSONObject(i);
+
+				stadiuDepart = new BeanStadiuObiectiv();
+				stadiuDepart.setCodDepart(object.getString("codDepart"));
+				stadiuDepart.setCodStadiu(Integer.valueOf(object.getString("codStadiu")));
+				stadiuDepart.setNumeStadiu(EnumStadiuSubantrep.getNumeStadiu(stadiuDepart.getCodStadiu()));
+				listStadiiDepart.add(stadiuDepart);
+
+			}
+
+			obiectiv.setStadiiDepart(listStadiiDepart);
+
 		} catch (JSONException e) {
 			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
 		}
@@ -250,6 +268,22 @@ public class OperatiiObiective implements AsyncTaskListener {
 			}
 
 			jsonObiectiv.put("constructori", jsonArrayConstr.toString());
+
+			JSONArray jsonArrayStadiu = new JSONArray();
+			JSONObject jsonObjStadiu = null;
+			Iterator<BeanStadiuObiectiv> iteratorStadiu = obiectiv.getStadiiDepart().iterator();
+			BeanStadiuObiectiv stadiuObiectiv = null;
+
+			while (iteratorStadiu.hasNext()) {
+				stadiuObiectiv = iteratorStadiu.next();
+				jsonObjStadiu = new JSONObject();
+				jsonObjStadiu.put("codDepart", stadiuObiectiv.getCodDepart());
+				jsonObjStadiu.put("codStadiu", stadiuObiectiv.getCodStadiu());
+				jsonArrayStadiu.put(jsonObjStadiu);
+
+			}
+
+			jsonObiectiv.put("stadii", jsonArrayStadiu.toString());
 
 		} catch (JSONException e) {
 

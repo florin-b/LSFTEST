@@ -45,7 +45,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_weight="0.05"
+        android:layout_weight="0.06"
         android:gravity="left"
         android:textColor="#A66D33"
         android:textSize="15sp" />
@@ -91,7 +91,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_weight="0.08"
+        android:layout_weight="0.075"
         android:gravity="right"
         android:textColor="#A66D33" />
 
@@ -100,7 +100,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_weight="0.08"
+        android:layout_weight="0.075"
         android:gravity="right"
         android:textColor="#A66D33" />
 
@@ -109,7 +109,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_weight="0.08"
+        android:layout_weight="0.075"
         android:gravity="right"
         android:textColor="#A66D33" />
 
@@ -118,7 +118,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_weight="0.08"
+        android:layout_weight="0.075"
         android:gravity="right"
         android:textColor="#A66D33" />
 
@@ -127,7 +127,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_weight="0.08"
+        android:layout_weight="0.075"
         android:gravity="right"
         android:textColor="#A66D33" />
 
@@ -136,7 +136,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_weight="0.08"
+        android:layout_weight="0.075"
         android:gravity="right"
         android:textColor="#A66D33" />
 
@@ -146,7 +146,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginRight="5dip"
-        android:layout_weight="0.08"
+        android:layout_weight="0.075"
         android:gravity="right"
         android:textColor="#A66D33" />
 
