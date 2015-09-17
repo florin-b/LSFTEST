@@ -50,6 +50,10 @@ public class AdapterStadiuSubantrepObiectiv extends BaseAdapter {
 		case 1:
 			viewHolder.imageStatus.setBackgroundResource(R.drawable.green_button_32);
 			break;
+		case 2:
+			viewHolder.imageStatus.setBackgroundResource(R.drawable.blue_button_32);
+			break;
+
 		}
 
 		return convertView;

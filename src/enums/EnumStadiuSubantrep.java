@@ -2,7 +2,7 @@ package enums;
 
 public enum EnumStadiuSubantrep {
 
-	TERMINAT("Terminat", 0), IN_CONSTRUCTIE("In constructie", 1);
+	TERMINAT("Terminat", 0), IN_CONSTRUCTIE("In constructie", 1), NEINCEPUT("Neinceput", 2);
 
 	private String numeStadiu;
 	private int codStadiu;
