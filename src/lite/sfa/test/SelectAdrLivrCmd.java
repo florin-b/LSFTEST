@@ -32,7 +32,7 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import utils.UtilsGeneral;
 import utils.UtilsUser;
-import adapters.AdapterObiectiveDepart;
+import adapters.AdapterObiective;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -1034,7 +1034,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 			obiectiveDepart.add(0, dummyOb);
 
-			AdapterObiectiveDepart adapterOb = new AdapterObiectiveDepart(getApplicationContext(), obiectiveDepart);
+			AdapterObiective adapterOb = new AdapterObiective(getApplicationContext(), obiectiveDepart);
 			spinnerObiective.setAdapter(adapterOb);
 		} else {
 			displayObiective(false);

@@ -14,4 +14,16 @@ public enum EnumDepartFinisaje {
 		return codDepart;
 	}
 
+	public static String getNumeDepart(String codDepart) {
+		String numeDepart = "Nedefinit";
+		for (EnumDepartFinisaje enumDepart : EnumDepartFinisaje.values()) {
+			if (codDepart.equals(enumDepart.getCodDepart())) {
+				numeDepart = enumDepart.name();
+				break;
+			}
+		}
+
+		return numeDepart;
+	}
+
 }

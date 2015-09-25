@@ -1,11 +1,13 @@
 package beans;
 
-public class BeanLinieUrmarire {
+public class BeanUrmarireEveniment {
 
 	private int idEveniment;
 	private String numeEveniment;
 	private String data;
 	private String observatii;
+	private String codClient;
+	private String codDepart;
 
 	public int getIdEveniment() {
 		return idEveniment;
@@ -42,5 +44,23 @@ public class BeanLinieUrmarire {
 	public void setObservatii(String observatii) {
 		this.observatii = observatii;
 	}
+
+	public String getCodClient() {
+		return codClient;
+	}
+
+	public void setCodClient(String codClient) {
+		this.codClient = codClient;
+	}
+
+	public String getCodDepart() {
+		return codDepart;
+	}
+
+	public void setCodDepart(String codDepart) {
+		this.codDepart = codDepart;
+	}
+	
+	
 
 }

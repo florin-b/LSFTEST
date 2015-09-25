@@ -35,10 +35,10 @@ public class AdresaDialog extends Dialog {
 		setTitle("Adresa");
 		setCancelable(true);
 
-		setUpLayout();
+		setupLayout();
 	}
 
-	private void setUpLayout() {
+	private void setupLayout() {
 
 		spinnerJudete = (Spinner) findViewById(R.id.spinnerJudete);
 

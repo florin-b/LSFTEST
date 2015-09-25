@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import listeners.AsyncTaskListener;
 import listeners.OperatiiAgentListener;
@@ -13,7 +14,6 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import utils.UtilsGeneral;
-
 import android.content.Context;
 import android.widget.Toast;
 
@@ -121,6 +121,13 @@ public class OperatiiAgent implements AsyncTaskListener {
 			position++;
 
 		return position;
+	}
+
+	public List<Agent> getListObjAgenti() {
+		List<Agent> localList = new ArrayList<Agent>(listObjAgenti);
+		localList.add(0, new Agent("Selectati un agent", "-1"));
+
+		return localList;
 	}
 
 	public void onTaskComplete(String methodName, Object result) {

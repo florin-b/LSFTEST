@@ -13,12 +13,12 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import beans.BeanObiectivDepartament;
 
-public class AdapterObiectiveDepart extends BaseAdapter {
+public class AdapterObiective extends BaseAdapter {
 
 	private List<BeanObiectivDepartament> listObiective;
 	private Context context;
 
-	public AdapterObiectiveDepart(Context context, List<BeanObiectivDepartament> listObiective) {
+	public AdapterObiective(Context context, List<BeanObiectivDepartament> listObiective) {
 		this.context = context;
 		this.listObiective = listObiective;
 	}

@@ -35,9 +35,9 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import beans.BeanLinieUrmarire;
 import beans.BeanObiectiveConstructori;
 import beans.BeanObiectiveGenerale;
+import beans.BeanUrmarireEveniment;
 import beans.BeanUrmarireObiectiv;
 import dialogs.InputTextDialog;
 import dialogs.SelectDateDialog;
@@ -51,7 +51,7 @@ public class UrmarireObiective extends Fragment implements InputTextDialogListen
 	private Spinner spinnerClienti;
 	private ImageButton btnModificaData, btnModificaObservatii;
 	private BeanUrmarireObiectiv evenimentObiectiv;
-	private List<BeanLinieUrmarire> listEvenimente;
+	private List<BeanUrmarireEveniment> listEvenimente;
 	private Button btnSaveUrmarire;
 	private AdapterObiectiveUrmarire adapterObiective;
 	private LinearLayout layoutOptiuniClient, layoutOptiuniEveniment;
@@ -77,17 +77,17 @@ public class UrmarireObiective extends Fragment implements InputTextDialogListen
 		spinnerClienti.setAdapter(adapter);
 		setSpinnerClientiListener();
 
-		listEvenimente = new ArrayList<BeanLinieUrmarire>();
+		listEvenimente = new ArrayList<BeanUrmarireEveniment>();
 
 		adapterObiective = new AdapterObiectiveUrmarire(BeanObiectiveGenerale.getInstance(), getActivity(), listEvenimente);
 
-		loadListEvenimente(new ArrayList<BeanLinieUrmarire>());
+		loadListEvenimente(new ArrayList<BeanUrmarireEveniment>());
 		spinnerOptiuniUrmarire = (Spinner) v.findViewById(R.id.spinnerUrmarireObiective);
 		spinnerOptiuniUrmarire.setAdapter(adapterObiective);
 		setListenerSpinnerUrmarire();
 
 		textDataEveniment = (TextView) v.findViewById(R.id.textDataEveniment);
-		// setListenerTextData();
+
 		btnModificaData = (ImageButton) v.findViewById(R.id.btnModificaData);
 		btnModificaData.setVisibility(View.INVISIBLE);
 		setCurrentDate(textDataEveniment);
@@ -178,7 +178,7 @@ public class UrmarireObiective extends Fragment implements InputTextDialogListen
 	}
 
 	private void setEvenimentValues(Object evenimentValues) {
-		BeanLinieUrmarire eveniment = (BeanLinieUrmarire) evenimentValues;
+		BeanUrmarireEveniment eveniment = (BeanUrmarireEveniment) evenimentValues;
 		if (eveniment.getData().length() > 1) {
 			radioEvenimentDa.setChecked(true);
 			textDataEveniment.setText(eveniment.getData());
@@ -262,7 +262,7 @@ public class UrmarireObiective extends Fragment implements InputTextDialogListen
 		evenimentObiectiv.setData(textDataEveniment.getText().toString());
 		evenimentObiectiv.setObservatii(textObservatii.getText().toString());
 
-		BeanLinieUrmarire eveniment = (BeanLinieUrmarire) spinnerOptiuniUrmarire.getSelectedItem();
+		BeanUrmarireEveniment eveniment = (BeanUrmarireEveniment) spinnerOptiuniUrmarire.getSelectedItem();
 		evenimentObiectiv.setCodEveniment(eveniment.getIdEveniment());
 
 		saveEveniment();
@@ -276,7 +276,7 @@ public class UrmarireObiective extends Fragment implements InputTextDialogListen
 	}
 
 	private void updateEvenimentUrmarit(BeanUrmarireObiectiv obiectivUrmarit) {
-		for (BeanLinieUrmarire linie : listEvenimente) {
+		for (BeanUrmarireEveniment linie : listEvenimente) {
 			if (linie.getIdEveniment() == obiectivUrmarit.getCodEveniment()) {
 				if (isEvenimentProdus) {
 					linie.setData(obiectivUrmarit.getData());
@@ -318,13 +318,7 @@ public class UrmarireObiective extends Fragment implements InputTextDialogListen
 		dialogDate.show();
 	}
 
-	private void setListenerTextData() {
-		textDataEveniment.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				showDataDialog();
-			}
-		});
-	}
+	
 
 	private void setListenerTextObservatii() {
 		textObservatii.setOnClickListener(new View.OnClickListener() {
@@ -389,26 +383,26 @@ public class UrmarireObiective extends Fragment implements InputTextDialogListen
 
 	}
 
-	private void loadListEvenimente(List<BeanLinieUrmarire> evenimente) {
+	private void loadListEvenimente(List<BeanUrmarireEveniment> evenimente) {
 
 		listEvenimente.clear();
-		BeanLinieUrmarire obiectiv = null;
+		BeanUrmarireEveniment obiectiv = null;
 
-		obiectiv = new BeanLinieUrmarire();
+		obiectiv = new BeanUrmarireEveniment();
 		obiectiv.setIdEveniment(-1);
 		obiectiv.setNumeEveniment("Selectati un eveniment");
 		obiectiv.setData("");
 		listEvenimente.add(obiectiv);
 
 		for (EnumUrmarireObiective nume : EnumUrmarireObiective.values()) {
-			obiectiv = new BeanLinieUrmarire();
+			obiectiv = new BeanUrmarireEveniment();
 			obiectiv.setIdEveniment(nume.getCod());
 			obiectiv.setNumeEveniment(nume.getNume());
 
 			obiectiv.setData("");
 			obiectiv.setObservatii("");
 
-			for (BeanLinieUrmarire ev : evenimente) {
+			for (BeanUrmarireEveniment ev : evenimente) {
 				if (ev.getIdEveniment() == nume.getCod()) {
 					obiectiv.setData(ev.getData());
 					obiectiv.setObservatii(ev.getObservatii());

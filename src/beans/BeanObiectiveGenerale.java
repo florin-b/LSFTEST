@@ -40,6 +40,7 @@ public class BeanObiectiveGenerale {
 	private AdapterObiectiveGeneral adapterObiective;
 	private String id = " ";
 	private boolean inchis = false;
+	private List<BeanUrmarireEveniment> listEvenimente;
 
 	private static BeanObiectiveGenerale instance = new BeanObiectiveGenerale();
 
@@ -587,4 +588,16 @@ public class BeanObiectiveGenerale {
 		this.stadiiDepart = stadiiDepart;
 	}
 
+	public List<BeanUrmarireEveniment> getListEvenimente() {
+		return listEvenimente;
+	}
+
+	public void setListEvenimente(List<BeanUrmarireEveniment> listEvenimente) {
+		this.listEvenimente = listEvenimente;
+	}
+
+	
+	
+	
+	
 }

@@ -9,18 +9,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import beans.BeanLinieUrmarire;
+import beans.BeanUrmarireEveniment;
 import beans.BeanObiectiveGenerale;
 
 public class AdapterObiectiveUrmarire extends BaseAdapter {
 
 	private BeanObiectiveGenerale obiectiv;
 	private Context context;
-	private List<BeanLinieUrmarire> liniiUrmarire;
+	private List<BeanUrmarireEveniment> liniiUrmarire;
 	private int[] colors = new int[] { 0x3098BED9, 0x30E8E8E8 };
 
 	public AdapterObiectiveUrmarire(BeanObiectiveGenerale obiectiv, Context context,
-			List<BeanLinieUrmarire> liniiUrmarire) {
+			List<BeanUrmarireEveniment> liniiUrmarire) {
 		this.obiectiv = obiectiv;
 		this.context = context;
 		this.liniiUrmarire = liniiUrmarire;
@@ -49,7 +49,7 @@ public class AdapterObiectiveUrmarire extends BaseAdapter {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 
-		BeanLinieUrmarire linieObiectiv = getItem(position);
+		BeanUrmarireEveniment linieObiectiv = getItem(position);
 
 		viewHolder.textNumeLinie.setText(linieObiectiv.getNumeEveniment());
 		viewHolder.textStare.setText(linieObiectiv.getData());
@@ -64,7 +64,7 @@ public class AdapterObiectiveUrmarire extends BaseAdapter {
 		return liniiUrmarire.size();
 	}
 
-	public BeanLinieUrmarire getItem(int position) {
+	public BeanUrmarireEveniment getItem(int position) {
 		return liniiUrmarire.get(position);
 	}
 
@@ -72,7 +72,7 @@ public class AdapterObiectiveUrmarire extends BaseAdapter {
 		return arg0;
 	}
 
-	public void setListEvenimente(List<BeanLinieUrmarire> liniiUrmarire) {
+	public void setListEvenimente(List<BeanUrmarireEveniment> liniiUrmarire) {
 		this.liniiUrmarire = liniiUrmarire;
 	}
 

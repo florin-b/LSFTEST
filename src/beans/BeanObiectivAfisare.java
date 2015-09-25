@@ -6,6 +6,7 @@ public class BeanObiectivAfisare {
 	private String nume;
 	private String data;
 	private String beneficiar;
+	private String codStatus;
 
 	public String getId() {
 		return id;
@@ -39,9 +40,19 @@ public class BeanObiectivAfisare {
 		this.beneficiar = beneficiar;
 	}
 
-	public String toString() {
-		return "BeanObiectivAfisare [id=" + id + ", nume=" + nume + ", data=" + data + ", beneficiar=" + beneficiar
-				+ "]";
+	public String getCodStatus() {
+		return codStatus;
 	}
+
+	public void setCodStatus(String codStatus) {
+		this.codStatus = codStatus;
+	}
+
+	@Override
+	public String toString() {
+		return "BeanObiectivAfisare [id=" + id + ", nume=" + nume + ", data=" + data + ", beneficiar=" + beneficiar + ", codStatus=" + codStatus + "]";
+	}
+	
+	
 
 }

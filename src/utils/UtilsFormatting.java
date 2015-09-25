@@ -14,6 +14,9 @@ public class UtilsFormatting {
 
 		String formattedDate = "";
 
+		if (dateString.trim().equals(""))
+			return "";
+
 		DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yy", Locale.ENGLISH);
 
 		DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, new Locale("ro"));
@@ -49,6 +52,15 @@ public class UtilsFormatting {
 
 		return nf.format(doubleValue);
 
+	}
+
+	public static String addSpace(String text, int length) {
+		StringBuilder spaceString = new StringBuilder();
+
+		for (int i = 0; i < length - text.length(); i++)
+			spaceString.append(" ");
+
+		return spaceString.toString();
 	}
 
 }

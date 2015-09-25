@@ -9,6 +9,12 @@ public class Agent {
 
 	}
 
+	public Agent(String nume, String cod) {
+		super();
+		this.nume = nume;
+		this.cod = cod;
+	}
+
 	public String getNume() {
 		return nume;
 	}
@@ -23,6 +29,10 @@ public class Agent {
 
 	public void setCod(String cod) {
 		this.cod = cod;
+	}
+
+	public String toString() {
+		return nume;
 	}
 
 }

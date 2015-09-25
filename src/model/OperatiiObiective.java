@@ -17,12 +17,12 @@ import org.json.JSONTokener;
 import utils.UtilsGeneral;
 import android.content.Context;
 import android.widget.Toast;
-import beans.BeanLinieUrmarire;
 import beans.BeanObiectivAfisare;
 import beans.BeanObiectivDepartament;
 import beans.BeanObiectiveConstructori;
 import beans.BeanObiectiveGenerale;
 import beans.BeanStadiuObiectiv;
+import beans.BeanUrmarireEveniment;
 import beans.BeanUrmarireObiectiv;
 import enums.EnumOperatiiObiective;
 import enums.EnumStadiuSubantrep;
@@ -104,6 +104,7 @@ public class OperatiiObiective implements AsyncTaskListener {
 					obiectiv.setNume(object.getString("nume"));
 					obiectiv.setData(object.getString("data"));
 					obiectiv.setBeneficiar(object.getString("beneficiar"));
+					obiectiv.setCodStatus(object.getString("codStatus"));
 					listaObiective.add(obiectiv);
 				}
 
@@ -186,6 +187,10 @@ public class OperatiiObiective implements AsyncTaskListener {
 			}
 
 			obiectiv.setStadiiDepart(listStadiiDepart);
+
+			jsonArray = new JSONArray(jsonObject.getString("evenimente"));
+
+			obiectiv.setListEvenimente(deserializeListEvenimente(String.valueOf(jsonArray)));
 
 		} catch (JSONException e) {
 			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
@@ -314,9 +319,9 @@ public class OperatiiObiective implements AsyncTaskListener {
 		return constructor;
 	}
 
-	public List<BeanLinieUrmarire> deserializeListEvenimente(String resultList) {
-		List<BeanLinieUrmarire> listEvenimente = new ArrayList<BeanLinieUrmarire>();
-		BeanLinieUrmarire eveniment = null;
+	public List<BeanUrmarireEveniment> deserializeListEvenimente(String resultList) {
+		List<BeanUrmarireEveniment> listEvenimente = new ArrayList<BeanUrmarireEveniment>();
+		BeanUrmarireEveniment eveniment = null;
 
 		try {
 			Object json = new JSONTokener(resultList).nextValue();
@@ -328,10 +333,12 @@ public class OperatiiObiective implements AsyncTaskListener {
 				for (int i = 0; i < jsonArray.length(); i++) {
 					JSONObject evenimentObject = jsonArray.getJSONObject(i);
 
-					eveniment = new BeanLinieUrmarire();
+					eveniment = new BeanUrmarireEveniment();
 					eveniment.setIdEveniment(Integer.parseInt(evenimentObject.getString("codEveniment")));
 					eveniment.setData(UtilsGeneral.getFormattedDate(evenimentObject.getString("data")));
 					eveniment.setObservatii(evenimentObject.getString("observatii"));
+					eveniment.setCodClient(evenimentObject.getString("codClient"));
+					eveniment.setCodDepart(evenimentObject.getString("codDepart"));
 					listEvenimente.add(eveniment);
 
 				}

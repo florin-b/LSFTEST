@@ -83,10 +83,9 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		setContentView(R.layout.main);
 
 		if (isDebugMode(this)) {
-			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog()
+			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
+			StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath()
 					.build());
-			StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog()
-					.penaltyDeath().build());
 		}
 
 		slideToUnLock = (MySwitch) findViewById(R.id.switchLogon);
@@ -111,16 +110,16 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		addListenerUserName();
 		addListenerPassword();
 
-		etUsername.setText("androka");
+		etUsername.setText("androdv");
 		etPassword.setText("112");
 
 		// etUsername.setText("androag");
 		// etPassword.setText("sfa");
 
-		//CAG GL
-		//etUsername.setText("FROTARU");
-		//etPassword.setText("89mLcn");		
-		
+		// CAG GL
+		// etUsername.setText("FROTARU");
+		// etPassword.setText("89mLcn");
+
 		// etUsername.setText("SIONITA");
 		// etPassword.setText("SuJste");
 
@@ -142,8 +141,11 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		// etUsername.setText("androka");
 		// etPassword.setText("sfa");
 
-		// etUsername.setText("temasg"); //dir KA
-		// etPassword.setText("9TemAst7");
+		etUsername.setText("temasg"); // dir KA
+		etPassword.setText("9TemAst7");
+
+		//etUsername.setText("MRADUIANU"); // KA GL
+		//etPassword.setText("2GdCp4");
 
 		// etUsername.setText("SSTEFAN");
 		// etPassword.setText("tRYTjS");
