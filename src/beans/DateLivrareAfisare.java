@@ -1,5 +1,7 @@
 package beans;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class DateLivrareAfisare {
 
     private String codJudet = "";
@@ -38,6 +40,7 @@ public class DateLivrareAfisare {
     private String cnpClient;
     private String idObiectiv = " ";
 	private boolean isAdresaObiectiv;
+	private LatLng coordonateAdresa;
 
     public DateLivrareAfisare() {
 
@@ -348,5 +351,15 @@ public class DateLivrareAfisare {
 	public void setAdresaObiectiv(boolean isAdresaObiectiv) {
 		this.isAdresaObiectiv = isAdresaObiectiv;
 	}
+
+	public LatLng getCoordonateAdresa() {
+		return coordonateAdresa;
+	}
+
+	public void setCoordonateAdresa(LatLng coordonateAdresa) {
+		this.coordonateAdresa = coordonateAdresa;
+	}
+	
+	
 
 }

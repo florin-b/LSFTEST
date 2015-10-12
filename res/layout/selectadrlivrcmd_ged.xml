@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge>
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusableInTouchMode="true"
             android:orientation="vertical" >
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/layoutHeaderAdrese"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,7 +34,7 @@
                         android:layout_height="wrap_content"
                         android:checked="true"
                         android:text="Selecteaza adresa din lista"
-                        android:textColor="@color/detColor4"
+                        android:textColor="@color/labelColor"
                         android:textSize="16sp" />
 
                     <RadioButton
@@ -46,7 +43,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="30dip"
                         android:text="Introdu adresa noua"
-                        android:textColor="@color/detColor4"
+                        android:textColor="@color/labelColor"
                         android:textSize="16sp" />
                 </RadioGroup>
 
@@ -57,7 +54,6 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/layoutListAdrese"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +67,7 @@
                     android:gravity="left"
                     android:paddingLeft="5dip"
                     android:text="Adresa livrare"
-                    android:textColor="@color/detColor4"
+                    android:textColor="@color/labelColor"
                     android:textSize="16sp" />
 
                 <Spinner
@@ -90,22 +86,21 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/layoutAdr1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dip"
+                android:layout_height="60dip"
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|left"
                     android:layout_marginLeft="3dip"
                     android:gravity="left"
                     android:text="Sediul social"
-                    android:textColor="@color/detColor4"
-                    android:textSize="16sp" />
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
 
                 <Spinner
                     android:id="@+id/spinnerJudet"
@@ -113,235 +108,238 @@
                     android:layout_height="45dip"
                     android:layout_gravity="bottom|left"
                     android:layout_weight="0.1"
-                    android:background="@drawable/dropdown_style_1"
                     android:clickable="true"
                     android:gravity="left" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|left"
-                    android:layout_marginLeft="30dp"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginRight="20dp"
                     android:layout_weight="0.05"
-                    android:gravity="left"
+                    android:gravity="right"
                     android:text="Localitate"
-                    android:textColor="@color/detColor4"
-                    android:textSize="16sp" />
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
 
-                <Spinner
-                    android:id="@+id/spinnerLocalitate"
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteLocalitate"
                     android:layout_width="0dp"
                     android:layout_height="45dip"
                     android:layout_gravity="bottom|left"
+                    android:layout_marginRight="180dip"
                     android:layout_weight="0.1"
-                    android:background="@drawable/dropdown_style_1"
-                    android:clickable="true"
-                    android:gravity="left" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.21" />
+                    android:dropDownHeight="250dp"
+                    android:inputType="textCapSentences|textNoSuggestions"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/layoutAdr2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_height="60dip"
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|left"
                     android:layout_marginLeft="3dip"
                     android:gravity="left"
-                    android:text="Strada"
-                    android:textColor="@color/detColor4"
-                    android:textSize="16sp" />
+                    android:text="Strada, nr"
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
 
-                <EditText
-                    android:id="@+id/txtStrada"
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteStrada"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="45dip"
                     android:layout_gravity="bottom|left"
-                    android:layout_weight="0.25"
-                    android:background="@drawable/edittext_style_1"
-                    android:gravity="left"
-                    android:inputType="textNoSuggestions"
-                    android:maxLength="65"
+                    android:layout_marginRight="180dip"
+                    android:layout_weight="0.2"
+                    android:dropDownHeight="250dp"
+                    android:inputType="textCapSentences|textNoSuggestions"
+                    android:maxLength="80"
                     android:singleLine="true"
-                    android:textColor="@color/editTextColor1"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.2" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_height="60dip"
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|left"
+                    android:layout_marginLeft="3dip"
+                    android:gravity="left"
+                    android:text="Pozitionare"
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
+
+                <Button
+                    android:id="@+id/btnPozitieAdresa"
+                    style="@style/ok_button"
+                    android:layout_width="0dip"
+                    android:layout_height="40dip"
+                    android:layout_gravity="bottom|left"
+                    android:layout_weight="0.2"
+                    android:background="@drawable/cancel_button_style"
+                    android:paddingLeft="20dip"
+                    android:paddingRight="20dip"
+                    android:text="Pozitionati adresa pe harta" />
+
+                <TextView
+                    android:id="@+id/textCoordAdresa"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginRight="180dip"
+                    android:layout_weight="0.25"
+                    android:gravity="right"
+                    android:text=""
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
                     android:layout_marginLeft="3dip"
                     android:gravity="left"
                     android:text="Pers. contact"
-                    android:textColor="@color/detColor4"
-                    android:textSize="16sp" />
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
 
                 <EditText
                     android:id="@+id/txtPersCont"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|left"
+                    android:layout_marginRight="180dip"
                     android:layout_weight="0.25"
-                    android:background="@drawable/edittext_style_1"
                     android:gravity="left"
                     android:inputType="textNoSuggestions"
                     android:maxLength="65"
                     android:singleLine="true"
-                    android:textColor="@color/editTextColor1"
                     android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.2" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_height="60dip"
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|left"
                     android:layout_marginLeft="3dip"
                     android:gravity="left|center"
                     android:text="Telefon"
-                    android:textColor="@color/detColor4"
-                    android:textSize="16sp" />
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
 
                 <EditText
                     android:id="@+id/txtTelefon"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom|left"
+                    android:layout_marginRight="180dip"
                     android:layout_weight="0.25"
-                    android:background="@drawable/edittext_style_1"
-                    android:gravity="left"
+                    android:gravity="bottom"
                     android:inputType="number"
                     android:maxLength="65"
                     android:singleLine="true"
-                    android:textColor="@color/editTextColor1"
                     android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="45dip"
-                    android:layout_weight="0.2" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/layoutMail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_height="60dip"
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|left"
                     android:layout_marginLeft="3dip"
                     android:gravity="left|center"
                     android:text="E-mail"
-                    android:textColor="@color/detColor4"
-                    android:textSize="16sp" />
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
 
                 <EditText
                     android:id="@+id/txtMail"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom|left"
+                    android:layout_marginRight="180dip"
                     android:layout_weight="0.25"
-                    android:background="@drawable/edittext_style_1"
-                    android:gravity="left"
+                    android:gravity="bottom"
                     android:inputType="text"
                     android:maxLength="150"
                     android:singleLine="true"
-                    android:textColor="@color/editTextColor1"
                     android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="45dip"
-                    android:layout_weight="0.2" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_height="60dip"
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|left"
                     android:layout_marginLeft="3dip"
                     android:gravity="left|center"
                     android:text="Doc.insotitor"
-                    android:textColor="@color/detColor4"
-                    android:textSize="16sp" />
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
 
                 <Spinner
                     android:id="@+id/spinnerDocInsot"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left|bottom"
+                    android:layout_marginRight="180dip"
                     android:layout_weight="0.25"
-                    android:background="@drawable/dropdown_style_1"
                     android:gravity="left" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="45dip"
-                    android:layout_weight="0.2" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_height="60dip"
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|left"
                     android:layout_marginLeft="3dip"
                     android:gravity="left"
                     android:text="Plata"
-                    android:textColor="@color/detColor4"
-                    android:textSize="16sp" />
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
 
                 <Spinner
                     android:id="@+id/spinnerPlata"
@@ -349,7 +347,6 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="left|bottom"
                     android:layout_weight="0.17"
-                    android:background="@drawable/dropdown_style_1"
                     android:gravity="left" />
 
                 <TextView
@@ -363,31 +360,25 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left|bottom"
-                    android:layout_weight="0.1"
-                    android:background="@drawable/dropdown_style_1" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="45dip"
-                    android:layout_weight="0.22" />
+                    android:layout_marginRight="180dip"
+                    android:layout_weight="0.1" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_height="60dip"
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|left"
                     android:layout_marginLeft="3dip"
                     android:gravity="left"
                     android:text="Transport"
-                    android:textColor="@color/detColor4"
-                    android:textSize="16sp" />
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
 
                 <Spinner
                     android:id="@+id/spinnerTransp"
@@ -395,7 +386,6 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="left|bottom"
                     android:layout_weight="0.1"
-                    android:background="@drawable/dropdown_style_1"
                     android:gravity="left" />
 
                 <CheckBox
@@ -406,140 +396,115 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="0.08"
                     android:text="Camion cu macara" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="45dip"
-                    android:layout_weight="0.07" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_height="60dip"
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|left"
                     android:layout_marginLeft="3dip"
                     android:gravity="left"
                     android:text="Data livrare"
-                    android:textColor="@color/detColor4"
-                    android:textSize="16sp" />
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
 
                 <Spinner
                     android:id="@+id/spinnerDataLivrare"
                     android:layout_width="0dp"
                     android:layout_height="45dip"
                     android:layout_gravity="left|bottom"
+                    android:layout_marginRight="180dip"
                     android:layout_weight="0.25"
-                    android:background="@drawable/dropdown_style_1"
                     android:gravity="left" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.2" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_height="60dip"
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|left"
                     android:layout_marginLeft="3dip"
                     android:gravity="left"
                     android:text="Obs. livrare"
-                    android:textColor="@color/detColor4"
-                    android:textSize="16sp" />
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
 
                 <EditText
                     android:id="@+id/txtObservatii"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|left"
+                    android:layout_marginRight="180dip"
                     android:layout_weight="0.25"
-                    android:background="@drawable/edittext_style_1"
                     android:gravity="left"
                     android:inputType="textNoSuggestions"
                     android:maxLength="100"
                     android:singleLine="true"
-                    android:textColor="@color/editTextColor1"
                     android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.2" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_height="60dip"
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|left"
                     android:layout_marginLeft="3dip"
                     android:gravity="left"
                     android:text="Obs. plata"
-                    android:textColor="@color/detColor4"
-                    android:textSize="16sp" />
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
 
                 <EditText
                     android:id="@+id/txtObsPlata"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|left"
+                    android:layout_marginRight="180dip"
                     android:layout_weight="0.25"
-                    android:background="@drawable/edittext_style_1"
                     android:gravity="left"
                     android:inputType="textNoSuggestions"
                     android:maxLength="100"
                     android:singleLine="true"
-                    android:textColor="@color/editTextColor1"
                     android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.2" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_height="60dip"
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center"
                     android:layout_marginLeft="3dip"
                     android:gravity="left"
                     android:text="Adresa de livrare"
-                    android:textColor="@color/detColor4"
-                    android:textSize="16sp" />
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
 
                 <RadioGroup
                     android:id="@+id/radioAdresaLivrare"
                     android:layout_width="wrap_content"
                     android:layout_height="45dip"
+                    android:layout_gravity="bottom"
                     android:orientation="horizontal" >
 
                     <RadioButton
@@ -548,7 +513,7 @@
                         android:layout_height="wrap_content"
                         android:checked="true"
                         android:text="Sediul social"
-                        android:textColor="@color/detColor4"
+                        android:textColor="@color/labelColor"
                         android:textSize="16sp" />
 
                     <RadioButton
@@ -557,7 +522,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dip"
                         android:text="Alta adresa"
-                        android:textColor="@color/detColor4"
+                        android:textColor="@color/labelColor"
                         android:textSize="16sp" />
                 </RadioGroup>
 
@@ -568,15 +533,13 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/layoutAdrLivrare1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_height="60dip"
                 android:orientation="horizontal" >
 
                 <View
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dip" />
 
@@ -586,7 +549,6 @@
                     android:layout_height="45dip"
                     android:layout_gravity="bottom|left"
                     android:layout_weight="0.1"
-                    android:background="@drawable/dropdown_style_1"
                     android:gravity="left" />
 
                 <TextView
@@ -597,68 +559,55 @@
                     android:layout_weight="0.05"
                     android:gravity="left"
                     android:text="Localitate"
-                    android:textColor="@color/detColor4"
+                    android:textColor="@color/labelColor"
                     android:textSize="16sp" />
 
-                <Spinner
-                    android:id="@+id/spinnerLocLivrare"
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteLocLivrare"
                     android:layout_width="0dp"
                     android:layout_height="45dip"
                     android:layout_gravity="bottom|left"
-                    android:layout_weight="0.1"
-                    android:background="@drawable/dropdown_style_1"
-                    android:clickable="true"
-                    android:gravity="left" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.21" />
+                    android:layout_marginRight="180dip"
+                    android:layout_weight="0.15"
+                    android:dropDownHeight="250dp"
+                    android:inputType="textCapSentences|textNoSuggestions"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/layoutAdrLivrare2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_height="60dip"
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:layout_width="150dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|left"
                     android:layout_marginLeft="3dip"
                     android:gravity="left"
                     android:text="Strada"
-                    android:textColor="@color/detColor4"
-                    android:textSize="16sp" />
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
 
-                <EditText
-                    android:id="@+id/txtStradaLivrare"
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteStradaLivrare"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="45dip"
                     android:layout_gravity="bottom|left"
-                    android:layout_weight="0.25"
-                    android:background="@drawable/edittext_style_1"
-                    android:gravity="left"
-                    android:inputType="textNoSuggestions"
-                    android:maxLength="65"
+                    android:layout_marginRight="180dip"
+                    android:layout_weight="0.2"
+                    android:dropDownHeight="250dp"
+                    android:inputType="textCapSentences|textNoSuggestions"
+                    android:maxLength="80"
                     android:singleLine="true"
-                    android:textColor="@color/editTextColor1"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.2" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
+                android:layout_height="60dip"
                 android:orientation="horizontal" >
 
                 <View

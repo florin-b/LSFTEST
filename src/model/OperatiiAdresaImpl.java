@@ -10,10 +10,13 @@ import lite.sfa.test.AsyncTaskWSCall;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import utils.UtilsFormatting;
 import android.content.Context;
 import android.widget.Toast;
+import beans.BeanAdreseJudet;
 import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
 
@@ -32,6 +35,23 @@ public class OperatiiAdresaImpl implements OperatiiAdresa, AsyncTaskListener {
 	public void getLocalitatiJudet(HashMap<String, String> params, EnumLocalitate tipLocalitate) {
 
 		numeComanda = EnumOperatiiAdresa.GET_LOCALITATI_JUDET;
+		this.params = params;
+		this.tipLocalitate = tipLocalitate;
+		performOperation();
+
+	}
+
+	public void getAdreseJudet(HashMap<String, String> params, EnumLocalitate tipLocalitate) {
+
+		numeComanda = EnumOperatiiAdresa.GET_ADRESE_JUDET;
+		this.params = params;
+		this.tipLocalitate = tipLocalitate;
+		performOperation();
+
+	}
+
+	public void isAdresaValida(HashMap<String, String> params, EnumLocalitate tipLocalitate) {
+		numeComanda = EnumOperatiiAdresa.IS_ADRESA_VALIDA;
 		this.params = params;
 		this.tipLocalitate = tipLocalitate;
 		performOperation();
@@ -58,6 +78,36 @@ public class OperatiiAdresaImpl implements OperatiiAdresa, AsyncTaskListener {
 		}
 
 		return listLocalitati;
+	}
+
+	public BeanAdreseJudet deserializeListAdrese(Object resultList) {
+
+		BeanAdreseJudet adreseJudet = new BeanAdreseJudet();
+		List<String> listLocalitati = new ArrayList<String>();
+		List<String> listStrazi = new ArrayList<String>();
+
+		try {
+			JSONObject jsonObject = new JSONObject((String) resultList);
+			JSONArray jsonArrayLoc = new JSONArray(jsonObject.getString("listLocalitati"));
+
+			for (int i = 0; i < jsonArrayLoc.length(); i++) {
+				listLocalitati.add(UtilsFormatting.flattenToAscii(jsonArrayLoc.getString(i).toString()));
+			}
+
+			JSONArray jsonArrayStrazi = new JSONArray(jsonObject.getString("listStrazi"));
+
+			for (int i = 0; i < jsonArrayStrazi.length(); i++) {
+				listStrazi.add(UtilsFormatting.flattenToAscii(jsonArrayStrazi.getString(i).toString()));
+			}
+
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		adreseJudet.setListLocalitati(listLocalitati);
+		adreseJudet.setListStrazi(listStrazi);
+
+		return adreseJudet;
 	}
 
 	public void setOperatiiAdresaListener(OperatiiAdresaListener listener) {

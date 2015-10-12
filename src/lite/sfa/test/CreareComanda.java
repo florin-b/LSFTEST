@@ -68,8 +68,8 @@ import dialogs.PretTransportDialog;
 import dialogs.ValoareNegociataDialog;
 import enums.EnumComenziDAO;
 
-public class CreareComanda extends Activity implements AsyncTaskListener, ValoareNegociataDialogListener, ComenziDAOListener,
-		PretTransportDialogListener, ArtComplDialogListener, Observer {
+public class CreareComanda extends Activity implements AsyncTaskListener, ValoareNegociataDialogListener, ComenziDAOListener, PretTransportDialogListener,
+		ArtComplDialogListener, Observer {
 
 	Button stocBtn, clientBtn, articoleBtn, livrareBtn, saveCmdBtn, slideButtonCmd;
 	String filiala = "", nume = "", cod = "";
@@ -342,22 +342,21 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		} else {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-			builder.setMessage("Datele se vor pierde. Continuati?").setCancelable(false)
-					.setPositiveButton("Da", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
+			builder.setMessage("Datele se vor pierde. Continuati?").setCancelable(false).setPositiveButton("Da", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
 
-							resetAllVars();
-							UserInfo.getInstance().setParentScreen("");
+					resetAllVars();
+					UserInfo.getInstance().setParentScreen("");
 
-							Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);
-							startActivity(nextScreen);
-							finish();
-						}
-					}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							dialog.cancel();
-						}
-					}).setTitle("Atentie!").setIcon(R.drawable.warning96);
+					Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);
+					startActivity(nextScreen);
+					finish();
+				}
+			}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			}).setTitle("Atentie!").setIcon(R.drawable.warning96);
 
 			AlertDialog alert = builder.create();
 			alert.show();
@@ -504,10 +503,10 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 				textNrFact.setText("1 factura (red. in pret)");
 			}
 
-			clientFinalStr += "#" + dateLivrareInstance.getStrada() + "^" + dateLivrareInstance.getOras() + "^" + dateLivrareInstance.getCodJudet()
-					+ "#" + tokenLivrare[1] + "#" + tokenLivrare[2] + "#" + tokenLivrare[3] + "#" + tokenLivrare[4].substring(0, 1).trim() + "#"
-					+ tokenLivrare[5].substring(0, 4).trim() + "#" + String.valueOf(totalComanda) + "#" + varUnitLog + "#"
-					+ UserInfo.getInstance().getCod() + "#" + factRed + "#";
+			clientFinalStr += "#" + dateLivrareInstance.getStrada() + "^" + dateLivrareInstance.getOras() + "^" + dateLivrareInstance.getCodJudet() + "#"
+					+ tokenLivrare[1] + "#" + tokenLivrare[2] + "#" + tokenLivrare[3] + "#" + tokenLivrare[4].substring(0, 1).trim() + "#"
+					+ tokenLivrare[5].substring(0, 4).trim() + "#" + String.valueOf(totalComanda) + "#" + varUnitLog + "#" + UserInfo.getInstance().getCod()
+					+ "#" + factRed + "#";
 
 			dateLivrareInstance.setPersContact(tokenLivrare[1]);
 			dateLivrareInstance.setNrTel(tokenLivrare[2]);
@@ -715,8 +714,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 						DateLivrare dateLivrareInstance = DateLivrare.getInstance();
 
 						if (dateLivrareInstance.getTipPlata().equals("E") && totalComanda > 5000 && CreareComanda.tipClientVar.equals("PJ")) {
-							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT)
-									.show();
+							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT).show();
 							return;
 						}
 
@@ -759,8 +757,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 								+ dateLivrareInstance.isAdrLivrNoua() + "#" + dateLivrareInstance.getTipDocInsotitor() + "#" + alerteKA + "#"
 								+ dateLivrareInstance.getObsPlata() + "#" + dateLivrareInstance.getAddrNumber() + "#" + localRedSeparat + "#"
 								+ CreareComanda.filialaAlternativa + "#" + dateLivrareInstance.getValoareIncasare() + "#"
-								+ UserInfo.getInstance().getUserSite() + "#" + userSiteMail + "#" + isValIncModif + "#" + codJ + "#" + adrLivrareGED
-								+ "@" + articoleFinaleStr;
+								+ UserInfo.getInstance().getUserSite() + "#" + userSiteMail + "#" + isValIncModif + "#" + codJ + "#" + adrLivrareGED + "@"
+								+ articoleFinaleStr;
 
 						Comanda comanda = new Comanda();
 						comanda.setCodClient(codClientVar);
@@ -969,9 +967,9 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 					articolCmd.setDepart(articol.getDepart());
 					listArticole.add(articolCmd);
 
-					retVal += "000000000000000000" + "#" + "1" + "#" + " " + "#" + String.valueOf(dblLocalTaxaVerde) + "#" + "0" + "#" + "BUC" + "#"
-							+ "0" + "#" + " " + "#" + "0" + "#" + "0" + "#" + "1" + "#" + String.valueOf(dblLocalTaxaVerde) + "#" + " " + "#" + "1"
-							+ "#" + "BUC" + "@";
+					retVal += "000000000000000000" + "#" + "1" + "#" + " " + "#" + String.valueOf(dblLocalTaxaVerde) + "#" + "0" + "#" + "BUC" + "#" + "0"
+							+ "#" + " " + "#" + "0" + "#" + "0" + "#" + "1" + "#" + String.valueOf(dblLocalTaxaVerde) + "#" + " " + "#" + "1" + "#" + "BUC"
+							+ "@";
 
 				}
 			}
@@ -1100,6 +1098,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			obj.put("macara", DateLivrare.getInstance().isMasinaMacara() ? "X" : " ");
 			obj.put("idObiectiv", DateLivrare.getInstance().getIdObiectiv());
 			obj.put("isAdresaObiectiv", DateLivrare.getInstance().isAdresaObiectiv());
+			obj.put("coordonateGps", getCoordAdresa());
 
 		} catch (JSONException ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
@@ -1111,6 +1110,14 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 	}
 
+	
+	private String getCoordAdresa() {
+		if (DateLivrare.getInstance().getCoordonateAdresa() != null)
+			return DateLivrare.getInstance().getCoordonateAdresa().latitude + "#" + DateLivrare.getInstance().getCoordonateAdresa().longitude;
+		else
+			return "0#0";
+	}
+	
 	public void addListenerClientBtn() {
 		clientBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {

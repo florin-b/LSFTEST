@@ -729,68 +729,43 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 	public void onSelectedSpinnerItem(int spinnerId, HashMap<String, String> map, int position) {
 
-		switch (spinnerId) {
-
-		case R.id.spinnerFiliala:
-
+		if (spinnerId == R.id.spinnerFiliala) {
 			String filNr = map.get("codFiliala");
-
 			if (filNr.trim().equals(""))
 				filNr = "-1"; // fara selectie
 			if (filNr.equals("00000000"))
 				filNr = "0";
-
 			totalComenzi = 0;
 			totalComenziTva = 0;
-
 			textTotalCmd.setText("0.00 RON");
 			textTotalTvaCmd.setText("0.00 RON");
-
 			selectedFiliala = filNr;
-
 			selectedCmd = "-1";
 			selectedAgent = "-1";
-
 			listAgenti.clear();
 			adapterAgenti.notifyDataSetChanged();
-
 			spinnerCmd.setAdapter(new ComandaAfisAdapter(new ArrayList<BeanComandaCreata>(), AfisComanda.this));
-
 			if (!filNr.equals("-1")) {
 				performGetAgenti();
 			}
-			break;
-
-		case R.id.spinnerAgentiAfisCmd:
-
+		} else if (spinnerId == R.id.spinnerAgentiAfisCmd) {
 			agentNr = map.get("codAgent");
-
 			if (agentNr.trim().equals(""))
 				agentNr = "0"; // fara selectie
 			if (agentNr.equals("00000000"))
 				agentNr = "0";
-
 			selectedAgent = agentNr;
-
 			selectedCmd = "-1";
-
 			if (spinnerAgentiAfisCmd.getSelectedItemPosition() > 0) {
 				performGetComenzi();
 			} else {
 				noComenziLayout();
 			}
-
-			break;
-
-		case R.id.spinnerTipUser:
-
+		} else if (spinnerId == R.id.spinnerTipUser) {
 			if (isDirectorDistrib()) {
 				selectedTipUser = getEnumReducere(map.get("stringId"));
 				populateListaAgenti(selectedTipUser);
 			}
-
-			break;
-
 		}
 
 	}

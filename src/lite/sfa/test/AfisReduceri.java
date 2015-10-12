@@ -451,9 +451,7 @@ public class AfisReduceri extends ListActivity implements AsyncTaskListener, Cus
 	}
 
 	public void onSelectedSpinnerItem(int spinnerId, HashMap<String, String> map, int position) {
-		switch (spinnerId) {
-		case R.id.spinnerRed:
-
+		if (spinnerId == R.id.spinnerRed) {
 			if (!selectedSabl.equals("-1")) {
 				list1.clear();
 				adapter.notifyDataSetChanged();
@@ -464,8 +462,6 @@ public class AfisReduceri extends ListActivity implements AsyncTaskListener, Cus
 				selectedSabl = cmdNr;
 				performArtSablon();
 			}
-
-			break;
 		}
 
 	}

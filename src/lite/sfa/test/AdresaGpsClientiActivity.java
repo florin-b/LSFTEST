@@ -3,8 +3,6 @@ package lite.sfa.test;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import utils.UtilsGeneral;
-
 import listeners.AdreseGPSListener;
 import listeners.CustomSpinnerClass;
 import listeners.CustomSpinnerListener;
@@ -13,6 +11,7 @@ import model.AdreseGPS;
 import model.OperatiiAgent;
 import model.OperatiiFiliala;
 import model.UserInfo;
+import utils.UtilsGeneral;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -146,39 +145,25 @@ public class AdresaGpsClientiActivity extends Fragment implements CustomSpinnerL
 	}
 
 	public void onSelectedSpinnerItem(int spinnerId, HashMap<String, String> map, int position) {
-		switch (spinnerId) {
-		case R.id.spinnerFilialaAdrese:
-
+		if (spinnerId == R.id.spinnerFilialaAdrese) {
 			String filNr = map.get("codFiliala");
-
 			if (filNr.trim().equals(""))
 				filNr = "-1";
 			if (filNr.equals("00000000"))
 				filNr = "0";
-
 			selectedFiliala = filNr;
-
 			if (!filNr.equals("-1")) {
 				performGetAgenti();
 
 			}
-
-			break;
-
-		case R.id.spinnerAgentiAdrese:
-
+		} else if (spinnerId == R.id.spinnerAgentiAdrese) {
 			String agentNr = map.get("codAgent");
-
 			if (agentNr.trim().equals(""))
 				agentNr = "0";
-
 			selectedAgent = agentNr;
-
 			if (!selectedAgent.equals("0")) {
 				getListaAdreseGps(selectedAgent, tipAdresa);
 			}
-
-			break;
 		}
 
 	}

@@ -21,5 +21,6 @@
 	<classpathentry kind="lib" path="D:/Aplicatii/Android/LiteSfaTest/LiteSFATest/libs/butterknife-5.1.2.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="D:/Aplicatii/Android/Librarii/google-maps-services-0.1.7"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

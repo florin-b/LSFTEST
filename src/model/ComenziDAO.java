@@ -22,6 +22,9 @@ import beans.BeanConditii;
 import beans.BeanConditiiArticole;
 import beans.BeanConditiiHeader;
 import beans.DateLivrareAfisare;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import enums.EnumComenziDAO;
 
 public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
@@ -156,6 +159,9 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 				dateLivrare.setCnpClient(jsonLivrare.getString("cnpClient"));
 				dateLivrare.setIdObiectiv(jsonLivrare.getString("idObiectiv"));
 				dateLivrare.setAdresaObiectiv(Boolean.valueOf(jsonLivrare.getString("isAdresaObiectiv")));
+
+				String[] coords = jsonLivrare.getString("coordonateGps").split(",");
+				dateLivrare.setCoordonateAdresa(new LatLng(Double.valueOf(coords[0]), Double.valueOf(coords[1])));
 
 				JSONArray jsonArticole = jsonObject.getJSONArray("articoleComanda");
 				String tipAlert = "", subCmp = "";

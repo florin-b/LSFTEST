@@ -688,11 +688,10 @@ public class Stocuri extends ListActivity implements AsyncTaskListener,
 
     public void onClick(View v) {
 
-        switch (v.getId()) {
-        case R.id.stocBtn:
-            stocBtnListener();
-            break;
-        }
+        int id = v.getId();
+		if (id == R.id.stocBtn) {
+			stocBtnListener();
+		}
 
     }
 

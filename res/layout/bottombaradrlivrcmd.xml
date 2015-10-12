@@ -7,10 +7,10 @@
 
     <Button
         android:id="@+id/saveAdrLivrBtn"
-        style="@style/button_text_1"
+        style="@style/ok_button"
         android:layout_width="wrap_content"
         android:layout_height="45dip"
-        android:background="@drawable/button_style_1"
+        android:background="@drawable/ok_button_style"
         android:paddingLeft="20dip"
         android:paddingRight="20dip"
         android:text="@string/strSalveaza" />

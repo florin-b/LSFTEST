@@ -90,8 +90,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:layout_weight="0.3"
+            android:layout_weight="0.1"
             android:textColor="@color/rowColor1" />
+
+        <TextView
+            android:id="@+id/textObsArt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:layout_weight="0.2"
+            android:textColor="#D2691E" />
 
         <TextView
             android:id="@+id/textPretArt"

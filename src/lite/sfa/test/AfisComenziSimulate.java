@@ -27,8 +27,6 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import beans.BeanComandaCreata;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -55,6 +53,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import beans.BeanComandaCreata;
 import enums.EnumComenziDAO;
 
 public class AfisComenziSimulate extends Activity implements AsyncTaskListener, CustomSpinnerListener,
@@ -1034,12 +1033,10 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 	public void onSelectedSpinnerItem(int spinnerId, HashMap<String, String> map, int position) {
 
-		switch (spinnerId) {
-		case R.id.spinnerCmd:
+		if (spinnerId == R.id.spinnerCmd) {
 			if (touched || list1.size() == 0) {
 				getArtSelCmd();
 			}
-			break;
 		}
 
 	}

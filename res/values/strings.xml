@@ -33,6 +33,8 @@
 	<string name="strAdrNou">Adres\u0103 de livrare nou\u0103:</string>
 
     <color name="editTextColor1">#01796F</color>
+    
+    <color name="labelColor">#556B2F</color>
 
     <string name="strSelecteaza">Selecteaz\u0103</string>
 

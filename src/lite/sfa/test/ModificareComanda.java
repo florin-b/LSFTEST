@@ -497,13 +497,12 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 						prepareArtForDelivery();
 
 						if (dateLivrareInstance.getTipPlata().equals("E") && totalComanda > 5000 && tipClientVar.equals("PJ")) {
-							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT)
-									.show();
+							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT).show();
 							return;
 						}
 
-						clientFinalStr += String.valueOf(totalComanda) + "#" + UserInfo.getInstance().getUnitLog() + "#"
-								+ UserInfo.getInstance().getCod() + "#-1#";
+						clientFinalStr += String.valueOf(totalComanda) + "#" + UserInfo.getInstance().getUnitLog() + "#" + UserInfo.getInstance().getCod()
+								+ "#-1#";
 
 						dateLivrareInstance.setTotalComanda(String.valueOf(totalComanda));
 						dateLivrareInstance.setCodAgent(UserInfo.getInstance().getCod());
@@ -856,7 +855,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("unitLog", DateLivrare.getInstance().getUnitLog());
 			obj.put("codAgent", DateLivrare.getInstance().getCodAgent());
 			obj.put("idObiectiv", DateLivrare.getInstance().getIdObiectiv());
-			obj.put("isAdresaObiectiv", DateLivrare.getInstance().isAdresaObiectiv() );
+			obj.put("isAdresaObiectiv", DateLivrare.getInstance().isAdresaObiectiv());
+			obj.put("coordonateGps", getCoordAdresa());
 
 			if (isComandaGed())
 				obj.put("factRed", "NU");
@@ -870,6 +870,13 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 		return obj.toString();
 
+	}
+
+	private String getCoordAdresa() {
+		if (DateLivrare.getInstance().getCoordonateAdresa() != null)
+			return DateLivrare.getInstance().getCoordonateAdresa().latitude + "#" + DateLivrare.getInstance().getCoordonateAdresa().longitude;
+		else
+			return "0#0";
 	}
 
 	private boolean isConditiiAcceptate() {
@@ -1271,13 +1278,11 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 				listViewSelPos = position;
 
-				if ((listViewArticole.getFirstVisiblePosition() == listViewSelPos)
-						|| (listViewArticole.getFirstVisiblePosition() + 1 == listViewSelPos)) {
+				if ((listViewArticole.getFirstVisiblePosition() == listViewSelPos) || (listViewArticole.getFirstVisiblePosition() + 1 == listViewSelPos)) {
 					listViewArticole.smoothScrollToPositionFromTop(listViewSelPos - 1, 0);
 				}
 
-				if ((listViewArticole.getLastVisiblePosition() == listViewSelPos)
-						|| (listViewArticole.getLastVisiblePosition() - 1 == listViewSelPos)) {
+				if ((listViewArticole.getLastVisiblePosition() == listViewSelPos) || (listViewArticole.getLastVisiblePosition() - 1 == listViewSelPos)) {
 					listViewArticole.smoothScrollToPositionFromTop(listViewArticole.getFirstVisiblePosition() + 1, 0);
 				}
 

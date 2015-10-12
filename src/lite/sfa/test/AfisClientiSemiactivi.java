@@ -285,25 +285,16 @@ public class AfisClientiSemiactivi extends Fragment implements AsyncTaskListener
 
 	public void onClick(View v) {
 
-		switch (v.getId()) {
-		case R.id.textNumeClient:
+		int id = v.getId();
+		if (id == R.id.textNumeClient) {
 			sortNumeClient();
-			break;
-
-		case R.id.textJudet:
+		} else if (id == R.id.textJudet) {
 			sortJudet();
-			break;
-
-		case R.id.textLocalitate:
+		} else if (id == R.id.textLocalitate) {
 			sortLocalitate();
-			break;
-
-		case R.id.textVanzMed:
+		} else if (id == R.id.textVanzMed) {
 			sortVanzariMedii();
-			break;
-
-		default:
-			break;
+		} else {
 		}
 
 	}

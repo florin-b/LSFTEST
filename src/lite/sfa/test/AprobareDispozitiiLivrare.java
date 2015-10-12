@@ -488,14 +488,10 @@ public class AprobareDispozitiiLivrare extends Activity implements CustomSpinner
 	}
 
 	public void onSelectedSpinnerItem(int spinnerId, HashMap<String, String> map, int position) {
-		switch (spinnerId) {
-		case R.id.spinnerCmdDl:
-
+		if (spinnerId == R.id.spinnerCmdDl) {
 			selectedCmd = map.get("idCmdClp");
 			selectedCmdSap = map.get("cmdSAP");
 			performArtCmd();
-
-			break;
 		}
 
 	}

@@ -6,6 +6,8 @@ package model;
 
 import beans.DateLivrareAfisare;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class DateLivrare {
 
 	private static DateLivrare instance = new DateLivrare();
@@ -54,6 +56,7 @@ public class DateLivrare {
 	private String cnpClient;
 	private String idObiectiv = " ";
 	private boolean isAdresaObiectiv;
+	private LatLng coordonateAdresa;
 
 	private DateLivrareAfisare dateLivrareAfisare;
 
@@ -100,6 +103,7 @@ public class DateLivrare {
 		this.cnpClient = dateLivrareAfisare.getCnpClient();
 		this.idObiectiv = dateLivrareAfisare.getIdObiectiv();
 		this.isAdresaObiectiv = dateLivrareAfisare.isAdresaObiectiv();
+		this.coordonateAdresa = dateLivrareAfisare.getCoordonateAdresa();
 
 	}
 
@@ -412,6 +416,14 @@ public class DateLivrare {
 		this.isAdresaObiectiv = isAdresaObiectiv;
 	}
 
+	public LatLng getCoordonateAdresa() {
+		return coordonateAdresa;
+	}
+
+	public void setCoordonateAdresa(LatLng coordonateAdresa) {
+		this.coordonateAdresa = coordonateAdresa;
+	}
+
 	public void resetAll() {
 		codJudet = "";
 		numeJudet = "";
@@ -444,6 +456,7 @@ public class DateLivrare {
 		codJudetD = " ";
 		idObiectiv = " ";
 		isAdresaObiectiv = false;
+		coordonateAdresa = null;
 
 	}
 

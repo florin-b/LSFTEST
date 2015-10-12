@@ -207,42 +207,27 @@ public class SelectAgentNeincasate extends Fragment implements CustomSpinnerList
 	}
 
 	public void onSelectedSpinnerItem(int spinnerId, HashMap<String, String> map, int position) {
-		switch (spinnerId) {
-		case R.id.spinnerFilialaVanzAg:
-
+		if (spinnerId == R.id.spinnerFilialaVanzAg) {
 			String filNr = map.get("codFiliala");
-
 			if (filNr.trim().equals(""))
 				filNr = "-1"; // fara selectie
 			if (filNr.equals("00000000"))
 				filNr = "0";
-
 			localFiliala = filNr;
 			Neincasate.selectedFiliala = filNr;
-
 			listAgenti.clear();
 			adapterAgenti.notifyDataSetChanged();
-
 			if (!filNr.equals("-1")) {
 				performGetAgenti();
 
 			}
-
-			break;
-
-		case R.id.spinnerAgentiVanzAg:
-
+		} else if (spinnerId == R.id.spinnerAgentiVanzAg) {
 			String agentNr = map.get("codAgent");
-
 			if (agentNr.trim().equals(""))
 				agentNr = "0"; // fara selectie
 			if (agentNr.equals("00000000"))
 				agentNr = "0";
-
 			Neincasate.selectedAgent = agentNr;
-
-			break;
-
 		}
 
 	}

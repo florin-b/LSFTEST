@@ -14,11 +14,14 @@ import java.util.List;
 import java.util.Locale;
 
 import listeners.AsyncTaskListener;
+import listeners.MapListener;
 import listeners.ObiectiveListener;
 import listeners.OperatiiAdresaListener;
+import model.ArticolComanda;
 import model.ConnectionStrings;
 import model.DateLivrare;
 import model.HandleJSONData;
+import model.ListaArticoleComanda;
 import model.OperatiiAdresa;
 import model.OperatiiAdresaImpl;
 import model.OperatiiObiective;
@@ -30,6 +33,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import utils.Exceptions;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import adapters.AdapterObiective;
@@ -39,6 +43,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -49,6 +55,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -61,19 +68,23 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import beans.Address;
 import beans.BeanAdresaLivrare;
+import beans.BeanAdreseJudet;
 import beans.BeanObiectivDepartament;
+
+import com.google.android.gms.maps.model.LatLng;
+
+import dialogs.MapAddressDialog;
 import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
 import enums.EnumOperatiiObiective;
 
-public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnItemClickListener, AsyncTaskListener, OperatiiAdresaListener,
-		ObiectiveListener {
+public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnItemClickListener, AsyncTaskListener, OperatiiAdresaListener, ObiectiveListener,
+		MapListener {
 
 	private Button saveAdrLivrBtn;
 	private EditText txtPers, txtTel, txtObservatii, txtValoareIncasare;
-
-	private TextView txtStrada;
 
 	private static final String METHOD_NAME = "getAdreseLivrareClient";
 
@@ -98,7 +109,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private boolean adrNouaModifCmd = false;
 	private int selectedAddrModifCmd = -1;
 	private CheckBox checkMacara;
-	private Spinner spinnerLocalitate, spinnerObiective;
+	private Spinner spinnerObiective;
 	private LinearLayout layoutObiective;
 
 	private ListPopupWindow lpw;
@@ -108,6 +119,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private OperatiiAdresa operatiiAdresa;
 	private OperatiiObiective operatiiObiective;
 	private BeanObiectivDepartament obiectivSelectat;
+	private AutoCompleteTextView textLocalitate, textStrada;
+	private Button btnPozitieAdresa;
+	private TextView textCoordAdresa;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -131,7 +145,16 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		this.layoutAdr1 = (LinearLayout) findViewById(R.id.layoutAdr1);
 		this.layoutAdr2 = (LinearLayout) findViewById(R.id.layoutAdr2);
 
-		txtStrada = (TextView) findViewById(R.id.txtStrada);
+		textLocalitate = (AutoCompleteTextView) findViewById(R.id.autoCompleteLocalitate);
+		textLocalitate.setVisibility(View.INVISIBLE);
+
+		textCoordAdresa = (TextView) findViewById(R.id.textCoordAdresa);
+		afisCoordAdresa();
+
+		btnPozitieAdresa = (Button) findViewById(R.id.btnPozitieAdresa);
+		setListnerBtnPozitieAdresa();
+
+		textStrada = (AutoCompleteTextView) findViewById(R.id.autoCompleteStrada);
 
 		txtPers = (EditText) findViewById(R.id.txtPersCont);
 		txtTel = (EditText) findViewById(R.id.txtTelefon);
@@ -197,14 +220,12 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		spinnerJudet = (Spinner) findViewById(R.id.spinnerJudet);
 		spinnerJudet.setOnItemSelectedListener(new regionSelectedListener());
 
-		spinnerLocalitate = (Spinner) findViewById(R.id.spinnerLocalitate);
-		spinnerLocalitate.setVisibility(View.INVISIBLE);
 		operatiiAdresa = new OperatiiAdresaImpl(this);
 		operatiiAdresa.setOperatiiAdresaListener(this);
 
 		listJudete = new ArrayList<HashMap<String, String>>();
-		adapterJudete = new SimpleAdapter(this, listJudete, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] {
-				R.id.textNumeJudet, R.id.textCodJudet });
+		adapterJudete = new SimpleAdapter(this, listJudete, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] { R.id.textNumeJudet,
+				R.id.textCodJudet });
 
 		spinnerTermenPlata = (Spinner) findViewById(R.id.spinnerTermenPlata);
 		adapterTermenPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
@@ -218,8 +239,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		fillSpinnerDataLivrare();
 
 		spinnerAdreseLivrare = (Spinner) findViewById(R.id.spinnerAdreseLivrare);
+
+		setListenerSpinnerAdreseLivrare();
+
 		listAdreseLivrare = new ArrayList<HashMap<String, String>>();
-		adapterAdreseLivrare = new SimpleAdapter(this, listAdreseLivrare, R.layout.simplerowlayout_1, new String[] { "rowText", "rowId" }, new int[] {
+		adapterAdreseLivrare = new SimpleAdapter(this, listAdreseLivrare, R.layout.row_layout_2_items, new String[] { "rowText", "rowId" }, new int[] {
 				R.id.textRowName, R.id.textRowId });
 
 		spinnerAdreseLivrare.setAdapter(adapterAdreseLivrare);
@@ -241,6 +265,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 			if (!ModificareComanda.codClientVar.equals("")) {
 				globalCodClient = ModificareComanda.codClientVar;
+				afisCoordAdresa();
 
 			}
 
@@ -337,6 +362,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		layoutAdr1.setVisibility(View.GONE);
 		layoutAdr2.setVisibility(View.GONE);
 		performGetAdreseLivrare();
+
 	}
 
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -360,6 +386,14 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			}
 		}
 		return false;
+	}
+
+	private void afisCoordAdresa() {
+		if (DateLivrare.getInstance().getCoordonateAdresa() != null && DateLivrare.getInstance().getCoordonateAdresa().latitude != 0)
+			textCoordAdresa.setText(DateLivrare.getInstance().getCoordonateAdresa().latitude + "," + DateLivrare.getInstance().getCoordonateAdresa().longitude);
+		else
+			textCoordAdresa.setText("");
+
 	}
 
 	private void addSpinnerTranspListener() {
@@ -404,6 +438,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					radioObiectiv.setVisibility(View.VISIBLE);
 					radioObiectiv.setChecked(true);
 					obiectivSelectat = (BeanObiectivDepartament) parent.getAdapter().getItem(pos);
+					setAdresaLivrareFromObiectiv();
 				} else {
 					radioObiectiv.setVisibility(View.INVISIBLE);
 					radioLista.setChecked(true);
@@ -568,11 +603,21 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	public void addListenerRadioLista() {
+
+		radioLista.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				clearAdresaLivrare();
+
+			}
+		});
+
 		radioLista.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
 
 				if (arg1) {
+
 					layoutAdrese.setVisibility(View.VISIBLE);
 					layoutAdr1.setVisibility(View.GONE);
 					layoutAdr2.setVisibility(View.GONE);
@@ -584,6 +629,15 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	public void addListenerRadioText() {
+
+		radioText.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				clearAdresaLivrare();
+
+			}
+		});
+
 		radioText.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
@@ -592,6 +646,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					layoutAdrese.setVisibility(View.GONE);
 					layoutAdr1.setVisibility(View.VISIBLE);
 					layoutAdr2.setVisibility(View.VISIBLE);
+
 				}
 
 			}
@@ -599,6 +654,15 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	private void addListenerRadioObiectiv() {
+
+		radioObiectiv.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				clearAdresaLivrare();
+
+			}
+		});
+
 		radioObiectiv.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
@@ -607,6 +671,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					layoutAdrese.setVisibility(View.GONE);
 					layoutAdr1.setVisibility(View.GONE);
 					layoutAdr2.setVisibility(View.GONE);
+					spinnerObiective.setSelection(1);
+
 				}
 
 			}
@@ -658,8 +724,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			for (int i = 0; i < adresaArray.size(); i++) {
 				temp = new HashMap<String, String>();
 
-				strAdresa = getNumeJudet(adresaArray.get(i).getCodJudet()) + "; " + adresaArray.get(i).getOras() + "; "
-						+ adresaArray.get(i).getStrada() + "; " + adresaArray.get(i).getNrStrada() + ";";
+				strAdresa = getNumeJudet(adresaArray.get(i).getCodJudet()) + "; " + adresaArray.get(i).getOras() + "; " + adresaArray.get(i).getStrada() + "; "
+						+ adresaArray.get(i).getNrStrada() + ";";
 
 				temp.put("rowText", strAdresa);
 				temp.put("rowId", adresaArray.get(i).getCodAdresa());
@@ -680,9 +746,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		} else {
 
 		}
-
-		// if (UserInfo.getInstance().getTipUser().equals("AV") &&
-		// CreareComanda.codClientVar.trim().length() > 0)
 
 		if (UtilsUser.hasObiective() && CreareComanda.codClientVar.trim().length() > 0)
 			getObiectiveDepartament();
@@ -761,7 +824,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					dialog = null;
 				}
 
-				// afisare erori
 				if (!errMessage.equals("")) {
 					Toast toast = Toast.makeText(getApplicationContext(), errMessage, Toast.LENGTH_SHORT);
 					toast.show();
@@ -804,7 +866,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 				DateLivrare.getInstance().setOras(tokLivrare[7]);
 
-				txtStrada.setText(tokLivrare[4]);
+				textLocalitate.setText(tokLivrare[7]);
+
+				textStrada.setText(tokLivrare[4]);
 				adrNouaModifCmd = true;
 
 			} else {
@@ -935,11 +999,28 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	private void setMacaraVisible() {
-		if (UtilsUser.isMacaraVisible())
+		if (UtilsUser.isMacaraVisible() || isArtException())
 			checkMacara.setVisibility(View.VISIBLE);
 		else
 			checkMacara.setVisibility(View.INVISIBLE);
 
+	}
+
+	private boolean isArtException() {
+
+		List<String> articoleExceptii = Exceptions.getExceptionsMacara(this);
+		List<ArticolComanda> articoleComanda = ListaArticoleComanda.getInstance().getListArticoleComanda();
+
+		for (String exceptie : articoleExceptii) {
+
+			for (ArticolComanda articol : articoleComanda) {
+				if (exceptie.equals(articol.getCodArticol()))
+					return true;
+			}
+
+		}
+
+		return false;
 	}
 
 	public class regionSelectedListener implements OnItemSelectedListener {
@@ -954,7 +1035,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 				HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 				params.put("codJudet", DateLivrare.getInstance().getCodJudet());
-				operatiiAdresa.getLocalitatiJudet(params, null);
+				operatiiAdresa.getAdreseJudet(params, null);
+
 			}
 
 		}
@@ -964,57 +1046,47 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		}
 	}
 
-	private void populateListLocalitati(List<String> localitati) {
+	private void populateListLocalitati(BeanAdreseJudet listAdrese) {
 
-		spinnerLocalitate.setVisibility(View.VISIBLE);
-		ArrayList<HashMap<String, String>> listLocalitati = new ArrayList<HashMap<String, String>>();
+		textLocalitate.setVisibility(View.VISIBLE);
+		textLocalitate.setText(DateLivrare.getInstance().getOras());
 
-		SimpleAdapter adapterLocalitati = new SimpleAdapter(this, listLocalitati, R.layout.generic_rowlayout,
-				new String[] { "stringName", "stringId" }, new int[] { R.id.textName, R.id.textId });
+		String[] arrayLocalitati = listAdrese.getListLocalitati().toArray(new String[listAdrese.getListLocalitati().size()]);
+		ArrayAdapter<String> adapterLoc = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, arrayLocalitati);
 
-		HashMap<String, String> temp;
+		textLocalitate.setThreshold(0);
+		textLocalitate.setAdapter(adapterLoc);
 
-		temp = new HashMap<String, String>();
-		temp.put("stringName", "Selectati localitatea");
-		temp.put("stringId", " ");
-		listLocalitati.add(temp);
+		String[] arrayStrazi = listAdrese.getListStrazi().toArray(new String[listAdrese.getListStrazi().size()]);
+		ArrayAdapter<String> adapterStrazi = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, arrayStrazi);
 
-		int selectedLoc = 0;
-		for (String localitate : localitati) {
-			temp = new HashMap<String, String>();
-			temp.put("stringName", localitate);
-			temp.put("stringId", " ");
-			listLocalitati.add(temp);
+		textStrada.setThreshold(0);
+		textStrada.setAdapter(adapterStrazi);
 
-			// pentru comenzi salvate
-			if (localitate.equals(DateLivrare.getInstance().getOras()))
-				selectedLoc = listLocalitati.size() - 1;
-
-		}
-
-		spinnerLocalitate.setAdapter(adapterLocalitati);
-		spinnerLocalitate.setOnItemSelectedListener(new LocalitateSelectedListener());
-		spinnerLocalitate.setSelection(selectedLoc);
+		setListenerTextLocalitate();
 
 	}
 
-	public class LocalitateSelectedListener implements OnItemSelectedListener {
+	private void setListenerTextLocalitate() {
 
-		@SuppressWarnings("unchecked")
-		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-			if (spinnerLocalitate.getSelectedItemPosition() > 0) {
+		textLocalitate.addTextChangedListener(new TextWatcher() {
 
-				HashMap<String, String> tempMap = (HashMap<String, String>) spinnerLocalitate.getSelectedItem();
-				DateLivrare.getInstance().setOras(tempMap.get("stringName"));
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				DateLivrare.getInstance().setOras(textLocalitate.getText().toString().trim());
 
-			} else
-				DateLivrare.getInstance().setOras("");
+			}
 
-		}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-		public void onNothingSelected(AdapterView<?> arg0) {
-			return;
-		}
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+
+			}
+		});
 
 	}
 
@@ -1042,154 +1114,239 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	}
 
-	@SuppressWarnings("unchecked")
+	private void setListnerBtnPozitieAdresa() {
+		btnPozitieAdresa.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+
+				android.app.FragmentManager fm = getFragmentManager();
+
+				Address address = new Address();
+
+				if (radioText.isChecked()) {
+					address.setCity(textLocalitate.getText().toString().trim());
+					address.setStreet(textStrada.getText().toString().trim());
+					address.setSector(UtilsGeneral.getNumeJudet(DateLivrare.getInstance().getCodJudet()));
+
+					if (!isAdresaComplet())
+						return;
+
+					DateLivrare.getInstance().setOras(address.getCity());
+					DateLivrare.getInstance().setStrada(address.getStreet());
+
+				} else {
+					address.setCity(DateLivrare.getInstance().getOras());
+					address.setStreet(DateLivrare.getInstance().getStrada());
+					address.setSector(UtilsGeneral.getNumeJudet(DateLivrare.getInstance().getCodJudet()));
+				}
+				MapAddressDialog mapDialog = new MapAddressDialog(address, SelectAdrLivrCmd.this, fm);
+				mapDialog.setMapListener(SelectAdrLivrCmd.this);
+				mapDialog.show();
+			}
+		});
+	}
+
+	private boolean isAdresaComplet() {
+		if (spinnerJudet.getSelectedItemPosition() == 0) {
+			Toast.makeText(this, "Selectati judetul", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+
+		if (textLocalitate.getText().toString().trim().equals("")) {
+			Toast.makeText(this, "Completati localitatea", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+
+		return true;
+	}
+
 	public void addListenerSaveAdr() {
 		saveAdrLivrBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				// validari
 
-				String adresa = "";
-				String oras = "";
-				String strada = "";
-				String pers = "";
-				String telefon = "";
-				String observatii = "", obsPlata = " ";
-
-				DateLivrare dateLivrareInstance = DateLivrare.getInstance();
-
-				if (layoutAdrese.getVisibility() == View.VISIBLE) { // adresa
-					// din lista
-
-					if (listAdreseLivrare.size() > 0) {
-						artMap = (HashMap<String, String>) spinnerAdreseLivrare.getSelectedItem();
-
-						String[] tokenAdr;
-						tokenAdr = artMap.get("rowText").toString().split(";");
-						dateLivrareInstance.setAddrNumber(artMap.get("rowId").toString());
-
-						dateLivrareInstance.setNumeJudet(tokenAdr[0].trim());
-
-						if (!tokenAdr[1].trim().equals("")) {
-							dateLivrareInstance.setOras(tokenAdr[1].trim());
-							oras = tokenAdr[1].trim();
-						} else {
-							dateLivrareInstance.setOras("-");
-							oras = "-";
-						}
-
-						if (!tokenAdr[2].trim().equals("")) {
-							dateLivrareInstance.setStrada(tokenAdr[2].trim() + " " + tokenAdr[3].trim());
-							strada = dateLivrareInstance.getStrada();
-						} else {
-							dateLivrareInstance.setStrada("-");
-							strada = "-";
-						}
-
-						dateLivrareInstance.setCodJudet(getCodJudet(tokenAdr[0].trim()));
-						dateLivrareInstance.setAdrLivrNoua(false);
-
-					}
-
-				} else {
-					strada = txtStrada.getText().toString().trim();
-					dateLivrareInstance.setStrada(strada);
-					dateLivrareInstance.setAdrLivrNoua(true);
-					dateLivrareInstance.setAddrNumber(" ");
-
-				}
-
-				setAdresaLivrareFromObiectiv();
-
-				pers = txtPers.getText().toString().trim();
-				telefon = txtTel.getText().toString().trim();
-				observatii = txtObservatii.getText().toString().trim();
-				obsPlata = spinnerResponsabil.getSelectedItem().toString().substring(0, 2);
-
-				if (observatii.trim().length() == 0)
-					observatii = " ";
-
-				dateLivrareInstance.setPersContact(pers);
-				dateLivrareInstance.setNrTel(telefon);
-
-				if (DateLivrare.getInstance().getOras().trim().equals("")) {
-					Toast.makeText(getApplicationContext(), "Selectati localitatea!", Toast.LENGTH_SHORT).show();
-					return;
-				}
-
-				if (DateLivrare.getInstance().getStrada().trim().equals("")) {
-					Toast.makeText(getApplicationContext(), "Completati strada!", Toast.LENGTH_SHORT).show();
-					return;
-				}
-
-				if (dateLivrareInstance.getCodJudet().equals("")) {
-					Toast.makeText(getApplicationContext(), "Selectati judetul!", Toast.LENGTH_SHORT).show();
-					return;
-				}
-
-				if (pers.equals("") || pers.equals("-")) {
-					Toast.makeText(getApplicationContext(), "Completati persoana de contact!", Toast.LENGTH_SHORT).show();
-					return;
-				}
-
-				if (telefon.equals("") || telefon.equals("-")) {
-					Toast.makeText(getApplicationContext(), "Completati nr. de telefon!", Toast.LENGTH_SHORT).show();
-					return;
-				}
-
-				if (spinnerDataLivrare.getSelectedItemPosition() == 0) {
-					Toast.makeText(getApplicationContext(), "Selectati data livrare!", Toast.LENGTH_SHORT).show();
-					return;
-				}
-
-				if (layoutValoareIncasare.getVisibility() == View.VISIBLE && txtValoareIncasare.getText().toString().equals("")) {
-					Toast.makeText(getApplicationContext(), "Completati valoarea incasarii!", Toast.LENGTH_SHORT).show();
-					return;
-				}
-
-				String cantar = "NU";
-				dateLivrareInstance.setCantar("NU");
-
-				String factRed = "NU";
-
-				if (spinnerTipReducere.getSelectedItemPosition() == 0) {
-					dateLivrareInstance.setRedSeparat(" ");
-				}
-
-				if (spinnerTipReducere.getSelectedItemPosition() == 1) {
-					dateLivrareInstance.setRedSeparat("X");
-				}
-
-				if (spinnerTipReducere.getSelectedItemPosition() == 2) {
-					dateLivrareInstance.setRedSeparat("R");
-				}
-
-				factRed = spinnerTipReducere.getSelectedItem().toString();
-
-				dateLivrareInstance.setTipPlata(spinnerPlata.getSelectedItem().toString().substring(0, 1));
-				dateLivrareInstance.setTransport(spinnerTransp.getSelectedItem().toString().substring(0, 4));
-				dateLivrareInstance.setDataLivrare(spinnerDataLivrare.getSelectedItemPosition() - 1);
-
-				if (layoutValoareIncasare.getVisibility() == View.VISIBLE)
-					dateLivrareInstance.setValoareIncasare(txtValoareIncasare.getText().toString());
+				if (radioText.isChecked())
+					valideazaAdresaLivrare();
 				else
-					dateLivrareInstance.setValoareIncasare("0");
-
-				adresa = dateLivrareInstance.getNumeJudet() + " " + dateLivrareInstance.getOras() + " " + dateLivrareInstance.getStrada();
-
-				dateLivrareInstance.setDateLivrare(adresa + "#" + pers + "#" + telefon + "#" + cantar + "#" + dateLivrareInstance.getTipPlata() + "#"
-						+ dateLivrareInstance.getTransport() + "#" + dateLivrareInstance.getRedSeparat() + "#");
-
-				dateLivrareInstance.setTermenPlata(spinnerTermenPlata.getSelectedItem().toString());
-
-				dateLivrareInstance.setObsLivrare(observatii.replace("#", "-").replace("@", "-"));
-				dateLivrareInstance.setObsPlata(obsPlata);
-
-				dateLivrareInstance.setTipDocInsotitor(String.valueOf(spinnerDocInsot.getSelectedItemPosition() + 1));
-
-				finish();
+					valideazaDateLivrare();
 
 			}
 		});
+
+	}
+
+	@SuppressWarnings("unchecked")
+	private void valideazaDateLivrare() {
+		String adresa = "";
+		String pers = "";
+		String telefon = "";
+		String observatii = "", obsPlata = " ";
+
+		DateLivrare dateLivrareInstance = DateLivrare.getInstance();
+
+		if (layoutAdrese.getVisibility() == View.VISIBLE) { // adresa
+			// din lista
+
+			if (listAdreseLivrare.size() > 0) {
+				artMap = (HashMap<String, String>) spinnerAdreseLivrare.getSelectedItem();
+
+				setAdresaLivrareFromList(artMap);
+
+			}
+
+		} else {
+			dateLivrareInstance.setStrada(textStrada.getText().toString().trim());
+			dateLivrareInstance.setAdrLivrNoua(true);
+			dateLivrareInstance.setAddrNumber(" ");
+		}
+
+		setAdresaLivrareFromObiectiv();
+
+		pers = txtPers.getText().toString().trim();
+		telefon = txtTel.getText().toString().trim();
+		observatii = txtObservatii.getText().toString().trim();
+		obsPlata = spinnerResponsabil.getSelectedItem().toString().substring(0, 2);
+
+		if (observatii.trim().length() == 0)
+			observatii = " ";
+
+		dateLivrareInstance.setPersContact(pers);
+		dateLivrareInstance.setNrTel(telefon);
+
+		if (DateLivrare.getInstance().getOras().trim().equals("")) {
+			Toast.makeText(getApplicationContext(), "Selectati localitatea!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		if (DateLivrare.getInstance().getStrada().trim().equals("")) {
+			Toast.makeText(getApplicationContext(), "Completati strada!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		if (dateLivrareInstance.getCodJudet().equals("")) {
+			Toast.makeText(getApplicationContext(), "Selectati judetul!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		if (pers.equals("") || pers.equals("-")) {
+			Toast.makeText(getApplicationContext(), "Completati persoana de contact!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		if (telefon.equals("") || telefon.equals("-")) {
+			Toast.makeText(getApplicationContext(), "Completati nr. de telefon!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		if (spinnerDataLivrare.getSelectedItemPosition() == 0) {
+			Toast.makeText(getApplicationContext(), "Selectati data livrare!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		if (layoutValoareIncasare.getVisibility() == View.VISIBLE && txtValoareIncasare.getText().toString().equals("")) {
+			Toast.makeText(getApplicationContext(), "Completati valoarea incasarii!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		String cantar = "NU";
+		dateLivrareInstance.setCantar("NU");
+
+		if (spinnerTipReducere.getSelectedItemPosition() == 0) {
+			dateLivrareInstance.setRedSeparat(" ");
+		}
+
+		if (spinnerTipReducere.getSelectedItemPosition() == 1) {
+			dateLivrareInstance.setRedSeparat("X");
+		}
+
+		if (spinnerTipReducere.getSelectedItemPosition() == 2) {
+			dateLivrareInstance.setRedSeparat("R");
+		}
+
+		dateLivrareInstance.setTipPlata(spinnerPlata.getSelectedItem().toString().substring(0, 1));
+		dateLivrareInstance.setTransport(spinnerTransp.getSelectedItem().toString().substring(0, 4));
+		dateLivrareInstance.setDataLivrare(spinnerDataLivrare.getSelectedItemPosition() - 1);
+
+		if (layoutValoareIncasare.getVisibility() == View.VISIBLE)
+			dateLivrareInstance.setValoareIncasare(txtValoareIncasare.getText().toString());
+		else
+			dateLivrareInstance.setValoareIncasare("0");
+
+		adresa = dateLivrareInstance.getNumeJudet() + " " + dateLivrareInstance.getOras() + " " + dateLivrareInstance.getStrada();
+
+		dateLivrareInstance.setDateLivrare(adresa + "#" + pers + "#" + telefon + "#" + cantar + "#" + dateLivrareInstance.getTipPlata() + "#"
+				+ dateLivrareInstance.getTransport() + "#" + dateLivrareInstance.getRedSeparat() + "#");
+
+		dateLivrareInstance.setTermenPlata(spinnerTermenPlata.getSelectedItem().toString());
+
+		dateLivrareInstance.setObsLivrare(observatii.replace("#", "-").replace("@", "-"));
+		dateLivrareInstance.setObsPlata(obsPlata);
+
+		dateLivrareInstance.setTipDocInsotitor(String.valueOf(spinnerDocInsot.getSelectedItemPosition() + 1));
+
+		finish();
+
+	}
+
+	private void setAdresaLivrareFromList(HashMap<String, String> selectedLine) {
+
+		String[] tokenAdr = selectedLine.get("rowText").toString().split(";");
+		DateLivrare.getInstance().setAddrNumber(artMap.get("rowId").toString());
+
+		DateLivrare.getInstance().setNumeJudet(tokenAdr[0].trim());
+
+		if (!tokenAdr[1].trim().equals("")) {
+			DateLivrare.getInstance().setOras(tokenAdr[1].trim());
+		} else {
+			DateLivrare.getInstance().setOras("-");
+		}
+
+		if (!tokenAdr[2].trim().equals("")) {
+			DateLivrare.getInstance().setStrada(tokenAdr[2].trim() + " " + tokenAdr[3].trim());
+		} else {
+			DateLivrare.getInstance().setStrada("-");
+		}
+		DateLivrare.getInstance().setCodJudet(getCodJudet(tokenAdr[0].trim()));
+		DateLivrare.getInstance().setAdrLivrNoua(false);
+	}
+
+	private void valideazaAdresaLivrare() {
+
+		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
+		params.put("codJudet", DateLivrare.getInstance().getCodJudet());
+		params.put("localitate", DateLivrare.getInstance().getOras());
+
+		operatiiAdresa.isAdresaValida(params, EnumLocalitate.LOCALITATE_SEDIU);
+
+	}
+
+	private void setListenerSpinnerAdreseLivrare() {
+		spinnerAdreseLivrare.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				artMap = (HashMap<String, String>) spinnerAdreseLivrare.getSelectedItem();
+				setAdresaLivrareFromList(artMap);
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+
+			}
+		});
+	}
+
+	private void clearAdresaLivrare() {
+		DateLivrare.getInstance().setOras("");
+		DateLivrare.getInstance().setStrada("");
+		DateLivrare.getInstance().setCodJudet("");
+		DateLivrare.getInstance().setCoordonateAdresa(null);
+		textCoordAdresa.setText("");
+		
+		spinnerJudet.setSelection(0);
+		textLocalitate.setText("");
+		textStrada.setText("");
 
 	}
 
@@ -1264,8 +1421,27 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	}
 
+	private void valideazaAdresaResponse(String result) {
+		Boolean response = Boolean.valueOf(result);
+
+		if (response)
+			valideazaDateLivrare();
+		else
+			Toast.makeText(this, "Adresa invalida", Toast.LENGTH_SHORT).show();
+
+	}
+
 	public void operatiiAdresaComplete(EnumOperatiiAdresa numeComanda, Object result, EnumLocalitate tipLocalitate) {
-		populateListLocalitati(operatiiAdresa.deserializeListLocalitati(result));
+		switch (numeComanda) {
+		case GET_ADRESE_JUDET:
+			populateListLocalitati(operatiiAdresa.deserializeListAdrese(result));
+			break;
+		case IS_ADRESA_VALIDA:
+			valideazaAdresaResponse((String) result);
+			break;
+		default:
+			break;
+		}
 
 	}
 
@@ -1277,6 +1453,13 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		default:
 			break;
 		}
+
+	}
+
+	@Override
+	public void addressSelected(LatLng coord) {
+		DateLivrare.getInstance().setCoordonateAdresa(coord);
+		textCoordAdresa.setText(coord.latitude + "," + coord.longitude);
 
 	}
 

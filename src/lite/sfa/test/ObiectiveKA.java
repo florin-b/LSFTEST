@@ -58,28 +58,22 @@ public class ObiectiveKA extends FragmentActivity implements SelectObiectivListe
 
 		FragmentTransaction tx = null;
 		BeanObiectiveGenerale.getInstance().clearInstanceData();
-		switch (item.getItemId()) {
-		case R.id.menuCreare:
+		int itemId = item.getItemId();
+		if (itemId == R.id.menuCreare) {
 			meniuObiectiv = EnumMeniuObiectiv.CREARE;
 			tx = getSupportFragmentManager().beginTransaction();
 			tx.replace(R.id.main, Fragment.instantiate(ObiectiveKA.this, "lite.sfa.test.Obiective2"));
 			tx.commit();
-			break;
-		case R.id.menuModificare:
+		} else if (itemId == R.id.menuModificare) {
 			meniuObiectiv = EnumMeniuObiectiv.MODIFICARE;
 			dialog.setTipOperatie(meniuObiectiv);
 			dialog.show();
-			break;
-		case R.id.menuUrmarire:
+		} else if (itemId == R.id.menuUrmarire) {
 			meniuObiectiv = EnumMeniuObiectiv.URMARIRE;
 			dialog.setTipOperatie(meniuObiectiv);
 			dialog.show();
-			break;
-
-		case android.R.id.home:
+		} else if (itemId == android.R.id.home) {
 			returnToHome();
-			break;
-
 		}
 
 		return false;

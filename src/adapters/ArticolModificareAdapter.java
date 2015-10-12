@@ -42,8 +42,7 @@ public class ArticolModificareAdapter extends BaseAdapter implements OperatiiArt
 	private NumberFormat nf2;
 	private NumberFormat nf4;
 
-	public ArticolModificareAdapter(Context context, List<ArticolComanda> listArticole, List<BeanConditiiArticole> listConditii,
-			BeanComandaCreata comanda) {
+	public ArticolModificareAdapter(Context context, List<ArticolComanda> listArticole, List<BeanConditiiArticole> listConditii, BeanComandaCreata comanda) {
 		this.context = context;
 		this.listArticole = listArticole;
 		this.listConditii = listConditii;
@@ -64,7 +63,7 @@ public class ArticolModificareAdapter extends BaseAdapter implements OperatiiArt
 
 	public static class ViewHolder {
 		TextView textNrCrt, textNumeArt, textCodArt, textCantArt, textUmArt, textPretArt, textMonedaArt, textDepozit, textStatusArt, textProcRed,
-				textCantConditie, textUmConditie, textPretConditie, textMonedaConditie, textConditie;
+				textCantConditie, textUmConditie, textPretConditie, textMonedaConditie, textConditie, textObsArt;
 
 		ImageButton stergeArticolBtn, acceptaConditiiBtn;
 		public ImageView statusImage;
@@ -97,6 +96,7 @@ public class ArticolModificareAdapter extends BaseAdapter implements OperatiiArt
 			viewHolder.textUmConditie = (TextView) convertView.findViewById(R.id.textUmConditie);
 			viewHolder.textPretConditie = (TextView) convertView.findViewById(R.id.textPretConditie);
 			viewHolder.textMonedaConditie = (TextView) convertView.findViewById(R.id.textMonedaConditie);
+			viewHolder.textObsArt = (TextView) convertView.findViewById(R.id.textObsArt);
 			viewHolder.stergeArticolBtn = (ImageButton) convertView.findViewById(R.id.stergeArticolBtn);
 			viewHolder.acceptaConditiiBtn = (ImageButton) convertView.findViewById(R.id.acceptaConditiiBtn);
 			viewHolder.statusImage = (ImageView) convertView.findViewById(R.id.imageAlertaPret);
@@ -126,6 +126,9 @@ public class ArticolModificareAdapter extends BaseAdapter implements OperatiiArt
 
 		viewHolder.textMonedaArt.setText(unitPret);
 		viewHolder.textDepozit.setText(articol.getDepozit());
+
+		viewHolder.textObsArt.setText(getObsArt(articol.getStatus()));
+
 		viewHolder.textStatusArt.setText(getStatusArticol(articol, comanda));
 		viewHolder.textProcRed.setText(nf2.format(articol.getProcent()));
 
@@ -239,6 +242,12 @@ public class ArticolModificareAdapter extends BaseAdapter implements OperatiiArt
 
 		return statusArticol;
 
+	}
+
+	private String getObsArt(String statusArt) {
+		if (statusArt != null && statusArt.equals("9"))
+			return "Stoc insuficient";
+		return "";
 	}
 
 	private String getStareArticolComandaCV(ArticolComanda articol, BeanComandaCreata comanda) {
@@ -360,8 +369,7 @@ public class ArticolModificareAdapter extends BaseAdapter implements OperatiiArt
 		if (finalPrice == initPrice)
 			finalPrice = (finalPrice / articolConditie.getCantitate());
 
-		double procRedFact = (initPrice / articolConditie.getCantitate() * valMultiplu - finalPrice) / (listPrice / articolConditie.getCantitate())
-				* 100;
+		double procRedFact = (initPrice / articolConditie.getCantitate() * valMultiplu - finalPrice) / (listPrice / articolConditie.getCantitate()) * 100;
 
 		listArticole.get(pozitieArticolSelectat).setCantitate(articolConditie.getCantitate());
 		listArticole.get(pozitieArticolSelectat).setCantUmb(cantUmB);

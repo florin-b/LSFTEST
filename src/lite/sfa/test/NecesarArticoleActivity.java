@@ -307,35 +307,21 @@ public class NecesarArticoleActivity extends Activity implements NecesarArticole
 
 	public void onClick(View v) {
 
-		switch (v.getId()) {
-		case R.id.textNumeMaterial:
+		int id = v.getId();
+		if (id == R.id.textNumeMaterial) {
 			sortNumeMaterial();
-			break;
-
-		case R.id.textCons30:
+		} else if (id == R.id.textCons30) {
 			sortCons30();
-			break;
-
-		case R.id.textStoc:
+		} else if (id == R.id.textStoc) {
 			sortStoc();
-			break;
-
-		case R.id.textPropunere:
+		} else if (id == R.id.textPropunere) {
 			sortPropunere();
-			break;
-
-		case R.id.textCodMaterial:
+		} else if (id == R.id.textCodMaterial) {
 			sortCodMaterial();
-			break;
-
-		case R.id.textCodSintetic:
+		} else if (id == R.id.textCodSintetic) {
 			sortCodSintetic();
-			break;
-
-		case R.id.textNumeSintetic:
+		} else if (id == R.id.textNumeSintetic) {
 			sortNumeSintetic();
-			break;
-
 		}
 
 	}

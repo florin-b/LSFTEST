@@ -15,6 +15,9 @@ public class ArticolDB {
 
 	}
 
+	
+	
+	
 	public String getCod() {
 		return cod;
 	}
