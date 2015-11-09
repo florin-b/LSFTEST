@@ -86,10 +86,10 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 	private String selectedCmdSAP = "-1", pretArtSel = "";
 	private int tipOpCmd = -1;
 	private int listViewSelPos = -1;
-	private String cmdNr = null, depozit = "", procRed = "", nrCrt = "", cmp = "", procCmp = "", disClient = "", procAgent = "", multiplu = "";
+	private String cmdNr = null, disClient = "", procAgent = "";
 
-	private TextView textNumeArt, textCodArt, textUmArt, textProcCalitAprob, textNrFacturiAprob, textMarjaCmd, textAdrLivrNoua, labelAdresa,
-			textAdresaLivrare, textPondereArtB, textCastigBrut, textPondereB_30, textTipTransport;
+	private TextView textNumeArt, textCodArt, textUmArt, textProcCalitAprob, textNrFacturiAprob, textMarjaCmd, textAdrLivrNoua, labelAdresa, textAdresaLivrare,
+			textPondereArtB, textCastigBrut, textPondereB_30, textTipTransport;
 	private LinearLayout condTable;
 	private LinearLayout conditiiArticolLayout;
 
@@ -100,18 +100,14 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 	ListView listViewArticoleComanda, listViewArticoleConditii;
 	private EditText textCantArt, textPretArt, textCondCal;
 	private int selectedPos = -1;
-	private String condFinale = "";
-	private String varNrFact = "0";
-	private boolean alertCMP = false;
-	private HashMap<String, String> artMap = null, artMapCond = null;
-	private double marjaCmd = 0;
-	private Dialog dialogConfirmDenial;
+	private int selectedPosComanda = -1;
+
 	public String stringMotiveRespingere = "", unitatePret = "", unitatePretBaza = "", tipAgentComanda = "";
 	String tipAprob = "";
 	Spinner denialOptions;
 	String codRespingere = "";
 	String numeArtSelContextMenu = "", codArtSelContextMenu = "", infoPretArticol = "";
-	private Dialog dialogInfoArticol;
+
 	private Double globalPondere30Cmd = 0.0;
 	private ComenziDAO operatiiComenzi;
 	private List<BeanComandaCreata> listComenzi;
@@ -201,9 +197,9 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 
 		listViewArticoleConditii = (ListView) findViewById(R.id.listArtCondAprob);
 		arrayCndAprob = new ArrayList<HashMap<String, String>>();
-		adapterCndAprob = new SimpleAdapter(this, arrayCndAprob, R.layout.rowlayoutartcond, new String[] { "nrCrt", "numeArtCond", "codArtCond",
-				"cantArtCond", "umArtCond", "pretArtCond", "monedaArtCond" }, new int[] { R.id.textNrCrt, R.id.textNumeArtCond, R.id.textCodArtCond,
-				R.id.textCantArtCond, R.id.textUmArtCond, R.id.textPretArtCond, R.id.textMonArtCond });
+		adapterCndAprob = new SimpleAdapter(this, arrayCndAprob, R.layout.rowlayoutartcond, new String[] { "nrCrt", "numeArtCond", "codArtCond", "cantArtCond",
+				"umArtCond", "pretArtCond", "monedaArtCond" }, new int[] { R.id.textNrCrt, R.id.textNumeArtCond, R.id.textCodArtCond, R.id.textCantArtCond,
+				R.id.textUmArtCond, R.id.textPretArtCond, R.id.textMonArtCond });
 
 		listViewArticoleConditii.setAdapter(adapterCndAprob);
 
@@ -231,7 +227,6 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 
 		checkEliminaTransp = (CheckBox) findViewById(R.id.checkEliminaTransp);
 		checkEliminaTransp.setVisibility(View.INVISIBLE);
-		
 
 		getListComenzi();
 
@@ -463,7 +458,6 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 				tipOpCmd = 2;
 				opereazaComanda();
 
-				condFinale = "";
 				commentsCondAprob = "";
 
 			} catch (Exception e) {
@@ -531,10 +525,8 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		textCantArt.setText(" ");
 		textUmArt.setText(" ");
 		textPretArt.setText(" ");
-		depozit = " ";
-		procRed = " ";
+
 		pretArtSel = " ";
-		nrCrt = " ";
 
 	}
 
@@ -626,6 +618,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 			params.put("codRespingere", codRespingere);
 			params.put("divizieAgent", divizieAgent);
 			params.put("elimTransp", getStareElimTransport());
+			params.put("filiala", listComenzi.get(selectedPosComanda).getFiliala());
 
 			operatiiComenzi.opereazaComanda(params);
 
@@ -661,11 +654,16 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 			if (UserInfo.getInstance().getTipAcces().equals("18"))
 				tipUsr = "SM";
 
+			String depart = UserInfo.getInstance().getCodDepart();
+
+			if (UtilsUser.isDV_WOOD())
+				depart = "11";
+
 			params.put("filiala", UserInfo.getInstance().getUnitLog());
 			params.put("codUser", UserInfo.getInstance().getCod());
 			params.put("tipCmd", "2"); // pentru aprobare
 			params.put("tipUser", tipUsr); // selectie comenzi
-			params.put("depart", UserInfo.getInstance().getCodDepart());
+			params.put("depart", depart);
 
 			operatiiComenzi.getListComenzi(params);
 
@@ -755,8 +753,6 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 
 			textCastigBrut.setVisibility(View.INVISIBLE);
 		}
-		
-		
 
 		StringBuilder strAdresaLivrare = new StringBuilder();
 		strAdresaLivrare.append(dateLivrare.getNumeJudet());
@@ -777,8 +773,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		textMarjaCmd.setText("Marja comanda: " + String.format("%.02f", valoriComanda.getMarja() / valoriComanda.getTotal() * 100).toString() + "%");
 
 		if (textPondereArtB.getVisibility() == View.VISIBLE) {
-			textPondereArtB.setText("Pondere art. B comanda: "
-					+ String.format("%.02f", (valoriComanda.getPondereB() / valoriComanda.getTotal()) * 100) + "%");
+			textPondereArtB.setText("Pondere art. B comanda: " + String.format("%.02f", (valoriComanda.getPondereB() / valoriComanda.getTotal()) * 100) + "%");
 			globalPondere30Cmd = valoriComanda.getPondereB() / valoriComanda.getTotal() * 100;
 		}
 
@@ -788,7 +783,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 
 		String unitLogAlt = listArticoleComanda.get(0).getUnitLogAlt();
 
-		if (unitLogAlt.equals("BV90"))
+		if (unitLogAlt.equals("BV90") || unitLogAlt.equals("BV92"))
 			textComandaBV90.setVisibility(View.VISIBLE);
 		else
 			textComandaBV90.setVisibility(View.INVISIBLE);
@@ -912,7 +907,6 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 
 					selectedPos = position;
 
-					procRed = String.valueOf(articolSelectat.getProcAprob());
 					pretArtSel = String.valueOf(articolSelectat.getPretUnit());
 					procAgent = String.valueOf(articolSelectat.getProcent());
 
@@ -921,14 +915,8 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 					textCantArt.setText(String.valueOf(articolSelectat.getCantitate()));
 					textUmArt.setText(articolSelectat.getUm());
 					textPretArt.setText(String.valueOf(articolSelectat.getPretUnit()));
-					depozit = articolSelectat.getDepozit();
-					nrCrt = String.valueOf(articolSelectat.getNrCrt());
-
-					cmp = String.valueOf(articolSelectat.getCmp());
 
 					disClient = String.valueOf(articolSelectat.getDiscClient());
-
-					multiplu = String.valueOf(articolSelectat.getMultiplu());
 
 					infoPretArticol = articolSelectat.getInfoArticol();
 
@@ -1316,6 +1304,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		spinnerComenzi.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
 
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				selectedPosComanda = position;
 				fillComandaDetails(position);
 
 			}

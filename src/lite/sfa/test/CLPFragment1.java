@@ -69,19 +69,19 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 	private static ArrayList<HashMap<String, String>> listClienti = new ArrayList<HashMap<String, String>>();
 	public SimpleAdapter adapterClienti, adapterJudete, adapterFiliale, adapterPlata;
 
-	String[] judete = { "ALBA", "ARAD", "ARGES", "BACAU", "BIHOR", "BISTRITA-NASAUD", "BOTOSANI", "BRAILA", "BRASOV", "BUCURESTI", "BUZAU",
-			"CALARASI", "CARAS-SEVERIN", "CLUJ", "CONSTANTA", "COVASNA", "DAMBOVITA", "DOLJ", "GALATI", "GIURGIU", "GORJ", "HARGHITA", "HUNEDOARA",
-			"IALOMITA", "IASI", "ILFOV", "MARAMURES", "MEHEDINTI", "MURES", "NEAMT", "OLT", "PRAHOVA", "SALAJ", "SATU-MARE", "SIBIU", "SUCEAVA",
-			"TELEORMAN", "TIMIS", "TULCEA", "VALCEA", "VASLUI", "VRANCEA" };
+	String[] judete = { "ALBA", "ARAD", "ARGES", "BACAU", "BIHOR", "BISTRITA-NASAUD", "BOTOSANI", "BRAILA", "BRASOV", "BUCURESTI", "BUZAU", "CALARASI",
+			"CARAS-SEVERIN", "CLUJ", "CONSTANTA", "COVASNA", "DAMBOVITA", "DOLJ", "GALATI", "GIURGIU", "GORJ", "HARGHITA", "HUNEDOARA", "IALOMITA", "IASI",
+			"ILFOV", "MARAMURES", "MEHEDINTI", "MURES", "NEAMT", "OLT", "PRAHOVA", "SALAJ", "SATU-MARE", "SIBIU", "SUCEAVA", "TELEORMAN", "TIMIS", "TULCEA",
+			"VALCEA", "VASLUI", "VRANCEA" };
 
-	String[] codJudete = { "01", "02", "03", "04", "05", "06", "07", "09", "08", "40", "10", "51", "11", "12", "13", "14", "15", "16", "17", "52",
-			"18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "31", "30", "32", "33", "34", "35", "36", "38", "37", "39" };
+	String[] codJudete = { "01", "02", "03", "04", "05", "06", "07", "09", "08", "40", "10", "51", "11", "12", "13", "14", "15", "16", "17", "52", "18", "19",
+			"20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "31", "30", "32", "33", "34", "35", "36", "38", "37", "39" };
 
-	String[] numeFiliala = { "Bacau", "Baia Mare", "Brasov", "Brasov-central", "Buc. Andronache", "Buc. Militari", "Buc. Otopeni", "Buc. Glina",
-			"Constanta", "Cluj", "Craiova", "Focsani", "Galati", "Iasi", "Oradea", "Piatra Neamt", "Pitesti", "Ploiesti", "Timisoara", "Tg. Mures" };
+	String[] numeFiliala = { "Bacau", "Baia Mare", "Brasov", "Buzau", "Brasov-central", "Buc. Andronache", "Buc. Militari", "Buc. Otopeni", "Buc. Glina",
+			"Constanta", "Cluj", "Craiova", "Focsani", "Galati", "Hunedoara", "Iasi", "Oradea", "Piatra Neamt", "Pitesti", "Ploiesti", "Timisoara", "Tg. Mures" };
 
-	String[] codFiliala = { "BC10", "MM10", "BV10", "BV90", "BU13", "BU11", "BU12", "BU10", "CT10", "CJ10", "DJ10", "VN10", "GL10", "IS10", "BH10",
-			"NT10", "AG10", "PH10", "TM10", "MS10" };
+	String[] codFiliala = { "BC10", "MM10", "BV10", "BZ10", "BV90", "BU13", "BU11", "BU12", "BU10", "CT10", "CJ10", "DJ10", "VN10", "GL10", "HD10", "IS10",
+			"BH10", "NT10", "AG10", "PH10", "TM10", "MS10" };
 
 	String[] tipPlata = { "B - Bilet la ordin", "C - Cec", "E - Plata in numerar", "O - Ordin de plata" };
 
@@ -110,8 +110,8 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 	private TextView labelCodClient, labelNumeClient, labelLimitaCredit, labelRestCredit, labelClient;
 	LinearLayout selClientLayout;
 	SlidingDrawer slidingDrawer;
-	public static Spinner spinnerJudetCLP, spinnerFilialaCLP, spinnerPlataCLP, spinnerTransportCLP, spinnerDepozClp_Dest, spinnerAgentiCLP,
-			spinnerDepartament, spinnerTipCamion, spinnerTipIncarcare;
+	public static Spinner spinnerJudetCLP, spinnerFilialaCLP, spinnerPlataCLP, spinnerTransportCLP, spinnerDepozClp_Dest, spinnerAgentiCLP, spinnerDepartament,
+			spinnerTipCamion, spinnerTipIncarcare;
 
 	public static EditText txtObservatiiCLP;
 
@@ -167,8 +167,8 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			addListenerCautaClient();
 
 			listClienti = new ArrayList<HashMap<String, String>>();
-			adapterClienti = new SimpleAdapter(getActivity(), listClienti, R.layout.customrownumeclient, new String[] { "numeClient", "codClient" },
-					new int[] { R.id.textNumeClient, R.id.textCodClient });
+			adapterClienti = new SimpleAdapter(getActivity(), listClienti, R.layout.customrownumeclient, new String[] { "numeClient", "codClient" }, new int[] {
+					R.id.textNumeClient, R.id.textCodClient });
 
 			listViewClienti = (ListView) v.findViewById(R.id.listClienti);
 			listViewClienti.setOnItemClickListener(new MyOnItemSelectedListener());
@@ -194,14 +194,14 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			spinnerJudetCLP.setOnItemSelectedListener(new regionSelectedListener());
 
 			listJudete = new ArrayList<HashMap<String, String>>();
-			adapterJudete = new SimpleAdapter(getActivity(), listJudete, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" },
-					new int[] { R.id.textNumeJudet, R.id.textCodJudet });
+			adapterJudete = new SimpleAdapter(getActivity(), listJudete, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] {
+					R.id.textNumeJudet, R.id.textCodJudet });
 			fillJudete();
 
 			spinnerFilialaCLP = (Spinner) v.findViewById(R.id.spinnerFilialaCLP);
 			listFiliale = new ArrayList<HashMap<String, String>>();
-			adapterFiliale = new SimpleAdapter(getActivity(), listFiliale, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" },
-					new int[] { R.id.textNumeJudet, R.id.textCodJudet });
+			adapterFiliale = new SimpleAdapter(getActivity(), listFiliale, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] {
+					R.id.textNumeJudet, R.id.textCodJudet });
 
 			spinnerFilialaCLP.setOnItemSelectedListener(new filialaSelectedListener());
 
@@ -280,8 +280,8 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 			spinnerAgentiCLP = (Spinner) v.findViewById(R.id.spinnerAgentiClp);
 
-			adapterAgenti = new SimpleAdapter(getActivity(), listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" },
-					new int[] { R.id.textNumeAgent, R.id.textCodAgent });
+			adapterAgenti = new SimpleAdapter(getActivity(), listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" }, new int[] {
+					R.id.textNumeAgent, R.id.textCodAgent });
 			spinnerAgentiCLP.setAdapter(adapterAgenti);
 
 			labelAgentiClp = (TextView) v.findViewById(R.id.labelAgentiClp);
@@ -332,8 +332,8 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 		layoutDepartament.setVisibility(View.VISIBLE);
 
 		listDepart = new ArrayList<HashMap<String, String>>();
-		SimpleAdapter adapterDepart = new SimpleAdapter(getActivity(), listDepart, R.layout.rowlayoutjudete,
-				new String[] { "numeJudet", "codJudet" }, new int[] { R.id.textNumeJudet, R.id.textCodJudet });
+		SimpleAdapter adapterDepart = new SimpleAdapter(getActivity(), listDepart, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" },
+				new int[] { R.id.textNumeJudet, R.id.textCodJudet });
 
 		HashMap<String, String> temp;
 
@@ -594,10 +594,6 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 		}
 
 		spinnerFilialaCLP.setAdapter(adapterFiliale);
-		
-		
-		
-		
 
 	}
 

@@ -116,6 +116,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	private String selectedDepartamentAgent;
 	private ArrayAdapter<String> adapterSpinnerDepozite;
+	private ArticolDB articolDBSelected;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -253,8 +254,6 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				selectedDepartamentAgent = EnumDepartExtra.getCodDepart(spinnerDepartament.getSelectedItem().toString());
 
-				CreareComanda.filialaAlternativa = UserInfo.getInstance().getUnitLog();
-
 				if (isDepartExtra() && selectedDepartamentAgent.equals("02"))
 					CreareComanda.filialaAlternativa = "BV90";
 
@@ -317,8 +316,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("10")) {
 			if (UserInfo.getInstance().getCodDepart().equals("02") || UserInfo.getInstance().getCodDepart().equals("05"))
 				return true;
-		}
-		else if (UserInfo.getInstance().getTipUser().equals("KA"))
+		} else if (UserInfo.getInstance().getTipUser().equals("KA"))
 			return true;
 
 		return false;
@@ -901,8 +899,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						return;
 					}
 
-					if (Double.parseDouble(textCant.getText().toString().trim()) > Double.parseDouble(textStoc.getText().toString()
-							.replaceAll(",", ""))) {
+					if (Double.parseDouble(textCant.getText().toString().trim()) > Double.parseDouble(textStoc.getText().toString().replaceAll(",", ""))) {
 						Toast.makeText(getApplicationContext(), "Stoc insuficient!", Toast.LENGTH_LONG).show();
 						return;
 					}
@@ -1035,6 +1032,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						unArticol.setTipArt(tipArticol);
 						unArticol.setPromotie(Integer.parseInt(codPromo));
 						unArticol.setObservatii(tipAlert);
+						unArticol.setDepartAprob(articolDBSelected.getDepartAprob());
 
 						ListaArticoleComanda listaComanda = ListaArticoleComanda.getInstance();
 						listaComanda.addArticolComanda(unArticol);
@@ -1045,15 +1043,15 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 																							// e
 																							// adaugat
 																							// deja
-								CreareComanda.articoleComanda += numeArticol + "#" + codArticol + "#" + cantArticol + "#"
-										+ String.valueOf(finalPrice) + "#" + localUnitMas + "#" + globalDepozSel + "#" + nf.format(procRedFin) + "#"
-										+ tipAlert + "#" + codPromo + "#" + nf.format(procRedFact) + "#" + nf.format(procDiscClient) + "#"
-										+ nf.format(procentAprob) + "#" + valMultiplu + "#" + String.valueOf(valArticol) + "#" + infoArticol + "#"
-										+ Umb + "#" + cantUmb + "#" + alteValori + "#" + globalCodDepartSelectetItem + "#" + tipArticol + "@@";
+								CreareComanda.articoleComanda += numeArticol + "#" + codArticol + "#" + cantArticol + "#" + String.valueOf(finalPrice) + "#"
+										+ localUnitMas + "#" + globalDepozSel + "#" + nf.format(procRedFin) + "#" + tipAlert + "#" + codPromo + "#"
+										+ nf.format(procRedFact) + "#" + nf.format(procDiscClient) + "#" + nf.format(procentAprob) + "#" + valMultiplu + "#"
+										+ String.valueOf(valArticol) + "#" + infoArticol + "#" + Umb + "#" + cantUmb + "#" + alteValori + "#"
+										+ globalCodDepartSelectetItem + "#" + tipArticol + "@@";
 
 						} else {
-							Toast.makeText(getApplicationContext(), "Comanda contine depozite diferite, articolul nu a fost adaugat! ",
-									Toast.LENGTH_LONG).show();
+							Toast.makeText(getApplicationContext(), "Comanda contine depozite diferite, articolul nu a fost adaugat! ", Toast.LENGTH_LONG)
+									.show();
 
 						}
 
@@ -1224,8 +1222,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				minimKAPrice = 0;
 				if (UserInfo.getInstance().getTipAcces().equals("27")) {
 
-					minimKAPrice = listPrice / globalCantArt * valMultiplu - (listPrice / globalCantArt * valMultiplu)
-							* Double.valueOf(tokenPret[16]) / 100;
+					minimKAPrice = listPrice / globalCantArt * valMultiplu - (listPrice / globalCantArt * valMultiplu) * Double.valueOf(tokenPret[16]) / 100;
 
 					if (listPrice > 0)
 						procDiscClient = 100 - (initPrice / listPrice) * 100;
@@ -1326,12 +1323,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				tglProc.setChecked(false);
 				tglProc.performClick();
 
-				if (tokenPret[3].toUpperCase(Locale.getDefault()).equals("X") || CreareComanda.canalDistrib.equals("20")
-						|| globalCodDepartSelectetItem.equals("11")) // nu
-				// se
-				// acorda
-				// discounturi
-				{
+				if (noDiscount(tokenPret[3])) {
 					txtPretArt.setEnabled(false);
 					textProcRed.setFocusable(false);
 					tglProc.setEnabled(false);
@@ -1346,9 +1338,9 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						double pret1 = (Double.parseDouble(tokenPret[1]) / Double.parseDouble(tokenPret[0])) * valMultiplu;
 						double pret2 = (Double.parseDouble(tokenPret[6]) / Double.parseDouble(tokenPret[5])) * valMultiplu;
 
-						artPromoText = "Din cantitatea comandata " + tokenPret[0] + " " + tokenPret[2] + " au pretul de " + nf2.format(pret1)
-								+ " RON/" + tokenPret[2] + " si " + tokenPret[5] + " " + tokenPret[7] + " au pretul de " + nf2.format(pret2)
-								+ " RON/" + tokenPret[7] + ".";
+						artPromoText = "Din cantitatea comandata " + tokenPret[0] + " " + tokenPret[2] + " au pretul de " + nf2.format(pret1) + " RON/"
+								+ tokenPret[2] + " si " + tokenPret[5] + " " + tokenPret[7] + " au pretul de " + nf2.format(pret2) + " RON/" + tokenPret[7]
+								+ ".";
 					}
 
 				} else {
@@ -1419,6 +1411,18 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	}
 
+	private boolean noDiscount(String artPromo) {
+
+		if (artPromo.toUpperCase(Locale.getDefault()).equals("X"))
+			return true;
+		else if ((CreareComanda.canalDistrib.equals("20") || globalCodDepartSelectetItem.equals("11"))
+				&& !(globalDepozSel.equals("MAV1") && articolDBSelected.getDepart().equals("11") && !articolDBSelected.getDepartAprob().equals("00")))
+			return true;
+
+		return false;
+
+	}
+
 	public void showPromoWindow(String promoString) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -1436,6 +1440,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 
 		ArticolDB articol = (ArticolDB) l.getAdapter().getItem(position);
+
+		articolDBSelected = articol;
 
 		numeArticol = articol.getNume();
 		codArticol = articol.getCod();
@@ -1502,7 +1508,10 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			String varLocalUnitLog = "";
 
 			if (globalDepozSel.equals("MAV1")) {
-				varLocalUnitLog = CreareComanda.filialaAlternativa.substring(0, 2) + "2" + CreareComanda.filialaAlternativa.substring(3, 4);
+				if (CreareComanda.filialaAlternativa.equals("BV90"))
+					varLocalUnitLog = "BV92";
+				else
+					varLocalUnitLog = CreareComanda.filialaAlternativa.substring(0, 2) + "2" + CreareComanda.filialaAlternativa.substring(3, 4);
 			} else {
 				varLocalUnitLog = CreareComanda.filialaAlternativa;
 			}

@@ -108,7 +108,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 	private String comandaBlocata = "0";
 	private String globalAlertSDKA = "", globalAlertDVKA = "";
-	private String clientFinalStr = "", conditieID = "";
+	private String conditieID = "";
 	private int idOperatieComanda = 3;
 
 	private boolean alertSD = false;
@@ -135,6 +135,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	private List<BeanConditiiArticole> conditiiComandaArticole;
 	private ArticolModificareAdapter adapterArticole;
 	private String codTipReducere = "-1";
+	private LinearLayout layoutBV90;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -159,6 +160,9 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 		layoutDetaliiCmd = (LinearLayout) findViewById(R.id.layoutDetaliiCmd);
 		listViewArticole = (ListView) findViewById(R.id.listArtModif);
+
+		layoutBV90 = (LinearLayout) findViewById(R.id.layoutBV90);
+		layoutBV90.setVisibility(View.GONE);
 
 		if (isUserCV())
 			ListaArticoleComandaGed.getInstance().addObserver(this);
@@ -381,10 +385,6 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			textTransport.setText(tipTransp);
 			// ***************sf. tip transport
 
-			clientFinalStr = codClientVar + "#" + dateLivrareInstance.getStrada() + "^" + dateLivrareInstance.getOras() + "^"
-					+ dateLivrareInstance.getCodJudet() + "#" + dateLivrareInstance.getPersContact() + "#" + dateLivrareInstance.getNrTel() + "#"
-					+ dateLivrareInstance.getCantar() + "#" + dateLivrareInstance.getTipPlata() + "#" + dateLivrareInstance.getTransport() + "#";
-
 		}
 
 	}
@@ -500,9 +500,6 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT).show();
 							return;
 						}
-
-						clientFinalStr += String.valueOf(totalComanda) + "#" + UserInfo.getInstance().getUnitLog() + "#" + UserInfo.getInstance().getCod()
-								+ "#-1#";
 
 						dateLivrareInstance.setTotalComanda(String.valueOf(totalComanda));
 						dateLivrareInstance.setCodAgent(UserInfo.getInstance().getCod());
@@ -744,6 +741,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		articol.setCantUmb(1);
 		articol.setUmb("BUC");
 		articol.setDepart(listArticoleComanda.get(0).getDepart());
+		articol.setObservatii("");
 		listArticoleComanda.add(articol);
 
 	}
@@ -777,6 +775,9 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 				obj.put("Umb", listArticoleComanda.get(i).getUmb());
 				obj.put("depart", listArticoleComanda.get(i).getDepart());
 				obj.put("ponderare", listArticoleComanda.get(i).getPonderare());
+
+				obj.put("observatii", listArticoleComanda.get(i).getTipAlert());
+				obj.put("departAprob", listArticoleComanda.get(i).getDepartAprob());
 				myArray.put(obj);
 			}
 		} catch (Exception ex) {
@@ -1154,10 +1155,17 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 		calculPondereB();
 
-		if (listArticoleComanda.get(0).getUnitLogAlt().equals("NN10"))
+		if (listArticoleComanda.get(0).getUnitLogAlt().equals("NN10")) {
 			filialaAlternativaM = UserInfo.getInstance().getUnitLog();
-		else
+		} else {
 			filialaAlternativaM = listArticoleComanda.get(0).getUnitLogAlt();
+		}
+
+		if (listArticoleComanda.get(0).getUnitLogAlt().contains("BV9")) {
+			layoutBV90.setVisibility(View.VISIBLE);
+		} else {
+			layoutBV90.setVisibility(View.GONE);
+		}
 
 		displayCmdDetails(true);
 

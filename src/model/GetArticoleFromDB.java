@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import connectors.ConnectionStrings;
+
 import beans.ArticolDB;
 
 import listeners.AsyncTaskListener;

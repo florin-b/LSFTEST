@@ -144,14 +144,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
+                android:layout_marginBottom="40dip"
                 android:layout_marginLeft="20dip"
                 android:layout_marginTop="40dip"
-                android:layout_marginBottom="40dip"
                 android:text="Cmp:"
                 android:textColor="@color/detColor1"
                 android:textSize="16sp"
                 android:typeface="monospace" />
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/ArtPretTable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginBottom="20dip"
+                android:layout_marginTop="20dip"
+                android:orientation="vertical" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
-</LinearLayout>

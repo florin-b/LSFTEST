@@ -23,9 +23,9 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 	int[] colors = new int[] { 0x3098BED9, 0x30E8E8E8 };
 	double procentCmp, multiplu;
 
-	private double valoareArticoleB;
-	private double valoareComanda;
-	private double numaratorMarjaComanda, numitorMarjaComanda;
+	
+	
+	
 	private double valoareCmp;
 
 	private NumberFormat nf3;
@@ -137,13 +137,6 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 		if (isPretSpecial(articol.getInfoArticol()))
 			viewHolder.textPretSpecial.setText("(*)");
 
-		if (articol.getTipArt().equals(("B")))
-			valoareArticoleB += (articol.getPretUnit() * Double.valueOf(articol.getCantUmb())) / multiplu;
-
-		valoareComanda += (articol.getPretUnit() * Double.valueOf(articol.getCantUmb())) / multiplu;
-
-		numaratorMarjaComanda += (articol.getPretUnit() / multiplu - valoareCmp) * Double.valueOf(articol.getCantUmb());
-		numitorMarjaComanda += (articol.getPretUnit() / multiplu) * Double.valueOf(articol.getCantUmb());
 
 		if (colorPos % 2 == 0)
 			convertView.setBackgroundResource(R.drawable.shadow_dark);

@@ -45,7 +45,7 @@ public class AfisReduceri extends ListActivity implements AsyncTaskListener, Cus
 	private static ArrayList<HashMap<String, String>> list1 = null;
 	private String selectedSabl = "-1", selectedAgent = "-1", stareSablon = "-1";
 	private String cmdNr = null;
-	private String[] tokenCmd;
+	
 
 	static String tipAcces;
 	SlidingDrawer slidingDrawerRed;

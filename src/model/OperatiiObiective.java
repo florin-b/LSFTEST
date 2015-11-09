@@ -44,7 +44,7 @@ public class OperatiiObiective implements AsyncTaskListener {
 	}
 
 	public void getListObiective(HashMap<String, String> params) {
-		numeComanda = EnumOperatiiObiective.GET_LIST_OBEICTIVE;
+		numeComanda = EnumOperatiiObiective.GET_LIST_OBIECTIVE;
 		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getNume(), params, (AsyncTaskListener) this, context);
 		call.getCallResultsFromFragment();
 	}

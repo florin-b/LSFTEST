@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import model.ConnectionStrings;
 import model.UserInfo;
 
 import org.ksoap2.HeaderProperty;
@@ -16,6 +15,8 @@ import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+
+import connectors.ConnectionStrings;
 
 import android.app.ActionBar;
 import android.app.Activity;

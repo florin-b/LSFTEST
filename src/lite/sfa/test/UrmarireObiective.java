@@ -79,7 +79,7 @@ public class UrmarireObiective extends Fragment implements InputTextDialogListen
 
 		listEvenimente = new ArrayList<BeanUrmarireEveniment>();
 
-		adapterObiective = new AdapterObiectiveUrmarire(BeanObiectiveGenerale.getInstance(), getActivity(), listEvenimente);
+		adapterObiective = new AdapterObiectiveUrmarire(getActivity(), listEvenimente);
 
 		loadListEvenimente(new ArrayList<BeanUrmarireEveniment>());
 		spinnerOptiuniUrmarire = (Spinner) v.findViewById(R.id.spinnerUrmarireObiective);
@@ -317,8 +317,6 @@ public class UrmarireObiective extends Fragment implements InputTextDialogListen
 		SelectDateDialog dialogDate = new SelectDateDialog(getActivity(), datePickerListener, year, month, day);
 		dialogDate.show();
 	}
-
-	
 
 	private void setListenerTextObservatii() {
 		textObservatii.setOnClickListener(new View.OnClickListener() {

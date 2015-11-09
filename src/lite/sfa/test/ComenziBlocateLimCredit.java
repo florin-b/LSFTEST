@@ -92,12 +92,10 @@ public class ComenziBlocateLimCredit extends Activity implements ComenziDAOListe
 		this.refreshCmdBtn = (Button) findViewById(R.id.refreshCmdBtn);
 		addListenerRefreshCmdBtn();
 
-		adapter = new SimpleAdapter(this, arrayListArticole, R.layout.customrowcmdsim, new String[] { "nrCrt",
-				"numeArt", "codArt", "cantArt", "umArt", "pretArt", "monedaArt", "depozit", "status", "procent",
-				"procFact", "zDis", "tipAlert", "procAprob" }, new int[] { R.id.textNrCrt, R.id.textNumeArt,
-				R.id.textCodArt, R.id.textCantArt, R.id.textUmArt, R.id.textPretArt, R.id.textMonedaArt,
-				R.id.textDepozit, R.id.textStatusArt, R.id.textProcRed, R.id.textProcFact, R.id.textZDIS,
-				R.id.textAlertUsr, R.id.textProcAprobModif });
+		adapter = new SimpleAdapter(this, arrayListArticole, R.layout.customrowcmdsim, new String[] { "nrCrt", "numeArt", "codArt", "cantArt", "umArt",
+				"pretArt", "monedaArt", "depozit", "status", "procent", "procFact", "zDis", "tipAlert", "procAprob" }, new int[] { R.id.textNrCrt,
+				R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt, R.id.textUmArt, R.id.textPretArt, R.id.textMonedaArt, R.id.textDepozit,
+				R.id.textStatusArt, R.id.textProcRed, R.id.textProcFact, R.id.textZDIS, R.id.textAlertUsr, R.id.textProcAprobModif });
 
 		listViewArticole.setAdapter(adapter);
 		listViewArticole.setVisibility(View.INVISIBLE);
@@ -276,7 +274,7 @@ public class ComenziBlocateLimCredit extends Activity implements ComenziDAOListe
 			HashMap<String, String> temp;
 			String[] tokenMain = articoleComanda.split("@@");
 			String[] tokenAntet = tokenMain[0].split("#");
-			String tipPlata = "", tipTransport = "", cantar = "", factRed = "", tipAlert = "";
+			String tipPlata = "", tipTransport = "", cantar = "", factRed = "";
 
 			listViewArticole.setVisibility(View.VISIBLE);
 			layoutDetaliiComanda.setVisibility(View.VISIBLE);
@@ -352,12 +350,12 @@ public class ComenziBlocateLimCredit extends Activity implements ComenziDAOListe
 
 			String[] tokenArt;
 			String client = "";
-			String statusArt = " ", procAprob = "";
+			String statusArt = " ";
 
 			for (int i = 1; i <= nrArt; i++) {
 
 				statusArt = "";
-				tipAlert = " ";
+
 				temp = new HashMap<String, String>();
 				client = tokenMain[i];
 				tokenArt = client.split("#");
@@ -392,19 +390,6 @@ public class ComenziBlocateLimCredit extends Activity implements ComenziDAOListe
 					temp.put("status", statusArt);
 				} else {
 					temp.put("status", " ");
-				}
-
-				if (UserInfo.getInstance().getTipAcces().equals("9"))// userul
-																		// este
-				// agent
-				{
-					if (Double.parseDouble(tokenArt[15]) > Double.parseDouble(tokenArt[12])) {
-						tipAlert = "SD";
-					}
-				}
-
-				if (Double.parseDouble(tokenArt[15]) > Double.parseDouble(tokenArt[13])) {
-					tipAlert = "DV";
 				}
 
 				arrayListArticole.add(temp);
@@ -503,15 +488,13 @@ public class ComenziBlocateLimCredit extends Activity implements ComenziDAOListe
 			Locale.setDefault(locale);
 			Configuration config = new Configuration();
 			config.locale = locale;
-			getBaseContext().getResources().updateConfiguration(config,
-					getBaseContext().getResources().getDisplayMetrics());
+			getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 		}
 
 		// restart app la idle
 		if (UserInfo.getInstance().getCod().equals("")) {
 
-			Intent i = getBaseContext().getPackageManager()
-					.getLaunchIntentForPackage(getBaseContext().getPackageName());
+			Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
 			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(i);
 		}

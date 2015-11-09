@@ -8,29 +8,16 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 
 import listeners.AsyncTaskListener;
-import model.ConnectionStrings;
 import model.InfoStrings;
 import model.UserInfo;
-
-import org.ksoap2.HeaderProperty;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
-
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -247,96 +234,6 @@ public class GradReduceri extends Activity implements AsyncTaskListener {
 
 	}
 
-	private class getSabloane extends AsyncTask<String, Void, String> {
-		String errMessage = "";
-		Context mContext;
-		private ProgressDialog dialog;
-
-		private getSabloane(Context context) {
-			super();
-			this.mContext = context;
-		}
-
-		protected void onPreExecute() {
-			this.dialog = new ProgressDialog(mContext);
-			this.dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			this.dialog.setMessage("Incarcare lista sabloane...");
-			this.dialog.setCancelable(false);
-			this.dialog.show();
-		}
-
-		@Override
-		protected String doInBackground(String... url) {
-			String response = "";
-			try {
-
-				SoapObject request = new SoapObject(ConnectionStrings
-						.getInstance().getNamespace(), "getGradSabloane");
-				String tipUser = "";
-				if (UserInfo.getInstance().getTipAcces().equals("9")) {
-					tipUser = "AV";
-				}
-				if (UserInfo.getInstance().getTipAcces().equals("10")) {
-					tipUser = "SD";
-				}
-				if (UserInfo.getInstance().getTipAcces().equals("14")
-						|| UserInfo.getInstance().getTipAcces().equals("12")) {
-					tipUser = "DV";
-				}
-
-				NumberFormat nf3 = new DecimalFormat("00000000");
-				String fullCode = nf3.format(Integer.parseInt(selectedAgent))
-						.toString();
-				request.addProperty("codUser", fullCode);
-				request.addProperty("filiala", UserInfo.getInstance()
-						.getUnitLog());
-				request.addProperty("depart", UserInfo.getInstance()
-						.getCodDepart());
-				request.addProperty("tipUser", tipUser);
-
-				SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-						SoapEnvelope.VER11);
-				envelope.dotNet = true;
-				envelope.setOutputSoapObject(request);
-				HttpTransportSE androidHttpTransport = new HttpTransportSE(
-						ConnectionStrings.getInstance().getUrl(), 60000);
-				List<HeaderProperty> headerList = new ArrayList<HeaderProperty>();
-				headerList.add(new HeaderProperty("Authorization", "Basic "
-						+ org.kobjects.base64.Base64.encode("bflorin:bflorin"
-								.getBytes())));
-				androidHttpTransport.call(ConnectionStrings.getInstance()
-						.getNamespace() + "getGradSabloane", envelope,
-						headerList);
-				Object result = envelope.getResponse();
-				response = result.toString();
-			} catch (Exception e) {
-				errMessage = e.getMessage();
-			}
-			return response;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			// TODO
-			try {
-				if (dialog != null) {
-					dialog.dismiss();
-					dialog = null;
-				}
-
-				if (!errMessage.equals("")) {
-					Toast toast = Toast.makeText(getApplicationContext(),
-							errMessage, Toast.LENGTH_SHORT);
-					toast.show();
-				} else {
-					populateSablonList(result);
-				}
-			} catch (Exception e) {
-				Log.e("Error", e.toString());
-			}
-		}
-
-	}
 
 	protected void populateSablonList(String sablonList) {
 

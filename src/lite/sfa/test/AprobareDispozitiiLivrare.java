@@ -15,7 +15,6 @@ import listeners.CustomSpinnerListener;
 import listeners.DlDAOListener;
 import model.DlDAO;
 import model.HandleJSONData;
-import model.InfoStrings;
 import model.UserInfo;
 import adapters.ArticoleCLPAdapter;
 import android.app.ActionBar;
@@ -48,10 +47,9 @@ public class AprobareDispozitiiLivrare extends Activity implements CustomSpinner
 			listArtCmdDl = new ArrayList<HashMap<String, String>>();
 	public static String selectedCmd = "", selectedCmdSap = "";
 	ListView listViewArtCmdDl;
-	private HashMap<String, String> artMap = null;
+	
 
-	private TextView textAdrLivr, textPersContact, textTelefon, textOras, textJudet, textDataLivrare, textTipPlata,
-			textTipTransport, textAprobatOC;
+	private TextView textAdrLivr, textPersContact, textTelefon, textOras, textJudet, textDataLivrare, textTipPlata, textTipTransport, textAprobatOC;
 
 	LinearLayout layoutCmdCondHead;
 	Button btnAprobaDl, btnRespingeDl;
@@ -80,9 +78,9 @@ public class AprobareDispozitiiLivrare extends Activity implements CustomSpinner
 
 		spinnerCmdDl = (Spinner) findViewById(R.id.spinnerCmdDl);
 
-		adapterComenziDl = new SimpleAdapter(this, listComenziDl, R.layout.list_comenzi_clp, new String[] { "idCmdClp",
-				"numeClient", "data", "cmdSAP", "ul", "agent", "depoz" }, new int[] { R.id.textIdCmdClp,
-				R.id.textClient, R.id.textData, R.id.textCmdSAP, R.id.textUL, R.id.textAgent, R.id.textDepoz });
+		adapterComenziDl = new SimpleAdapter(this, listComenziDl, R.layout.list_comenzi_clp, new String[] { "idCmdClp", "numeClient", "data", "cmdSAP", "ul",
+				"agent", "depoz" },
+				new int[] { R.id.textIdCmdClp, R.id.textClient, R.id.textData, R.id.textCmdSAP, R.id.textUL, R.id.textAgent, R.id.textDepoz });
 
 		spinnerCmdDl.setAdapter(adapterComenziDl);
 
@@ -91,9 +89,8 @@ public class AprobareDispozitiiLivrare extends Activity implements CustomSpinner
 
 		listViewArtCmdDl = (ListView) findViewById(R.id.listArtCmdDl);
 
-		adapterArtCmdDl = new SimpleAdapter(this, listArtCmdDl, R.layout.art_comenzi_clp, new String[] { "nrCrt",
-				"numeArt", "codArt", "cantArt", "umArt", "depozit", "status" }, new int[] { R.id.textNrCrt,
-				R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt, R.id.textUmArt, R.id.textDepozit,
+		adapterArtCmdDl = new SimpleAdapter(this, listArtCmdDl, R.layout.art_comenzi_clp, new String[] { "nrCrt", "numeArt", "codArt", "cantArt", "umArt",
+				"depozit", "status" }, new int[] { R.id.textNrCrt, R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt, R.id.textUmArt, R.id.textDepozit,
 				R.id.textStatusArt });
 
 		listViewArtCmdDl.setAdapter(adapterArtCmdDl);
@@ -262,75 +259,6 @@ public class AprobareDispozitiiLivrare extends Activity implements CustomSpinner
 
 	}
 
-	private void populateArtCmdList1(String articoleComanda) {
-
-		listArtCmdDl.clear();
-		adapterArtCmdDl.notifyDataSetChanged();
-
-		NumberFormat nf2 = new DecimalFormat("#0.00");
-
-		if (!articoleComanda.equals("-1") && articoleComanda.length() > 0) {
-			HashMap<String, String> temp;
-			String[] tokenMain = articoleComanda.split("@@");
-			String[] tokenAntet = tokenMain[0].split("#");
-
-			listViewArtCmdDl.setVisibility(View.VISIBLE);
-
-			textAdrLivr.setText(tokenAntet[2]);
-			textPersContact.setText(tokenAntet[0]);
-			textTelefon.setText(tokenAntet[1]);
-			textOras.setText(tokenAntet[3]);
-
-			String varNumeJudet = InfoStrings.numeJudet(tokenAntet[4]);
-
-			if (varNumeJudet.equals("Nedefinit"))
-				varNumeJudet = " ";
-
-			textJudet.setText(varNumeJudet);
-
-			textDataLivrare.setText(tokenAntet[5]);
-
-			int nrArt = Integer.parseInt(tokenAntet[10]); // nr. articole
-															// comanda
-
-			textTipPlata.setText(InfoStrings.getTipPlata(tokenAntet[11]));
-			textTipTransport.setText(InfoStrings.getTipTransport(tokenAntet[12]));
-			textAprobatOC.setText(InfoStrings.getTipAprobare(tokenAntet[13]));
-
-			String[] tokenArt;
-			String client = "", statusArt = "";
-
-			for (int i = 1; i <= nrArt; i++) {
-
-				statusArt = "";
-				temp = new HashMap<String, String>(20, 0.75f);
-				client = tokenMain[i];
-				tokenArt = client.split("#");
-
-				temp.put("nrCrt", String.valueOf(i) + ".");
-				temp.put("numeArt", tokenArt[1]);
-				temp.put("codArt", tokenArt[0]);
-				temp.put("cantArt", nf2.format(Float.parseFloat(tokenArt[2])));
-				temp.put("umArt", tokenArt[3]);
-				temp.put("depozit", tokenArt[4]);
-
-				statusArt = "";
-				if (tokenArt[5].equals("9")) {
-					statusArt = "Stoc insuficient";
-				}
-
-				temp.put("status", statusArt);
-
-				listArtCmdDl.add(temp);
-
-			}// sf. for
-
-			listViewArtCmdDl.setAdapter(adapterArtCmdDl);
-
-		}
-
-	}
-
 	public void addListenerAprobaClp() {
 		btnAprobaDl.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -343,20 +271,19 @@ public class AprobareDispozitiiLivrare extends Activity implements CustomSpinner
 
 	public void showConfirmationApprovalAlert() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Aprobati cererea?").setCancelable(false)
-				.setPositiveButton("Da", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
+		builder.setMessage("Aprobati cererea?").setCancelable(false).setPositiveButton("Da", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
 
-						tipOpCmdDl = 0; // aprobare
-						opereazaComandaClp();
+				tipOpCmdDl = 0; // aprobare
+				opereazaComandaClp();
 
-					}
-				}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
+			}
+		}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
 
-					}
-				}).setTitle("Confirmare").setIcon(R.drawable.warning96);
+			}
+		}).setTitle("Confirmare").setIcon(R.drawable.warning96);
 
 		AlertDialog alert = builder.create();
 		alert.show();
@@ -375,20 +302,19 @@ public class AprobareDispozitiiLivrare extends Activity implements CustomSpinner
 
 	public void showConfirmationDenialAlert() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Respingeti cererea?").setCancelable(false)
-				.setPositiveButton("Da", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
+		builder.setMessage("Respingeti cererea?").setCancelable(false).setPositiveButton("Da", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
 
-						tipOpCmdDl = 1; // respingere
-						opereazaComandaClp();
+				tipOpCmdDl = 1; // respingere
+				opereazaComandaClp();
 
-					}
-				}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
+			}
+		}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
 
-					}
-				}).setTitle("Confirmare").setIcon(R.drawable.warning96);
+			}
+		}).setTitle("Confirmare").setIcon(R.drawable.warning96);
 
 		AlertDialog alert = builder.create();
 		alert.show();

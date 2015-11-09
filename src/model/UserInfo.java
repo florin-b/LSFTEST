@@ -29,6 +29,7 @@ public class UserInfo {
 	private double comisionCV = 0;
 	private String coefCorectie = "";
 	private String userSite = "";
+	private boolean userWood = false;
 
 	private static UserInfo instance = new UserInfo();
 
@@ -181,6 +182,14 @@ public class UserInfo {
 
 	public void setInitUnitLog(String initUnitLog) {
 		this.initUnitLog = initUnitLog;
+	}
+
+	public boolean isUserWood() {
+		return userWood;
+	}
+
+	public void setUserWood(boolean userWood) {
+		this.userWood = userWood;
 	}
 
 	public void setExtraFiliale(String extraFiliale) {

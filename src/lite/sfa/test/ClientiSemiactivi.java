@@ -4,11 +4,8 @@
  */
 package lite.sfa.test;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 
 import model.UserInfo;
 import adapters.DrawerMenuAdapterClInact;
@@ -39,11 +36,8 @@ public class ClientiSemiactivi extends Activity {
 	public static ArrayList<String> artSelListName = new ArrayList<String>();
 	public static ArrayList<String> artSelListCode = new ArrayList<String>();
 
-	
-
 	private static ArrayList<String> docSelList = new ArrayList<String>();
 
-	private static String startIntervalRap = "", stopIntervalRap = "";
 	public static String selectedFiliala = "-1", selectedAgent = "-1", tipComanda = "E";
 
 	ListView listViewMenu;
@@ -81,14 +75,11 @@ public class ClientiSemiactivi extends Activity {
 				selectedFiliala = UserInfo.getInstance().getUnitLog();
 			}
 
-			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
-			String currentDate = sdf.format(new Date());
+			
+			
 
-			ClientiSemiactivi.startIntervalRap = currentDate;
-			ClientiSemiactivi.stopIntervalRap = currentDate;
-
-			menuAdapter = new DrawerMenuAdapterClInact(this, menuList, R.layout.rowlayout_menu_item, new String[] { "menuName", "menuId" },
-					new int[] { R.id.textMenuName, R.id.textMenuId });
+			menuAdapter = new DrawerMenuAdapterClInact(this, menuList, R.layout.rowlayout_menu_item, new String[] { "menuName", "menuId" }, new int[] {
+					R.id.textMenuName, R.id.textMenuId });
 
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction().replace(R.id.main, new FragmentOne()).commit();
@@ -213,8 +204,6 @@ public class ClientiSemiactivi extends Activity {
 		artSelListCode.clear();
 		docSelList.clear();
 
-		startIntervalRap = "";
-		stopIntervalRap = "";
 		selectedFiliala = "-1";
 		selectedAgent = "0";
 		tipComanda = "E";

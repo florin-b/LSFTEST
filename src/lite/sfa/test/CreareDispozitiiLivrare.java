@@ -207,7 +207,7 @@ public class CreareDispozitiiLivrare extends FragmentActivity {
 		}
 	}
 
-	@SuppressWarnings("unused")
+	
 	private void CreateMenu(Menu menu) {
 
 		switch (menuIndex) {

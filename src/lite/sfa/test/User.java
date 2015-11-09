@@ -337,15 +337,7 @@ public class User extends Activity {
 		}
 	}
 
-	private boolean isUserExceptieBZ_HD() {
-		return (UserInfo.getInstance().getUnitLog().equals("GL10")
-				|| UserInfo.getInstance().getUnitLog().equals("BZ10")
-				|| UserInfo.getInstance().getUnitLog().equals("TM10") || UserInfo.getInstance().getUnitLog()
-				.equals("HD10"))
-				&& UserInfo.getInstance().getCodDepart().contains("04")
-				&& (UserInfo.getInstance().getTipUserSap().equals("AV") || UserInfo.getInstance().getTipUserSap()
-						.equals("SD"));
-	}
+	
 
 	// captare evenimente spinner departament
 	public class onSelectedDepart implements OnItemSelectedListener {

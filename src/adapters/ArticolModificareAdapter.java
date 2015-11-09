@@ -330,6 +330,14 @@ public class ArticolModificareAdapter extends BaseAdapter implements OperatiiArt
 
 		String codArticol = articolComanda.getCodArticol();
 
+		String localDepart = articolComanda.getDepart();
+		String localCanalDistrib = comanda.getCanalDistrib();
+
+		if (articolComanda.getDepozit().equals("MAV1") && !articolComanda.getDepartAprob().equals("00")) {
+			localDepart = "11";
+			localCanalDistrib = "10";
+		}
+
 		if (codArticol.length() == 8)
 			codArticol = "0000000000" + codArticol;
 
@@ -337,12 +345,12 @@ public class ArticolModificareAdapter extends BaseAdapter implements OperatiiArt
 		params.put("client", comanda.getCodClient());
 		params.put("articol", codArticol);
 		params.put("cantitate", String.valueOf(cantitate));
-		params.put("depart", articolComanda.getDepart());
+		params.put("depart", localDepart);
 		params.put("um", articolComanda.getUm());
 		params.put("ul", comanda.getFiliala());
 		params.put("depoz", articolComanda.getDepozit());
 		params.put("codUser", UserInfo.getInstance().getCod());
-		params.put("canalDistrib", comanda.getCanalDistrib());
+		params.put("canalDistrib", localCanalDistrib);
 		params.put("filialaAlternativa", articolComanda.getUnitLogAlt());
 
 		operatiiArticol.getPret(params);
@@ -391,10 +399,21 @@ public class ArticolModificareAdapter extends BaseAdapter implements OperatiiArt
 
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("codArt", codArticol);
-		params.put("filiala", UserInfo.getInstance().getUnitLog());
+		params.put("filiala", getUnitLogArtStoc(articolComanda));
 		params.put("depozit", articolComanda.getDepozit());
 
 		operatiiArticol.getStocDepozit(params);
+
+	}
+
+	private String getUnitLogArtStoc(ArticolComanda articolComanda) {
+
+		if (articolComanda.getUnitLogAlt().toUpperCase().contains("BV9"))
+			return articolComanda.getUnitLogAlt();
+		else if (articolComanda.getDepozit().toUpperCase().equals("WOOD"))
+			return comanda.getFiliala();
+		else
+			return UserInfo.getInstance().getUnitLog();
 
 	}
 

@@ -11,7 +11,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import listeners.SearchClientListener;
-import model.ConnectionStrings;
 import model.HandleJSONData;
 import model.UserInfo;
 
@@ -20,6 +19,8 @@ import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+
+import connectors.ConnectionStrings;
 
 import beans.BeanClient;
 

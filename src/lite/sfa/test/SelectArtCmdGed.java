@@ -55,6 +55,7 @@ import beans.PretArticolGed;
 import enums.EnumArticoleDAO;
 import enums.EnumDepartExtra;
 
+
 public class SelectArtCmdGed extends ListActivity implements OperatiiArticolListener {
 
 	Button articoleBtn, saveArtBtn, pretBtn;
@@ -97,7 +98,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	private double procentAprob = 0, selectedCant = 0;
 	private double pretMediuDistrib = 0, adaosMediuDistrib = 0;
 	private double valoareUmrez = 1, valoareUmren = 1;
-	private String umPretMediu;
 
 	NumberFormat nf2;
 
@@ -109,7 +109,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 	private HashMap<String, String> artMap = null;
 	double procR = 0, globalCantArt = 0;
-	private String depozUnic = "", unitLogUnic = "";
+
 	Dialog dialogSelFilArt;
 
 	private double discMaxAV = 0, discMaxSD = 0;
@@ -121,11 +121,11 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 	private boolean totalNegociat;
 	private String codClientVar;
-	private String depozitUnic;
+
 	private String tipComanda;
 	private boolean rezervStoc;
 	private String filialaAlternativa;
-	private String canalDistrib;
+
 	private double coefCorectie;
 	private ArrayAdapter<String> adapterSpinnerDepozite;
 	private LinearLayout layoutPretGEDFTva;
@@ -146,11 +146,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		totalNegociat = Boolean.valueOf(intent.getStringExtra("totalNegociat"));
 		codClientVar = intent.getStringExtra("codClientVar");
-		depozitUnic = intent.getStringExtra("depozitUnic");
+
 		tipComanda = intent.getStringExtra("tipComanda");
 		rezervStoc = Boolean.valueOf(intent.getStringExtra("rezervStoc"));
 		filialaAlternativa = intent.getStringExtra("filialaAlternativa");
-		canalDistrib = intent.getStringExtra("canalDistrib");
 
 		opArticol = OperatiiArticolFactory.createObject("OperatiiArticolImpl", this);
 		opArticol.setListener(this);
@@ -224,11 +223,19 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		spinnerDepoz = (Spinner) findViewById(R.id.spinnerDepoz);
 
 		ArrayList<String> arrayListDepozite = new ArrayList<String>();
-		arrayListDepozite.addAll(Arrays.asList(UtilsGeneral.getDepoziteGed()));
+
+		if (isWood())
+			arrayListDepozite.addAll(Arrays.asList(UtilsGeneral.getDepoziteWood()));
+		else
+			arrayListDepozite.addAll(Arrays.asList(UtilsGeneral.getDepoziteGed()));
+
 		adapterSpinnerDepozite = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayListDepozite);
 		adapterSpinnerDepozite.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerDepoz.setAdapter(adapterSpinnerDepozite);
 		spinnerDepoz.setOnItemSelectedListener(new OnSelectDepozit());
+
+		if (isWood())
+			spinnerDepoz.setSelection(arrayListDepozite.size() - 1);
 
 		spinnerUnitMas = (Spinner) findViewById(R.id.spinnerUnitMas);
 
@@ -320,6 +327,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		if (isKA())
 			selectedDepartamentAgent = "00";
+
+		if (isWood())
+			selectedDepartamentAgent = "12";
+
 	}
 
 	boolean isKA() {
@@ -328,6 +339,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 	boolean isCV() {
 		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM");
+	}
+
+	boolean isWood() {
+		return UserInfo.getInstance().getTipUser().equals("WOOD");
 	}
 
 	// eveniment selectie unitate masura alternativa
@@ -633,12 +648,16 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	private void callGetPret() {
 		HashMap<String, String> params = new HashMap<String, String>();
 
-		String uLog = UserInfo.getInstance().getUnitLog();
-
 		if (codArticol.length() == 8)
 			codArticol = "0000000000" + codArticol;
 
-		uLog = UserInfo.getInstance().getUnitLog().substring(0, 2) + "2" + UserInfo.getInstance().getUnitLog().substring(3, 4);
+		String uLog = UserInfo.getInstance().getUnitLog().substring(0, 2) + "2" + UserInfo.getInstance().getUnitLog().substring(3, 4);
+		String tipUser = UserInfo.getInstance().getTipUser();
+
+		if (isWood()) {
+			uLog = UserInfo.getInstance().getUnitLog().substring(0, 2) + "4" + UserInfo.getInstance().getUnitLog().substring(3, 4);
+			tipUser = "CV";
+		}
 
 		String paramUnitMas = textUM.getText().toString();
 
@@ -647,10 +666,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			paramUnitMas = artMap.get("rowText");
 
 		}
-
-		String tipUser;
-
-		tipUser = UserInfo.getInstance().getTipUser();
 
 		BeanParametruPretGed paramPret = new BeanParametruPretGed();
 		paramPret.setClient(codClientVar);
@@ -914,7 +929,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 						tipAlert = " ";
 
-						if (UtilsUser.userIsAgentOrSD()) {
+						if (UtilsUser.isAgentOrSD() || UtilsUser.isConsWood()) {
 							if (procentAprob > discMaxAV) {
 								tipAlert = "SD";
 							}
@@ -956,7 +971,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						articol.setTipAlert(tipAlert);
 						articol.setPromotie(Integer.valueOf(codPromo));
 
-						if (UtilsUser.userIsAgentOrSD()) {
+						if (UtilsUser.isAgentOrSD() || UtilsUser.isConsWood()) {
 							if (articol.getPromotie() >= 1)
 								articol.setPonderare(0);
 							else
@@ -1134,7 +1149,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		cmpArt = Double.valueOf(pretArticol.getCmp());
 		pretMediuDistrib = Double.valueOf(pretArticol.getPretMediu());
 		adaosMediuDistrib = Double.valueOf(pretArticol.getAdaosMediu());
-		umPretMediu = pretArticol.getUmPretMediu();
 
 		initPrice = Double.valueOf(pretArticol.getPret());
 		listPrice = Double.valueOf(pretArticol.getPretLista());
@@ -1400,6 +1414,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		if (globalDepozSel.equals("MAV1")) {
 			varLocalUnitLog = filialaAlternativa.substring(0, 2) + "2" + filialaAlternativa.substring(3, 4);
+		} else if (globalDepozSel.equals("WOOD")) {
+			varLocalUnitLog = filialaAlternativa.substring(0, 2) + "4" + filialaAlternativa.substring(3, 4);
 		} else {
 			varLocalUnitLog = filialaAlternativa.substring(0, 2) + "1" + filialaAlternativa.substring(3, 4);
 		}

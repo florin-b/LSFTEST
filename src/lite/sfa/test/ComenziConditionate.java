@@ -308,7 +308,7 @@ public class ComenziConditionate extends Activity implements AsyncTaskListener {
 
 			String[] tokenArt, tokenArtCond;
 			String client = "";
-			String procAprob = "", UmB = "", UmV = "", unitPret = "";
+			String  UmB = "", UmV = "", unitPret = "";
 
 			int ii = 1;
 

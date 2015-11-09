@@ -308,6 +308,20 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layoutBV90"
+                        style="@style/dateLivrareDlLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            style="@style/dateLivrareDlLabel"
+                            android:layout_width="0dip"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.2"
+                            android:text="Comanda BV90" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         xmlns:tools="http://schemas.android.com/tools"
                         style="@style/dateLivrareDlLayout"
@@ -404,8 +418,8 @@
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         xmlns:tools="http://schemas.android.com/tools"
-                        style="@style/dateLivrareDlLayout"
                         android:id="@+id/layoutCondNrFact"
+                        style="@style/dateLivrareDlLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
 
@@ -427,8 +441,8 @@
                     <LinearLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         xmlns:tools="http://schemas.android.com/tools"
-                        style="@style/dateLivrareDlLayout"
                         android:id="@+id/layoutCondObs"
+                        style="@style/dateLivrareDlLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
 

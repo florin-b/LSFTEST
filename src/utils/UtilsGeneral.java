@@ -16,33 +16,29 @@ import enums.EnumTipAlert;
 
 public class UtilsGeneral {
 
-	public static String[] numeFiliale = { "Andronache", "Bacau", "Baia-Mare", "Brasov", "Buzau", "Constanta", "Cluj", "Craiova", "Focsani",
-			"Galati", "Glina", "Hunedoara", "Iasi", "Militari", "Oradea", "Otopeni", "Piatra-Neamt", "Pitesti", "Ploiesti", "Timisoara", "Tg. Mures" };
+	public static String[] numeFiliale = { "Andronache", "Bacau", "Baia-Mare", "Brasov", "Buzau", "Constanta", "Cluj", "Craiova", "Focsani", "Galati", "Glina",
+			"Hunedoara", "Iasi", "Militari", "Oradea", "Otopeni", "Piatra-Neamt", "Pitesti", "Ploiesti", "Timisoara", "Tg. Mures" };
 
-	public static String[] codFiliale = { "BU13", "BC10", "MM10", "BV10", "BZ10", "CT10", "CJ10", "DJ10", "VN10", "GL10", "BU10", "HD10", "IS10",
-			"BU11", "BH10", "BU12", "NT10", "AG10", "PH10", "TM10", "MS10" };
+	public static String[] codFiliale = { "BU13", "BC10", "MM10", "BV10", "BZ10", "CT10", "CJ10", "DJ10", "VN10", "GL10", "BU10", "HD10", "IS10", "BU11",
+			"BH10", "BU12", "NT10", "AG10", "PH10", "TM10", "MS10" };
 
-	public static String[] numeDivizii = { "Lemnoase", "Feronerie", "Parchet", "Materiale grele", "Electrice", "Gips", "Chimice", "Instalatii",
-			"Hidroizolatii" };
+	public static String[] numeDivizii = { "Lemnoase", "Feronerie", "Parchet", "Materiale grele", "Electrice", "Gips", "Chimice", "Instalatii", "Hidroizolatii" };
 
 	public static String[] codDivizii = { "01", "02", "03", "04", "05", "06", "07", "08", "09" };
 
-	public static String[] numeJudete = { "Selectati un judet", "ALBA", "ARAD", "ARGES", "BACAU", "BIHOR", "BISTRITA-NASAUD", "BOTOSANI", "BRAILA",
-			"BRASOV", "BUCURESTI", "BUZAU", "CALARASI", "CARAS-SEVERIN", "CLUJ", "CONSTANTA", "COVASNA", "DAMBOVITA", "DOLJ", "GALATI", "GIURGIU",
-			"GORJ", "HARGHITA", "HUNEDOARA", "IALOMITA", "IASI", "ILFOV", "MARAMURES", "MEHEDINTI", "MURES", "NEAMT", "OLT", "PRAHOVA", "SALAJ",
-			"SATU-MARE", "SIBIU", "SUCEAVA", "TELEORMAN", "TIMIS", "TULCEA", "VALCEA", "VASLUI", "VRANCEA" };
+	public static String[] numeJudete = { "Selectati un judet", "ALBA", "ARAD", "ARGES", "BACAU", "BIHOR", "BISTRITA-NASAUD", "BOTOSANI", "BRAILA", "BRASOV",
+			"BUCURESTI", "BUZAU", "CALARASI", "CARAS-SEVERIN", "CLUJ", "CONSTANTA", "COVASNA", "DAMBOVITA", "DOLJ", "GALATI", "GIURGIU", "GORJ", "HARGHITA",
+			"HUNEDOARA", "IALOMITA", "IASI", "ILFOV", "MARAMURES", "MEHEDINTI", "MURES", "NEAMT", "OLT", "PRAHOVA", "SALAJ", "SATU-MARE", "SIBIU", "SUCEAVA",
+			"TELEORMAN", "TIMIS", "TULCEA", "VALCEA", "VASLUI", "VRANCEA" };
 
-	public static String[] codJudete = { " ", "01", "02", "03", "04", "05", "06", "07", "09", "08", "40", "10", "51", "11", "12", "13", "14", "15",
-			"16", "17", "52", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "31", "30", "32", "33", "34", "35", "36", "38",
-			"37", "39" };
+	public static String[] codJudete = { " ", "01", "02", "03", "04", "05", "06", "07", "09", "08", "40", "10", "51", "11", "12", "13", "14", "15", "16", "17",
+			"52", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "31", "30", "32", "33", "34", "35", "36", "38", "37", "39" };
 
 	private static String[] depoziteDISTRIB = { "V1 - vanzare", "V2 - vanzare", "V3 - vanzare", "G1 - gratuite", "G2 - gratuite", "G3 - gratuite",
 			"D1 - deteriorate", "D2 - deteriorate", "D3 - deteriorate", "DESC", "GAR1" };
 
-	
 	public static String[] tipReducere = { "1 factura (red. in pret)", "2 facturi", "1 factura (red. separat)" };
-	
-	
+
 	public static String[] getDepoziteDistributie() {
 		return depoziteDISTRIB;
 	}
@@ -52,6 +48,15 @@ public class UtilsGeneral {
 
 		System.arraycopy(depoziteDISTRIB, 0, depoziteGed, 0, depoziteDISTRIB.length);
 		depoziteGed[depoziteDISTRIB.length] = "MAV1";
+
+		return depoziteGed;
+	}
+
+	public static String[] getDepoziteWood() {
+		String[] depoziteGed = new String[depoziteDISTRIB.length + 1];
+
+		System.arraycopy(depoziteDISTRIB, 0, depoziteGed, 0, depoziteDISTRIB.length);
+		depoziteGed[depoziteDISTRIB.length] = "WOOD";
 
 		return depoziteGed;
 	}

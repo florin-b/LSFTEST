@@ -134,7 +134,7 @@ public class SelectObiectivDialog extends Dialog implements ObiectiveListener {
 
 	public void operationObiectivComplete(EnumOperatiiObiective numeComanda, Object result) {
 		switch (numeComanda) {
-		case GET_LIST_OBEICTIVE:
+		case GET_LIST_OBIECTIVE:
 			populateListObiective(obiective.deserializeListaObiective((String) result));
 			break;
 		default:

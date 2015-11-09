@@ -125,7 +125,6 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	private boolean alertSD = false, alertDV = false;
 
 	private String nrCmdGED = "";
-	private boolean marjaCmdOK = true;
 
 	private String comandaFinalaStr = "";
 
@@ -287,7 +286,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		mnu3.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
-		if (UtilsUser.userIsAgentOrSD()) {
+		if (UtilsUser.isAgentOrSD()) {
 			MenuItem mnu4 = menu.add(0, 3, 3, "Valoare negociata");
 			mnu4.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		}
@@ -700,7 +699,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	public void calculProcente() {
 
-		if (UtilsUser.userIsAgentOrSD())
+		if (UtilsUser.isAgentOrSD() || UtilsUser.isConsWood())
 			return;
 
 		adapter.notifyDataSetChanged();
@@ -718,7 +717,6 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		textComisionGed.setText("Comision: " + nf.format(algoritm.getMarjaBrutaGed() * algoritm.getCoefComision()));
 		textComisionClient.setText(nf.format(algoritm.getMarjaBrutaClient() * algoritm.getCoefComision()));
 
-		marjaCmdOK = true;
 		textAlertaMarja.setVisibility(View.GONE);
 
 		double formulaTotalAdaosClientCorectat = algoritm.getTotalAdaosClientCorectat();
@@ -1245,13 +1243,13 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				myArray.put(obj);
 
 				// exceptie transport
-				if (listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1 && !UtilsUser.userIsAgentOrSD()) {
+				if (listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1 && !UtilsUser.isAgentOrSD()) {
 					alertDV = true;
 					comandaFinala.setComandaBlocata("1");
 					aprobariCV.add(listArticole.get(i).getDepart());
 				}
 
-				if (UtilsUser.userIsAgentOrSD()) {
+				if (UtilsUser.isAgentOrSD() || UtilsUser.isConsWood()) {
 					if (listArticole.get(i).getTipAlert().contains("SD"))
 						alertSD = true;
 
@@ -1267,8 +1265,14 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT).show();
 		}
 
-		String strAprobariCV = new String(aprobariCV.toString());
-		comandaFinala.setNecesarAprobariCV(strAprobariCV.substring(1, strAprobariCV.length() - 1));
+		if (UtilsUser.isConsWood()) {
+			alertSD = false;
+			comandaFinala.setNecesarAprobariCV("");
+
+		} else {
+			String strAprobariCV = new String(aprobariCV.toString());
+			comandaFinala.setNecesarAprobariCV(strAprobariCV.substring(1, strAprobariCV.length() - 1));
+		}
 
 		return myArray.toString();
 
@@ -1338,7 +1342,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			obj.put("isValIncModif", DateLivrare.getInstance().isValIncModif());
 			obj.put("mail", DateLivrare.getInstance().getMail());
 			obj.put("totalComanda", DateLivrare.getInstance().getTotalComanda());
-			obj.put("unitLog", DateLivrare.getInstance().getUnitLog());
+			obj.put("unitLog", getUnitLog());
 			obj.put("codAgent", DateLivrare.getInstance().getCodAgent());
 			obj.put("factRed", DateLivrare.getInstance().getFactRed());
 			obj.put("macara", DateLivrare.getInstance().isMasinaMacara() ? "X" : " ");
@@ -1350,6 +1354,15 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		return obj.toString();
 
+	}
+
+	private String getUnitLog() {
+
+		String uLog = DateLivrare.getInstance().getUnitLog();
+		if (UserInfo.getInstance().getTipUserSap().equals("WOOD"))
+			uLog = UserInfo.getInstance().getUnitLog().substring(0, 2) + "4" + UserInfo.getInstance().getUnitLog().substring(3, 4);
+
+		return uLog;
 	}
 
 	private String getCoordAdresa() {
@@ -1585,9 +1598,14 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	private void performSaveCmdGED() {
 		try {
 
+			String canalDistrib = "20";
+			if (UtilsUser.isConsWood())
+				canalDistrib = "40";
+
 			HashMap<String, String> params = new HashMap<String, String>();
 
 			params.put("comanda", nrCmdGED);
+			params.put("canal", canalDistrib);
 			AsyncTaskWSCall call = new AsyncTaskWSCall(this, "saveCmdGED", params);
 			call.getCallResults();
 
@@ -1611,52 +1629,6 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		ListaArticoleComandaGed.getInstance().calculProcentReducere();
 		displayArticoleComanda();
 		getValoareTransportSap();
-	}
-
-	private void performCalcTransportCmdSiteSAP() {
-
-		articoleSite = "";
-		umSite = "";
-		cantSite = "";
-		valSite = "";
-
-		String localCodArt = "";
-
-		for (int i = 0; i < listArticole.size(); i++) {
-
-			localCodArt = listArticole.get(i).getCodArticol();
-
-			if (localCodArt.length() == 8)
-				localCodArt = "0000000000" + localCodArt;
-
-			articoleSite += localCodArt + "#";
-			umSite += listArticole.get(i).getUmb() + "#";
-			cantSite += listArticole.get(i).getCantUmb() + "#";
-
-			valSite += String.valueOf(listArticole.get(i).getPret() * Double.valueOf(listArticole.get(i).getCantUmb())) + "#";
-
-		}
-
-		if (articoleSite.equals("")) {
-			Toast.makeText(getApplicationContext(), "Nu exista articole!", Toast.LENGTH_SHORT).show();
-		} else {
-
-			HashMap<String, String> params = new HashMap<String, String>();
-
-			String articoleData = articoleSite + "?" + umSite + "?" + cantSite + "?" + valSite;
-
-			params.put("oras", DateLivrare.getInstance().getOras().toUpperCase(Locale.getDefault()));
-			params.put("codClient", CreareComandaGed.codClientVar);
-			params.put("listArticole", articoleData);
-			params.put("codJudet", DateLivrare.getInstance().getCodJudet());
-			params.put("unitLog", UserInfo.getInstance().getUnitLog());
-			params.put("tipPlata", DateLivrare.getInstance().getTipPlata());
-
-			AsyncTaskWSCall call = new AsyncTaskWSCall(this, "getValTransportComandaSite", params);
-			call.getCallResults();
-
-		}
-
 	}
 
 	public void showModifValTranspDialogBox() {

@@ -2,7 +2,8 @@ package listeners;
 
 import java.util.Observable;
 
-import model.ConnectionStrings;
+import connectors.ConnectionStrings;
+
 
 import android.app.ProgressDialog;
 import android.content.Context;

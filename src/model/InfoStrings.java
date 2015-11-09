@@ -540,6 +540,9 @@ public class InfoStrings {
 
 			if (filiala.equals("BV10"))
 				codClient = "4119000030";
+			
+			if (filiala.equals("BZ10"))
+				codClient = "4119000255";
 
 			if (filiala.equals("CJ10"))
 				codClient = "4119000031";
@@ -553,6 +556,9 @@ public class InfoStrings {
 			if (filiala.equals("GL10"))
 				codClient = "4119000033";
 
+			if (filiala.equals("HD10"))
+				codClient = "4119000260";
+			
 			if (filiala.equals("IS10"))
 				codClient = "4119000034";
 
@@ -601,6 +607,9 @@ public class InfoStrings {
 			if (filiala.equals("BV10"))
 				codClient = "4119000066";
 
+			if (filiala.equals("BZ10"))
+				codClient = "4119000256";
+			
 			if (filiala.equals("CJ10"))
 				codClient = "4119000067";
 
@@ -613,6 +622,9 @@ public class InfoStrings {
 			if (filiala.equals("GL10"))
 				codClient = "4119000069";
 
+			if (filiala.equals("HD10"))
+				codClient = "4119000261";
+			
 			if (filiala.equals("IS10"))
 				codClient = "4119000070";
 

@@ -31,6 +31,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import utils.UtilsUser;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -133,6 +134,11 @@ public class MainMenu extends Activity {
 	public int[] btnImageKA3 = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.modif_icon, R.drawable.preview_icon, R.drawable.cmd_bloc,
 			R.drawable.simulate, R.drawable.clp, R.drawable.afis_clp, R.drawable.retur_marfa, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon,
 			R.drawable.dollar_icon, R.drawable.client_info, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
+
+	public String[] btnNamesWOOD = { "Utilizator", "Creare cmd GED","Modificare comanda", "Afisare comanda", "Stocuri", "Preturi", "Despre", "Iesire" };
+
+	public int[] btnImageWOOD = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon,R.drawable.modif_icon, R.drawable.preview_icon, R.drawable.stoc_icon,
+			R.drawable.dollar_icon, R.drawable.despre_icon, R.drawable.exit_icon };
 
 	private static final String URL = "http://10.1.0.58/androidwebservices/TESTService.asmx";
 	String name = "", filiala = "";
@@ -257,7 +263,6 @@ public class MainMenu extends Activity {
 			return position;
 		}
 
-		@SuppressWarnings("deprecation")
 		public View getView(int position, View convertView, ViewGroup parent) {
 
 			Button btn;
@@ -607,16 +612,6 @@ public class MainMenu extends Activity {
 
 				}
 
-				// sincronizare articole
-				if (selectedBtnName.equalsIgnoreCase("Sincronizare articole")) {
-
-					Intent nextScreen = new Intent(MainMenu.this, SincArticole.class);
-					startActivity(nextScreen);
-					finish();
-
-				}
-
-				// sincronizare articole
 				if (selectedBtnName.equalsIgnoreCase("Comenzi conditionate")) {
 
 					Intent nextScreen = new Intent(MainMenu.this, ComenziConditionate.class);
@@ -956,8 +951,7 @@ public class MainMenu extends Activity {
 
 				} else {
 
-					if (UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance().getTipAcces().equals("17")) // ged
-					{
+					if (isUserGed() || UtilsUser.isConsWood()) {
 						paramDepart = "11";
 					} else {
 						paramDepart = UserInfo.getInstance().getCodDepart();
@@ -1005,6 +999,10 @@ public class MainMenu extends Activity {
 
 		}
 
+	}
+
+	private boolean isUserGed() {
+		return UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance().getTipAcces().equals("17") || UtilsUser.isDV_WOOD();
 	}
 
 	public void startModifCmdBtnAnimation(String result) {
@@ -1236,6 +1234,10 @@ public class MainMenu extends Activity {
 			nrBtns = btnNamesCONSGED.length;
 		}
 
+		if (UserInfo.getInstance().getTipUserSap().equals("WOOD")) {
+			nrBtns = btnNamesWOOD.length;
+		}
+
 		return nrBtns;
 
 	}
@@ -1274,6 +1276,10 @@ public class MainMenu extends Activity {
 
 		if (UserInfo.getInstance().getTipUserSap().equals("CONS-GED")) {
 			btnName = btnNamesCONSGED[btnPos];
+		}
+
+		if (UserInfo.getInstance().getTipUserSap().equals("WOOD")) {
+			btnName = btnNamesWOOD[btnPos];
 		}
 
 		return btnName;
@@ -1315,6 +1321,10 @@ public class MainMenu extends Activity {
 
 		if (UserInfo.getInstance().getTipUserSap().equals("CONS-GED")) {
 			btnImg = btnImageCONSGED[btnPos];
+		}
+
+		if (UserInfo.getInstance().getTipUserSap().equals("WOOD")) {
+			btnImg = btnImageWOOD[btnPos];
 		}
 
 		return btnImg;
@@ -1399,6 +1409,16 @@ public class MainMenu extends Activity {
 
 			for (int i = 0; i < btnNamesCONSGED.length; i++) {
 				if (btnNamesCONSGED[i].equalsIgnoreCase(btnName)) {
+					position = i;
+					break;
+				}
+			}
+		}
+
+		if (UserInfo.getInstance().getTipUserSap().equals("WOOD")) {
+
+			for (int i = 0; i < btnNamesWOOD.length; i++) {
+				if (btnNamesWOOD[i].equalsIgnoreCase(btnName)) {
 					position = i;
 					break;
 				}

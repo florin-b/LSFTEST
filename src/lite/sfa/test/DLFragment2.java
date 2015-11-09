@@ -47,7 +47,6 @@ import android.widget.SimpleAdapter;
 import android.widget.SlidingDrawer;
 import android.widget.SlidingDrawer.OnDrawerCloseListener;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
-import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,7 +67,7 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 	private static ArrayList<HashMap<String, String>> listArticole = null, listArtSelDl = null;
 	public SimpleAdapter adapterListArtDl;
 	public ListView listViewArticole;
-	private Spinner spinnerDepoz;
+	
 	String codArticol = "", numeArticol = "", umArticol = "";
 
 	public String globalDepozSel = "", globalCodDepartSelectetItem = "";

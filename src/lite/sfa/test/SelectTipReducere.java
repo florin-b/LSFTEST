@@ -202,6 +202,7 @@ public class SelectTipReducere extends Activity {
 
 	public void addListenerDataStart() {
 		textDataStart.setOnClickListener(new View.OnClickListener() {
+			@SuppressWarnings("deprecation")
 			public void onClick(View v) {
 
 				dataInt = 1;
@@ -232,6 +233,7 @@ public class SelectTipReducere extends Activity {
 
 	public void addListenerDataStop() {
 		textDataStop.setOnClickListener(new View.OnClickListener() {
+			@SuppressWarnings("deprecation")
 			public void onClick(View v) {
 				dataInt = 2;
 				showDialog(DATE_DIALOG_ID);

@@ -294,20 +294,6 @@ public class BeanObiectiveGenerale {
 		return "";
 	}
 
-	private String getNumeStadiu1(String codStadiu) {
-		for (BeanStadiuObiectiv stadiu : listStadii) {
-			if (stadiu.getCodDepart().equals(codStadiu))
-				return stadiu.getNumeStadiu();
-
-			if (codStadiu.equals("00")) {
-				if (stadiu.getCodDepart().equals("03") || stadiu.getCodDepart().equals("06") || stadiu.getCodDepart().equals("07"))
-					return stadiu.getNumeStadiu();
-			}
-		}
-
-		return "";
-	}
-
 	public String getCodAgent() {
 		return codAgent;
 	}
@@ -596,8 +582,4 @@ public class BeanObiectiveGenerale {
 		this.listEvenimente = listEvenimente;
 	}
 
-	
-	
-	
-	
 }

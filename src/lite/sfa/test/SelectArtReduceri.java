@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import listeners.OperatiiArticolListener;
-import model.ConnectionStrings;
 import model.OperatiiArticol;
 import model.OperatiiArticolFactory;
 import model.UserInfo;
@@ -21,7 +20,6 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import utils.UtilsGeneral;
-
 import adapters.CautareArticoleAdapter;
 import android.app.ActionBar;
 import android.app.ListActivity;
@@ -44,6 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import beans.ArticolDB;
+import connectors.ConnectionStrings;
 import enums.EnumArticoleDAO;
 
 public class SelectArtReduceri extends ListActivity implements OperatiiArticolListener {
@@ -70,14 +69,11 @@ public class SelectArtReduceri extends ListActivity implements OperatiiArticolLi
 
 	private int cautaArt = 0;
 
-	private String[] umArray = { "BAG", "BUC", "CUT", "DNT", "G", "KG", "KM", "L", "M", "M2", "M3", "ML", "PAK", "PUN",
-			"ROL", "SET", "TO" };
+	private String[] umArray = { "BAG", "BUC", "CUT", "DNT", "G", "KG", "KM", "L", "M", "M2", "M3", "ML", "PAK", "PUN", "ROL", "SET", "TO" };
 
 	boolean selArt = false, selSint = false, selNiv1 = false;
 
 	private ArrayAdapter<String> adapterSpinnerUm = null;
-
-	private static ArrayList<HashMap<String, String>> listArticole = new ArrayList<HashMap<String, String>>();;
 
 	static final int DATE_DIALOG_ID = 1;
 	LinearLayout artRedTbl1;
@@ -318,14 +314,12 @@ public class SelectArtReduceri extends ListActivity implements OperatiiArticolLi
 
 					// validari intrari
 					if (ReduceriUlterioare.procRedB5.equals("") && cantArt.equals("") && procStr.equals("")) {
-						Toast.makeText(getApplicationContext(), "Completati procentul de reducere!", Toast.LENGTH_SHORT)
-								.show();
+						Toast.makeText(getApplicationContext(), "Completati procentul de reducere!", Toast.LENGTH_SHORT).show();
 						return;
 					}
 
 					if (!cantArt.equals("") && procStr.equals("")) {
-						Toast.makeText(getApplicationContext(), "Completati procentul de reducere!", Toast.LENGTH_SHORT)
-								.show();
+						Toast.makeText(getApplicationContext(), "Completati procentul de reducere!", Toast.LENGTH_SHORT).show();
 						return;
 					}
 
@@ -362,9 +356,8 @@ public class SelectArtReduceri extends ListActivity implements OperatiiArticolLi
 
 					exceptii = " ";
 					if (ReduceriUlterioare.articoleReduceri.indexOf(codArticol) == -1)
-						ReduceriUlterioare.articoleReduceri += String.valueOf(cautaArt) + "#" + numeArticol + "#"
-								+ codArticol + "#" + cantitate + "#" + valoare + "#" + um + "#" + procent + "#" + data1
-								+ "#" + data2 + "#" + exceptii + "#" + sintetic + "@@";
+						ReduceriUlterioare.articoleReduceri += String.valueOf(cautaArt) + "#" + numeArticol + "#" + codArticol + "#" + cantitate + "#"
+								+ valoare + "#" + um + "#" + procent + "#" + data1 + "#" + data2 + "#" + exceptii + "#" + sintetic + "@@";
 
 					textNumeArticol.setText("");
 					textCodArticol.setText("");
@@ -516,13 +509,10 @@ public class SelectArtReduceri extends ListActivity implements OperatiiArticolLi
 				SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 				envelope.dotNet = true;
 				envelope.setOutputSoapObject(request);
-				HttpTransportSE androidHttpTransport = new HttpTransportSE(ConnectionStrings.getInstance().getUrl(),
-						25000);
+				HttpTransportSE androidHttpTransport = new HttpTransportSE(ConnectionStrings.getInstance().getUrl(), 25000);
 				List<HeaderProperty> headerList = new ArrayList<HeaderProperty>();
-				headerList.add(new HeaderProperty("Authorization", "Basic "
-						+ org.kobjects.base64.Base64.encode("bflorin:bflorin".getBytes())));
-				androidHttpTransport.call(ConnectionStrings.getInstance().getNamespace() + "getArtUmVanz", envelope,
-						headerList);
+				headerList.add(new HeaderProperty("Authorization", "Basic " + org.kobjects.base64.Base64.encode("bflorin:bflorin".getBytes())));
+				androidHttpTransport.call(ConnectionStrings.getInstance().getNamespace() + "getArtUmVanz", envelope, headerList);
 				Object result = envelope.getResponse();
 				response = result.toString();
 

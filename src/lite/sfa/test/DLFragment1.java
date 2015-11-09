@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import model.ConnectionStrings;
 import model.HandleJSONData;
 import model.UserInfo;
 
@@ -23,6 +22,8 @@ import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+
+import connectors.ConnectionStrings;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;

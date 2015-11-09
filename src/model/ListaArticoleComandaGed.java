@@ -1,7 +1,5 @@
 package model;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -62,7 +60,7 @@ public class ListaArticoleComandaGed extends Observable {
 	// pentru total negociat
 	public void calculProcentReducere() {
 
-		NumberFormat nf2 = new DecimalFormat("#0.00");
+		
 		double totalComanda = getTotalNegociatComanda();
 
 		double procentGlobal = 0;

@@ -1,6 +1,7 @@
 package lite.sfa.test;
 
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import listeners.AsyncTaskListener;
 import model.GetArticoleFromDB;
@@ -29,8 +30,7 @@ public class AsyncTaskWSCall {
 		this.contextListener = contextListener;
 	}
 
-	public AsyncTaskWSCall(String methodName, HashMap<String, String> params, AsyncTaskListener myListener,
-			Context context) {
+	public AsyncTaskWSCall(String methodName, HashMap<String, String> params, AsyncTaskListener myListener, Context context) {
 		this.contextListener = myListener;
 		this.methodName = methodName;
 		this.params = params;
@@ -44,8 +44,7 @@ public class AsyncTaskWSCall {
 		this.params = params;
 	}
 
-	public AsyncTaskWSCall(Context context, AsyncTaskListener contextListener, String methodName,
-			HashMap<String, String> params) {
+	public AsyncTaskWSCall(Context context, AsyncTaskListener contextListener, String methodName, HashMap<String, String> params) {
 		this.context = context;
 		this.methodName = methodName;
 		this.params = params;
@@ -54,6 +53,22 @@ public class AsyncTaskWSCall {
 
 	public void getCallResults() {
 		new WebServiceCall(context, methodName, params).execute();
+	}
+
+	public Object getCallResultsSync() {
+
+		Object retVal = null;
+		try {
+			retVal = new WebServiceCallFromFragment(context, contextListener, methodName, params).execute().get();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return retVal;
 	}
 
 	public void getCallResultsFromFragment() {

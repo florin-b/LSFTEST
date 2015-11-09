@@ -838,6 +838,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			String tokCond = " ", varAlteValori = " ";
 			String[] tokPret;
 			double valCondPret = 0;
+			String localCodDepart = "";
 
 			List<ArticolComanda> listaArticole = ListaArticoleComanda.getInstance().getListArticoleComanda();
 
@@ -900,20 +901,30 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 				if (isUserExceptie()) {
 					if (articol.getObservatii() != null) {
+
+						localCodDepart = articol.getDepart();
+
+						if (isArtGedExceptie(articol)) {
+							localCodDepart = articol.getDepartAprob();
+
+						}
+
 						if (articol.getObservatii().contains("SD")) {
 							comandaBlocata = "1";
 							alertSD = true;
 
-							if (!globalAlertSDKA.contains(articol.getDepart()))
-								globalAlertSDKA += articol.getDepart() + "?";
+							if (!globalAlertSDKA.contains(localCodDepart))
+								globalAlertSDKA += localCodDepart + "?";
+
 						}
 
 						if (articol.getObservatii().contains("DV")) {
 							comandaBlocata = "1";
 							alertDV = true;
 
-							if (!globalAlertDVKA.contains(articol.getDepart()))
-								globalAlertDVKA += articol.getDepart() + "?";
+							if (!globalAlertDVKA.contains(localCodDepart))
+
+								globalAlertDVKA += localCodDepart + "?";
 						}
 					}
 
@@ -936,6 +947,10 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 				articolCmd.setCantUmb(Double.valueOf(tokCantUmb));
 				articolCmd.setUmb(tokUmb);
 				articolCmd.setDepart(articol.getDepart());
+				articolCmd.setDepartAprob(articol.getDepartAprob());
+				if (isArtGedExceptie(articol))
+					articolCmd.setObservatii(articol.getObservatii());
+
 				listArticole.add(articolCmd);
 
 				retVal += tokCodArticol + "#" + tokCantArticol + "#" + tokDepozArticol + "#" + tokPretArticol + "#" + tokProcent + "#" + tokUM + "#"
@@ -965,6 +980,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 					articolCmd.setCantUmb(1);
 					articolCmd.setUmb("BUC");
 					articolCmd.setDepart(articol.getDepart());
+					articolCmd.setObservatii("");
 					listArticole.add(articolCmd);
 
 					retVal += "000000000000000000" + "#" + "1" + "#" + " " + "#" + String.valueOf(dblLocalTaxaVerde) + "#" + "0" + "#" + "BUC" + "#" + "0"
@@ -995,6 +1011,10 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 				|| UserInfo.getInstance().getTipAcces().equals("27");
 	}
 
+	private boolean isArtGedExceptie(ArticolComanda articolComanda) {
+		return articolComanda.getDepozit().equals("MAV1") && articolComanda.getDepart().equals("11") && !articolComanda.getDepartAprob().equals("00");
+	}
+
 	private String serializeArticole() {
 		JSONArray myArray = new JSONArray();
 
@@ -1019,6 +1039,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 				obj.put("cantUmb", listArticole.get(i).getCantUmb());
 				obj.put("Umb", listArticole.get(i).getUmb());
 				obj.put("depart", listArticole.get(i).getDepart());
+				obj.put("observatii", listArticole.get(i).getObservatii());
+				obj.put("departAprob", listArticole.get(i).getDepartAprob());
 				myArray.put(obj);
 			}
 		} catch (Exception ex) {
@@ -1110,14 +1132,13 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 	}
 
-	
 	private String getCoordAdresa() {
 		if (DateLivrare.getInstance().getCoordonateAdresa() != null)
 			return DateLivrare.getInstance().getCoordonateAdresa().latitude + "#" + DateLivrare.getInstance().getCoordonateAdresa().longitude;
 		else
 			return "0#0";
 	}
-	
+
 	public void addListenerClientBtn() {
 		clientBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {

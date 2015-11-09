@@ -20,7 +20,7 @@ public class AlgoritmComandaGed {
 
 	public void calculProcenteComanda(ArrayList<ArticolComanda> listArticole, boolean seAplicaAlgoritm) {
 
-		double pretUnitarClient = 0, pretUnitarGed = 0, cantitate = 0, cmp = 0, factorConversie = 0;
+		double pretUnitarClient = 0, pretUnitarGed = 0, cantitate = 0, cmp = 0;
 
 		double pretMediuDistrib = 0, adaosMediuDistrib = 0, coefZ = 0;
 		double adaosMinimArticol = 0, marjaMedieDistrib = 0, adaosClientCorectat = 0, adaosMinimReper = 0;
@@ -39,7 +39,7 @@ public class AlgoritmComandaGed {
 
 				if (articol.getPromotie() <= 0) {
 
-					factorConversie = (articol.getCantitate() / articol.getMultiplu()) / Double.valueOf(articol.getCantUmb());
+					
 
 					pretUnitarClient = articol.getPretUnitarClient();
 

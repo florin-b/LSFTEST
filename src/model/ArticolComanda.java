@@ -72,6 +72,8 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 	private double valTransport;
 	private double procTransport;
 
+	private String departAprob;
+
 	public int getNrCrt() {
 		return nrCrt;
 	}
@@ -521,9 +523,18 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 		this.procTransport = procTransport;
 	}
 
+	public String getDepartAprob() {
+		return departAprob;
+	}
+
+	public void setDepartAprob(String departAprob) {
+		this.departAprob = departAprob;
+	}
+
 	@Override
 	public String toString() {
-		return "ArticolComanda [numeArticol=" + numeArticol + ", codArticol=" + codArticol + ", ponderare=" + ponderare + "]";
+		return "ArticolComanda [nrCrt=" + nrCrt + ", numeArticol=" + numeArticol + ", codArticol=" + codArticol + ", depozit=" + depozit + ", cantitate="
+				+ cantitate + ", um=" + um + ", pret=" + pret + "]";
 	}
 
 	public static Comparator<ArticolComanda> DepartComparator = new Comparator<ArticolComanda>() {
@@ -539,11 +550,7 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 			if (depart2 != null)
 				departName2 = depart2.getDepart().toUpperCase(Locale.getDefault());
 
-			// descrescator
 			return departName2.compareTo(departName1);
-
-			// crescator
-			// return departName1.compareTo(departName2);
 
 		}
 

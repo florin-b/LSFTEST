@@ -777,7 +777,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 			objArticol[ii].setNumeArticol(tokVal);
 
 			tokVal = artMap.get("cantArt");
-			objArticol[ii].setCantitate(Double.parseDouble(tokVal));
+			objArticol[ii].setCantitate(Double.parseDouble(tokVal.replace(",", "")));
 
 			tokVal = artMap.get("Umb");
 			objArticol[ii].setUmb(tokVal);
@@ -789,7 +789,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 			objArticol[ii].setObservatii(tokVal);
 
 			tokVal = artMap.get("greutate");
-			objArticol[ii].setCantUmb(Double.parseDouble(tokVal));
+			objArticol[ii].setCantUmb(Double.parseDouble(tokVal.replace(",", "")));
 
 			tokVal = artMap.get("umgreutate");
 			objArticol[ii].setUnitMasPretMediu(tokVal);

@@ -10,14 +10,12 @@ public class ArticolDB {
 	private String sintetic;
 	private String umVanz10;
 	private String nivel1;
+	private String departAprob;
 
 	public ArticolDB() {
 
 	}
 
-	
-	
-	
 	public String getCod() {
 		return cod;
 	}
@@ -84,9 +82,18 @@ public class ArticolDB {
 		this.nivel1 = nivel1;
 	}
 
+	public String getDepartAprob() {
+		return departAprob;
+	}
+
+	public void setDepartAprob(String departAprob) {
+		this.departAprob = departAprob;
+	}
+
+	@Override
 	public String toString() {
-		return "ArticolDB [cod=" + cod + ", nume=" + nume + ", umVanz=" + umVanz + ", depart=" + depart + ", tipAB=" + tipAB + ", sintetic="
-				+ sintetic + ", umVanz10=" + umVanz10 + ", nivel1=" + nivel1 + "]";
+		return "ArticolDB [cod=" + cod + ", nume=" + nume + ", umVanz=" + umVanz + ", depart=" + depart + ", tipAB=" + tipAB + ", sintetic=" + sintetic
+				+ ", umVanz10=" + umVanz10 + ", nivel1=" + nivel1 + ", departAprob=" + departAprob + "]";
 	}
 
 }

@@ -2,7 +2,7 @@
  * @author florinb
  *
  */
-package model;
+package connectors;
 
 import android.os.Environment;
 

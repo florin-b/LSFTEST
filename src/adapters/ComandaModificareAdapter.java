@@ -1,10 +1,8 @@
 package adapters;
 
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 import lite.sfa.test.R;
 import utils.UtilsFormatting;
@@ -18,82 +16,70 @@ import beans.BeanComandaCreata;
 
 public class ComandaModificareAdapter extends BaseAdapter {
 
-    private List<BeanComandaCreata> listComenzi;
-    private Context context;
-    private Locale locale;
-    private DateFormat dateFormat;
+	private List<BeanComandaCreata> listComenzi;
+	private Context context;
+	
 
-    public ComandaModificareAdapter(List<BeanComandaCreata> listComenzi,
-            Context context) {
-        this.listComenzi = listComenzi;
-        this.context = context;
-        this.locale = new Locale("ro");
-        dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
-    }
+	public ComandaModificareAdapter(List<BeanComandaCreata> listComenzi, Context context) {
+		this.listComenzi = listComenzi;
+		this.context = context;
+		
 
-    static class ViewHolder {
-        public TextView textIdCmd, textClient, textData, textSuma, textStare,
-                textCmdSAP;
-    }
+	}
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+	static class ViewHolder {
+		public TextView textIdCmd, textClient, textData, textSuma, textStare, textCmdSAP;
+	}
 
-        NumberFormat numberFormat = new DecimalFormat("#0.00");
+	public View getView(int position, View convertView, ViewGroup parent) {
 
-        ViewHolder viewHolder;
+		NumberFormat numberFormat = new DecimalFormat("#0.00");
 
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(
-                    R.layout.modificare_cmd_header, parent, false);
-            viewHolder = new ViewHolder();
+		ViewHolder viewHolder;
 
-            viewHolder.textIdCmd = (TextView) convertView
-                    .findViewById(R.id.textIdCmd);
-            viewHolder.textClient = (TextView) convertView
-                    .findViewById(R.id.textClient);
-            viewHolder.textData = (TextView) convertView
-                    .findViewById(R.id.textData);
-            viewHolder.textSuma = (TextView) convertView
-                    .findViewById(R.id.textSuma);
-            viewHolder.textStare = (TextView) convertView
-                    .findViewById(R.id.textStare);
-            viewHolder.textCmdSAP = (TextView) convertView
-                    .findViewById(R.id.textCmdSAP);
+		if (convertView == null) {
+			convertView = LayoutInflater.from(context).inflate(R.layout.modificare_cmd_header, parent, false);
+			viewHolder = new ViewHolder();
 
-            convertView.setTag(viewHolder);
+			viewHolder.textIdCmd = (TextView) convertView.findViewById(R.id.textIdCmd);
+			viewHolder.textClient = (TextView) convertView.findViewById(R.id.textClient);
+			viewHolder.textData = (TextView) convertView.findViewById(R.id.textData);
+			viewHolder.textSuma = (TextView) convertView.findViewById(R.id.textSuma);
+			viewHolder.textStare = (TextView) convertView.findViewById(R.id.textStare);
+			viewHolder.textCmdSAP = (TextView) convertView.findViewById(R.id.textCmdSAP);
 
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+			convertView.setTag(viewHolder);
 
-        BeanComandaCreata comanda = getItem(position);
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
+		}
 
-        viewHolder.textIdCmd.setText(comanda.getId());
-        viewHolder.textClient.setText(comanda.getNumeClient());
-        viewHolder.textData.setText(UtilsFormatting.formatDate(comanda
-                .getData()));
+		BeanComandaCreata comanda = getItem(position);
 
-        viewHolder.textSuma.setText(numberFormat.format(Double
-                .parseDouble(comanda.getSuma())));
-        viewHolder.textStare.setText(comanda.getStare());
-        if (!comanda.getCmdSap().equals("-1"))
-            viewHolder.textCmdSAP.setText(comanda.getCmdSap());
-        else
-            viewHolder.textCmdSAP.setText(" ");
+		viewHolder.textIdCmd.setText(comanda.getId());
+		viewHolder.textClient.setText(comanda.getNumeClient());
+		viewHolder.textData.setText(UtilsFormatting.formatDate(comanda.getData()));
 
-        return convertView;
-    }
+		viewHolder.textSuma.setText(numberFormat.format(Double.parseDouble(comanda.getSuma())));
+		viewHolder.textStare.setText(comanda.getStare());
+		if (!comanda.getCmdSap().equals("-1"))
+			viewHolder.textCmdSAP.setText(comanda.getCmdSap());
+		else
+			viewHolder.textCmdSAP.setText(" ");
 
-    public int getCount() {
-        return listComenzi.size();
-    }
+		return convertView;
+	}
 
-    public BeanComandaCreata getItem(int position) {
-        return listComenzi.get(position);
-    }
+	public int getCount() {
+		return listComenzi.size();
+	}
 
-    public long getItemId(int position) {
-        return position;
-    }
+	public BeanComandaCreata getItem(int position) {
+		return listComenzi.get(position);
+	}
+
+	public long getItemId(int position) {
+		return position;
+	}
 
 }

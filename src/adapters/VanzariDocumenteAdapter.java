@@ -11,7 +11,6 @@ import java.util.List;
 
 import lite.sfa.test.AfisRaportVanzariAg;
 import lite.sfa.test.R;
-import model.ConnectionStrings;
 import model.HandleJSONData;
 import model.VanzariAgenti;
 
@@ -20,6 +19,8 @@ import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+
+import connectors.ConnectionStrings;
 
 import android.app.ProgressDialog;
 import android.content.Context;

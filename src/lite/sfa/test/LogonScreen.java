@@ -10,7 +10,6 @@ import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Timer;
 
 import listeners.AsyncTaskListener;
 import model.InfoStrings;
@@ -25,7 +24,6 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.text.InputType;
 import android.util.Log;
@@ -36,7 +34,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,20 +43,12 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 	private EditText etPassword;
 	private TextView lblResult;
 
-	private static final String SOAP_ACTION = "http://SFATest.org/userLogon";
 	private static final String METHOD_NAME = "userLogon";
-	private static final String NAMESPACE = "http://SFATest.org/";
-	private static final String URL = "http://10.1.0.58/AndroidWebServices/TESTService.asmx";
 
 	public static String codInitDepart = "00";
 	public static String numeInitDepart = "NEDE", globalMyIP = "0.0.0.0";
 
 	public static Double discMaxAV = 0.0, discMaxSD = 0.0, discMaxDV = 0.0;
-
-	private ProgressBar mProgress;
-	private Timer myTimer;
-	private int progressVal = 0;
-	private Handler logonHandler = new Handler();
 
 	MySwitch slideToUnLock;
 
@@ -110,11 +99,15 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		addListenerUserName();
 		addListenerPassword();
 
-		etUsername.setText("androag");
-		etPassword.setText("112");
+		// etUsername.setText("androwood");
+		// etPassword.setText("112");
 
-		// etUsername.setText("androag");
-		// etPassword.setText("sfa");
+		// etUsername.setText("androwood");
+		// etPassword.setText("112");
+
+		// DD Wood
+		 etUsername.setText("OCODREANU");
+		 etPassword.setText("Cdw6BU");
 
 		// CAG GL
 		// etUsername.setText("FROTARU");
@@ -144,8 +137,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		// etUsername.setText("temasg"); // dir KA
 		// etPassword.setText("9TemAst7");
 
-		//etUsername.setText("MRADUIANU"); // KA GL
-		//etPassword.setText("2GdCp4");
+		// etUsername.setText("MRADUIANU"); // KA GL
+		// etPassword.setText("2GdCp4");
 
 		// etUsername.setText("SSTEFAN");
 		// etPassword.setText("tRYTjS");
@@ -198,10 +191,15 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 
 		// etUsername.setText("LPADURARU"); // sd parc Gl
 		// etPassword.setText("tTXHRk");
-		
-		
-		 etUsername.setText("ABOGDAN"); // av inst Ploiesti
-		 etPassword.setText("Jg3UuK");
+
+		// etUsername.setText("ABOGDAN"); // av inst Ploiesti
+		// etPassword.setText("Jg3UuK");
+
+		//etUsername.setText("MDINICA"); // ag electr Gl
+		//etPassword.setText("rxtw93");
+
+		//etUsername.setText("CCUZA"); // sd electr Gl
+		//etPassword.setText("84fGx3");
 
 		globalMyIP = getIPConnection();
 
@@ -535,13 +533,21 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 					uInfo.setUnitLog(getFiliala(token[2].toString()));
 					uInfo.setInitUnitLog(getFiliala(token[2].toString()));
 					uInfo.setTipAcces(token[5].toString());
-					uInfo.setTipUser(InfoStrings.getTipUser(token[5].toString()));
+
+					if (token[10].toLowerCase(Locale.getDefault()).equals("w")) {
+						uInfo.setTipUser("WOOD");
+						uInfo.setTipUserSap("WOOD");
+					} else {
+						uInfo.setTipUser(InfoStrings.getTipUser(token[5].toString()));
+						uInfo.setTipUserSap(token[10]);
+					}
+
 					uInfo.setParentScreen("logon");
 					uInfo.setFilialeDV(token[9]);
 					uInfo.setAltaFiliala(false);
 					uInfo.setUserSite(token[8]);
 					uInfo.setDepartExtra(token[7]);
-					uInfo.setTipUserSap(token[10]);
+
 					uInfo.setExtraFiliale(token[11]);
 
 					if (uInfo.getTipAcces().equals("27") || uInfo.getTipAcces().equals("35") || uInfo.getTipAcces().equals("17")

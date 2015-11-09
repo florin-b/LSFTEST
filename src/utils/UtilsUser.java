@@ -37,15 +37,30 @@ public class UtilsUser {
 		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM");
 	}
 
-	public static boolean userIsAgentOrSD() {
-		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("AV")
-				|| UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD");
+	public static boolean isAgentOrSD() {
+		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("AV") || UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD");
 
+	}
+
+	public static boolean isConsWood() {
+		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("WOOD");
+	}
+
+	public static boolean isDV_WOOD() {
+		if (isANYDV()) {
+			String[] filiale = UserInfo.getInstance().getFilialeDV().split(";");
+
+			if (filiale.length > 0 && filiale[0].substring(2, 3).equals("4"))
+				return true;
+
+		}
+
+		return false;
 	}
 
 	public static boolean isMacaraVisible() {
 
-		if (userIsAgentOrSD()) {
+		if (isAgentOrSD()) {
 			if (UserInfo.getInstance().getCodDepart().contains("04") || UserInfo.getInstance().getCodDepart().contains("07")
 					|| UserInfo.getInstance().getCodDepart().contains("09"))
 				return true;

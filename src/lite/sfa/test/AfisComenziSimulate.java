@@ -17,7 +17,6 @@ import listeners.ComenziDAOListener;
 import listeners.CustomSpinnerClass;
 import listeners.CustomSpinnerListener;
 import model.ComenziDAO;
-import model.ConnectionStrings;
 import model.InfoStrings;
 import model.UserInfo;
 
@@ -54,10 +53,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import beans.BeanComandaCreata;
+import connectors.ConnectionStrings;
 import enums.EnumComenziDAO;
 
-public class AfisComenziSimulate extends Activity implements AsyncTaskListener, CustomSpinnerListener,
-		ComenziDAOListener {
+public class AfisComenziSimulate extends Activity implements AsyncTaskListener, CustomSpinnerListener, ComenziDAOListener {
 
 	Button creazaCmdSimBtn, stergeCmdSimBtn;
 	String filiala = "", nume = "", cod = "";
@@ -67,7 +66,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 	private SimpleAdapter adapter;
 
 	private Spinner spinnerCmd;
-	private SimpleAdapter adapterComenzi, adapterArtCond;
+	private SimpleAdapter adapterComenzi;
 	private static ArrayList<HashMap<String, String>> listComenzi = new ArrayList<HashMap<String, String>>();
 	private static ArrayList<HashMap<String, String>> list1 = new ArrayList<HashMap<String, String>>();
 	public static String selectedCmd = "", selectedCmdSAP = "";
@@ -90,8 +89,6 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 	private String selectedClient = "";
 	private Integer selectedClientIndex = -1;
-
-	private String selectedAgent = "-1", selectedFiliala = "-1";
 
 	private boolean totiClientiiRadioBtnSelected = true;
 
@@ -119,10 +116,9 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 		spinnerCmd = (Spinner) findViewById(R.id.spinnerCmd);
 
-		adapterComenzi = new SimpleAdapter(this, listComenzi, R.layout.comsimulatecustomview, new String[] { "idCmd",
-				"codClient", "numeClient", "data", "suma", "stare", "tipCmd", "ul", "cmdSap" }, new int[] {
-				R.id.textIdCmd, R.id.textCodClient, R.id.textClient, R.id.textData, R.id.textSuma, R.id.textStare,
-				R.id.textTipCmd, R.id.textUL, R.id.textCmdSAP });
+		adapterComenzi = new SimpleAdapter(this, listComenzi, R.layout.comsimulatecustomview, new String[] { "idCmd", "codClient", "numeClient", "data",
+				"suma", "stare", "tipCmd", "ul", "cmdSap" }, new int[] { R.id.textIdCmd, R.id.textCodClient, R.id.textClient, R.id.textData, R.id.textSuma,
+				R.id.textStare, R.id.textTipCmd, R.id.textUL, R.id.textCmdSAP });
 
 		spinnerCmd.setOnItemSelectedListener(spinnerListener);
 		spinnerListener.setListener(this);
@@ -148,12 +144,10 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 		this.stergeCmdSimBtn.setVisibility(View.INVISIBLE);
 		addListenerStergeCmdSimBtn();
 
-		adapter = new SimpleAdapter(this, list1, R.layout.comsimulatecustomrowview, new String[] { "nrCrt", "numeArt",
-				"codArt", "cantArt", "umArt", "pretArt", "monedaArt", "depozit", "status", "procent", "procFact",
-				"zDis", "tipAlert", "procAprob" }, new int[] { R.id.textNrCrt, R.id.textNumeArt, R.id.textCodArt,
-				R.id.textCantArt, R.id.textUmArt, R.id.textPretArt, R.id.textMonedaArt, R.id.textDepozit,
-				R.id.textStatusArt, R.id.textProcRed, R.id.textProcFact, R.id.textZDIS, R.id.textAlertUsr,
-				R.id.textProcAprobModif });
+		adapter = new SimpleAdapter(this, list1, R.layout.comsimulatecustomrowview, new String[] { "nrCrt", "numeArt", "codArt", "cantArt", "umArt", "pretArt",
+				"monedaArt", "depozit", "status", "procent", "procFact", "zDis", "tipAlert", "procAprob" }, new int[] { R.id.textNrCrt, R.id.textNumeArt,
+				R.id.textCodArt, R.id.textCantArt, R.id.textUmArt, R.id.textPretArt, R.id.textMonedaArt, R.id.textDepozit, R.id.textStatusArt,
+				R.id.textProcRed, R.id.textProcFact, R.id.textZDIS, R.id.textAlertUsr, R.id.textProcAprobModif });
 
 		listArtModif.setAdapter(adapter);
 		listArtModif.setVisibility(View.INVISIBLE);
@@ -235,8 +229,8 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 			spinnerClienti.setVisibility(View.INVISIBLE);
 
 			final ArrayList<HashMap<String, String>> listClienti = new ArrayList<HashMap<String, String>>();
-			final SimpleAdapter adapterClienti = new SimpleAdapter(this, listClienti, R.layout.rowlayoutagenti,
-					new String[] { "numeClient", "codClient" }, new int[] { R.id.textNumeAgent, R.id.textCodAgent });
+			final SimpleAdapter adapterClienti = new SimpleAdapter(this, listClienti, R.layout.rowlayoutagenti, new String[] { "numeClient", "codClient" },
+					new int[] { R.id.textNumeAgent, R.id.textCodAgent });
 
 			final RadioGroup radioGroupClnt = (RadioGroup) dialogSelClient.findViewById(R.id.radioGroup1);
 
@@ -305,8 +299,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 						String response = "";
 						try {
 
-							SoapObject request = new SoapObject(ConnectionStrings.getInstance().getNamespace(),
-									"getListClientiGED");
+							SoapObject request = new SoapObject(ConnectionStrings.getInstance().getNamespace(), "getListClientiGED");
 
 							NumberFormat nf3 = new DecimalFormat("00000000");
 							String fullCode = nf3.format(Integer.parseInt(UserInfo.getInstance().getCod())).toString();
@@ -326,13 +319,10 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 							SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 							envelope.dotNet = true;
 							envelope.setOutputSoapObject(request);
-							HttpTransportSE androidHttpTransport = new HttpTransportSE(ConnectionStrings.getInstance()
-									.getUrl(), 60000);
+							HttpTransportSE androidHttpTransport = new HttpTransportSE(ConnectionStrings.getInstance().getUrl(), 60000);
 							List<HeaderProperty> headerList = new ArrayList<HeaderProperty>();
-							headerList.add(new HeaderProperty("Authorization", "Basic "
-									+ org.kobjects.base64.Base64.encode("bflorin:bflorin".getBytes())));
-							androidHttpTransport.call(ConnectionStrings.getInstance().getNamespace()
-									+ "getListClientiGED", envelope, headerList);
+							headerList.add(new HeaderProperty("Authorization", "Basic " + org.kobjects.base64.Base64.encode("bflorin:bflorin".getBytes())));
+							androidHttpTransport.call(ConnectionStrings.getInstance().getNamespace() + "getListClientiGED", envelope, headerList);
 							Object result = envelope.getResponse();
 							response = result.toString();
 						} catch (Exception e) {
@@ -453,8 +443,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 			public void onClick(View v) {
 
 				if (tipSelCmd.equals("21")) {
-					Toast.makeText(getApplicationContext(), "Doar comenzile cu rezervare de stoc", Toast.LENGTH_LONG)
-							.show();
+					Toast.makeText(getApplicationContext(), "Doar comenzile cu rezervare de stoc", Toast.LENGTH_LONG).show();
 				}
 				if (tipSelCmd.equals("20")) // transformare in comanda ferma
 				{
@@ -468,20 +457,19 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 	public void showCreateCmdConfirmationAlert() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Creati comanda?").setCancelable(false)
-				.setPositiveButton("Da", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
+		builder.setMessage("Creati comanda?").setCancelable(false).setPositiveButton("Da", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
 
-						tipOpCmd = "9";
-						opereazaComanda();
+				tipOpCmd = "9";
+				opereazaComanda();
 
-					}
-				}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
+			}
+		}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
 
-					}
-				}).setTitle("Confirmare").setIcon(R.drawable.warning96);
+			}
+		}).setTitle("Confirmare").setIcon(R.drawable.warning96);
 
 		AlertDialog alert = builder.create();
 		alert.show();
@@ -511,20 +499,19 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 	public void showDeleteConfirmationAlert() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Stergeti comanda?").setCancelable(false)
-				.setPositiveButton("Da", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
+		builder.setMessage("Stergeti comanda?").setCancelable(false).setPositiveButton("Da", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
 
-						tipOpCmd = "3";
-						opereazaComanda();
+				tipOpCmd = "3";
+				opereazaComanda();
 
-					}
-				}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
+			}
+		}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
 
-					}
-				}).setTitle("Confirmare").setIcon(R.drawable.warning96);
+			}
+		}).setTitle("Confirmare").setIcon(R.drawable.warning96);
 
 		AlertDialog alert = builder.create();
 		alert.show();
@@ -656,7 +643,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 			HashMap<String, String> temp;
 			String[] tokenMain = articoleComanda.split("@@");
 			String[] tokenAntet = tokenMain[0].split("#");
-			String tipPlata = "", tipTransport = "", cantar = "", factRed = "", tipAlert = "";
+			String tipPlata = "", tipTransport = "", cantar = "", factRed = "";
 
 			listArtModif.setVisibility(View.VISIBLE);
 
@@ -728,12 +715,12 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 			String[] tokenArt;
 			String client = "";
-			String statusArt = " ", procAprob = "";
+			String statusArt = " ";
 
 			for (int i = 1; i <= nrArt; i++) {
 
 				statusArt = "";
-				tipAlert = " ";
+				
 				temp = new HashMap<String, String>();
 				client = tokenMain[i];
 				tokenArt = client.split("#");
@@ -770,18 +757,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 					temp.put("status", " ");
 				}
 
-				if (UserInfo.getInstance().getTipAcces().equals("9"))// userul
-																		// este
-				// agent
-				{
-					if (Double.parseDouble(tokenArt[15]) > Double.parseDouble(tokenArt[12])) {
-						tipAlert = "SD";
-					}
-				}
-
-				if (Double.parseDouble(tokenArt[15]) > Double.parseDouble(tokenArt[13])) {
-					tipAlert = "DV";
-				}
+				
 
 				list1.add(temp);
 
@@ -874,7 +850,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 			HashMap<String, String> temp;
 
-			String client = "", numeAgent = "";
+			String numeAgent = "";
 			String stareCmd = "";
 
 			Iterator<BeanComandaCreata> iterator = cmdList.iterator();
@@ -928,52 +904,6 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 		});
 	}
 
-	private void clearAllData() {
-		// curatenie ecran
-		list1.clear();
-		adapter.notifyDataSetChanged();
-
-		listComenzi.clear();
-		adapterComenzi.notifyDataSetChanged();
-
-		textTotalCmd.setText("");
-		textTipPlata.setText("");
-		textAdrLivr.setText("");
-		textPersContact.setText("");
-		textTelefon.setText("");
-		textCantar.setText("");
-		textTransport.setText("");
-		textOrasModif.setText("");
-		textJudetModif.setText("");
-
-		textTotalCmd.setVisibility(View.GONE);
-		textTipPlata.setVisibility(View.GONE);
-		textAdrLivr.setVisibility(View.GONE);
-		textPersContact.setVisibility(View.GONE);
-		textTelefon.setVisibility(View.GONE);
-		textCantar.setVisibility(View.GONE);
-		textTransport.setVisibility(View.GONE);
-
-		labelTotal.setVisibility(View.GONE);
-		labelCantar.setVisibility(View.GONE);
-		labelFactRed.setVisibility(View.GONE);
-		textFactRed.setVisibility(View.GONE);
-
-		// sf.
-
-		// reset variabile
-		numeClientVar = "";
-		articoleComanda = "";
-		dateLivrare = "";
-
-		articoleComanda = "";
-
-		numeClientVar = "";
-		codClientVar = "";
-		totalComanda = 0;
-
-	}
-
 	private void checkStaticVars() {
 		// pentru in idle mare variabilele statice se sterg si setarile locale
 		// se reseteaza
@@ -988,15 +918,13 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 			Locale.setDefault(locale);
 			Configuration config = new Configuration();
 			config.locale = locale;
-			getBaseContext().getResources().updateConfiguration(config,
-					getBaseContext().getResources().getDisplayMetrics());
+			getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 		}
 
 		// restart app la idle
 		if (UserInfo.getInstance().getCod().equals("")) {
 
-			Intent i = getBaseContext().getPackageManager()
-					.getLaunchIntentForPackage(getBaseContext().getPackageName());
+			Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
 			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(i);
 		}

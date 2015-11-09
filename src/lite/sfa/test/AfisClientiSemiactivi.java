@@ -30,7 +30,7 @@ import dialogs.IstoricSemiactiviDialog;
 
 public class AfisClientiSemiactivi extends Fragment implements AsyncTaskListener, OnClickListener {
 
-	private String reportParams = "0";
+	
 	static ListView listViewClSemiactivi;
 
 	public static ArrayList<HashMap<String, String>> arrayListClInactivi = null;

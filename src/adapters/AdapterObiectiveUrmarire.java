@@ -10,18 +10,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import beans.BeanUrmarireEveniment;
-import beans.BeanObiectiveGenerale;
 
 public class AdapterObiectiveUrmarire extends BaseAdapter {
 
-	private BeanObiectiveGenerale obiectiv;
+	
 	private Context context;
 	private List<BeanUrmarireEveniment> liniiUrmarire;
 	private int[] colors = new int[] { 0x3098BED9, 0x30E8E8E8 };
 
-	public AdapterObiectiveUrmarire(BeanObiectiveGenerale obiectiv, Context context,
+	public AdapterObiectiveUrmarire( Context context,
 			List<BeanUrmarireEveniment> liniiUrmarire) {
-		this.obiectiv = obiectiv;
+		
 		this.context = context;
 		this.liniiUrmarire = liniiUrmarire;
 	}

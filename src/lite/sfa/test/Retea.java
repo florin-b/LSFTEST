@@ -29,7 +29,7 @@ public class Retea extends Activity {
 	public static String unitLog = "";
 	public static String numeDepart = "";
 	public static String codDepart = "";
-	private TextView conType, params, imeiNr, telNr;
+	private TextView conType, params, imeiNr;
 	String tipAcces;
 
 	@Override

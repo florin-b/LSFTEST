@@ -43,6 +43,8 @@ public interface OperatiiArticol {
 	
 	public BeanGreutateArticol deserializeGreutateArticol(Object result);
 	
+	public Object getDepartBV90(String codArticol);
+	
 	
 	
 

@@ -100,6 +100,18 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		performOperation();
 	}
 
+	@Override
+	public Object getDepartBV90(String codArticol) {
+		numeComanda = EnumArticoleDAO.GET_DEP_BV90;
+
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("codArticol", codArticol);
+
+		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
+		Object obj = call.getCallResultsSync();
+		return obj;
+	}
+
 	private void performOperation() {
 		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
 		call.getCallResultsFromFragment();
@@ -128,6 +140,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 					articol.setUmVanz10(articolObject.getString("umVanz10"));
 					articol.setTipAB(articolObject.getString("tipAB"));
 					articol.setDepart(articolObject.getString("depart"));
+					articol.setDepartAprob(articolObject.getString("departAprob"));
 					listArticole.add(articol);
 
 				}
