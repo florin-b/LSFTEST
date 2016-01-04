@@ -41,8 +41,7 @@ public class ReduceriUlterioare extends Activity implements AsyncTaskListener {
 	String filiala = " ", nume = " ", codAg = " ";
 	String codClient = " ", numeClient = " ";
 
-	TextView textTipReducere, textTipFrecventa, textStartValabil, textStopValabil, labelValTotDepHead,
-			textValTotDepHead;
+	TextView textTipReducere, textTipFrecventa, textStartValabil, textStopValabil, labelValTotDepHead, textValTotDepHead;
 	TextView labelTipReducere, labelTipFrecventa, labelStartValabil;
 	TextView labelProcRedB5, textProcRedB5, labelCoefCalit, textCoefCalitHead;
 
@@ -99,10 +98,9 @@ public class ReduceriUlterioare extends Activity implements AsyncTaskListener {
 
 		artListView = (ListView) findViewById(R.id.listArt);
 
-		adapter = new SimpleAdapter(this, list1, R.layout.customrowarticolreducere, new String[] { "numeArt", "codArt",
-				"cantArt", "umArt", "procent", "lprocent", "tipArt", "obs1", "obs2", "obs3" }, new int[] {
-				R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt, R.id.textUmArt, R.id.textProcent,
-				R.id.labelProcent, R.id.textTipArt, R.id.textData1, R.id.textData2, R.id.textData3 }
+		adapter = new SimpleAdapter(this, list1, R.layout.customrowarticolreducere, new String[] { "numeArt", "codArt", "cantArt", "umArt", "procent",
+				"lprocent", "tipArt", "obs1", "obs2", "obs3" }, new int[] { R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt, R.id.textUmArt,
+				R.id.textProcent, R.id.labelProcent, R.id.textTipArt, R.id.textData1, R.id.textData2, R.id.textData3 }
 
 		);
 
@@ -153,8 +151,8 @@ public class ReduceriUlterioare extends Activity implements AsyncTaskListener {
 
 		clientListView = (ListView) findViewById(R.id.clientList);
 		list2 = new ArrayList<HashMap<String, String>>();
-		adapter2 = new SimpleAdapter(this, list2, R.layout.rowlayoutclientred,
-				new String[] { "numeClient", "codClient" }, new int[] { R.id.textNumeClient, R.id.textCodClient }
+		adapter2 = new SimpleAdapter(this, list2, R.layout.rowlayoutclientred, new String[] { "numeClient", "codClient" }, new int[] { R.id.textNumeClient,
+				R.id.textCodClient }
 
 		);
 
@@ -190,8 +188,7 @@ public class ReduceriUlterioare extends Activity implements AsyncTaskListener {
 
 		case 0:
 			if (list1.size() > 0) {
-				Toast.makeText(getApplicationContext(), "Stergeti mai intai toate articolele!", Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(getApplicationContext(), "Stergeti mai intai toate articolele!", Toast.LENGTH_LONG).show();
 			} else {
 				Intent nextScreenTipRed = new Intent(getApplicationContext(), SelectTipReducere.class);
 				startActivity(nextScreenTipRed);
@@ -263,38 +260,37 @@ public class ReduceriUlterioare extends Activity implements AsyncTaskListener {
 			finish();
 		} else {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage("Datele se vor pierde. Continuati?").setCancelable(false)
-					.setPositiveButton("Da", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
+			builder.setMessage("Datele se vor pierde. Continuati?").setCancelable(false).setPositiveButton("Da", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
 
-							articoleReduceri = "";
-							numeClientRed = "";
-							codClientRed = "";
-							tipReducere = "";
+					articoleReduceri = "";
+					numeClientRed = "";
+					codClientRed = "";
+					tipReducere = "";
 
-							if (list1 != null) {
-								list1.clear();
-								adapter.notifyDataSetChanged();
-							}
+					if (list1 != null) {
+						list1.clear();
+						adapter.notifyDataSetChanged();
+					}
 
-							if (list2 != null) {
-								list2.clear();
-								adapter2.notifyDataSetChanged();
-							}
+					if (list2 != null) {
+						list2.clear();
+						adapter2.notifyDataSetChanged();
+					}
 
-							UserInfo.getInstance().setParentScreen("");
+					UserInfo.getInstance().setParentScreen("");
 
-							Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);
+					Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);
 
-							startActivity(nextScreen);
+					startActivity(nextScreen);
 
-							finish();
-						}
-					}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							dialog.cancel();
-						}
-					}).setTitle("Atentie!").setIcon(R.drawable.warning96);
+					finish();
+				}
+			}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			}).setTitle("Atentie!").setIcon(R.drawable.warning96);
 
 			AlertDialog alert = builder.create();
 			alert.show();
@@ -522,8 +518,7 @@ public class ReduceriUlterioare extends Activity implements AsyncTaskListener {
 
 					list1.add(temp);
 				} else {
-					Toast.makeText(getApplicationContext(), "Un articol din sinteticul " + sintetic + " exista deja! ",
-							Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), "Un articol din sinteticul " + sintetic + " exista deja! ", Toast.LENGTH_LONG).show();
 				}
 			}
 
@@ -641,17 +636,14 @@ public class ReduceriUlterioare extends Activity implements AsyncTaskListener {
 					case MotionEvent.ACTION_DOWN:
 
 						if (list1.size() == 0) {
-							Toast.makeText(getApplicationContext(), "Adaugati cel putin un articol sau sintetic!",
-									Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), "Adaugati cel putin un articol sau sintetic!", Toast.LENGTH_SHORT).show();
 						} else if (list2.size() == 0) {
-							Toast.makeText(getApplicationContext(), "Selectati cel putin un client!",
-									Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), "Selectati cel putin un client!", Toast.LENGTH_SHORT).show();
 
 						}
 
 						else if (textTipReducere.getText().toString().equals("")) {
-							Toast.makeText(getApplicationContext(), "Selectati tipul de reducere!", Toast.LENGTH_SHORT)
-									.show();
+							Toast.makeText(getApplicationContext(), "Selectati tipul de reducere!", Toast.LENGTH_SHORT).show();
 
 						} else {
 							mProgress.setVisibility(View.VISIBLE);
@@ -698,12 +690,10 @@ public class ReduceriUlterioare extends Activity implements AsyncTaskListener {
 						if (procRedB5.equals(""))
 							procRedB5 = "0";
 
-						clientFinalStr += "#" + tipReducere + "#" + frecventaRedCod + "#"
-								+ UserInfo.getInstance().getCod() + "#" + UserInfo.getInstance().getUnitLog() + "#"
-								+ UserInfo.getInstance().getCodDepart() + "#" + startValabil + "#" + stopValabil + "#"
-								+ coefCalit + "#" + valTotDepart + "#"
-								+ String.valueOf(ReduceriUlterioare.selTipClient) + "#" + procRedB5 + "#" + sablonID
-								+ "@";
+						clientFinalStr += "#" + tipReducere + "#" + frecventaRedCod + "#" + UserInfo.getInstance().getCod() + "#"
+								+ UserInfo.getInstance().getUnitLog() + "#" + UserInfo.getInstance().getCodDepart() + "#" + startValabil + "#" + stopValabil
+								+ "#" + coefCalit + "#" + valTotDepart + "#" + String.valueOf(ReduceriUlterioare.selTipClient) + "#" + procRedB5 + "#"
+								+ sablonID + "@";
 
 						reducereFinalaStr = clientFinalStr + articoleFinaleStr;
 
@@ -765,6 +755,32 @@ public class ReduceriUlterioare extends Activity implements AsyncTaskListener {
 		return retVal;
 	}
 
+	private static String getFieldValue(String brutValue, String fieldName) {
+		String[] tokenValue = brutValue.toString().split(",");
+		String fieldValue = "";
+
+		for (int i = 0; i < tokenValue.length; i++) {
+			if (foundField(tokenValue[i], fieldName)) {
+				if (i == tokenValue.length - 1)
+					fieldValue = tokenValue[i].substring(tokenValue[i].indexOf('=') + 1, tokenValue[i].length() - 1);
+				else
+					fieldValue = tokenValue[i].substring(tokenValue[i].indexOf('=') + 1, tokenValue[i].length());
+				break;
+			}
+		}
+
+		return fieldValue;
+	}
+
+	private static boolean foundField(String currentField, String searchField) {
+		if (searchField.toLowerCase().equals("procent") && !currentField.toLowerCase().contains("lprocent"))
+			return currentField.toLowerCase().contains(searchField.toLowerCase());
+		else if (!currentField.toLowerCase().contains("lprocent"))
+			return currentField.toLowerCase().contains(searchField.toLowerCase());
+
+		return false;
+	}
+
 	public String prepareArtForDelivery() {
 		String retVal = "";
 		String tipExceptie = "";
@@ -781,21 +797,20 @@ public class ReduceriUlterioare extends Activity implements AsyncTaskListener {
 		for (int j = 0; j < count; j++) {
 
 			Object o = this.adapter.getItem(j);
-			String[] token = o.toString().split(",");
 
-			tokTipArticol = token[8].substring(token[8].indexOf('=') + 1, token[8].length());
+			tokTipArticol = getFieldValue(o.toString(), "tipart");
 
-			tokCodArticol = token[9].substring(token[9].indexOf('=') + 1, token[9].length() - 1);
+			tokCodArticol = getFieldValue(o.toString(), "codart");
 
-			tokNumeArticol = token[5].substring(token[5].indexOf('=') + 1, token[5].length());
+			tokNumeArticol = getFieldValue(o.toString(), "numeart");
 
-			tokValPrag = token[0].substring(token[0].indexOf('=') + 1, token[0].length());
+			tokValPrag = getFieldValue(o.toString(), "cantart");
 
-			tokUmPrag = token[7].substring(token[7].indexOf('=') + 1, token[7].length());
+			tokUmPrag = getFieldValue(o.toString(), "umart");
 
-			tokProcent = token[6].substring(token[6].indexOf('=') + 1, token[6].length());
+			tokProcent = getFieldValue(o.toString(), "procent");
 
-			tokExceptii = token[2].substring(token[2].indexOf('=') + 1, token[2].length());
+			tokExceptii = getFieldValue(o.toString(), "obs1");
 
 			if (tokExceptii.contains("Exceptie")) {
 				tokExceptii = tokCodArticol;
@@ -829,8 +844,8 @@ public class ReduceriUlterioare extends Activity implements AsyncTaskListener {
 				tokTipArticol = "4";
 			}
 
-			retVal += tokTipArticol + "#" + tokCodArticol + "#" + tokNumeArticol + "#" + tokValPrag + "#" + tokUmPrag
-					+ "#" + tokProcent + "#" + tokExceptii + "#" + tipExceptie + "@";
+			retVal += tokTipArticol + "#" + tokCodArticol + "#" + tokNumeArticol + "#" + tokValPrag + "#" + tokUmPrag + "#" + tokProcent + "#" + tokExceptii
+					+ "#" + tipExceptie + "@";
 
 		}
 
@@ -845,8 +860,7 @@ public class ReduceriUlterioare extends Activity implements AsyncTaskListener {
 					Intent nextScreen = new Intent(getApplicationContext(), SelectClientCmd.class);
 					startActivity(nextScreen);
 				} else {
-					Toast.makeText(getApplicationContext(), "Stergeti mai intai toate articolele!", Toast.LENGTH_SHORT)
-							.show();
+					Toast.makeText(getApplicationContext(), "Stergeti mai intai toate articolele!", Toast.LENGTH_SHORT).show();
 				}
 
 			}
@@ -922,8 +936,7 @@ public class ReduceriUlterioare extends Activity implements AsyncTaskListener {
 
 				saveRedBtn.setVisibility(View.GONE);
 
-				Toast.makeText(getApplicationContext(), "Sablonul " + saveResponse + " a fost salvat!",
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), "Sablonul " + saveResponse + " a fost salvat!", Toast.LENGTH_LONG).show();
 
 			} catch (Exception e) {
 				Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -948,15 +961,13 @@ public class ReduceriUlterioare extends Activity implements AsyncTaskListener {
 			Locale.setDefault(locale);
 			Configuration config = new Configuration();
 			config.locale = locale;
-			getBaseContext().getResources().updateConfiguration(config,
-					getBaseContext().getResources().getDisplayMetrics());
+			getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 		}
 
 		// restart app la idle
 		if (UserInfo.getInstance().getCod().equals("")) {
 
-			Intent i = getBaseContext().getPackageManager()
-					.getLaunchIntentForPackage(getBaseContext().getPackageName());
+			Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
 			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(i);
 		}

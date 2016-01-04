@@ -58,6 +58,16 @@ public class UtilsUser {
 		return false;
 	}
 
+	public static boolean isDV_CONS() {
+		String codDvCons = "00001027,00012326";
+
+		if (codDvCons.contains(UserInfo.getInstance().getCod()))
+			return true;
+
+		return false;
+
+	}
+
 	public static boolean isMacaraVisible() {
 
 		if (isAgentOrSD()) {

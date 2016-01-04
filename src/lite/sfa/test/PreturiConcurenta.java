@@ -7,15 +7,12 @@ import java.util.List;
 import listeners.GenericSpinnerSelection;
 import listeners.OperatiiConcurentaListener;
 import listeners.SpinnerSelectionListener;
-import model.OperatiiArticol;
-import model.OperatiiArticolFactory;
 import model.OperatiiConcurenta;
 import model.OperatiiConcurentaImpl;
 import model.UserInfo;
-import utils.ScreenUtils;
 import utils.UtilsGeneral;
+import adapters.AdapterArticolConcurenta;
 import adapters.AfisPretConcurentaAdapter;
-import adapters.CautareArticoleAdapter;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -31,9 +28,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
-import beans.ArticolDB;
+import beans.BeanArticolConcurenta;
 import beans.BeanCompanieConcurenta;
 import beans.BeanPretConcurenta;
 import enums.EnumArticoleConcurenta;
@@ -42,20 +37,19 @@ import enums.EnumOperatiiConcurenta;
 
 public class PreturiConcurenta extends Activity implements SpinnerSelectionListener, OperatiiConcurentaListener {
 
-	private String selectedArtName = "", selectedArtCod = "", codConcurenta = "", tipLista = "", umVanz = "";
+	private String selectedArtName = "", selectedArtCod = "", umVanz = "";
 	private GenericSpinnerSelection itemSelected = new GenericSpinnerSelection();
 
-	private Button articoleBtn;
-	private ToggleButton tglButton, tglTipArtBtn;
-	private EditText txtNumeArticol;
 	private TextView textNumeArticolSelectat;
 	private TextView textCodArticolSelectat, labelUM;
 	private EditText editPretArt;
 	private LinearLayout artDetLayout;
 	private ListView listViewArticoleConcurenta, listViewPreturi;
-	private OperatiiArticol operatiiArticol;
+
 	private OperatiiConcurenta operatiiConcurenta;
 	private Spinner spinnerCompetition, spinnerTipActulizare;
+	private String competitionId = "-1";
+	private String tipActualizare = "-1";
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,30 +67,16 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 		actionBar.setTitle("Preturi concurenta");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-		txtNumeArticol = (EditText) findViewById(R.id.txtNumeArt);
-		txtNumeArticol.setHint("Introduceti cod articol");
-
-		operatiiArticol = OperatiiArticolFactory.createObject("OperatiiArticolImpl", this);
-
 		operatiiConcurenta = new OperatiiConcurentaImpl(this);
 		operatiiConcurenta.setListener(PreturiConcurenta.this);
-
-		tglButton = (ToggleButton) findViewById(R.id.togglebutton);
-		addListenerToggle();
-		tglButton.setChecked(true);
-
-		tglTipArtBtn = (ToggleButton) findViewById(R.id.tglTipArt);
-		addListenerTglTipArtBtn();
-
-		articoleBtn = (Button) findViewById(R.id.articoleBtn);
-		addListenerBtnArticole();
 
 		listViewPreturi = (ListView) findViewById(R.id.listIstoricPret);
 
 		spinnerCompetition = (Spinner) findViewById(R.id.spinnerCompetition);
-		spinnerCompetition.setOnItemSelectedListener(itemSelected);
+		setSpinnerCompetitionListener();
 
-		fillCompetitionList(null);
+		operatiiConcurenta.getCompaniiConcurente(UtilsGeneral.newHashMapInstance());
+
 		fillArtTypeList();
 
 		addBtnPret();
@@ -119,8 +99,8 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 
 		ArrayList<HashMap<String, String>> listCompetition = new ArrayList<HashMap<String, String>>();
 
-		SimpleAdapter adapterCompetition = new SimpleAdapter(this, listCompetition, R.layout.generic_rowlayout, new String[] { "stringName",
-				"stringId" }, new int[] { R.id.textName, R.id.textId });
+		SimpleAdapter adapterCompetition = new SimpleAdapter(this, listCompetition, R.layout.generic_rowlayout, new String[] { "stringName", "stringId" },
+				new int[] { R.id.textName, R.id.textId });
 
 		HashMap<String, String> temp;
 
@@ -146,104 +126,38 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 
 	}
 
-	public void addListenerToggle() {
-		tglButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				if (tglButton.isChecked()) {
-					if (tglTipArtBtn.isChecked())
-						txtNumeArticol.setHint("Introduceti cod sintetic");
-					else
-						txtNumeArticol.setHint("Introduceti cod articol");
-				} else {
-					if (tglTipArtBtn.isChecked())
-						txtNumeArticol.setHint("Introduceti nume sintetic");
-					else
-						txtNumeArticol.setHint("Introduceti nume articol");
-				}
-			}
-		});
+	private void setSpinnerCompetitionListener() {
+		spinnerCompetition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-	}
+			@SuppressWarnings("unchecked")
+			public void onItemSelected(AdapterView<?> parent, View view, int pos, long arg3) {
 
-	public void addListenerTglTipArtBtn() {
-		tglTipArtBtn.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				if (tglTipArtBtn.isChecked()) {
-					if (!tglButton.isChecked())
-						txtNumeArticol.setHint("Introduceti nume sintetic");
-					else
-						txtNumeArticol.setHint("Introduceti cod sintetic");
-				} else {
-					if (!tglButton.isChecked())
-						txtNumeArticol.setHint("Introduceti nume articol");
-					else
-						txtNumeArticol.setHint("Introduceti cod articol");
-
-				}
-			}
-		});
-
-	}
-
-	public void addListenerBtnArticole() {
-		articoleBtn.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				ScreenUtils.hideSoftKeyboard(getApplicationContext(), txtNumeArticol);
-				if (isInputValid()) {
+				if (pos > 0) {
+					HashMap<String, String> artMap = (HashMap<String, String>) parent.getAdapter().getItem(pos);
+					competitionId = artMap.get("stringId");
 					getArticoleConcurenta();
-				}
+				} else
+					competitionId = "-1";
+
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
 
 			}
 		});
-
-	}
-
-	private boolean isInputValid() {
-		if (txtNumeArticol.getText().toString().length() == 0) {
-			Toast.makeText(PreturiConcurenta.this, "Cod sau nume articol invalid", Toast.LENGTH_SHORT).show();
-			return false;
-		}
-
-		if (spinnerCompetition.getSelectedItemPosition() == 0) {
-			Toast.makeText(PreturiConcurenta.this, "Selectati un concurent", Toast.LENGTH_SHORT).show();
-			return false;
-		}
-
-		if (spinnerTipActulizare.getSelectedItemPosition() == 0) {
-			Toast.makeText(PreturiConcurenta.this, "Selectati un tip de actualizare", Toast.LENGTH_SHORT).show();
-			return false;
-		}
-
-		return true;
 	}
 
 	protected void getArticoleConcurenta() {
 
-		try {
+		if (!competitionId.equals("-1") && !tipActualizare.equals("-1")) {
 
-			String numeArticol = txtNumeArticol.getText().toString().trim();
-			String tipCautare = "", tipArticol = "";
-
-			if (tglButton.isChecked())
-				tipCautare = "C";
-			else
-				tipCautare = "N";
-
-			if (tglTipArtBtn.isChecked())
-				tipArticol = "S";
-			else
-				tipArticol = "A";
+			artDetLayout.setVisibility(View.INVISIBLE);
 
 			HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
-			params.put("searchString", numeArticol);
-			params.put("tipArticol", tipArticol);
-			params.put("tipCautare", tipCautare);
-			params.put("tipActualizare", tipLista);
+			params.put("codConcurent", competitionId);
+			params.put("tipActualizare", tipActualizare);
+			operatiiConcurenta.getArticoleConcurentaBulk(params);
 
-			operatiiConcurenta.getArticoleConcurenta(params);
-
-		} catch (Exception e) {
-			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
 		}
 
 	}
@@ -254,8 +168,8 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 
 		ArrayList<HashMap<String, String>> listTypes = new ArrayList<HashMap<String, String>>();
 
-		SimpleAdapter adapterTypes = new SimpleAdapter(this, listTypes, R.layout.generic_rowlayout, new String[] { "stringName", "stringId" },
-				new int[] { R.id.textName, R.id.textId });
+		SimpleAdapter adapterTypes = new SimpleAdapter(this, listTypes, R.layout.generic_rowlayout, new String[] { "stringName", "stringId" }, new int[] {
+				R.id.textName, R.id.textId });
 
 		HashMap<String, String> temp;
 
@@ -268,8 +182,29 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 		}
 
 		spinnerTipActulizare.setAdapter(adapterTypes);
-		spinnerTipActulizare.setOnItemSelectedListener(itemSelected);
+		setSpinnerTipActListener();
 
+	}
+
+	private void setSpinnerTipActListener() {
+		spinnerTipActulizare.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+			@SuppressWarnings("unchecked")
+			public void onItemSelected(AdapterView<?> parent, View view, int pos, long arg3) {
+
+				if (pos > 0) {
+					HashMap<String, String> artMap = (HashMap<String, String>) parent.getAdapter().getItem(pos);
+					tipActualizare = artMap.get("stringId");
+					getArticoleConcurenta();
+				} else
+					tipActualizare = "-1";
+
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+
+			}
+		});
 	}
 
 	private void addBtnPret() {
@@ -290,12 +225,12 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 
 			String valPret = editPretArt.getText().toString().trim();
 
-			if (codConcurenta.length() > 0 && valPret.length() > 0) {
+			if (competitionId.length() > 0 && valPret.length() > 0) {
 				HashMap<String, String> params = new HashMap<String, String>();
 
 				params.put("codArt", selectedArtCod);
 				params.put("codAgent", UserInfo.getInstance().getCod());
-				params.put("concurent", codConcurenta);
+				params.put("concurent", competitionId);
 				params.put("valoare", editPretArt.getText().toString());
 
 				operatiiConcurenta.addPretConcurenta(params);
@@ -325,8 +260,8 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 		listViewPreturi.setAdapter(adapter);
 	}
 
-	private void populateListArticoleConcurenta(List<ArticolDB> listArticole) {
-		CautareArticoleAdapter adapterArticole = new CautareArticoleAdapter(this, listArticole);
+	private void populateListArticoleConcurenta(List<BeanArticolConcurenta> listArticole) {
+		AdapterArticolConcurenta adapterArticole = new AdapterArticolConcurenta(this, listArticole);
 		listViewArticoleConcurenta.setAdapter(adapterArticole);
 
 	}
@@ -334,14 +269,14 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 	private void setListenerListConcurenta() {
 		listViewArticoleConcurenta.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int pos, long arg3) {
-				ArticolDB articol = (ArticolDB) parent.getAdapter().getItem(pos);
+				BeanArticolConcurenta articol = (BeanArticolConcurenta) parent.getAdapter().getItem(pos);
 				showPanelAdaugaPret(articol);
 
 			}
 		});
 	}
 
-	private void showPanelAdaugaPret(ArticolDB articol) {
+	private void showPanelAdaugaPret(BeanArticolConcurenta articol) {
 
 		if (artDetLayout.getVisibility() == View.INVISIBLE)
 			artDetLayout.setVisibility(View.VISIBLE);
@@ -363,7 +298,7 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("codArt", selectedArtCod);
 		params.put("codAgent", UserInfo.getInstance().getCod());
-		params.put("concurent", codConcurenta);
+		params.put("concurent", competitionId);
 		operatiiConcurenta.getPretConcurenta(params);
 
 	}
@@ -374,23 +309,19 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 			if (spinnerCompetition.getAdapter().getCount() == 1) {
 				operatiiConcurenta.getCompaniiConcurente(UtilsGeneral.newHashMapInstance());
 			} else {
-				codConcurenta = cod;
+				competitionId = cod;
 				if (selectedArtCod.length() > 0)
 					getPreturiConcurenta();
 			}
 
 		}
 
-		if (spinner.getId() == R.id.spinnerArtTypeList) {
-			tipLista = cod;
-		}
-
 	}
 
 	public void operationComplete(EnumOperatiiConcurenta numeComanda, Object result) {
 		switch (numeComanda) {
-		case GET_ARTICOLE_CONCURENTA:
-			populateListArticoleConcurenta(operatiiArticol.deserializeArticoleVanzare((String) result));
+		case GET_ARTICOLE_CONCURENTA_BULK:
+			populateListArticoleConcurenta(operatiiConcurenta.deserializeArticoleConcurenta((String) result));
 			break;
 		case GET_COMPANII_CONCURENTE:
 			fillCompetitionList(operatiiConcurenta.deserializeCompConcurente((String) result));

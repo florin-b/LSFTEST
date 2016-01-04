@@ -128,7 +128,7 @@
                         android:textColor="@color/detColor4"
                         android:textSize="16sp" />
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/txtOrasCLP"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -164,11 +164,11 @@
                         android:layout_gravity="left|center"
                         android:layout_marginLeft="3dip"
                         android:gravity="left"
-                        android:text="Strada"
+                        android:text="Strada, nr"
                         android:textColor="@color/detColor4"
                         android:textSize="16sp" />
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/txtStradaCLP"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

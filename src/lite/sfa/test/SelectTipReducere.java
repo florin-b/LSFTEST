@@ -32,12 +32,10 @@ public class SelectTipReducere extends Activity {
 
 	private Button saveAntetReducere;
 
-	private static ArrayList<HashMap<String, String>> arraylistTipReducere = null,
-			arraylistFrecventaReducere = null;
+	private static ArrayList<HashMap<String, String>> arraylistTipReducere = null, arraylistFrecventaReducere = null;
 	private SimpleAdapter adapterTipReducere, adapterFrecventaReducere;
 	private Spinner spinnerTipReducere, spinnerFrecventaReducere;
-	private TextView textDataStart, textDataStop, textProcRedB5,
-			textCoefCalitSelect, textValDepart;
+	private TextView textDataStart, textDataStop, textProcRedB5, textCoefCalitSelect, textValDepart;
 	private int mYear;
 	private int mMonth;
 	private int mDay;
@@ -82,10 +80,8 @@ public class SelectTipReducere extends Activity {
 		spinnerTipReducere = (Spinner) findViewById(R.id.spinnerTipReducere);
 
 		arraylistTipReducere = new ArrayList<HashMap<String, String>>();
-		adapterTipReducere = new SimpleAdapter(this, arraylistTipReducere,
-				R.layout.rowlayouttipreducere, new String[] {
-						"textNumeReducere", "textCodReducere" }, new int[] {
-						R.id.textNumeReducere, R.id.textCodReducere });
+		adapterTipReducere = new SimpleAdapter(this, arraylistTipReducere, R.layout.rowlayouttipreducere,
+				new String[] { "textNumeReducere", "textCodReducere" }, new int[] { R.id.textNumeReducere, R.id.textCodReducere });
 
 		HashMap<String, String> temp;
 
@@ -104,11 +100,8 @@ public class SelectTipReducere extends Activity {
 		spinnerFrecventaReducere = (Spinner) findViewById(R.id.spinnerFrecventaReducere);
 
 		arraylistFrecventaReducere = new ArrayList<HashMap<String, String>>();
-		adapterFrecventaReducere = new SimpleAdapter(this,
-				arraylistFrecventaReducere,
-				R.layout.rowlayoutfrecventareducere, new String[] {
-						"textNumeFrecventa", "textCodFrecventa" }, new int[] {
-						R.id.textNumeFrecventa, R.id.textCodFrecventa });
+		adapterFrecventaReducere = new SimpleAdapter(this, arraylistFrecventaReducere, R.layout.rowlayoutfrecventareducere, new String[] { "textNumeFrecventa",
+				"textCodFrecventa" }, new int[] { R.id.textNumeFrecventa, R.id.textCodFrecventa });
 
 		spinnerFrecventaReducere.setEnabled(false);
 
@@ -186,8 +179,7 @@ public class SelectTipReducere extends Activity {
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case DATE_DIALOG_ID:
-			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth,
-					mDay);
+			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay);
 		}
 		return null;
 	}
@@ -243,14 +235,12 @@ public class SelectTipReducere extends Activity {
 	}
 
 	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-		public void onDateSet(DatePicker view, int year, int monthOfYear,
-				int dayOfMonth) {
+		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 			mYear = year;
 			mMonth = monthOfYear;
 			mDay = dayOfMonth;
 
-			SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy",
-					Locale.UK);
+			SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
 			Calendar clnd = new GregorianCalendar(mYear, mMonth, mDay);
 
 			if (dataInt == 1) {
@@ -267,44 +257,37 @@ public class SelectTipReducere extends Activity {
 		saveAntetReducere.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
-				ReduceriUlterioare.procRedB5 = textProcRedB5.getText()
-						.toString().trim();
+				ReduceriUlterioare.procRedB5 = textProcRedB5.getText().toString().trim();
 
 				if (ReduceriUlterioare.selTotDepart) {
 					if (textValDepart.getText().toString().trim().equals("")) {
-						Toast.makeText(getApplicationContext(),
-								"Completati valoarea pe departament!",
-								Toast.LENGTH_SHORT).show();
+						Toast.makeText(getApplicationContext(), "Completati valoarea pe departament!", Toast.LENGTH_SHORT).show();
 						return;
 					}
 				}
 
 				Object obj = spinnerTipReducere.getSelectedItem();
 				String[] token = obj.toString().split(",");
-				ReduceriUlterioare.tipReducere = token[0].substring(
-						token[0].indexOf('=') + 1, token[0].length());
+				if (token[0].toLowerCase().contains("codreducere"))
+					ReduceriUlterioare.tipReducere = token[0].substring(token[0].indexOf('=') + 1, token[0].length());
+				else
+					ReduceriUlterioare.tipReducere = token[1].substring(token[1].indexOf('=') + 1, token[1].length() - 1);
 
 				obj = spinnerFrecventaReducere.getSelectedItem();
 				token = obj.toString().split(",");
 
-				ReduceriUlterioare.frecventaRedNume = token[0].substring(
-						token[0].indexOf('=') + 1, token[0].length());
+				ReduceriUlterioare.frecventaRedNume = token[0].substring(token[0].indexOf('=') + 1, token[0].length());
 
-				ReduceriUlterioare.frecventaRedCod = token[1].substring(
-						token[1].indexOf('=') + 1, token[1].length() - 1);
+				ReduceriUlterioare.frecventaRedCod = token[1].substring(token[1].indexOf('=') + 1, token[1].length() - 1);
 
-				ReduceriUlterioare.startValabil = textDataStart.getText()
-						.toString();
-				ReduceriUlterioare.stopValabil = textDataStop.getText()
-						.toString();
-				ReduceriUlterioare.coefCalit = textCoefCalitSelect.getText()
-						.toString();
+				ReduceriUlterioare.startValabil = textDataStart.getText().toString();
+				ReduceriUlterioare.stopValabil = textDataStop.getText().toString();
+				ReduceriUlterioare.coefCalit = textCoefCalitSelect.getText().toString();
 
 				if (!ReduceriUlterioare.selTotDepart)
 					ReduceriUlterioare.valTotDepart = "-1";
 				else
-					ReduceriUlterioare.valTotDepart = textValDepart.getText()
-							.toString();
+					ReduceriUlterioare.valTotDepart = textValDepart.getText().toString();
 
 				finish();
 			}
@@ -314,17 +297,15 @@ public class SelectTipReducere extends Activity {
 
 	public void addListenerSpinnerReducere() {
 
-		spinnerTipReducere
-				.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-					public void onItemSelected(AdapterView<?> adapterView,
-							View view, int position, long l) {
+		spinnerTipReducere.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
-					}
+			}
 
-					public void onNothingSelected(AdapterView<?> adapterView) {
+			public void onNothingSelected(AdapterView<?> adapterView) {
 
-					}
-				});
+			}
+		});
 
 	}
 

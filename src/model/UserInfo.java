@@ -4,11 +4,16 @@
  */
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class UserInfo {
+public class UserInfo implements Serializable {
+
+	/**
+	 * 
+	 */
 
 	private String nume = "";
 	private String filiala = "";

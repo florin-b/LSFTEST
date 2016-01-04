@@ -17,6 +17,7 @@ import model.UserInfo;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -99,19 +100,24 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		addListenerUserName();
 		addListenerPassword();
 
-		// etUsername.setText("androwood");
-		// etPassword.setText("112");
+		etUsername.setText("androwood");
+		etPassword.setText("112");
 
-		// etUsername.setText("androwood");
-		// etPassword.setText("112");
+		etUsername.setText("androcv");
+		etPassword.setText("112");
 
 		// DD Wood
-		 etUsername.setText("OCODREANU");
-		 etPassword.setText("Cdw6BU");
+		// etUsername.setText("OCODREANU");
+		// etPassword.setText("Cdw6BU");
 
 		// CAG GL
-		// etUsername.setText("FROTARU");
-		// etPassword.setText("89mLcn");
+		//etUsername.setText("FROTARU");
+		//etPassword.setText("89mLcn");
+		
+		//DV CAG
+		//etUsername.setText("NIONITA");
+		//etPassword.setText("ga9Sm3");		
+		
 
 		// etUsername.setText("SIONITA");
 		// etPassword.setText("SuJste");
@@ -195,11 +201,11 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		// etUsername.setText("ABOGDAN"); // av inst Ploiesti
 		// etPassword.setText("Jg3UuK");
 
-		//etUsername.setText("MDINICA"); // ag electr Gl
-		//etPassword.setText("rxtw93");
+		// etUsername.setText("MDINICA"); // ag electr Gl
+		// etPassword.setText("rxtw93");
 
-		//etUsername.setText("CCUZA"); // sd electr Gl
-		//etPassword.setText("84fGx3");
+		// etUsername.setText("CCUZA"); // sd electr Gl
+		// etPassword.setText("84fGx3");
 
 		globalMyIP = getIPConnection();
 
@@ -557,6 +563,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 						uInfo.setNumeDepart("LEMN");
 					}
 
+					
+
 					Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);
 					startActivity(nextScreen);
 					finish();
@@ -577,6 +585,13 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 			slideToUnLock.setChecked(true);
 		}
 
+	}
+
+	private void writeToSharedPreferences() {
+		SharedPreferences prefs = getSharedPreferences("demopref", Context.MODE_WORLD_READABLE);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString("demostring", "demoValue1");
+		editor.commit();
 	}
 
 	public final void onTaskComplete(String methodName, Object result) {

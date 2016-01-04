@@ -162,7 +162,7 @@
                     android:textColor="@color/detColor4"
                     android:textSize="16sp" />
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/txtOrasCLP"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -185,7 +185,7 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
+                
                 android:id="@+id/layoutAdr2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -198,11 +198,11 @@
                     android:layout_gravity="bottom|left"
                     android:layout_marginLeft="3dip"
                     android:gravity="left"
-                    android:text="Strada"
+                    android:text="Strada, nr"
                     android:textColor="@color/detColor4"
                     android:textSize="16sp" />
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/txtStradaCLP"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

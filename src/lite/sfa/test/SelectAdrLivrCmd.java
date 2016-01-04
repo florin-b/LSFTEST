@@ -188,7 +188,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			txtValoareIncasare.setText(DateLivrare.getInstance().getValoareIncasare());
 			checkModifValInc.setChecked(true);
 		} else {
-			txtValoareIncasare.setText(nf2.format(CreareComanda.totalComanda * 1.24));
+			txtValoareIncasare.setText(nf2.format(CreareComanda.totalComanda * 1.20));
 			checkModifValInc.setChecked(false);
 		}
 
@@ -470,9 +470,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 					double localValCmd = 0;
 					if (!CreareComanda.codClientVar.equals(""))
-						localValCmd = CreareComanda.totalComanda * 1.24;
+						localValCmd = CreareComanda.totalComanda * 1.20;
 					else
-						localValCmd = ModificareComanda.totalComanda * 1.24;
+						localValCmd = ModificareComanda.totalComanda * 1.20;
 
 					txtValoareIncasare.setText(nf2.format(localValCmd));
 
@@ -532,11 +532,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 						double localValCmd = 0;
 						if (!CreareComanda.codClientVar.equals("")) {
 							if (CreareComanda.canalDistrib.equals("10"))
-								localValCmd = CreareComanda.totalComanda * 1.24;
+								localValCmd = CreareComanda.totalComanda * 1.20;
 							else if (CreareComanda.canalDistrib.equals("20"))
 								localValCmd = CreareComanda.totalComanda;
 						} else
-							localValCmd = ModificareComanda.totalComanda * 1.24;
+							localValCmd = ModificareComanda.totalComanda * 1.20;
 
 						txtValoareIncasare.setText(nf2.format(localValCmd));
 
@@ -568,11 +568,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 						double localValCmd = 0;
 						if (!CreareComanda.codClientVar.equals("")) {
 							if (CreareComanda.canalDistrib.equals("10"))
-								localValCmd = CreareComanda.totalComanda * 1.24;
+								localValCmd = CreareComanda.totalComanda * 1.20;
 							else if (CreareComanda.canalDistrib.equals("20"))
 								localValCmd = CreareComanda.totalComanda;
 						} else
-							localValCmd = ModificareComanda.totalComanda * 1.24;
+							localValCmd = ModificareComanda.totalComanda * 1.20;
 
 						txtValoareIncasare.setText(nf2.format(localValCmd));
 

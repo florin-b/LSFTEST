@@ -482,7 +482,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						finalPrice = initPrice;
 
 						if (CreareComanda.canalDistrib.equals("10"))
-							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.24)));
+							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.20)));
 						else
 							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu)));
 
@@ -505,7 +505,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						finalPrice = initPrice;
 
 						if (CreareComanda.canalDistrib.equals("10"))
-							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.24)));
+							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.20)));
 						else
 							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu)));
 
@@ -557,7 +557,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 										finalPrice = newPr;
 
 										if (CreareComanda.canalDistrib.equals("10"))
-											textPretTVA.setText(String.valueOf(nf2.format(finalPrice * 1.24)));
+											textPretTVA.setText(String.valueOf(nf2.format(finalPrice * 1.20)));
 										else
 											textPretTVA.setText(String.valueOf(nf2.format(finalPrice)));
 									}
@@ -567,7 +567,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 								txtPretArt.setText(nf2.format(initPrice / globalCantArt * valMultiplu));
 								if (CreareComanda.canalDistrib.equals("10"))
-									textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.24)));
+									textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.20)));
 								else
 									textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu)));
 							}
@@ -589,7 +589,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 							}
 
 							if (CreareComanda.canalDistrib.equals("10"))
-								textPretTVA.setText(String.valueOf(nf2.format(finalPrice * 1.24)));
+								textPretTVA.setText(String.valueOf(nf2.format(finalPrice * 1.20)));
 							else
 								textPretTVA.setText(String.valueOf(nf2.format(finalPrice)));
 
@@ -972,7 +972,9 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						// stocul disponibil
 						if (UserInfo.getInstance().getTipAcces().equals("27")) {
 							if (Double.parseDouble(cantArticol) > Double.parseDouble(textStoc.getText().toString().replaceAll(",", "")) / 2) {
-								tipAlert = "SD";
+
+								if (!globalCodDepartSelectetItem.equals("11"))
+									tipAlert = "SD";
 							}
 						}
 
@@ -1269,7 +1271,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				txtPretArt.setHint(nf2.format(initPrice / globalCantArt * valMultiplu));
 
 				if (CreareComanda.canalDistrib.equals("10"))
-					textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.24)));
+					textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.20)));
 				else
 					textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu)));
 

@@ -6,76 +6,20 @@
     android:orientation="horizontal" >
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:layout_weight="0.5"
         android:orientation="vertical" >
-
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="45dip"
-            android:orientation="horizontal" >
-
-            <ToggleButton
-                android:id="@+id/tglTipArt"
-                style="@style/button_text_1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="left|bottom"
-                android:layout_weight="0.07"
-                android:background="@drawable/button_style_5"
-                android:textOff="Articol"
-                android:textOn="Sintetic" />
-
-            <ToggleButton
-                android:id="@+id/togglebutton"
-                style="@style/button_text_1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="left|bottom"
-                android:layout_marginLeft="10dip"
-                android:layout_weight="0.07"
-                android:background="@drawable/button_style_5"
-                android:textOff="Nume"
-                android:textOn="Cod" />
-
-            <EditText
-                android:id="@+id/txtNumeArt"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="left|bottom"
-                android:layout_marginLeft="10dip"
-                android:layout_weight="0.2"
-                android:background="@drawable/edittext_style_1"
-                android:inputType="textNoSuggestions"
-                android:maxLength="30"
-                android:singleLine="true"
-                android:textColor="@color/editTextColor1"
-                android:typeface="monospace" />
-
-            <Button
-                android:id="@+id/articoleBtn"
-                style="@style/button_text_1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="bottom"
-                android:layout_marginLeft="10dip"
-                android:layout_weight="0.07"
-                android:background="@drawable/button_style_1"
-                android:text="@string/strCauta" />
-        </LinearLayout>
 
         <ListView
             android:id="@+id/listArticole"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dip"
-            android:layout_marginTop="20dip"
+            android:layout_marginTop="40dip"
             android:choiceMode="singleChoice"
             android:dividerHeight="1.0sp"
             android:drawSelectorOnTop="false" />
@@ -88,7 +32,6 @@
     </View>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -96,7 +39,6 @@
         android:orientation="vertical" >
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
@@ -121,7 +63,6 @@
         </LinearLayout>
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/artDetLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -130,7 +71,6 @@
             android:orientation="vertical" >
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
@@ -158,7 +98,6 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
@@ -227,8 +166,7 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/artDetLayout"
+               
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"

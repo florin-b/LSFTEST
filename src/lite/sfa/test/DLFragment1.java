@@ -14,7 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import listeners.OperatiiAdresaListener;
 import model.HandleJSONData;
+import model.OperatiiAdresa;
+import model.OperatiiAdresaImpl;
 import model.UserInfo;
 
 import org.ksoap2.HeaderProperty;
@@ -23,8 +26,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import connectors.ConnectionStrings;
-
+import utils.UtilsGeneral;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -43,6 +45,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -58,13 +61,19 @@ import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import beans.BeanAdreseJudet;
 import beans.BeanClient;
 import beans.BeanFurnizor;
 import beans.BeanFurnizorProduse;
+import connectors.ConnectionStrings;
+import enums.EnumLocalitate;
+import enums.EnumOperatiiAdresa;
 
-public class DLFragment1 extends Fragment {
+public class DLFragment1 extends Fragment implements OperatiiAdresaListener {
 
-	private static EditText txtNumeClient, txtOras, txtStrada, txtPersCont, txtTelefon, txtTipMarfa, txtMasaMarfa;
+	private static EditText txtNumeClient, txtPersCont, txtTelefon, txtTipMarfa, txtMasaMarfa;
+
+	private static AutoCompleteTextView txtOras, txtStrada;
 
 	private static TextView txtDataLivrare, textLimitaCredit, textRestCredit;
 
@@ -75,42 +84,36 @@ public class DLFragment1 extends Fragment {
 	private static ArrayList<HashMap<String, String>> listClienti = new ArrayList<HashMap<String, String>>();
 	public SimpleAdapter adapterClienti, adapterJudete, adapterFiliale, adapterPlata;
 
-	String[] judete = { "ALBA", "ARAD", "ARGES", "BACAU", "BIHOR", "BISTRITA-NASAUD", "BOTOSANI", "BRAILA", "BRASOV",
-			"BUCURESTI", "BUZAU", "CALARASI", "CARAS-SEVERIN", "CLUJ", "CONSTANTA", "COVASNA", "DAMBOVITA", "DOLJ",
-			"GALATI", "GIURGIU", "GORJ", "HARGHITA", "HUNEDOARA", "IALOMITA", "IASI", "ILFOV", "MARAMURES",
-			"MEHEDINTI", "MURES", "NEAMT", "OLT", "PRAHOVA", "SALAJ", "SATU-MARE", "SIBIU", "SUCEAVA", "TELEORMAN",
-			"TIMIS", "TULCEA", "VALCEA", "VASLUI", "VRANCEA" };
+	String[] judete = { "ALBA", "ARAD", "ARGES", "BACAU", "BIHOR", "BISTRITA-NASAUD", "BOTOSANI", "BRAILA", "BRASOV", "BUCURESTI", "BUZAU", "CALARASI",
+			"CARAS-SEVERIN", "CLUJ", "CONSTANTA", "COVASNA", "DAMBOVITA", "DOLJ", "GALATI", "GIURGIU", "GORJ", "HARGHITA", "HUNEDOARA", "IALOMITA", "IASI",
+			"ILFOV", "MARAMURES", "MEHEDINTI", "MURES", "NEAMT", "OLT", "PRAHOVA", "SALAJ", "SATU-MARE", "SIBIU", "SUCEAVA", "TELEORMAN", "TIMIS", "TULCEA",
+			"VALCEA", "VASLUI", "VRANCEA" };
 
-	String[] codJudete = { "01", "02", "03", "04", "05", "06", "07", "09", "08", "40", "10", "51", "11", "12", "13",
-			"14", "15", "16", "17", "52", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "31",
-			"30", "32", "33", "34", "35", "36", "38", "37", "39" };
+	String[] codJudete = { "01", "02", "03", "04", "05", "06", "07", "09", "08", "40", "10", "51", "11", "12", "13", "14", "15", "16", "17", "52", "18", "19",
+			"20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "31", "30", "32", "33", "34", "35", "36", "38", "37", "39" };
 
-	String[] numeFiliala = { "Bacau", "Baia Mare", "Brasov", "Brasov-central", "Buc. Andronache", "Buc. Militari",
-			"Buc. Otopeni", "Buc. Glina", "Constanta", "Cluj", "Craiova", "Focsani", "Galati", "Iasi", "Oradea",
-			"Piatra Neamt", "Pitesti", "Ploiesti", "Timisoara", "Tg. Mures" };
+	String[] numeFiliala = { "Bacau", "Baia Mare", "Brasov", "Brasov-central", "Buc. Andronache", "Buc. Militari", "Buc. Otopeni", "Buc. Glina", "Constanta",
+			"Cluj", "Craiova", "Focsani", "Galati", "Iasi", "Oradea", "Piatra Neamt", "Pitesti", "Ploiesti", "Timisoara", "Tg. Mures" };
 
-	String[] codFiliala = { "BC10", "MM10", "BV10", "BV90", "BU13", "BU11", "BU12", "BU10", "CT10", "CJ10", "DJ10",
-			"VN10", "GL10", "IS10", "BH10", "NT10", "AG10", "PH10", "TM10", "MS10" };
+	String[] codFiliala = { "BC10", "MM10", "BV10", "BV90", "BU13", "BU11", "BU12", "BU10", "CT10", "CJ10", "DJ10", "VN10", "GL10", "IS10", "BH10", "NT10",
+			"AG10", "PH10", "TM10", "MS10" };
 
 	String[] tipCamion = { "Prelata", "Perdea", "Platforma", "Descoperita", "Macara" };
 	String[] tipIncarcare = { "Complet", "Partial" };
 
-	String[] tipTransport = { "TRAP - Transport Arabesque", "TCLI - Transport client", "TFRN - Transport furnizor",
-			"TERT - Transport curier" };
+	String[] tipTransport = { "TRAP - Transport Arabesque", "TCLI - Transport client", "TFRN - Transport furnizor", "TERT - Transport curier" };
 
-	String[] depozite = { "V1 - vanzare", "V2 - vanzare", "V3 - vanzare", "G1 - gratuite", "G2 - gratuite",
-			"G3 - gratuite", "D1 - deteriorate", "D2 - deteriorate", "D3 - deteriorate", "DESC" };
+	String[] depozite = { "V1 - vanzare", "V2 - vanzare", "V3 - vanzare", "G1 - gratuite", "G2 - gratuite", "G3 - gratuite", "D1 - deteriorate",
+			"D2 - deteriorate", "D3 - deteriorate", "DESC" };
 
-	String[] tipPlata = { "B - Bilet la ordin", "C - Cec", "E - Plata in numerar", "O - Ordin de plata",
-			"E1 - Numerar la sofer" };
+	String[] tipPlata = { "B - Bilet la ordin", "C - Cec", "E - Plata in numerar", "O - Ordin de plata", "E1 - Numerar la sofer" };
 
 	private ListView listViewClienti;
 	private LinearLayout layoutClient, layoutAgenti;
 
 	private static ArrayList<HashMap<String, String>> listJudete = null;
 
-	String codClient = "", numeClient = "", codFurnizor = "", numeFurnizor = "", codFurnizorProd = "",
-			numeFurnizorProd = "";
+	String codClient = "", numeClient = "", codFurnizor = "", numeFurnizor = "", codFurnizorProd = "", numeFurnizorProd = "";
 
 	private TextView codClientText, labelTipClient, labelLimitaCredit, labelRestCredit;
 	private static TextView numeClientText, labelClient, textSelFurnizor, textSelFurnizorProd;
@@ -123,13 +126,14 @@ public class DLFragment1 extends Fragment {
 	private TextView labelCodClient, labelNumeClient, labelAgentiDl;
 
 	SlidingDrawer slidingDrawer;
-	public static Spinner spinnerJudetDL, spinnerTipCamion, spinnerTipIncarcare, spinnerDepozDl_Dest, spinnerTipPlata,
-			spinnerAgentiDl, spinnerTransp;
+	public static Spinner spinnerJudetDL, spinnerTipCamion, spinnerTipIncarcare, spinnerDepozDl_Dest, spinnerTipPlata, spinnerAgentiDl, spinnerTransp;
 
 	private static ArrayList<HashMap<String, String>> listAgenti = new ArrayList<HashMap<String, String>>();
 	public SimpleAdapter adapterAgenti;
 
 	LinearLayout layoutValoareClp;
+
+	private OperatiiAdresa operatiiAdresa;
 
 	private int mYear;
 	private int mMonth;
@@ -164,8 +168,8 @@ public class DLFragment1 extends Fragment {
 			addListenerCautaClient();
 
 			listClienti = new ArrayList<HashMap<String, String>>();
-			adapterClienti = new SimpleAdapter(getActivity(), listClienti, R.layout.customrownumeclient, new String[] {
-					"numeClient", "codClient" }, new int[] { R.id.textNumeClient, R.id.textCodClient });
+			adapterClienti = new SimpleAdapter(getActivity(), listClienti, R.layout.customrownumeclient, new String[] { "numeClient", "codClient" }, new int[] {
+					R.id.textNumeClient, R.id.textCodClient });
 
 			listViewClienti = (ListView) v.findViewById(R.id.listClienti);
 			listViewClienti.setOnItemClickListener(new MyOnItemSelectedListener());
@@ -175,6 +179,9 @@ public class DLFragment1 extends Fragment {
 			addDrawerListener();
 
 			slidingDrawer.setVisibility(View.GONE);
+
+			operatiiAdresa = new OperatiiAdresaImpl(getActivity());
+			operatiiAdresa.setOperatiiAdresaListener((OperatiiAdresaListener) this);
 
 			codClientText = (TextView) v.findViewById(R.id.textCodClient);
 			numeClientText = (TextView) v.findViewById(R.id.textNumeClient);
@@ -200,14 +207,14 @@ public class DLFragment1 extends Fragment {
 			spinnerJudetDL.setOnItemSelectedListener(new regionSelectedListener());
 
 			listJudete = new ArrayList<HashMap<String, String>>();
-			adapterJudete = new SimpleAdapter(getActivity(), listJudete, R.layout.rowlayoutjudete, new String[] {
-					"numeJudet", "codJudet" }, new int[] { R.id.textNumeJudet, R.id.textCodJudet });
+			adapterJudete = new SimpleAdapter(getActivity(), listJudete, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] {
+					R.id.textNumeJudet, R.id.textCodJudet });
 			fillJudete();
 
-			txtOras = (EditText) v.findViewById(R.id.txtOrasCLP);
+			txtOras = (AutoCompleteTextView) v.findViewById(R.id.txtOrasCLP);
 			addTxtOrasListener();
 
-			txtStrada = (EditText) v.findViewById(R.id.txtStradaCLP);
+			txtStrada = (AutoCompleteTextView) v.findViewById(R.id.txtStradaCLP);
 			addTxtStradaListener();
 
 			txtPersCont = (EditText) v.findViewById(R.id.txtPersContCLP);
@@ -236,20 +243,17 @@ public class DLFragment1 extends Fragment {
 			addListenerRadioFiliala();
 
 			spinnerTipCamion = (Spinner) v.findViewById(R.id.spinnerTipCamion);
-			ArrayAdapter<String> adapterSpinnerTransp = new ArrayAdapter<String>(getActivity(),
-					android.R.layout.simple_spinner_item, tipCamion);
+			ArrayAdapter<String> adapterSpinnerTransp = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, tipCamion);
 			adapterSpinnerTransp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinnerTipCamion.setAdapter(adapterSpinnerTransp);
 
 			spinnerTipIncarcare = (Spinner) v.findViewById(R.id.spinnerTipIncarcare);
-			ArrayAdapter<String> adapterSpinnerIncarcare = new ArrayAdapter<String>(getActivity(),
-					android.R.layout.simple_spinner_item, tipIncarcare);
+			ArrayAdapter<String> adapterSpinnerIncarcare = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, tipIncarcare);
 			adapterSpinnerIncarcare.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinnerTipIncarcare.setAdapter(adapterSpinnerIncarcare);
 
 			spinnerDepozDl_Dest = (Spinner) v.findViewById(R.id.spinnerDepozDl_Dest);
-			ArrayAdapter<String> adapterSpinnerDepoz = new ArrayAdapter<String>(getActivity(),
-					android.R.layout.simple_spinner_item, depozite);
+			ArrayAdapter<String> adapterSpinnerDepoz = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, depozite);
 			adapterSpinnerDepoz.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinnerDepozDl_Dest.setAdapter(adapterSpinnerDepoz);
 			spinnerDepozDl_Dest.setSelection(9);
@@ -259,15 +263,13 @@ public class DLFragment1 extends Fragment {
 
 			spinnerTipPlata = (Spinner) v.findViewById(R.id.spinnerTipPlata);
 
-			ArrayAdapter<String> adapterSpinnerPlata = new ArrayAdapter<String>(getActivity(),
-					android.R.layout.simple_spinner_item, tipPlata);
+			ArrayAdapter<String> adapterSpinnerPlata = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, tipPlata);
 			adapterSpinnerPlata.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinnerTipPlata.setAdapter(adapterSpinnerPlata);
 			addListenerTipPlata();
 
 			spinnerTransp = (Spinner) v.findViewById(R.id.spinnerTransp);
-			ArrayAdapter<String> adapterSpinnerTransport = new ArrayAdapter<String>(getActivity(),
-					android.R.layout.simple_spinner_item, tipTransport);
+			ArrayAdapter<String> adapterSpinnerTransport = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, tipTransport);
 			adapterSpinnerTransport.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinnerTransp.setAdapter(adapterSpinnerTransport);
 			spinnerTransp.setOnItemSelectedListener(new OnSelectTipTransport());
@@ -286,8 +288,8 @@ public class DLFragment1 extends Fragment {
 			layoutAgenti = (LinearLayout) v.findViewById(R.id.layoutSelAgentiDl);
 
 			spinnerAgentiDl = (Spinner) v.findViewById(R.id.spinnerAgentiDl);
-			adapterAgenti = new SimpleAdapter(getActivity(), listAgenti, R.layout.rowlayoutagenti, new String[] {
-					"numeAgent", "codAgent" }, new int[] { R.id.textNumeAgent, R.id.textCodAgent });
+			adapterAgenti = new SimpleAdapter(getActivity(), listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" }, new int[] {
+					R.id.textNumeAgent, R.id.textCodAgent });
 
 			spinnerAgentiDl.setAdapter(adapterAgenti);
 			labelAgentiDl = (TextView) v.findViewById(R.id.labelAgentiDl);
@@ -352,8 +354,7 @@ public class DLFragment1 extends Fragment {
 					if (txtNumeClient.length() > 0) {
 						performListClients();
 					} else {
-						Toast.makeText(DLFragment1.this.getActivity(), "Introduceti nume client!", Toast.LENGTH_SHORT)
-								.show();
+						Toast.makeText(DLFragment1.this.getActivity(), "Introduceti nume client!", Toast.LENGTH_SHORT).show();
 					}
 				} catch (Exception ex) {
 					Toast.makeText(DLFragment1.this.getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
@@ -459,8 +460,7 @@ public class DLFragment1 extends Fragment {
 			String response = "";
 			try {
 
-				SoapObject request = new SoapObject(ConnectionStrings.getInstance().getNamespace(),
-						"getClientDetAndroid");
+				SoapObject request = new SoapObject(ConnectionStrings.getInstance().getNamespace(), "getClientDetAndroid");
 
 				request.addProperty("codClient", codClient);
 				request.addProperty("depart", UserInfo.getInstance().getCodDepart());
@@ -469,15 +469,12 @@ public class DLFragment1 extends Fragment {
 				envelope.dotNet = true;
 				envelope.setOutputSoapObject(request);
 
-				HttpTransportSE androidHttpTransport = new HttpTransportSE(ConnectionStrings.getInstance().getUrl(),
-						60000);
+				HttpTransportSE androidHttpTransport = new HttpTransportSE(ConnectionStrings.getInstance().getUrl(), 60000);
 
 				List<HeaderProperty> headerList = new ArrayList<HeaderProperty>();
-				headerList.add(new HeaderProperty("Authorization", "Basic "
-						+ org.kobjects.base64.Base64.encode("bflorin:bflorin".getBytes())));
+				headerList.add(new HeaderProperty("Authorization", "Basic " + org.kobjects.base64.Base64.encode("bflorin:bflorin".getBytes())));
 
-				androidHttpTransport.call(ConnectionStrings.getInstance().getNamespace() + "getClientDetAndroid",
-						envelope, headerList);
+				androidHttpTransport.call(ConnectionStrings.getInstance().getNamespace() + "getClientDetAndroid", envelope, headerList);
 				Object result = envelope.getResponse();
 				response = result.toString();
 			} catch (Exception e) {
@@ -617,13 +614,10 @@ public class DLFragment1 extends Fragment {
 				SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 				envelope.dotNet = true;
 				envelope.setOutputSoapObject(request);
-				HttpTransportSE androidHttpTransport = new HttpTransportSE(ConnectionStrings.getInstance().getUrl(),
-						60000);
+				HttpTransportSE androidHttpTransport = new HttpTransportSE(ConnectionStrings.getInstance().getUrl(), 60000);
 				List<HeaderProperty> headerList = new ArrayList<HeaderProperty>();
-				headerList.add(new HeaderProperty("Authorization", "Basic "
-						+ org.kobjects.base64.Base64.encode("bflorin:bflorin".getBytes())));
-				androidHttpTransport.call(ConnectionStrings.getInstance().getNamespace() + methodName, envelope,
-						headerList);
+				headerList.add(new HeaderProperty("Authorization", "Basic " + org.kobjects.base64.Base64.encode("bflorin:bflorin".getBytes())));
+				androidHttpTransport.call(ConnectionStrings.getInstance().getNamespace() + methodName, envelope, headerList);
 				Object result = envelope.getResponse();
 				response = result.toString();
 			} catch (Exception e) {
@@ -734,8 +728,7 @@ public class DLFragment1 extends Fragment {
 		// cautare furnizori produse
 		if (tipCautare.equals("FP")) {
 			HandleJSONData objFurnizoriProduseList = new HandleJSONData(getActivity(), clientResponse);
-			ArrayList<BeanFurnizorProduse> furnizorProduseArray = objFurnizoriProduseList
-					.decodeJSONFurnizorProduseList();
+			ArrayList<BeanFurnizorProduse> furnizorProduseArray = objFurnizoriProduseList.decodeJSONFurnizorProduseList();
 
 			if (furnizorProduseArray.size() > 0) {
 				HashMap<String, String> temp;
@@ -841,10 +834,15 @@ public class DLFragment1 extends Fragment {
 			artMap = (HashMap<String, String>) adapterJudete.getItem(pos);
 			CreareDispozitiiLivrare.codJudet = artMap.get("codJudet");
 
+			HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
+			params.put("codJudet", CreareDispozitiiLivrare.codJudet);
+
+			operatiiAdresa.getAdreseJudet(params, null);
+
 		}
 
 		public void onNothingSelected(AdapterView<?> parent) {
-			// TODO
+
 		}
 	}
 
@@ -852,7 +850,6 @@ public class DLFragment1 extends Fragment {
 
 		txtOras.addTextChangedListener(new TextWatcher() {
 			public void afterTextChanged(Editable s) {
-				// TODO
 
 				try {
 
@@ -1042,8 +1039,7 @@ public class DLFragment1 extends Fragment {
 					Time today = new Time(Time.getCurrentTimezone());
 					today.setToNow();
 
-					DatePickerDialog dialog = new DatePickerDialog(getActivity(), datePickerListener, today.year,
-							today.month, today.monthDay);
+					DatePickerDialog dialog = new DatePickerDialog(getActivity(), datePickerListener, today.year, today.month, today.monthDay);
 
 					dialog.getDatePicker().setMinDate(new Date().getTime() - 1000);
 
@@ -1302,11 +1298,9 @@ public class DLFragment1 extends Fragment {
 				SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 				envelope.dotNet = true;
 				envelope.setOutputSoapObject(request);
-				HttpTransportSE androidHttpTransport = new HttpTransportSE(
-						"http://10.1.0.58/androidwebservices/service1.asmx", 60000);
+				HttpTransportSE androidHttpTransport = new HttpTransportSE("http://10.1.0.58/androidwebservices/service1.asmx", 60000);
 				List<HeaderProperty> headerList = new ArrayList<HeaderProperty>();
-				headerList.add(new HeaderProperty("Authorization", "Basic "
-						+ org.kobjects.base64.Base64.encode("bflorin:bflorin".getBytes())));
+				headerList.add(new HeaderProperty("Authorization", "Basic " + org.kobjects.base64.Base64.encode("bflorin:bflorin".getBytes())));
 				androidHttpTransport.call("http://SmartScan.org/" + "getListAgenti", envelope, headerList);
 				Object result = envelope.getResponse();
 				response = result.toString();
@@ -1337,6 +1331,22 @@ public class DLFragment1 extends Fragment {
 				Log.e("Error", e.toString());
 			}
 		}
+
+	}
+
+	private void populateListLocalitati(BeanAdreseJudet listAdrese) {
+
+		String[] arrayLocalitati = listAdrese.getListLocalitati().toArray(new String[listAdrese.getListLocalitati().size()]);
+		ArrayAdapter<String> adapterLoc = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, arrayLocalitati);
+
+		txtOras.setThreshold(0);
+		txtOras.setAdapter(adapterLoc);
+
+		String[] arrayStrazi = listAdrese.getListStrazi().toArray(new String[listAdrese.getListStrazi().size()]);
+		ArrayAdapter<String> adapterStrazi = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, arrayStrazi);
+
+		txtStrada.setThreshold(0);
+		txtStrada.setAdapter(adapterStrazi);
 
 	}
 
@@ -1429,6 +1439,18 @@ public class DLFragment1 extends Fragment {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
 		txtDataLivrare.setText(sdf.format(new Date()));
+	}
+
+	@Override
+	public void operatiiAdresaComplete(EnumOperatiiAdresa numeComanda, Object result, EnumLocalitate tipLocalitate) {
+		switch (numeComanda) {
+		case GET_ADRESE_JUDET:
+			populateListLocalitati(operatiiAdresa.deserializeListAdrese(result));
+			break;
+		default:
+			break;
+		}
+
 	}
 
 }

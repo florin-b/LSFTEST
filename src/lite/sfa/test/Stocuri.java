@@ -757,7 +757,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 					labelPTVA = new TextView(this);
 					labelPTVA.setText("");
 					if (artTok[1] != null) {
-						Double ptva = Double.parseDouble(artTok[1]) * 1.24;
+						Double ptva = Double.parseDouble(artTok[1]) * 1.20;
 						labelPTVA.setText(String.valueOf(nf2.format(ptva)));
 					}
 

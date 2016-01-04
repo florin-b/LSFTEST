@@ -31,6 +31,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import utils.UtilsApps;
 import utils.UtilsUser;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -114,12 +115,12 @@ public class MainMenu extends Activity {
 			R.drawable.exit_icon, R.drawable.blank };
 
 	public String[] btnNamesCVA = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Comenzi simulate", "Creare CLP", "Afisare CLP",
-			"Retur paleti", "Stare retur paleti", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Info client", "Despre", "Iesire" };
+			"Retur paleti", "Stare retur paleti", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Info client", "Despre", "Iesire" };
 
 	public int[] btnImageCVA = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,
-			R.drawable.simulate, R.drawable.clp, R.drawable.afis_clp, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.vanzari,
-			R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.client_info, R.drawable.despre_icon, R.drawable.exit_icon,
-			R.drawable.blank };
+			R.drawable.simulate, R.drawable.clp, R.drawable.afis_clp, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.colosseum,
+			R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.client_info, R.drawable.despre_icon,
+			R.drawable.exit_icon, R.drawable.blank };
 
 	public String[] btnNamesCONSGED = { "Utilizator", "Creare cmd GED", "Afisare comanda", "Comenzi simulate", "Retur paleti", "Stare retur paleti", "Vanzari",
 			"Neincasate", "Stocuri", "Preturi", "Preturi concurenta", "Info client", "Despre", "Iesire" };
@@ -135,10 +136,10 @@ public class MainMenu extends Activity {
 			R.drawable.simulate, R.drawable.clp, R.drawable.afis_clp, R.drawable.retur_marfa, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon,
 			R.drawable.dollar_icon, R.drawable.client_info, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
-	public String[] btnNamesWOOD = { "Utilizator", "Creare cmd GED","Modificare comanda", "Afisare comanda", "Stocuri", "Preturi", "Despre", "Iesire" };
+	public String[] btnNamesWOOD = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Stocuri", "Preturi", "Despre", "Iesire" };
 
-	public int[] btnImageWOOD = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon,R.drawable.modif_icon, R.drawable.preview_icon, R.drawable.stoc_icon,
-			R.drawable.dollar_icon, R.drawable.despre_icon, R.drawable.exit_icon };
+	public int[] btnImageWOOD = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,
+			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.despre_icon, R.drawable.exit_icon };
 
 	private static final String URL = "http://10.1.0.58/androidwebservices/TESTService.asmx";
 	String name = "", filiala = "";
@@ -233,10 +234,12 @@ public class MainMenu extends Activity {
 					|| UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("17")
 					|| UserInfo.getInstance().getTipAcces().equals("18")) {
 
-				if (timerCheckCmdCond == null) {
-					timerCheckCmdCond = new Timer();
-					timerCheckCmdCond.schedule(new UpdateTimeTask(), 1000, 30000);
+				if (!UtilsUser.isDV_CONS()) {
+					if (timerCheckCmdCond == null) {
+						timerCheckCmdCond = new Timer();
+						timerCheckCmdCond.schedule(new UpdateTimeTask(), 1000, 30000);
 
+					}
 				}
 
 			}
@@ -458,18 +461,31 @@ public class MainMenu extends Activity {
 				if (selectedBtnName.equalsIgnoreCase("Obiective")) {
 
 					Intent nextScreen = null;
+					boolean isDownloading = false;
 
 					if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.KA.getTipAcces())) {
 						nextScreen = new Intent(MainMenu.this, ObiectiveKA.class);
-					} else if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.DV.getTipAcces())
-							|| UserInfo.getInstance().getTipUser().equals(EnumTipUser.DK.getTipAcces())) {
+					} else if ((UserInfo.getInstance().getTipUser().equals(EnumTipUser.DV.getTipAcces()) || UserInfo.getInstance().getTipUser()
+							.equals(EnumTipUser.DK.getTipAcces()))
+							&& !UtilsUser.isDV_CONS()) {
 						nextScreen = new Intent(MainMenu.this, AfiseazaObiectiveKA.class);
+					} else if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.CV.getTipAcces()) || UtilsUser.isDV_CONS()) {
+
+						if (UtilsApps.isPackageInstalled("com.stimasoft.obiectivecva", getApplicationContext())) {
+							nextScreen = getPackageManager().getLaunchIntentForPackage("com.stimasoft.obiectivecva");
+							addExtraInfo(nextScreen);
+						} else {
+							new UtilsApps().installObiectivaCVAApk(MainMenu.this);
+							isDownloading = true;
+
+						}
+
 					}
 
-					if (nextScreen != null)
+					if (nextScreen != null && !isDownloading) {
 						startActivity(nextScreen);
-
-					finish();
+						finish();
+					}
 
 				}
 
@@ -641,6 +657,18 @@ public class MainMenu extends Activity {
 
 	}
 
+	private void addExtraInfo(Intent intent) {
+
+		intent.putExtra("nume", UserInfo.getInstance().getNume());
+		intent.putExtra("filiala", UserInfo.getInstance().getFiliala());
+		intent.putExtra("cod", UserInfo.getInstance().getCod());
+		intent.putExtra("unitLog", UserInfo.getInstance().getUnitLog());
+		intent.putExtra("tipAcces", UserInfo.getInstance().getTipAcces());
+		intent.putExtra("tipUser", UserInfo.getInstance().getTipUser());
+		intent.putExtra("tipUserSap", UserInfo.getInstance().getTipUserSap());
+
+	}
+
 	private class checkUpdate extends AsyncTask<String, Void, String> {
 		String errMessage = "";
 		Context mContext;
@@ -758,7 +786,7 @@ public class MainMenu extends Activity {
 					}
 
 				} else {
-					if (isUpdateble()) {
+					if (isUpdateble() && !UtilsUser.isDV_CONS()) {
 
 						if (timerCheckCmdCond == null) {
 							timerCheckCmdCond = new Timer();

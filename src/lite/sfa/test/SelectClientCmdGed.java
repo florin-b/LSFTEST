@@ -16,6 +16,7 @@ import model.ListaArticoleComandaGed;
 import model.OperatiiClient;
 import model.UserInfo;
 import utils.UtilsGeneral;
+import utils.UtilsUser;
 import adapters.CautareClientiAdapter;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -359,13 +360,21 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					if (radioClPF.isChecked()) {
 						CreareComandaGed.tipClient = "PF";
 						DateLivrare.getInstance().setTipPersClient("PF");
-						CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PF");
+
+						if (UtilsUser.isConsWood())
+							CreareComandaGed.codClientVar = InfoStrings.getClientGenericGedWood(UserInfo.getInstance().getUnitLog(), "PF");
+						else
+							CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PF");
 					}
 
 					if (radioClPJ.isChecked()) {
 						CreareComandaGed.tipClient = "PJ";
 						DateLivrare.getInstance().setTipPersClient("PJ");
-						CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PJ");
+
+						if (UtilsUser.isConsWood())
+							CreareComandaGed.codClientVar = InfoStrings.getClientGenericGedWood(UserInfo.getInstance().getUnitLog(), "PJ");
+						else
+							CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PJ");
 					}
 
 					if (radioCmdNormala.isChecked())

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dip" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/textOras"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
         android:textColor="#7f5327"
         android:textSize="17sp" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/textStrada"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,7 +35,6 @@
         android:textSize="17sp" />
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"

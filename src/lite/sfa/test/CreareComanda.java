@@ -743,7 +743,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 						if (dateLivrareInstance.getObsPlata().equals("SO") && dateLivrareInstance.getTipPlata().equals("E")) {
 							if (!dateLivrareInstance.isValIncModif()) {
-								dateLivrareInstance.setValoareIncasare(nf3.format(CreareComanda.totalComanda * 1.24));
+								dateLivrareInstance.setValoareIncasare(nf3.format(CreareComanda.totalComanda * 1.20));
 							}
 						}
 

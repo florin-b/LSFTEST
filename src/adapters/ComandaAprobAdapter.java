@@ -91,7 +91,7 @@ public class ComandaAprobAdapter extends BaseAdapter {
 
         if (comanda.getCanalDistrib().equals("10")) {
             viewHolder.textSumaTVA.setText(numberFormat.format(Double
-                    .parseDouble(comanda.getSuma()) * 1.24));
+                    .parseDouble(comanda.getSuma()) * 1.20));
         } else {
             viewHolder.textSumaTVA.setText(numberFormat.format(Double
                     .parseDouble(comanda.getSuma())));

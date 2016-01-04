@@ -1320,7 +1320,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		if (valMWSI == 0)
 			procent = 0;
 		else
-			procent = 1.24;
+			procent = 1.20;
 
 		return procent;
 	}

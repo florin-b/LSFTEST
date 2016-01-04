@@ -13,9 +13,12 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 
+import listeners.OperatiiAdresaListener;
 import listeners.OperatiiAgentListener;
 import listeners.OperatiiClientListener;
 import model.HandleJSONData;
+import model.OperatiiAdresa;
+import model.OperatiiAdresaImpl;
 import model.OperatiiAgent;
 import model.OperatiiClient;
 import model.UserInfo;
@@ -36,6 +39,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -52,14 +56,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import beans.BeanAdreseJudet;
 import beans.BeanClient;
 import beans.DetaliiClient;
 import enums.EnumClienti;
 import enums.EnumDepartamente;
+import enums.EnumLocalitate;
+import enums.EnumOperatiiAdresa;
 
-public class CLPFragment1 extends Fragment implements OperatiiClientListener, OperatiiAgentListener {
+public class CLPFragment1 extends Fragment implements OperatiiClientListener, OperatiiAgentListener, OperatiiAdresaListener {
 
-	private static EditText txtOras, txtStrada, txtPersCont, txtTelefon, txtTipMarfa, txtMasaMarfa;
+	private static EditText txtPersCont, txtTelefon, txtTipMarfa, txtMasaMarfa;
+	private static AutoCompleteTextView txtOras, txtStrada;
 	public static EditText txtNumeClient;
 
 	private static TextView txtDataLivrare, textLimitaCredit, textRestCredit;
@@ -124,6 +132,8 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 	private int mMonth;
 	private int mDay;
 
+	private OperatiiAdresa operatiiAdresa;
+
 	private HashMap<String, String> artMap = null;
 
 	NumberFormat nf2;
@@ -178,6 +188,9 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			addDrawerListener();
 			slidingDrawer.setVisibility(View.GONE);
 
+			operatiiAdresa = new OperatiiAdresaImpl(getActivity());
+			operatiiAdresa.setOperatiiAdresaListener((OperatiiAdresaListener) this);
+
 			codClientText = (TextView) v.findViewById(R.id.textCodClient);
 			numeClientText = (TextView) v.findViewById(R.id.textNumeClient);
 
@@ -207,10 +220,10 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 			fillFiliale();
 
-			txtOras = (EditText) v.findViewById(R.id.txtOrasCLP);
+			txtOras = (AutoCompleteTextView) v.findViewById(R.id.txtOrasCLP);
 			addTxtOrasListener();
 
-			txtStrada = (EditText) v.findViewById(R.id.txtStradaCLP);
+			txtStrada = (AutoCompleteTextView) v.findViewById(R.id.txtStradaCLP);
 			addTxtStradaListener();
 
 			txtPersCont = (EditText) v.findViewById(R.id.txtPersContCLP);
@@ -604,6 +617,11 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			artMap = (HashMap<String, String>) adapterJudete.getItem(pos);
 			CreareClp.codJudet = artMap.get("codJudet");
 
+			HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
+			params.put("codJudet", CreareClp.codJudet);
+
+			operatiiAdresa.getAdreseJudet(params, null);
+
 		}
 
 		public void onNothingSelected(AdapterView<?> parent) {
@@ -978,6 +996,22 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 	}
 
+	private void populateListLocalitati(BeanAdreseJudet listAdrese) {
+
+		String[] arrayLocalitati = listAdrese.getListLocalitati().toArray(new String[listAdrese.getListLocalitati().size()]);
+		ArrayAdapter<String> adapterLoc = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, arrayLocalitati);
+
+		txtOras.setThreshold(0);
+		txtOras.setAdapter(adapterLoc);
+
+		String[] arrayStrazi = listAdrese.getListStrazi().toArray(new String[listAdrese.getListStrazi().size()]);
+		ArrayAdapter<String> adapterStrazi = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, arrayStrazi);
+
+		txtStrada.setThreshold(0);
+		txtStrada.setAdapter(adapterStrazi);
+
+	}
+
 	public class OnSelectAgent implements OnItemSelectedListener {
 		public void onItemSelected(AdapterView<?> parent, View v, int pos, long id) {
 
@@ -1013,6 +1047,18 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 	public void opAgentComplete(ArrayList<HashMap<String, String>> listAgenti) {
 		populateAgentiList(listAgenti);
+
+	}
+
+	@Override
+	public void operatiiAdresaComplete(EnumOperatiiAdresa numeComanda, Object result, EnumLocalitate tipLocalitate) {
+		switch (numeComanda) {
+		case GET_ADRESE_JUDET:
+			populateListLocalitati(operatiiAdresa.deserializeListAdrese(result));
+			break;
+		default:
+			break;
+		}
 
 	}
 }

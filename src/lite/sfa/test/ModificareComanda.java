@@ -527,7 +527,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 						if (dateLivrareInstance.getObsPlata().equals("SO") && dateLivrareInstance.getTipPlata().equals("E")) {
 							if (!dateLivrareInstance.isValIncModif()) {
-								dateLivrareInstance.setValoareIncasare(nf3.format(ModificareComanda.totalComanda * 1.24));
+								dateLivrareInstance.setValoareIncasare(nf3.format(ModificareComanda.totalComanda * 1.20));
 							}
 						}
 
@@ -607,7 +607,9 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		String tempDistribUL = InfoStrings.getDistribUnitLog(selectedUnitLog);
 
 		if (InfoStrings.getClientGenericGed(tempDistribUL, "PF").equals(selectedClientCode)
-				|| InfoStrings.getClientGenericGed(tempDistribUL, "PJ").equals(selectedClientCode))
+				|| InfoStrings.getClientGenericGed(tempDistribUL, "PJ").equals(selectedClientCode)
+				|| InfoStrings.getClientGenericGedWood(tempDistribUL, "PF").equals(selectedClientCode)
+				|| InfoStrings.getClientGenericGedWood(tempDistribUL, "PJ").equals(selectedClientCode))
 			return true;
 		else
 			return false;

@@ -525,6 +525,72 @@ public class InfoStrings {
 
 	}
 
+	public static String getClientGenericGedWood(String filiala, String tipClient) {
+		String codClient = "00";
+
+		if (tipClient.equals("PF")) {
+			if (filiala.equals("AG10"))
+				codClient = "4119000225";
+
+			if (filiala.equals("BH10"))
+				codClient = "4119000210";
+
+			if (filiala.equals("BV10"))
+				codClient = "4119000201";
+
+			if (filiala.equals("CJ10"))
+				codClient = "4119000179";
+
+			if (filiala.equals("CT10"))
+				codClient = "4119000216";
+
+			if (filiala.equals("DJ10"))
+				codClient = "4119000247";
+
+			if (filiala.equals("GL10"))
+				codClient = "4119000175";
+
+			if (filiala.equals("IS10"))
+				codClient = "4119000195";
+
+			if (filiala.equals("TM10"))
+				codClient = "4119000251";
+
+		}
+
+		if (tipClient.equals("PJ")) {
+			if (filiala.equals("AG10"))
+				codClient = "4119000226";
+
+			if (filiala.equals("BH10"))
+				codClient = "4119000211";
+
+			if (filiala.equals("BV10"))
+				codClient = "4119000202";
+
+			if (filiala.equals("CJ10"))
+				codClient = "4119000180";
+
+			if (filiala.equals("CT10"))
+				codClient = "4119000217";
+
+			if (filiala.equals("DJ10"))
+				codClient = "4119000248";
+
+			if (filiala.equals("GL10"))
+				codClient = "4119000176";
+
+			if (filiala.equals("IS10"))
+				codClient = "4119000196";
+
+			if (filiala.equals("TM10"))
+				codClient = "4119000252";
+
+		}
+
+		return codClient;
+	}
+
 	public static String getClientGenericGed(String filiala, String tipClient) {
 		String codClient = "00";
 
@@ -540,7 +606,7 @@ public class InfoStrings {
 
 			if (filiala.equals("BV10"))
 				codClient = "4119000030";
-			
+
 			if (filiala.equals("BZ10"))
 				codClient = "4119000255";
 
@@ -558,7 +624,7 @@ public class InfoStrings {
 
 			if (filiala.equals("HD10"))
 				codClient = "4119000260";
-			
+
 			if (filiala.equals("IS10"))
 				codClient = "4119000034";
 
@@ -609,7 +675,7 @@ public class InfoStrings {
 
 			if (filiala.equals("BZ10"))
 				codClient = "4119000256";
-			
+
 			if (filiala.equals("CJ10"))
 				codClient = "4119000067";
 
@@ -624,7 +690,7 @@ public class InfoStrings {
 
 			if (filiala.equals("HD10"))
 				codClient = "4119000261";
-			
+
 			if (filiala.equals("IS10"))
 				codClient = "4119000070";
 
@@ -760,8 +826,7 @@ public class InfoStrings {
 
 	}
 
-	public static String getDistribUnitLog(String gedUnitLog)
-	{
+	public static String getDistribUnitLog(String gedUnitLog) {
 		return gedUnitLog.substring(0, 2) + "1" + gedUnitLog.subSequence(3, 4);
 	}
 
