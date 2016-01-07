@@ -147,7 +147,7 @@
                     android:layout_gravity="bottom|left"
                     android:layout_marginLeft="3dip"
                     android:gravity="left"
-                    android:text="Strada, nr"
+                    android:text="Strada"
                     android:textColor="@color/labelColor"
                     android:textSize="17sp"
                     android:typeface="serif" />
@@ -158,12 +158,35 @@
                     android:layout_height="45dip"
                     android:layout_gravity="bottom|left"
                     android:layout_marginRight="180dip"
-                    android:layout_weight="0.2"
+                    android:layout_weight="0.15"
                     android:dropDownHeight="250dp"
                     android:inputType="textCapSentences|textNoSuggestions"
                     android:maxLength="80"
                     android:singleLine="true"
                     android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="0.05"
+                    android:gravity="right"
+                    android:text="Nr"
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
+
+                <EditText
+                    android:id="@+id/textNrStr"
+                    android:layout_width="0dp"
+                    android:layout_height="45dip"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginRight="180dip"
+                    android:layout_weight="0.05"
+                    android:dropDownHeight="250dp"
+                    android:inputType="textCapSentences|textNoSuggestions"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout

@@ -9,6 +9,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Observable;
@@ -20,6 +21,7 @@ import java.util.TreeSet;
 import listeners.ArtComplDialogListener;
 import listeners.AsyncTaskListener;
 import listeners.OperatiiArticolListener;
+import listeners.PaletAlertListener;
 import listeners.ValoareNegociataDialogListener;
 import model.AlgoritmComandaGed;
 import model.ArticolComanda;
@@ -72,11 +74,13 @@ import android.widget.Toast;
 import beans.BeanParametruPretGed;
 import beans.PretArticolGed;
 import dialogs.ArtComplDialog;
+import dialogs.PaletAlertDialog;
 import dialogs.ValoareNegociataDialog;
 import enums.EnumArticoleDAO;
+import enums.EnumDaNuOpt;
 
 public class CreareComandaGed extends Activity implements AsyncTaskListener, ArtComplDialogListener, Observer, OperatiiArticolListener,
-		ValoareNegociataDialogListener {
+		ValoareNegociataDialogListener, PaletAlertListener {
 
 	Button stocBtn, clientBtn, articoleBtn, livrareBtn, saveCmdBtn, slideButtonCmd, valTranspBtn, debugBtn;
 	String filiala = "", nume = "", cod = "";
@@ -1096,7 +1100,10 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 						comandaFinala.setValoareIncasare(valIncasare);
 
-						displayArtComplDialog();
+						if (comandaHasPalet())
+							displayAlertPalet();
+						else
+							displayArtComplDialog();
 
 					}
 				});
@@ -1107,6 +1114,29 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			}
 
 		}
+	}
+
+	private void displayAlertPalet() {
+
+		PaletAlertDialog infoDialog = new PaletAlertDialog(this);
+		infoDialog.setPaletAlertListener(this);
+		infoDialog.showAlertDialog();
+
+	}
+
+	private boolean comandaHasPalet() {
+
+		List<ArticolComanda> listaArticole = ListaArticoleComandaGed.getInstance().getListArticoleComanda();
+
+		Iterator<ArticolComanda> iterator = listaArticole.iterator();
+
+		while (iterator.hasNext()) {
+			if (iterator.next().isUmPalet())
+				return true;
+		}
+
+		return false;
+
 	}
 
 	public String serializeDateLivrareGed() {
@@ -2004,6 +2034,18 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		if (isTotalNegociat) {
 			calculProcentReducere();
+		}
+
+	}
+
+	@Override
+	public void paletDialogResponse(EnumDaNuOpt response) {
+		switch (response) {
+		case DA:
+			displayArtComplDialog();
+			break;
+		default:
+			break;
 		}
 
 	}

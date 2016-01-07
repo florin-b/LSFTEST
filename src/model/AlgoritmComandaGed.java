@@ -53,7 +53,8 @@ public class AlgoritmComandaGed {
 						pretUnitarGed = pretUnitarClient;
 
 					cantitate = articol.getCantitate();
-					cmp = round(articol.getCmp() * 1.20, 3); // cmp cu tva
+					
+					cmp = round(articol.getCmp() * Constants.TVA, 3); // cmp cu tva
 
 					marjaBrutaClient += (pretUnitarClient - cmp) * cantitate;
 					articol.setMarjaClient((pretUnitarClient - cmp) * cantitate);
@@ -66,16 +67,16 @@ public class AlgoritmComandaGed {
 					if (!articol.getDepozit().equals("0000")) {
 						if (!articol.getDepartSintetic().equals("11")) {
 
-							pretMediuDistrib = articol.getPretMediu() * 1.20;
-							adaosMediuDistrib = articol.getAdaosMediu() * 1.20;
+							pretMediuDistrib = articol.getPretMediu() * Constants.TVA;
+							adaosMediuDistrib = articol.getAdaosMediu() * Constants.TVA;
 						} else if (articol.getDepartSintetic().equals("11")) {
 
 							double pretGed = getPretGed(articol);
 
-							double marjaBruta = (pretGed) * articol.getMultiplu() - articol.getCmp() * 1.20;
+							double marjaBruta = (pretGed) * articol.getMultiplu() - articol.getCmp() * Constants.TVA;
 
 							pretMediuDistrib = (pretGed) * articol.getMultiplu() - marjaBruta * 0.2;
-							adaosMediuDistrib = pretMediuDistrib - articol.getCmp() * 1.20;
+							adaosMediuDistrib = pretMediuDistrib - articol.getCmp() * Constants.TVA;
 
 						}
 					}

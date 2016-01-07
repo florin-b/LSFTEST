@@ -11,6 +11,7 @@ public class ArticolDB {
 	private String umVanz10;
 	private String nivel1;
 	private String departAprob;
+	private boolean umPalet;
 
 	public ArticolDB() {
 
@@ -90,10 +91,18 @@ public class ArticolDB {
 		this.departAprob = departAprob;
 	}
 
+	public boolean isUmPalet() {
+		return umPalet;
+	}
+
+	public void setUmPalet(boolean umPalet) {
+		this.umPalet = umPalet;
+	}
+
 	@Override
 	public String toString() {
 		return "ArticolDB [cod=" + cod + ", nume=" + nume + ", umVanz=" + umVanz + ", depart=" + depart + ", tipAB=" + tipAB + ", sintetic=" + sintetic
-				+ ", umVanz10=" + umVanz10 + ", nivel1=" + nivel1 + ", departAprob=" + departAprob + "]";
+				+ ", umVanz10=" + umVanz10 + ", nivel1=" + nivel1 + ", departAprob=" + departAprob + ", umPalet=" + umPalet + "]";
 	}
 
 }

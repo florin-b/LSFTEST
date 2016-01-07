@@ -12,6 +12,7 @@ import java.util.List;
 
 import listeners.OperatiiArticolListener;
 import model.ArticolComandaGed;
+import model.Constants;
 import model.DateLivrare;
 import model.ListaArticoleComandaGed;
 import model.OperatiiArticol;
@@ -133,6 +134,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	private double procentTVA, procentTransport;
 	private PretArticolGed selectedArticol;
 	private NumberFormat nForm2;
+	private ArticolDB articolDBSelected;
 
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -1003,6 +1005,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						articol.setProcTransport(selectedArticol.getProcTransport());
 						articol.setDiscountAg(discMaxAV);
 						articol.setDiscountSd(discMaxSD);
+						articol.setUmPalet(articolDBSelected.isUmPalet());
 
 						ListaArticoleComandaGed listaArticole = ListaArticoleComandaGed.getInstance();
 						listaArticole.addArticolComanda(articol);
@@ -1320,7 +1323,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		if (valMWSI == 0)
 			procent = 0;
 		else
-			procent = 1.20;
+			procent = Constants.TVA;
 
 		return procent;
 	}
@@ -1349,6 +1352,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		super.onListItemClick(l, v, position, id);
 
 		ArticolDB articol = (ArticolDB) l.getAdapter().getItem(position);
+		
+		articolDBSelected = articol;
 
 		numeArticol = articol.getNume();
 		codArticol = articol.getCod();

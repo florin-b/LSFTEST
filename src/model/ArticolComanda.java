@@ -74,6 +74,8 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 
 	private String departAprob;
 
+	private boolean umPalet;
+
 	public int getNrCrt() {
 		return nrCrt;
 	}
@@ -529,6 +531,14 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 
 	public void setDepartAprob(String departAprob) {
 		this.departAprob = departAprob;
+	}
+
+	public boolean isUmPalet() {
+		return umPalet;
+	}
+
+	public void setUmPalet(boolean umPalet) {
+		this.umPalet = umPalet;
 	}
 
 	@Override

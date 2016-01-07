@@ -12,6 +12,7 @@ import java.util.List;
 import listeners.AsyncTaskListener;
 import listeners.OperatiiArticolListener;
 import listeners.PreturiListener;
+import model.Constants;
 import model.InfoStrings;
 import model.OperatiiArticol;
 import model.OperatiiArticolFactory;
@@ -757,7 +758,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 					labelPTVA = new TextView(this);
 					labelPTVA.setText("");
 					if (artTok[1] != null) {
-						Double ptva = Double.parseDouble(artTok[1]) * 1.20;
+						Double ptva = Double.parseDouble(artTok[1]) * Constants.TVA;
 						labelPTVA.setText(String.valueOf(nf2.format(ptva)));
 					}
 

@@ -13,6 +13,7 @@ import java.util.Locale;
 
 import listeners.OperatiiArticolListener;
 import model.ArticolComandaGed;
+import model.Constants;
 import model.ListaArticoleModificareComanda;
 import model.OperatiiArticol;
 import model.OperatiiArticolFactory;
@@ -436,7 +437,7 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 						finalPrice = initPrice;
 
 						if (ModificareComanda.isComandaDistrib)
-							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.20)));
+							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * Constants.TVA)));
 						else
 							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu)));
 
@@ -459,7 +460,7 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 						finalPrice = initPrice;
 
 						if (ModificareComanda.isComandaDistrib)
-							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.20)));
+							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * Constants.TVA)));
 						else
 							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu)));
 
@@ -511,7 +512,7 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 										finalPrice = newPr;
 
 										if (ModificareComanda.isComandaDistrib)
-											textPretTVA.setText(String.valueOf(nf2.format(finalPrice * 1.20)));
+											textPretTVA.setText(String.valueOf(nf2.format(finalPrice * Constants.TVA)));
 										else
 											textPretTVA.setText(String.valueOf(nf2.format(finalPrice)));
 									}
@@ -520,7 +521,7 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 							} else {
 								txtPretArt.setText(nf2.format(initPrice / globalCantArt * valMultiplu));
 								if (ModificareComanda.isComandaDistrib)
-									textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.20)));
+									textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * Constants.TVA)));
 								else
 									textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu)));
 							}
@@ -542,7 +543,7 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 							}
 
 							if (ModificareComanda.isComandaDistrib)
-								textPretTVA.setText(String.valueOf(nf2.format(finalPrice * 1.20)));
+								textPretTVA.setText(String.valueOf(nf2.format(finalPrice * Constants.TVA)));
 							else
 								textPretTVA.setText(String.valueOf(nf2.format(finalPrice)));
 
@@ -1212,7 +1213,7 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 				txtPretArt.setHint(nf2.format(initPrice / globalCantArt * valMultiplu));
 
 				if (ModificareComanda.isComandaDistrib)
-					textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.20)));
+					textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * Constants.TVA)));
 				else
 					textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu)));
 

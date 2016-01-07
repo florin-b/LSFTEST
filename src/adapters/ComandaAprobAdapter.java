@@ -5,6 +5,7 @@ import java.text.NumberFormat;
 import java.util.List;
 
 import lite.sfa.test.R;
+import model.Constants;
 import utils.UtilsFormatting;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,145 +17,121 @@ import beans.BeanComandaCreata;
 
 public class ComandaAprobAdapter extends BaseAdapter {
 
-    private List<BeanComandaCreata> listComenzi;
-    private Context context;
-    private NumberFormat numberFormat = new DecimalFormat("#0.00");
-    private String tipReducere, tipAlert, tipUser;
+	private List<BeanComandaCreata> listComenzi;
+	private Context context;
+	private NumberFormat numberFormat = new DecimalFormat("#0.00");
+	private String tipReducere, tipAlert, tipUser;
 
-    public ComandaAprobAdapter(List<BeanComandaCreata> listComenzi,
-            Context context) {
-        this.context = context;
-        this.listComenzi = listComenzi;
-    }
+	public ComandaAprobAdapter(List<BeanComandaCreata> listComenzi, Context context) {
+		this.context = context;
+		this.listComenzi = listComenzi;
+	}
 
-    static class ViewHolder {
-        public TextView textIdCmd, textClient, textData, textSuma, textStare,
-                textFact, textAprob, textTipClient, textNumeAgent, textFiliala,
-                textSumaTVA, textTermenPlata, textCursValutar, textAdrLivrNoua,
-                textPondereB_30;
-    }
+	static class ViewHolder {
+		public TextView textIdCmd, textClient, textData, textSuma, textStare, textFact, textAprob, textTipClient, textNumeAgent, textFiliala, textSumaTVA,
+				textTermenPlata, textCursValutar, textAdrLivrNoua, textPondereB_30;
+	}
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(int position, View convertView, ViewGroup parent) {
 
-        ViewHolder viewHolder;
+		ViewHolder viewHolder;
 
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(
-                    R.layout.customrowcmdaprob, parent, false);
-            viewHolder = new ViewHolder();
-            viewHolder.textIdCmd = (TextView) convertView
-                    .findViewById(R.id.textIdCmd);
-            viewHolder.textClient = (TextView) convertView
-                    .findViewById(R.id.textClient);
-            viewHolder.textData = (TextView) convertView
-                    .findViewById(R.id.textData);
-            viewHolder.textSuma = (TextView) convertView
-                    .findViewById(R.id.textSuma);
-            viewHolder.textStare = (TextView) convertView
-                    .findViewById(R.id.textStare);
-            viewHolder.textFact = (TextView) convertView
-                    .findViewById(R.id.textFact);
-            viewHolder.textAprob = (TextView) convertView
-                    .findViewById(R.id.textAprob);
-            viewHolder.textTipClient = (TextView) convertView
-                    .findViewById(R.id.textTipClient);
-            viewHolder.textNumeAgent = (TextView) convertView
-                    .findViewById(R.id.textNumeAgent);
-            viewHolder.textFiliala = (TextView) convertView
-                    .findViewById(R.id.textFiliala);
-            viewHolder.textSumaTVA = (TextView) convertView
-                    .findViewById(R.id.textSumaTVA);
-            viewHolder.textTermenPlata = (TextView) convertView
-                    .findViewById(R.id.textTermenPlata);
-            viewHolder.textCursValutar = (TextView) convertView
-                    .findViewById(R.id.textCursValutar);
-            viewHolder.textAdrLivrNoua = (TextView) convertView
-                    .findViewById(R.id.textAdrLivrNoua);
-            viewHolder.textPondereB_30 = (TextView) convertView
-                    .findViewById(R.id.textPondereB_30);
+		if (convertView == null) {
+			convertView = LayoutInflater.from(context).inflate(R.layout.customrowcmdaprob, parent, false);
+			viewHolder = new ViewHolder();
+			viewHolder.textIdCmd = (TextView) convertView.findViewById(R.id.textIdCmd);
+			viewHolder.textClient = (TextView) convertView.findViewById(R.id.textClient);
+			viewHolder.textData = (TextView) convertView.findViewById(R.id.textData);
+			viewHolder.textSuma = (TextView) convertView.findViewById(R.id.textSuma);
+			viewHolder.textStare = (TextView) convertView.findViewById(R.id.textStare);
+			viewHolder.textFact = (TextView) convertView.findViewById(R.id.textFact);
+			viewHolder.textAprob = (TextView) convertView.findViewById(R.id.textAprob);
+			viewHolder.textTipClient = (TextView) convertView.findViewById(R.id.textTipClient);
+			viewHolder.textNumeAgent = (TextView) convertView.findViewById(R.id.textNumeAgent);
+			viewHolder.textFiliala = (TextView) convertView.findViewById(R.id.textFiliala);
+			viewHolder.textSumaTVA = (TextView) convertView.findViewById(R.id.textSumaTVA);
+			viewHolder.textTermenPlata = (TextView) convertView.findViewById(R.id.textTermenPlata);
+			viewHolder.textCursValutar = (TextView) convertView.findViewById(R.id.textCursValutar);
+			viewHolder.textAdrLivrNoua = (TextView) convertView.findViewById(R.id.textAdrLivrNoua);
+			viewHolder.textPondereB_30 = (TextView) convertView.findViewById(R.id.textPondereB_30);
 
-            convertView.setTag(viewHolder);
+			convertView.setTag(viewHolder);
 
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
+		}
 
-        BeanComandaCreata comanda = getItem(position);
+		BeanComandaCreata comanda = getItem(position);
 
-        viewHolder.textIdCmd.setText(comanda.getId());
-        viewHolder.textClient.setText(comanda.getNumeClient());
+		viewHolder.textIdCmd.setText(comanda.getId());
+		viewHolder.textClient.setText(comanda.getNumeClient());
 
-        viewHolder.textData.setText(UtilsFormatting.formatDate(comanda
-                .getData()));
-        viewHolder.textSuma.setText(numberFormat.format(Double
-                .parseDouble(comanda.getSuma())));
+		viewHolder.textData.setText(UtilsFormatting.formatDate(comanda.getData()));
+		viewHolder.textSuma.setText(numberFormat.format(Double.parseDouble(comanda.getSuma())));
 
-        if (comanda.getCanalDistrib().equals("10")) {
-            viewHolder.textSumaTVA.setText(numberFormat.format(Double
-                    .parseDouble(comanda.getSuma()) * 1.20));
-        } else {
-            viewHolder.textSumaTVA.setText(numberFormat.format(Double
-                    .parseDouble(comanda.getSuma())));
-        }
+		if (comanda.getCanalDistrib().equals("10")) {
+			viewHolder.textSumaTVA.setText(numberFormat.format(Double.parseDouble(comanda.getSuma()) * Constants.TVA));
+		} else {
+			viewHolder.textSumaTVA.setText(numberFormat.format(Double.parseDouble(comanda.getSuma())));
+		}
 
-        viewHolder.textTipClient.setText(comanda.getTipClient());
-        viewHolder.textStare.setText(comanda.getStare());
+		viewHolder.textTipClient.setText(comanda.getTipClient());
+		viewHolder.textStare.setText(comanda.getStare());
 
-        tipReducere = "";
-        if (comanda.getFactRed().equals("X")) {
-            tipReducere = "2 facturi";
-        }
-        if (comanda.getFactRed().equals("R")) {
-            tipReducere = "1 factura (red. separat)";
-        }
-        if (comanda.getFactRed().equals(" ")) {
-            tipReducere = "1 factura (red. in pret)";
-        }
-        viewHolder.textFact.setText(tipReducere);
+		tipReducere = "";
+		if (comanda.getFactRed().equals("X")) {
+			tipReducere = "2 facturi";
+		}
+		if (comanda.getFactRed().equals("R")) {
+			tipReducere = "1 factura (red. separat)";
+		}
+		if (comanda.getFactRed().equals(" ")) {
+			tipReducere = "1 factura (red. in pret)";
+		}
+		viewHolder.textFact.setText(tipReducere);
 
-        tipAlert = "";
-        if (comanda.getAccept1().equals("X")) {
-            tipAlert = "SD";
-        }
+		tipAlert = "";
+		if (comanda.getAccept1().equals("X")) {
+			tipAlert = "SD";
+		}
 
-        if (comanda.getAccept2().equals("X")) {
-            tipAlert += ";DV";
-        }
-        viewHolder.textAprob.setText(tipAlert);
+		if (comanda.getAccept2().equals("X")) {
+			tipAlert += ";DV";
+		}
+		viewHolder.textAprob.setText(tipAlert);
 
-        viewHolder.textFiliala.setText(comanda.getFiliala().substring(0, 2));
+		viewHolder.textFiliala.setText(comanda.getFiliala().substring(0, 2));
 
-        tipUser = "  (AV)";
-        if (comanda.getDivizieAgent().equals("10")) {
-            tipUser = "  (KA)";
-        }
-        if (comanda.getDivizieAgent().equals("11")) {
-            tipUser = "  (CV)";
-        }
+		tipUser = "  (AV)";
+		if (comanda.getDivizieAgent().equals("10")) {
+			tipUser = "  (KA)";
+		}
+		if (comanda.getDivizieAgent().equals("11")) {
+			tipUser = "  (CV)";
+		}
 
-        viewHolder.textNumeAgent.setText(comanda.getNumeAgent() + tipUser);
-        viewHolder.textTermenPlata.setText(comanda.getTermenPlata());
+		viewHolder.textNumeAgent.setText(comanda.getNumeAgent() + tipUser);
+		viewHolder.textTermenPlata.setText(comanda.getTermenPlata());
 
-        if (!comanda.getCursValutar().equals("0"))
-            viewHolder.textCursValutar.setText("\u20ac: "
-                    + comanda.getCursValutar());
+		if (!comanda.getCursValutar().equals("0"))
+			viewHolder.textCursValutar.setText("\u20ac: " + comanda.getCursValutar());
 
-        viewHolder.textAdrLivrNoua.setText(comanda.getAdresaNoua());
-        viewHolder.textPondereB_30.setText(comanda.getPondere30());
+		viewHolder.textAdrLivrNoua.setText(comanda.getAdresaNoua());
+		viewHolder.textPondereB_30.setText(comanda.getPondere30());
 
-        return convertView;
-    }
+		return convertView;
+	}
 
-    public int getCount() {
-        return listComenzi.size();
-    }
+	public int getCount() {
+		return listComenzi.size();
+	}
 
-    public BeanComandaCreata getItem(int pos) {
-        return listComenzi.get(pos);
-    }
+	public BeanComandaCreata getItem(int pos) {
+		return listComenzi.get(pos);
+	}
 
-    public long getItemId(int position) {
-        return position;
-    }
+	public long getItemId(int position) {
+		return position;
+	}
 
 }

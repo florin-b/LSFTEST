@@ -18,6 +18,7 @@ import listeners.MapListener;
 import listeners.ObiectiveListener;
 import listeners.OperatiiAdresaListener;
 import model.ArticolComanda;
+import model.Constants;
 import model.DateLivrare;
 import model.HandleJSONData;
 import model.ListaArticoleComanda;
@@ -122,6 +123,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private AutoCompleteTextView textLocalitate, textStrada;
 	private Button btnPozitieAdresa;
 	private TextView textCoordAdresa;
+	private EditText textNrStr;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -147,6 +149,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		textLocalitate = (AutoCompleteTextView) findViewById(R.id.autoCompleteLocalitate);
 		textLocalitate.setVisibility(View.INVISIBLE);
+
+		textNrStr = (EditText) findViewById(R.id.textNrStr);
 
 		textCoordAdresa = (TextView) findViewById(R.id.textCoordAdresa);
 		afisCoordAdresa();
@@ -188,7 +192,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			txtValoareIncasare.setText(DateLivrare.getInstance().getValoareIncasare());
 			checkModifValInc.setChecked(true);
 		} else {
-			txtValoareIncasare.setText(nf2.format(CreareComanda.totalComanda * 1.20));
+			txtValoareIncasare.setText(nf2.format(CreareComanda.totalComanda * Constants.TVA));
 			checkModifValInc.setChecked(false);
 		}
 
@@ -470,9 +474,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 					double localValCmd = 0;
 					if (!CreareComanda.codClientVar.equals(""))
-						localValCmd = CreareComanda.totalComanda * 1.20;
+						localValCmd = CreareComanda.totalComanda * Constants.TVA;
 					else
-						localValCmd = ModificareComanda.totalComanda * 1.20;
+						localValCmd = ModificareComanda.totalComanda * Constants.TVA;
 
 					txtValoareIncasare.setText(nf2.format(localValCmd));
 
@@ -532,11 +536,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 						double localValCmd = 0;
 						if (!CreareComanda.codClientVar.equals("")) {
 							if (CreareComanda.canalDistrib.equals("10"))
-								localValCmd = CreareComanda.totalComanda * 1.20;
+								localValCmd = CreareComanda.totalComanda * Constants.TVA;
 							else if (CreareComanda.canalDistrib.equals("20"))
 								localValCmd = CreareComanda.totalComanda;
 						} else
-							localValCmd = ModificareComanda.totalComanda * 1.20;
+							localValCmd = ModificareComanda.totalComanda * Constants.TVA;
 
 						txtValoareIncasare.setText(nf2.format(localValCmd));
 
@@ -568,11 +572,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 						double localValCmd = 0;
 						if (!CreareComanda.codClientVar.equals("")) {
 							if (CreareComanda.canalDistrib.equals("10"))
-								localValCmd = CreareComanda.totalComanda * 1.20;
+								localValCmd = CreareComanda.totalComanda * Constants.TVA;
 							else if (CreareComanda.canalDistrib.equals("20"))
 								localValCmd = CreareComanda.totalComanda;
 						} else
-							localValCmd = ModificareComanda.totalComanda * 1.20;
+							localValCmd = ModificareComanda.totalComanda * Constants.TVA;
 
 						txtValoareIncasare.setText(nf2.format(localValCmd));
 
@@ -1126,19 +1130,21 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 				if (radioText.isChecked()) {
 					address.setCity(textLocalitate.getText().toString().trim());
 					address.setStreet(textStrada.getText().toString().trim());
+					address.setNumber(textNrStr.getText().toString().trim());
 					address.setSector(UtilsGeneral.getNumeJudet(DateLivrare.getInstance().getCodJudet()));
 
 					if (!isAdresaComplet())
 						return;
 
 					DateLivrare.getInstance().setOras(address.getCity());
-					DateLivrare.getInstance().setStrada(address.getStreet());
+					DateLivrare.getInstance().setStrada(address.getStreet() + " " + address.getNumber());
 
 				} else {
 					address.setCity(DateLivrare.getInstance().getOras());
 					address.setStreet(DateLivrare.getInstance().getStrada());
 					address.setSector(UtilsGeneral.getNumeJudet(DateLivrare.getInstance().getCodJudet()));
 				}
+
 				MapAddressDialog mapDialog = new MapAddressDialog(address, SelectAdrLivrCmd.this, fm);
 				mapDialog.setMapListener(SelectAdrLivrCmd.this);
 				mapDialog.show();
@@ -1194,7 +1200,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			}
 
 		} else {
-			dateLivrareInstance.setStrada(textStrada.getText().toString().trim());
+			dateLivrareInstance.setStrada(textStrada.getText().toString().trim() + " " + textNrStr.getText().toString().trim());
 			dateLivrareInstance.setAdrLivrNoua(true);
 			dateLivrareInstance.setAddrNumber(" ");
 		}
@@ -1311,12 +1317,26 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private void valideazaAdresaLivrare() {
 
-		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
-		params.put("codJudet", DateLivrare.getInstance().getCodJudet());
-		params.put("localitate", DateLivrare.getInstance().getOras());
+		if (isAdresaCompleta()) {
+			HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
+			params.put("codJudet", DateLivrare.getInstance().getCodJudet());
+			params.put("localitate", DateLivrare.getInstance().getOras());
 
-		operatiiAdresa.isAdresaValida(params, EnumLocalitate.LOCALITATE_SEDIU);
+			operatiiAdresa.isAdresaValida(params, EnumLocalitate.LOCALITATE_SEDIU);
+		}
 
+	}
+
+	private boolean isAdresaCompleta() {
+
+		if (!CreareComanda.codClientVar.equals("")) {
+			if (textNrStr.getText().toString().trim().equals("") && DateLivrare.getInstance().getCoordonateAdresa() == null) {
+				Toast.makeText(this, "Pozitionati adresa pe harta", Toast.LENGTH_SHORT).show();
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private void setListenerSpinnerAdreseLivrare() {
@@ -1343,9 +1363,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		DateLivrare.getInstance().setCodJudet("");
 		DateLivrare.getInstance().setCoordonateAdresa(null);
 		textCoordAdresa.setText("");
-		
+
 		spinnerJudet.setSelection(0);
 		textLocalitate.setText("");
+		textNrStr.setText("");
 		textStrada.setText("");
 
 	}

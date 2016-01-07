@@ -20,11 +20,13 @@ import java.util.TimerTask;
 import listeners.ArtComplDialogListener;
 import listeners.AsyncTaskListener;
 import listeners.ComenziDAOListener;
+import listeners.PaletAlertListener;
 import listeners.PretTransportDialogListener;
 import listeners.ValoareNegociataDialogListener;
 import model.ArticolComanda;
 import model.Comanda;
 import model.ComenziDAO;
+import model.Constants;
 import model.DateLivrare;
 import model.InfoStrings;
 import model.ListaArticoleComanda;
@@ -64,12 +66,14 @@ import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import dialogs.ArtComplDialog;
+import dialogs.PaletAlertDialog;
 import dialogs.PretTransportDialog;
 import dialogs.ValoareNegociataDialog;
 import enums.EnumComenziDAO;
+import enums.EnumDaNuOpt;
 
 public class CreareComanda extends Activity implements AsyncTaskListener, ValoareNegociataDialogListener, ComenziDAOListener, PretTransportDialogListener,
-		ArtComplDialogListener, Observer {
+		ArtComplDialogListener, Observer, PaletAlertListener {
 
 	Button stocBtn, clientBtn, articoleBtn, livrareBtn, saveCmdBtn, slideButtonCmd;
 	String filiala = "", nume = "", cod = "";
@@ -743,7 +747,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 						if (dateLivrareInstance.getObsPlata().equals("SO") && dateLivrareInstance.getTipPlata().equals("E")) {
 							if (!dateLivrareInstance.isValIncModif()) {
-								dateLivrareInstance.setValoareIncasare(nf3.format(CreareComanda.totalComanda * 1.20));
+								dateLivrareInstance.setValoareIncasare(nf3.format(CreareComanda.totalComanda * Constants.TVA));
 							}
 						}
 
@@ -776,7 +780,10 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 						comandaJson = serializeComanda(comanda);
 						articoleFinaleStr = serializedResult;
 
-						displayArtComplDialog();
+						if (comandaHasPalet())
+							displayAlertPalet();
+						else
+							displayArtComplDialog();
 
 					}
 				});
@@ -816,7 +823,29 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		}
 	}
 
-	public String prepareArtForDelivery() {
+	private void displayAlertPalet() {
+
+		PaletAlertDialog infoDialog = new PaletAlertDialog(this);
+		infoDialog.setPaletAlertListener(this);
+		infoDialog.showAlertDialog();
+
+	}
+
+	private boolean comandaHasPalet() {
+
+		List<ArticolComanda> listaArticole = ListaArticoleComanda.getInstance().getListArticoleComanda();
+		Iterator<ArticolComanda> iterator = listaArticole.iterator();
+
+		while (iterator.hasNext()) {
+			if (iterator.next().isUmPalet())
+				return true;
+		}
+
+		return false;
+
+	}
+
+	private String prepareArtForDelivery() {
 		String retVal = "";
 
 		listArticole = new ArrayList<ArticolComanda>();
@@ -1544,6 +1573,18 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 			calculPondereB();
 			calculTaxaVerde();
+		}
+
+	}
+
+	@Override
+	public void paletDialogResponse(EnumDaNuOpt response) {
+		switch (response) {
+		case DA:
+			displayArtComplDialog();
+			break;
+		default:
+			break;
 		}
 
 	}

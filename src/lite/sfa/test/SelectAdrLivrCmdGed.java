@@ -106,6 +106,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private AutoCompleteTextView textLocalitate, textStrada, textLocalitateLivrare, textStradaLivrare;
 	private Button btnPozitieAdresa;
 	private TextView textCoordAdresa;
+	private EditText textNrStr;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -133,6 +134,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			this.layoutAdr2 = (LinearLayout) findViewById(R.id.layoutAdr2);
 
 			textLocalitate = (AutoCompleteTextView) findViewById(R.id.autoCompleteLocalitate);
+
+			textNrStr = (EditText) findViewById(R.id.textNrStr);
 
 			textCoordAdresa = (TextView) findViewById(R.id.textCoordAdresa);
 			afisCoordAdresa();
@@ -960,7 +963,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		String telefon = "";
 		String observatii = "", obsPlata = " ", strMailAddr = " ";
 
-		strada = textStrada.getText().toString().trim();
+		strada = textStrada.getText().toString().trim() + " " + textNrStr.getText().toString().trim();
 
 		DateLivrare dateLivrareInstance = DateLivrare.getInstance();
 
@@ -1078,12 +1081,24 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	private void valideazaAdresaLivrare() {
 
-		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
-		params.put("codJudet", DateLivrare.getInstance().getCodJudet());
-		params.put("localitate", DateLivrare.getInstance().getOras());
+		if (isAdresaCompleta()) {
+			HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
+			params.put("codJudet", DateLivrare.getInstance().getCodJudet());
+			params.put("localitate", DateLivrare.getInstance().getOras());
 
-		operatiiAdresa.isAdresaValida(params, EnumLocalitate.LOCALITATE_SEDIU);
+			operatiiAdresa.isAdresaValida(params, EnumLocalitate.LOCALITATE_SEDIU);
+		}
 
+	}
+
+	private boolean isAdresaCompleta() {
+
+		if (textNrStr.getText().toString().trim().equals("") && DateLivrare.getInstance().getCoordonateAdresa() == null) {
+			Toast.makeText(this, "Pozitionati adresa pe harta", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+
+		return true;
 	}
 
 	private String getAdrLivrareJSON() {

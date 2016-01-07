@@ -141,6 +141,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 					articol.setTipAB(articolObject.getString("tipAB"));
 					articol.setDepart(articolObject.getString("depart"));
 					articol.setDepartAprob(articolObject.getString("departAprob"));
+					articol.setUmPalet(articolObject.getString("umPalet").equals("1") ? true : false);
 					listArticole.add(articol);
 
 				}

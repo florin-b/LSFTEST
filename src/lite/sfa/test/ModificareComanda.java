@@ -23,6 +23,7 @@ import listeners.ComenziDAOListener;
 import model.ArticolComanda;
 import model.Comanda;
 import model.ComenziDAO;
+import model.Constants;
 import model.DateLivrare;
 import model.InfoStrings;
 import model.ListaArticoleComandaGed;
@@ -527,7 +528,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 						if (dateLivrareInstance.getObsPlata().equals("SO") && dateLivrareInstance.getTipPlata().equals("E")) {
 							if (!dateLivrareInstance.isValIncModif()) {
-								dateLivrareInstance.setValoareIncasare(nf3.format(ModificareComanda.totalComanda * 1.20));
+								dateLivrareInstance.setValoareIncasare(nf3.format(ModificareComanda.totalComanda * Constants.TVA));
 							}
 						}
 
