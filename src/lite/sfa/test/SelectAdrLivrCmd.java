@@ -125,7 +125,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private Button btnPozitieAdresa;
 	private TextView textCoordAdresa;
 	private EditText textNrStr;
-	private EditText textCodPostal;
+	
 	private boolean adresaFromListHasNumber;
 
 	@Override
@@ -154,7 +154,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		textLocalitate.setVisibility(View.INVISIBLE);
 
 		textNrStr = (EditText) findViewById(R.id.textNrStr);
-		textCodPostal = (EditText) findViewById(R.id.textCodPostal);
+		
 
 		textCoordAdresa = (TextView) findViewById(R.id.textCoordAdresa);
 		afisCoordAdresa();
@@ -1140,8 +1140,14 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					if (!isAdresaComplet())
 						return;
 
+					
+					String nrStrada = "";
+					
+					if (textNrStr.getText().toString().trim().length() > 0)
+						nrStrada = " nr " + textNrStr.getText().toString().trim();
+					
 					DateLivrare.getInstance().setOras(address.getCity());
-					DateLivrare.getInstance().setStrada(address.getStreet() + " " + address.getNumber());
+					DateLivrare.getInstance().setStrada(address.getStreet() + nrStrada);
 
 				} else {
 					address.setCity(DateLivrare.getInstance().getOras());
@@ -1204,10 +1210,17 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			}
 
 		} else {
-			dateLivrareInstance.setStrada(textStrada.getText().toString().trim() + " " + textNrStr.getText().toString().trim());
+			
+			
+			String nrStrada = "";
+			
+			if (textNrStr.getText().toString().trim().length() > 0)
+				nrStrada = " NR " + textNrStr.getText().toString().trim();
+			
+			dateLivrareInstance.setStrada(textStrada.getText().toString().trim() + nrStrada);
 			dateLivrareInstance.setAdrLivrNoua(true);
 			dateLivrareInstance.setAddrNumber(" ");
-			dateLivrareInstance.setCodPostal(textCodPostal.getText().toString().trim());
+			
 		}
 
 		setAdresaLivrareFromObiectiv();
@@ -1241,7 +1254,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		if (!CreareComanda.codClientVar.equals("")) {
 
 			if (layoutAdrese.getVisibility() == View.VISIBLE) {
-				if (!adresaFromListHasNumber && DateLivrare.getInstance().getCoordonateAdresa() == null) {
+				if (!adresaFromListHasNumber && DateLivrare.getInstance().getCoordonateAdresa() == null && getTipTransport().equals("TRAP")) {
 					Toast.makeText(this, "Adresa de livrare imprecisa, pozitionati adresa pe harta", Toast.LENGTH_SHORT).show();
 					return;
 				}
@@ -1309,6 +1322,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	}
 
+	private String getTipTransport() {
+		return spinnerTransp.getSelectedItem().toString().substring(0, 4);
+	}
+
 	private void setAdresaLivrareFromList(HashMap<String, String> selectedLine) {
 
 		String[] tokenAdr = selectedLine.get("rowText").toString().split(";");
@@ -1330,7 +1347,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			adresaFromListHasNumber = false;
 		}
 		DateLivrare.getInstance().setCodJudet(getCodJudet(tokenAdr[0].trim()));
-		DateLivrare.getInstance().setCodPostal(" ");
+		
 		DateLivrare.getInstance().setAdrLivrNoua(false);
 
 	}
@@ -1351,7 +1368,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		if (!CreareComanda.codClientVar.equals("")) {
 
-			if (textNrStr.getText().toString().trim().equals("") && DateLivrare.getInstance().getCoordonateAdresa() == null) {
+			if (textNrStr.getText().toString().trim().equals("") && DateLivrare.getInstance().getCoordonateAdresa() == null && getTipTransport().equals("TRAP")) {
 				Toast.makeText(this, "Adresa de livrare imprecisa, pozitionati adresa pe harta", Toast.LENGTH_SHORT).show();
 				return false;
 			}

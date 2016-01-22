@@ -963,7 +963,13 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		String telefon = "";
 		String observatii = "", obsPlata = " ", strMailAddr = " ";
 
-		strada = textStrada.getText().toString().trim() + " " + textNrStr.getText().toString().trim();
+		String nrStrada = "";
+		
+		if (textNrStr.getText().toString().trim().length() > 0)
+			nrStrada = " NR " + textNrStr.getText().toString().trim();
+		
+		
+		strada = textStrada.getText().toString().trim() + nrStrada;
 
 		DateLivrare dateLivrareInstance = DateLivrare.getInstance();
 
@@ -1093,14 +1099,19 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	private boolean isAdresaCompleta() {
 
-		if (textNrStr.getText().toString().trim().equals("") && DateLivrare.getInstance().getCoordonateAdresa() == null) {
-			Toast.makeText(this, "Pozitionati adresa pe harta", Toast.LENGTH_SHORT).show();
+		if (textNrStr.getText().toString().trim().equals("") && DateLivrare.getInstance().getCoordonateAdresa() == null && getTipTransport().equals("TRAP")) {
+			Toast.makeText(this, "Adresa de livrare imprecisa, pozitionati adresa pe harta", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
 		return true;
 	}
 
+	
+	private String getTipTransport() {
+		return spinnerTransp.getSelectedItem().toString().substring(0, 4);
+	}
+	
 	private String getAdrLivrareJSON() {
 		String jsonData = "";
 

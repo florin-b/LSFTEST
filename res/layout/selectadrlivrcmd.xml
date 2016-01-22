@@ -173,7 +173,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|left"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="20dp"
                     android:layout_weight="0.05"
                     android:gravity="right"
                     android:text="Nr"
@@ -186,30 +186,9 @@
                     android:layout_width="0dp"
                     android:layout_height="45dip"
                     android:layout_gravity="bottom|left"
-                    android:layout_marginRight="20dip"
-                    android:layout_weight="0.05"
-                    android:inputType="textCapSentences|textNoSuggestions"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|left"
-                    android:layout_marginRight="20dp"
-                    android:layout_weight="0.05"
-                    android:gravity="right"
-                    android:text="Cod post."
-                    android:textColor="@color/labelColor"
-                    android:textSize="17sp"
-                    android:typeface="serif" />
-
-                <EditText
-                    android:id="@+id/textCodPostal"
-                    android:layout_width="0dp"
-                    android:layout_height="45dip"
-                    android:layout_gravity="bottom|left"
                     android:layout_marginRight="180dip"
                     android:layout_weight="0.05"
+                    android:dropDownHeight="250dp"
                     android:inputType="textCapSentences|textNoSuggestions"
                     android:textSize="18sp" />
             </LinearLayout>

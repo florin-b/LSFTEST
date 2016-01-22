@@ -48,7 +48,7 @@ public class UtilsGeneral {
 
 		System.arraycopy(depoziteDISTRIB, 0, depoziteGed, 0, depoziteDISTRIB.length);
 		depoziteGed[depoziteDISTRIB.length] = "MAV1";
-		depoziteGed[depoziteDISTRIB.length + 1] = "MAV2";
+		
 
 		return depoziteGed;
 	}

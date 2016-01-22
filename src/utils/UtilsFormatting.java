@@ -75,7 +75,7 @@ public class UtilsFormatting {
 	}
 
 	public static boolean streetHasNumber(String street) {
-		String regex = "num|nr|numar[\\s]*[\\.]*[\\s]*[\\d]+[\\w]*";
+		String regex = "[\\s]*[\\d]+[\\w]*";
 
 		Pattern patern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = patern.matcher(street);
