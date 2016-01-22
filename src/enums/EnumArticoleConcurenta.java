@@ -1,7 +1,7 @@
 package enums;
-
+  
 public enum EnumArticoleConcurenta {
-
+   
 	TIPART_0("Tip de actualizare", ""), TIPART_1("Hiper-sensibil", "01"), TIPART_2("Sensibil", "02"), TIPART_3("Reprezentativ", "03");
 
 	private String listName;

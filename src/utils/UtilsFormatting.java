@@ -63,16 +63,24 @@ public class UtilsFormatting {
 
 		return spaceString.toString();
 	}
-	
-	
+
 	public static String flattenToAscii(String string) {
-        StringBuilder sb = new StringBuilder(string.length());
-        string = Normalizer.normalize(string, Normalizer.Form.NFD);
-        for (char c : string.toCharArray()) {
-            if (c <= '\u007F') sb.append(c);
-        }
-        return sb.toString();
-    }
-	
+		StringBuilder sb = new StringBuilder(string.length());
+		string = Normalizer.normalize(string, Normalizer.Form.NFD);
+		for (char c : string.toCharArray()) {
+			if (c <= '\u007F')
+				sb.append(c);
+		}
+		return sb.toString();
+	}
+
+	public static boolean streetHasNumber(String street) {
+		String regex = "num|nr|numar[\\s]*[\\.]*[\\s]*[\\d]+[\\w]*";
+
+		Pattern patern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+		Matcher matcher = patern.matcher(street);
+
+		return matcher.find();
+	}
 
 }

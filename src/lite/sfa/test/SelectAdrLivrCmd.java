@@ -34,6 +34,7 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import utils.Exceptions;
+import utils.UtilsFormatting;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import adapters.AdapterObiective;
@@ -124,6 +125,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private Button btnPozitieAdresa;
 	private TextView textCoordAdresa;
 	private EditText textNrStr;
+	private EditText textCodPostal;
+	private boolean adresaFromListHasNumber;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -151,6 +154,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		textLocalitate.setVisibility(View.INVISIBLE);
 
 		textNrStr = (EditText) findViewById(R.id.textNrStr);
+		textCodPostal = (EditText) findViewById(R.id.textCodPostal);
 
 		textCoordAdresa = (TextView) findViewById(R.id.textCoordAdresa);
 		afisCoordAdresa();
@@ -1203,6 +1207,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			dateLivrareInstance.setStrada(textStrada.getText().toString().trim() + " " + textNrStr.getText().toString().trim());
 			dateLivrareInstance.setAdrLivrNoua(true);
 			dateLivrareInstance.setAddrNumber(" ");
+			dateLivrareInstance.setCodPostal(textCodPostal.getText().toString().trim());
 		}
 
 		setAdresaLivrareFromObiectiv();
@@ -1231,6 +1236,17 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		if (dateLivrareInstance.getCodJudet().equals("")) {
 			Toast.makeText(getApplicationContext(), "Selectati judetul!", Toast.LENGTH_SHORT).show();
 			return;
+		}
+
+		if (!CreareComanda.codClientVar.equals("")) {
+
+			if (layoutAdrese.getVisibility() == View.VISIBLE) {
+				if (!adresaFromListHasNumber && DateLivrare.getInstance().getCoordonateAdresa() == null) {
+					Toast.makeText(this, "Adresa de livrare imprecisa, pozitionati adresa pe harta", Toast.LENGTH_SHORT).show();
+					return;
+				}
+
+			}
 		}
 
 		if (pers.equals("") || pers.equals("-")) {
@@ -1308,11 +1324,15 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		if (!tokenAdr[2].trim().equals("")) {
 			DateLivrare.getInstance().setStrada(tokenAdr[2].trim() + " " + tokenAdr[3].trim());
+			adresaFromListHasNumber = UtilsFormatting.streetHasNumber(DateLivrare.getInstance().getStrada());
 		} else {
 			DateLivrare.getInstance().setStrada("-");
+			adresaFromListHasNumber = false;
 		}
 		DateLivrare.getInstance().setCodJudet(getCodJudet(tokenAdr[0].trim()));
+		DateLivrare.getInstance().setCodPostal(" ");
 		DateLivrare.getInstance().setAdrLivrNoua(false);
+
 	}
 
 	private void valideazaAdresaLivrare() {
@@ -1330,10 +1350,12 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private boolean isAdresaCompleta() {
 
 		if (!CreareComanda.codClientVar.equals("")) {
+
 			if (textNrStr.getText().toString().trim().equals("") && DateLivrare.getInstance().getCoordonateAdresa() == null) {
-				Toast.makeText(this, "Pozitionati adresa pe harta", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, "Adresa de livrare imprecisa, pozitionati adresa pe harta", Toast.LENGTH_SHORT).show();
 				return false;
 			}
+
 		}
 
 		return true;

@@ -52,7 +52,5 @@ public class BeanObiectivAfisare {
 	public String toString() {
 		return "BeanObiectivAfisare [id=" + id + ", nume=" + nume + ", data=" + data + ", beneficiar=" + beneficiar + ", codStatus=" + codStatus + "]";
 	}
-	
-	
 
 }

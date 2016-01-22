@@ -57,6 +57,7 @@ public class DateLivrare {
 	private String idObiectiv = " ";
 	private boolean isAdresaObiectiv;
 	private LatLng coordonateAdresa;
+	private String codPostal;
 
 	private DateLivrareAfisare dateLivrareAfisare;
 
@@ -424,6 +425,14 @@ public class DateLivrare {
 		this.coordonateAdresa = coordonateAdresa;
 	}
 
+	public String getCodPostal() {
+		return codPostal;
+	}
+
+	public void setCodPostal(String codPostal) {
+		this.codPostal = codPostal;
+	}
+
 	public void resetAll() {
 		codJudet = "";
 		numeJudet = "";
@@ -457,6 +466,7 @@ public class DateLivrare {
 		idObiectiv = " ";
 		isAdresaObiectiv = false;
 		coordonateAdresa = null;
+		codPostal = " ";
 
 	}
 
