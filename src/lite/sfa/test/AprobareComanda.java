@@ -116,6 +116,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 	private BeanConditiiHeader conditiiComandaHeader;
 	private String divizieAgent;
 	private EnumTipReducere tipReducere;
+	private BeanComandaCreata comandaCurenta;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -619,6 +620,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 			params.put("divizieAgent", divizieAgent);
 			params.put("elimTransp", getStareElimTransport());
 			params.put("filiala", listComenzi.get(selectedPosComanda).getFiliala());
+			params.put("codStare", comandaCurenta.getCodStare());
 
 			operatiiComenzi.opereazaComanda(params);
 
@@ -1300,12 +1302,22 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 
 	}
 
+	private void setupContextLayout(BeanComandaCreata comanda) {
+		if (comanda.getCodStare().equals("21"))
+			btnConditii.setVisibility(View.INVISIBLE);
+		else
+			btnConditii.setVisibility(View.VISIBLE);
+	}
+
 	private void addListenerSpinnerCmd() {
 		spinnerComenzi.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
 
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				selectedPosComanda = position;
 				fillComandaDetails(position);
+
+				comandaCurenta = (BeanComandaCreata) parent.getAdapter().getItem(position);
+				setupContextLayout(comandaCurenta);
 
 			}
 

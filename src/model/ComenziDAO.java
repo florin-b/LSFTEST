@@ -16,6 +16,7 @@ import org.json.JSONTokener;
 import utils.UtilsGeneral;
 import android.content.Context;
 import android.widget.Toast;
+import beans.ArticolSimulat;
 import beans.BeanArticoleAfisare;
 import beans.BeanComandaCreata;
 import beans.BeanConditii;
@@ -88,6 +89,11 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 
 	}
 
+	public void sendOfertaGedMail(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.SEND_OFERTA_GED_MAIL;
+		performOperation(params);
+	}
+
 	private void performOperation(HashMap<String, String> params) {
 		AsyncTaskListener contextListener = (AsyncTaskListener) ComenziDAO.this;
 		AsyncTaskWSCall call = new AsyncTaskWSCall(context, contextListener, numeComanda.getComanda(), params);
@@ -109,6 +115,87 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 
 			listener.operationComenziComplete(numeComanda, resultObject);
 		}
+
+	}
+
+	public BeanArticoleAfisare deserializeArticoleComandaLight(String serializedResult) {
+		BeanArticoleAfisare articoleComanda = new BeanArticoleAfisare();
+
+		DateLivrareAfisare dateLivrare = null;
+		ArrayList<ArticolSimulat> listArticole = new ArrayList<ArticolSimulat>();
+		ArticolSimulat articol = null;
+
+		try {
+
+			JSONObject jsonObject = (JSONObject) new JSONTokener(serializedResult).nextValue();
+
+			if (jsonObject instanceof JSONObject) {
+
+				JSONObject jsonLivrare = jsonObject.getJSONObject("dateLivrare");
+
+				dateLivrare = new DateLivrareAfisare();
+				dateLivrare.setPersContact(jsonLivrare.getString("persContact"));
+				dateLivrare.setNrTel(jsonLivrare.getString("nrTel"));
+				dateLivrare.setDateLivrare(jsonLivrare.getString("dateLivrare"));
+				dateLivrare.setTransport(jsonLivrare.getString("Transport"));
+				dateLivrare.setTipPlata(jsonLivrare.getString("tipPlata"));
+				dateLivrare.setOras(jsonLivrare.getString("Oras"));
+				dateLivrare.setCodJudet(jsonLivrare.getString("codJudet"));
+				dateLivrare.setNumeJudet(UtilsGeneral.getNumeJudet(jsonLivrare.getString("codJudet")));
+				dateLivrare.setUnitLog(jsonLivrare.getString("unitLog"));
+				dateLivrare.setNumeClient(jsonLivrare.getString("numeClient"));
+				dateLivrare.setCnpClient(jsonLivrare.getString("cnpClient"));
+				dateLivrare.setMail(jsonLivrare.getString("mail"));
+
+				JSONArray jsonArticole = jsonObject.getJSONArray("articoleComanda");
+				String subCmp = "";
+				for (int i = 0; i < jsonArticole.length(); i++) {
+					JSONObject articolObject = jsonArticole.getJSONObject(i);
+
+					articol = new ArticolSimulat();
+					articol.setStatus(articolObject.getString("status"));
+					articol.setCodArticol(articolObject.getString("codArticol"));
+					articol.setNumeArticol(articolObject.getString("numeArticol"));
+					articol.setCantitate(Double.valueOf(articolObject.getString("cantitate")));
+					articol.setDepozit(articolObject.getString("depozit"));
+					articol.setPretUnit(Double.valueOf(articolObject.getString("pretUnit")));
+					articol.setPretUnitarClient(Double.valueOf(articolObject.getString("pretUnit")));
+					articol.setUm(articolObject.getString("um"));
+					articol.setProcent(Double.valueOf(articolObject.getString("procent")));
+					articol.setProcentFact(Double.valueOf(articolObject.getString("procentFact")));
+					articol.setMultiplu(Double.valueOf(articolObject.getString("multiplu")));
+					articol.setPret(Double.valueOf(articolObject.getString("pret")));
+					articol.setInfoArticol(articolObject.getString("infoArticol"));
+					articol.setCantUmb(Double.valueOf(articolObject.getString("cantUmb")));
+					articol.setUmb(articolObject.getString("Umb"));
+					articol.setUnitLogAlt(articolObject.getString("unitLogAlt"));
+					articol.setDepart(articolObject.getString("depart"));
+					articol.setTipArt(articolObject.getString("tipArt"));
+					articol.setConditii(false);
+
+					subCmp = "0";
+					if (articol.getPretUnit() < articol.getCmp())
+						subCmp = "1";
+					articol.setAlteValori(subCmp);
+					articol.setDepartSintetic(articolObject.getString("departSintetic"));
+					articol.setDepartAprob(articolObject.getString("departAprob"));
+
+					listArticole.add(articol);
+
+				}
+
+			}
+
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		articoleComanda.setDateLivrare(dateLivrare);
+
+		articoleComanda.setArticoleSimulate(listArticole);
+		articoleComanda.setConditii(null);
+
+		return articoleComanda;
 
 	}
 
@@ -300,6 +387,7 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 					comanda.setData(comandaObject.getString("dataComanda"));
 					comanda.setSuma(comandaObject.getString("sumaComanda"));
 					comanda.setStare(InfoStrings.statusAprobCmd(Integer.valueOf(comandaObject.getString("stareComanda"))));
+					comanda.setCodStare(comandaObject.getString("stareComanda"));
 					comanda.setMoneda(comandaObject.getString("monedaComanda"));
 					comanda.setSumaTva(comandaObject.getString("sumaTVA"));
 					comanda.setMonedaTva(comandaObject.getString("monedaTVA"));
@@ -323,6 +411,10 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 					comanda.setAprobariPrimite(comandaObject.getString("aprobariPrimite"));
 					comanda.setCodClientGenericGed(comandaObject.getString("codClientGenericGed"));
 					comanda.setConditiiImpuse(comandaObject.getString("conditiiImpuse"));
+					comanda.setAvans(Double.valueOf(comandaObject.getString("avans")));
+
+					if (comandaObject.has("telAgent"))
+						comanda.setTelAgent(comandaObject.getString("telAgent"));
 
 					listComenzi.add(comanda);
 

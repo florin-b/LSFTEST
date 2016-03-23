@@ -891,7 +891,6 @@ public class MainMenu extends Activity {
 
 		@Override
 		protected void onPostExecute(String result) {
-			// TODO
 
 			try {
 				if (dialog != null) {

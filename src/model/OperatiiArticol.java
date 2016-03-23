@@ -6,6 +6,7 @@ import java.util.List;
 
 import listeners.OperatiiArticolListener;
 import beans.ArticolDB;
+import beans.BeanArticolStoc;
 import beans.BeanGreutateArticol;
 import beans.BeanParametruPretGed;
 import beans.PretArticolGed;
@@ -44,6 +45,12 @@ public interface OperatiiArticol {
 	public BeanGreutateArticol deserializeGreutateArticol(Object result);
 	
 	public Object getDepartBV90(String codArticol);
+	
+	public void getStocArticole(HashMap<String, String> params);
+	
+	public String serializeListArtStoc(List<BeanArticolStoc> listArticole);
+	
+	public List<BeanArticolStoc> derializeListArtStoc(String listArticole);
 	
 	
 	

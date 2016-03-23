@@ -620,7 +620,6 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			Double.parseDouble(input);
 			return true;
 		} catch (Exception ex) {
-			Log.e("Error", ex.toString());
 			return false;
 		}
 	}
@@ -843,6 +842,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			params.put("tipArticol", tipArticol);
 			params.put("tipCautare", tipCautare);
 			params.put("departament", selectedDepartamentAgent);
+			params.put("filiala", UserInfo.getInstance().getUnitLog());
 
 			opArticol.getArticoleDistributie(params);
 
@@ -1127,7 +1127,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			nf2.setMinimumFractionDigits(3);
 			nf2.setMaximumFractionDigits(3);
 
-			String[] tokenPret = pretResponse.split("#");
+			String[] tokenStoc = pretResponse.split("#");
 
 			textNumeArticol.setVisibility(View.VISIBLE);
 			textCodArticol.setVisibility(View.VISIBLE);
@@ -1138,32 +1138,32 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			labelStoc.setVisibility(View.VISIBLE);
 			pretBtn.setVisibility(View.VISIBLE);
 
-			textUM.setText(tokenPret[1]);
+			textUM.setText(tokenStoc[1]);
 
 			// verificare daca se afiseaza valoarea stocului (exceptia de la
 			// BV90 pentr ag/sd)
-			if (tokenPret[2].equals("0")) {
+			if (tokenStoc[2].equals("0")) {
 				textStoc.setVisibility(View.INVISIBLE);
 			} else {
 				textStoc.setVisibility(View.VISIBLE);
 			}
 
-			textStoc.setText(nf2.format(Double.valueOf(tokenPret[0])));
+			textStoc.setText(nf2.format(Double.valueOf(tokenStoc[0])));
 
 			// pentru KA se afiseaza stocul disponibil = stoc real / 2
 			if (UserInfo.getInstance().getTipAcces().equals("27")) {
 				layoutStocKA.setVisibility(View.VISIBLE);
-				textUmKA.setText(tokenPret[1]);
-				textStocKA.setText(nf2.format(Double.valueOf(tokenPret[0]) / 2));
+				textUmKA.setText(tokenStoc[1]);
+				textStocKA.setText(nf2.format(Double.valueOf(tokenStoc[0]) / 2));
 			}
 
-			umStoc = tokenPret[1];
+			umStoc = tokenStoc[1];
 
 			artMap = (HashMap<String, String>) spinnerUnitMas.getSelectedItem();
 
 			String stocUM = artMap.get("rowText");
 
-			if (!stocUM.equals(tokenPret[1]) && !tokenPret[1].trim().equals("")) // um
+			if (!stocUM.equals(tokenStoc[1]) && !tokenStoc[1].trim().equals("")) // um
 																					// vanz
 																					// si
 																					// um
@@ -1172,7 +1172,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			{
 				HashMap<String, String> tempUmVanz;
 				tempUmVanz = new HashMap<String, String>();
-				tempUmVanz.put("rowText", tokenPret[1]);
+				tempUmVanz.put("rowText", tokenStoc[1]);
 
 				listUmVanz.add(tempUmVanz);
 				spinnerUnitMas.setAdapter(adapterUmVanz);

@@ -56,7 +56,6 @@ import beans.PretArticolGed;
 import enums.EnumArticoleDAO;
 import enums.EnumDepartExtra;
 
-
 public class SelectArtCmdGed extends ListActivity implements OperatiiArticolListener {
 
 	Button articoleBtn, saveArtBtn, pretBtn;
@@ -135,6 +134,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	private PretArticolGed selectedArticol;
 	private NumberFormat nForm2;
 	private ArticolDB articolDBSelected;
+
+	private enum EnumDepoz {
+		MAV1;
+	}
 
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -236,8 +239,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		spinnerDepoz.setAdapter(adapterSpinnerDepozite);
 		spinnerDepoz.setOnItemSelectedListener(new OnSelectDepozit());
 
-		if (isWood())
-			spinnerDepoz.setSelection(arrayListDepozite.size() - 1);
+		if (isWood() || UtilsUser.isCV())
+			setDefaultDepoz(EnumDepoz.MAV1, arrayListDepozite);
 
 		spinnerUnitMas = (Spinner) findViewById(R.id.spinnerUnitMas);
 
@@ -279,6 +282,21 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		nForm2 = NumberFormat.getInstance();
 		nForm2.setMinimumFractionDigits(2);
 		nForm2.setMaximumFractionDigits(2);
+
+	}
+
+	private void setDefaultDepoz(EnumDepoz depoz, ArrayList<String> listDepozite) {
+
+		if (depoz == EnumDepoz.MAV1) {
+			int position = 0;
+			for (String dep : listDepozite) {
+				if (dep.equals(depoz.toString())) {
+					spinnerDepoz.setSelection(position);
+					break;
+				}
+				position++;
+			}
+		}
 
 	}
 
@@ -1352,7 +1370,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		super.onListItemClick(l, v, position, id);
 
 		ArticolDB articol = (ArticolDB) l.getAdapter().getItem(position);
-		
+
 		articolDBSelected = articol;
 
 		numeArticol = articol.getNume();

@@ -489,7 +489,8 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 			params.put("tipArticol", tipArticol);
 			params.put("tipCautare", tipCautare);
 			params.put("departament", selectedDepartamentAgent);
-
+			params.put("filiala", UserInfo.getInstance().getUnitLog());
+			
 			opArticol.getArticoleDistributie(params);
 		}
 

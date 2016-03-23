@@ -111,8 +111,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		// etPassword.setText("Cdw6BU");
 
 		// CAG GL
-		//etUsername.setText("FROTARU");
-		//etPassword.setText("89mLcn");
+		etUsername.setText("FROTARU");
+		etPassword.setText("89mLcn");
 		
 		//DV CAG
 		//etUsername.setText("NIONITA");

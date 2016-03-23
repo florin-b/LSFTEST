@@ -59,7 +59,7 @@ public class ComandaAfisAdapter extends BaseAdapter {
 		viewHolder.textMoneda.setText(comanda.getMoneda());
 		viewHolder.textSumaTVA.setText(numberFormat.format(Double.valueOf(comanda.getSumaTva())));
 		viewHolder.textMonedaTVA.setText(comanda.getMonedaTva());
-		viewHolder.textCmdSap.setText(comanda.getCmdSap());
+		viewHolder.textCmdSap.setText(comanda.getCmdSap().equals("-1") ? " " : comanda.getCmdSap());
 		viewHolder.textTipClient.setText(comanda.getTipClient());
 
 		return convertView;

@@ -8,6 +8,7 @@ public class BeanArticoleAfisare {
 
 	private DateLivrareAfisare dateLivrare;
 	private ArrayList<ArticolComanda> listArticole;
+	private ArrayList<ArticolSimulat> articoleSimulate;
 	private BeanConditii conditii;
 
 	public BeanArticoleAfisare() {
@@ -37,5 +38,15 @@ public class BeanArticoleAfisare {
 	public void setConditii(BeanConditii conditii) {
 		this.conditii = conditii;
 	}
+
+	public ArrayList<ArticolSimulat> getArticoleSimulate() {
+		return articoleSimulate;
+	}
+
+	public void setArticoleSimulate(ArrayList<ArticolSimulat> articoleSimulate) {
+		this.articoleSimulate = articoleSimulate;
+	}
+	
+	
 
 }

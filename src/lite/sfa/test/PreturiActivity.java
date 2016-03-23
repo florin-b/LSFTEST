@@ -346,6 +346,7 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 		params.put("tipArticol", tipArticol);
 		params.put("tipCautare", tipCautare);
 		params.put("departament", selectedDepartamentAgent);
+		params.put("filiala", UserInfo.getInstance().getUnitLog());
 
 		opArticol.getArticoleDistributie(params);
 

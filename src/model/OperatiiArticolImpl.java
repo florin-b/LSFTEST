@@ -18,6 +18,7 @@ import utils.UtilsGeneral;
 import android.content.Context;
 import android.widget.Toast;
 import beans.ArticolDB;
+import beans.BeanArticolStoc;
 import beans.BeanGreutateArticol;
 import beans.BeanParametruPretGed;
 import beans.PretArticolGed;
@@ -96,6 +97,13 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 
 	public void getNivel1Distributie(HashMap<String, String> params) {
 		numeComanda = EnumArticoleDAO.GET_NIVEL1_DISTRIBUTIE;
+		this.params = params;
+		performOperation();
+	}
+
+	@Override
+	public void getStocArticole(HashMap<String, String> params) {
+		numeComanda = EnumArticoleDAO.GET_STOC_ARTICOLE;
 		this.params = params;
 		performOperation();
 	}
@@ -246,6 +254,41 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		return serializedResult;
 	}
 
+	@Override
+	public String serializeListArtStoc(List<BeanArticolStoc> listArticole) {
+
+		JSONArray jsonArray = new JSONArray();
+		JSONObject object = null;
+
+		Iterator<BeanArticolStoc> iterator = listArticole.iterator();
+
+		while (iterator.hasNext()) {
+			BeanArticolStoc articol = iterator.next();
+
+			object = new JSONObject();
+			try {
+				object.put("cod", articol.getCod());
+				object.put("depozit", articol.getDepozit());
+				object.put("depart", articol.getDepart());
+				object.put("unitLog", articol.getUnitLog());
+
+				jsonArray.put(object);
+
+			} catch (JSONException e) {
+
+				e.printStackTrace();
+			}
+
+		}
+
+		return jsonArray.toString();
+	}
+
+	public void deserializeListArtStoc(String listArticole) {
+		// Object json = new JSONTokener(serializedListArticole).nextValue();
+
+	}
+
 	public PretArticolGed deserializePretGed(Object result) {
 		PretArticolGed pretArticol = new PretArticolGed();
 
@@ -317,6 +360,42 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		}
 
 		return greutateArticol;
+	}
+
+	public List<BeanArticolStoc> derializeListArtStoc(String serializedResult) {
+
+		List<BeanArticolStoc> listArticole = new ArrayList<BeanArticolStoc>();
+
+		try {
+			Object jsonObject =  new JSONTokener(serializedResult).nextValue();
+
+			if (jsonObject instanceof JSONArray) {
+				JSONArray jsonArray = new JSONArray(serializedResult);
+
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject articolObject = jsonArray.getJSONObject(i);
+
+					BeanArticolStoc articol = new BeanArticolStoc();
+
+					articol.setCod(articolObject.getString("cod"));
+
+					articol.setDepozit(articolObject.getString("depozit"));
+					articol.setDepart(articolObject.getString("depart"));
+					articol.setUnitLog(articolObject.getString("unitLog"));
+					articol.setStoc(Double.valueOf(articolObject.getString("stoc")));
+
+					listArticole.add(articol);
+
+				}
+
+			}
+
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+
+		return listArticole;
 	}
 
 }

@@ -833,18 +833,24 @@ public class InfoStrings {
 	public static boolean isMatTransport(String codArt) {
 		boolean isMat = false;
 
-		String[] articolePermise = { "000000000030101220", "000000000030101221", "000000000030101223", "000000000030101224", "000000000030101225",
+		String[] articoleTransp = { "000000000030101220", "000000000030101221", "000000000030101223", "000000000030101224", "000000000030101225",
 				"000000000030101226", "000000000030101227", "000000000030101228", "000000000030101230", "000000000030101222", "000000000030101111",
 				"000000000030101240" };
 
-		for (int i = 0; i < articolePermise.length; i++) {
-			if (articolePermise[i].equals(codArt)) {
+		for (int i = 0; i < articoleTransp.length; i++) {
+			if (articoleTransp[i].equals(codArt)) {
 				isMat = true;
 				break;
 			}
 		}
 
 		return isMat;
+	}
+
+	public static boolean isMatTransportNume(String numeArt) {
+
+		return numeArt.toLowerCase().contains("transport");
+
 	}
 
 }

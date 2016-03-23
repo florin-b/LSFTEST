@@ -1275,7 +1275,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				// exceptie transport
 				if (listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1 && !UtilsUser.isAgentOrSD()) {
 					alertDV = true;
-					comandaFinala.setComandaBlocata("1");
+					if (!comandaFinala.getComandaBlocata().equals("21"))
+						comandaFinala.setComandaBlocata("1");
 					aprobariCV.add(listArticole.get(i).getDepart());
 				}
 
@@ -1594,12 +1595,13 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 						performSaveCmdGED();
 					else {
 
-						if (CreareComandaGed.tipComanda.equals("S") && CreareComandaGed.rezervStoc) { // comanda
+						//if (CreareComandaGed.tipComanda.equals("S") && CreareComandaGed.rezervStoc) { // comanda
 																										// simulata
 																										// cu
 																										// rezervare
 																										// de
 																										// stoc
+						if (CreareComandaGed.tipComanda.equals("S") ) {
 							performSaveCmdGED();
 						} else {
 							// este simulare, a fost salvata deja

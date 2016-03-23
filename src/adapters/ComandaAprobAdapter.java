@@ -102,13 +102,16 @@ public class ComandaAprobAdapter extends BaseAdapter {
 
 		viewHolder.textFiliala.setText(comanda.getFiliala().substring(0, 2));
 
-		tipUser = "  (AV)";
+		tipUser = "  (AV) ";
 		if (comanda.getDivizieAgent().equals("10")) {
-			tipUser = "  (KA)";
+			tipUser = "  (KA) ";
 		}
 		if (comanda.getDivizieAgent().equals("11")) {
-			tipUser = "  (CV)";
+			tipUser = "  (CV) ";
 		}
+
+		if (comanda.getTelAgent() != null && !comanda.getTelAgent().equals("-1"))
+			tipUser += comanda.getTelAgent();
 
 		viewHolder.textNumeAgent.setText(comanda.getNumeAgent() + tipUser);
 		viewHolder.textTermenPlata.setText(comanda.getTermenPlata());

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_gravity="center_vertical"
-        android:inputType="textNoSuggestions"
+        android:inputType="textNoSuggestions|textMultiLine"
         android:gravity="left"
         android:textColor="#7f5327"
         android:textSize="17sp" />

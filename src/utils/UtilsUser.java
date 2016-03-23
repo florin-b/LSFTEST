@@ -2,6 +2,8 @@ package utils;
 
 import model.UserInfo;
 
+
+
 public class UtilsUser {
 
 	public static boolean isKA() {
@@ -48,10 +50,15 @@ public class UtilsUser {
 
 	public static boolean isDV_WOOD() {
 		if (isANYDV()) {
-			String[] filiale = UserInfo.getInstance().getFilialeDV().split(";");
 
-			if (filiale.length > 0 && filiale[0].substring(2, 3).equals("4"))
-				return true;
+			String filDV = UserInfo.getInstance().getFilialeDV();
+
+			if (filDV.contains(";")) {
+				String[] filiale = UserInfo.getInstance().getFilialeDV().split(";");
+
+				if (filiale.length > 0 && filiale[0].substring(2, 3).equals("4"))
+					return true;
+			}
 
 		}
 
