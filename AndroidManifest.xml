@@ -325,6 +325,12 @@
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan" >
         </activity>
+        <activity
+            android:name=".StareComenzi"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
 
         <uses-library
             android:name="com.google.android.maps"

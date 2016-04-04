@@ -18,7 +18,7 @@ public class ComandaAfisAdapter extends BaseAdapter {
 
 	private Context context;
 	private List<BeanComandaCreata> listComenzi;
-	NumberFormat numberFormat = new DecimalFormat("#0.00");
+	private NumberFormat numberFormat = new DecimalFormat("#0.00");
 
 	public ComandaAfisAdapter(List<BeanComandaCreata> listComenzi, Context context) {
 		this.context = context;

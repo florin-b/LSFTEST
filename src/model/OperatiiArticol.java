@@ -52,6 +52,8 @@ public interface OperatiiArticol {
 	
 	public List<BeanArticolStoc> derializeListArtStoc(String listArticole);
 	
+	public void getCodBare(HashMap<String, String> params);
+	
 	
 	
 

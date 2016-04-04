@@ -53,14 +53,14 @@ import enums.EnumDepartExtra;
 
 public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickListener, OperatiiArticolListener, PreturiListener {
 
-	Button stocBtn;
-	private String    selectedCodDepart = "";
+	private Button stocBtn;
+	private String selectedCodDepart = "";
 	private EditText txtCodArticol;
 	String codArticol = "";
 	String numeArticol = "";
 	String tipAcces;
 
-	private TextView textCodArticol;
+	private TextView textCodArticol, textCodBare;
 	private TextView textNumeArticol, textCmpArticol;
 
 	private static final String METHOD_NAME = "getStocAndroid";
@@ -131,6 +131,8 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 		spinnerFiliale.setVisibility(View.INVISIBLE);
 
 		filialaStoc = UserInfo.getInstance().getUnitLog();
+
+		textCodBare = (TextView) findViewById(R.id.textCodBare);
 
 		if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("10")
 				|| UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14")) // agenti,
@@ -490,7 +492,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 			params.put("tipCautare", tipCautare);
 			params.put("departament", selectedDepartamentAgent);
 			params.put("filiala", UserInfo.getInstance().getUnitLog());
-			
+
 			opArticol.getArticoleDistributie(params);
 		}
 
@@ -512,6 +514,13 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 
 		performGetStoc();
 
+	}
+
+	private void performGetCodBare() {
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("codArticol", codArticol);
+
+		opArticol.getCodBare(params);
 	}
 
 	protected void performGetStoc() {
@@ -858,6 +867,8 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 
 	public void taskComplete(String response) {
 		afisPretArt(response);
+		if (UtilsUser.isCV())
+			performGetCodBare();
 	}
 
 	public void operationComplete(EnumArticoleDAO methodName, Object result) {
@@ -866,8 +877,30 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 		case GET_ARTICOLE_DISTRIBUTIE:
 			populateListViewArticol(opArticol.deserializeArticoleVanzare((String) result));
 			break;
+		case GET_COD_BARE:
+			displayCodBare((String) result);
+			break;
 		default:
 			break;
+		}
+
+	}
+
+	private void displayCodBare(String result) {
+		if (!result.trim().equals("")) {
+
+			String label = "Cod bare\n";
+			if (!result.contains(",")) {
+				label += result;
+			} else {
+				String[] coduri = result.split(",");
+
+				for (int i = 0; i < coduri.length; i++)
+					label += coduri[i] + "\n";
+
+			}
+
+			textCodBare.setText(label);
 		}
 
 	}

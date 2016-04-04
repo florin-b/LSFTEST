@@ -729,6 +729,76 @@ public class InfoStrings {
 		return codClient;
 	}
 
+	public static String gedPJNeplatitorTVA(String filiala) {
+		String codClient = "00";
+
+		if (filiala.equals("AG10"))
+			codClient = "4119000265";
+
+		if (filiala.equals("BC10"))
+			codClient = "4119000267";
+
+		if (filiala.equals("BH10"))
+			codClient = "4119000269";
+
+		if (filiala.equals("BV10"))
+			codClient = "4119000272";
+
+		if (filiala.equals("BZ10"))
+			codClient = "4119000273";
+
+		if (filiala.equals("CJ10"))
+			codClient = "4119000274";
+
+		if (filiala.equals("CT10"))
+			codClient = "4119000275";
+
+		if (filiala.equals("DJ10"))
+			codClient = "4119000276";
+
+		if (filiala.equals("GL10"))
+			codClient = "4119000277";
+
+		if (filiala.equals("HD10"))
+			codClient = "4119000278";
+
+		if (filiala.equals("IS10"))
+			codClient = "4119000279";
+
+		if (filiala.equals("MM10"))
+			codClient = "4119000280";
+
+		if (filiala.equals("MS10"))
+			codClient = "4119000281";
+
+		if (filiala.equals("NT10"))
+			codClient = "4119000282";
+
+		if (filiala.equals("PH10"))
+			codClient = "4119000283";
+
+		if (filiala.equals("TM10"))
+			codClient = "4119000284";
+
+		if (filiala.equals("VN10"))
+			codClient = "4119000285";
+
+		if (filiala.equals("BU13")) // Andronache
+			codClient = "4119000266";
+
+		if (filiala.equals("BU10")) // Glina
+			codClient = "4119000268";
+
+		if (filiala.equals("BU11")) // Militari
+			codClient = "4119000270";
+
+		if (filiala.equals("BU12")) // Otopeni
+			codClient = "4119000271";
+
+		return codClient;
+
+	}
+
 	public static String getTipUser(String tipUser) {
 		String tipAcces = "NN";
 

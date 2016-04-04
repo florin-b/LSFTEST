@@ -5,7 +5,6 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -29,7 +28,6 @@
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -60,7 +58,6 @@
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -84,7 +81,6 @@
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -111,11 +107,24 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="40dip"
+            android:layout_weight="0.05" />
+
+        <CheckBox
+            android:id="@+id/checkPlatTva"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dip"
+            android:checked="true"
+            android:text="Platitor de TVA"
+            android:textColor="@color/detColor4" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="40dip"
             android:layout_weight="0.6" />
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/layoutLabelJ"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -141,7 +150,6 @@
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/layoutTextJ"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -173,7 +181,6 @@
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -197,7 +204,6 @@
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -240,7 +246,6 @@
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/layoutRezervStocLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -265,7 +270,6 @@
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/layoutRezervStocBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

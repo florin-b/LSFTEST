@@ -44,11 +44,12 @@ public class UtilsGeneral {
 	}
 
 	public static String[] getDepoziteGed() {
-		String[] depoziteGed = new String[depoziteDISTRIB.length + 1];
+		String[] depoziteGed = new String[depoziteDISTRIB.length + 2];
 
 		System.arraycopy(depoziteDISTRIB, 0, depoziteGed, 0, depoziteDISTRIB.length);
-		depoziteGed[depoziteDISTRIB.length] = "MAV1";
-		
+
+		depoziteGed[depoziteGed.length - 2] = "MAV1";
+		depoziteGed[depoziteGed.length - 1] = "MAV2";
 
 		return depoziteGed;
 	}

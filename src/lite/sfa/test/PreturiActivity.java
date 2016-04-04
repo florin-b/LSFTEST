@@ -59,7 +59,7 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 	String numeArticol = "", filialaPret = "";
 	String tipAcces;
 
-	private TextView textCodArticol;
+	private TextView textCodArticol, textCodBare;
 	private TextView textNumeArticol;
 
 	ToggleButton tglButton, tglTipArtBtn;
@@ -96,6 +96,8 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		this.pretBtn = (Button) findViewById(R.id.pretBtn);
+
+		textCodBare = (TextView) findViewById(R.id.textCodBare);
 
 		resultLayout = (LinearLayout) findViewById(R.id.resLayout);
 		resultLayout.setVisibility(View.INVISIBLE);
@@ -561,6 +563,13 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 
 	}
 
+	private void performGetCodBare() {
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("codArticol", codArticol);
+
+		opArticol.getCodBare(params);
+	}
+
 	@Override
 	public void onBackPressed() {
 
@@ -574,8 +583,30 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 		return;
 	}
 
+	private void displayCodBare(String result) {
+		if (!result.trim().equals("")) {
+
+			String label = "Cod bare\n";
+			if (!result.contains(",")) {
+				label += result;
+			} else {
+				String[] coduri = result.split(",");
+
+				for (int i = 0; i < coduri.length; i++)
+					label += coduri[i] + "\n";
+
+			}
+
+			textCodBare.setText(label);
+
+		}
+
+	}
+
 	public void taskComplete(String response) {
 		afisPretArt(response);
+		if (UtilsUser.isCV())
+			performGetCodBare();
 	}
 
 	public void operationComplete(EnumArticoleDAO methodName, Object result) {
@@ -583,6 +614,9 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 		switch (methodName) {
 		case GET_ARTICOLE_DISTRIBUTIE:
 			populateListViewArticol(opArticol.deserializeArticoleVanzare((String) result));
+			break;
+		case GET_COD_BARE:
+			displayCodBare((String) result);
 			break;
 		default:
 			break;

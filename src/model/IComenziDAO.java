@@ -18,4 +18,11 @@ public interface IComenziDAO {
 	void salveazaComandaGed(HashMap<String, String> params);
 
 	void sendOfertaGedMail(HashMap<String, String> params);
+	
+	void getComenziDeschise(HashMap<String, String> params);
+	
+	void getClientiBorderou(HashMap<String, String> params);
+	
+	void getPozitieMasina(HashMap<String, String> params);
+	
 }

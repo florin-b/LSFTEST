@@ -5,6 +5,7 @@ import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -81,6 +82,22 @@ public class UtilsFormatting {
 		Matcher matcher = patern.matcher(street);
 
 		return matcher.find();
+	}
+
+	public static String formatTime(String stringDateTime) {
+		DateFormat dfSap = new SimpleDateFormat("HHmmss");
+
+		Date d = new Date();
+
+		try {
+			d = dfSap.parse(stringDateTime);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		DateFormat dfFin = new SimpleDateFormat("HH:mm:ss");
+
+		return dfFin.format(d);
 	}
 
 }

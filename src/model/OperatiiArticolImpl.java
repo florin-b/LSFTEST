@@ -107,6 +107,13 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		this.params = params;
 		performOperation();
 	}
+	
+	@Override
+	public void getCodBare(HashMap<String, String> params) {
+		numeComanda = EnumArticoleDAO.GET_COD_BARE;
+		this.params = params;
+		performOperation();
+	}
 
 	@Override
 	public Object getDepartBV90(String codArticol) {
@@ -397,5 +404,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 
 		return listArticole;
 	}
+
+	
 
 }

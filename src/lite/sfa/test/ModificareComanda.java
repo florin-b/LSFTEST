@@ -519,7 +519,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 						if (isComandaGed())
 							localRedSeparat = "NU";
 
-						if (globalSubCmp.equals("1"))
+						if (globalSubCmp.equals("1") && !UserInfo.getInstance().getCodDepart().equals("07"))
 							localRedSeparat = "X";
 
 						NumberFormat nf3 = NumberFormat.getInstance();

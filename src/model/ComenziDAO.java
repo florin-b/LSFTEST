@@ -18,7 +18,9 @@ import android.content.Context;
 import android.widget.Toast;
 import beans.ArticolSimulat;
 import beans.BeanArticoleAfisare;
+import beans.BeanClientBorderou;
 import beans.BeanComandaCreata;
+import beans.BeanComandaDeschisa;
 import beans.BeanConditii;
 import beans.BeanConditiiArticole;
 import beans.BeanConditiiHeader;
@@ -92,6 +94,24 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 	public void sendOfertaGedMail(HashMap<String, String> params) {
 		numeComanda = EnumComenziDAO.SEND_OFERTA_GED_MAIL;
 		performOperation(params);
+	}
+
+	public void getComenziDeschise(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.GET_COMENZI_DESCHISE;
+		performOperation(params);
+
+	}
+
+	public void getClientiBorderou(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.GET_CLIENTI_BORD;
+		performOperation(params);
+
+	}
+
+	public void getPozitieMasina(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.GET_POZITIE_MASINA;
+		performOperation(params);
+
 	}
 
 	private void performOperation(HashMap<String, String> params) {
@@ -428,6 +448,75 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 		listComenziCreate = listComenzi;
 		return listComenzi;
 
+	}
+
+	public List<BeanComandaDeschisa> deserializeComenziDeschise(String result) {
+		List<BeanComandaDeschisa> listComenzi = new ArrayList<BeanComandaDeschisa>();
+		BeanComandaDeschisa comanda = null;
+		try {
+			Object json = new JSONTokener(result).nextValue();
+
+			if (json instanceof JSONArray) {
+				JSONArray jsonObject = new JSONArray(result);
+
+				for (int i = 0; i < jsonObject.length(); i++) {
+					JSONObject comandaObject = jsonObject.getJSONObject(i);
+					comanda = new BeanComandaDeschisa();
+					comanda.setIdCmdSap(comandaObject.getString("idCmdSap"));
+					comanda.setNumeClient(comandaObject.getString("numeClient"));
+					comanda.setCodClient(comandaObject.getString("codClient"));
+					comanda.setValoare(comandaObject.getString("valoare"));
+					comanda.setLocalitate(comandaObject.getString("localitate"));
+					comanda.setStrada(comandaObject.getString("strada"));
+					comanda.setCodBorderou(comandaObject.getString("codBorderou"));
+					comanda.setNrMasina(comandaObject.getString("nrMasina"));
+					comanda.setCodJudet(comandaObject.getString("codJudet"));
+					comanda.setNumeSofer(comandaObject.getString("numeSofer"));
+					comanda.setTelSofer(comandaObject.getString("telSofer"));
+					comanda.setCodStareComanda(Integer.valueOf(comandaObject.getString("stareComanda")));
+
+					listComenzi.add(comanda);
+
+				}
+
+			}
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return listComenzi;
+	}
+
+	public List<BeanClientBorderou> deserializeClientiBorderou(String result) {
+
+		List<BeanClientBorderou> listClienti = new ArrayList<BeanClientBorderou>();
+		BeanClientBorderou client = null;
+
+		try {
+			Object json = new JSONTokener(result).nextValue();
+
+			if (json instanceof JSONArray) {
+				JSONArray jsonObject = new JSONArray(result);
+
+				for (int i = 0; i < jsonObject.length(); i++) {
+					JSONObject clientObject = jsonObject.getJSONObject(i);
+
+					client = new BeanClientBorderou();
+					client.setCodClient(clientObject.getString("codClient"));
+					client.setPozitie(Integer.valueOf(clientObject.getString("pozitie")));
+					client.setStareLivrare(clientObject.getString("dataEveniment"));
+					listClienti.add(client);
+
+				}
+
+			}
+
+		} catch (JSONException e) {
+
+		}
+
+		return listClienti;
 	}
 
 	public List<BeanComandaCreata> getComenziDivizie(String divizie) {

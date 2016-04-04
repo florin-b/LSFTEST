@@ -742,7 +742,9 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 						String localRedSeparat = dateLivrareInstance.getRedSeparat();
 
-						if (globalSubCmp.equals("1"))
+						
+						
+						if (globalSubCmp.equals("1") && !UserInfo.getInstance().getCodDepart().equals("07"))
 							localRedSeparat = "X";
 
 						if (dateLivrareInstance.getObsPlata().equals("SO") && dateLivrareInstance.getTipPlata().equals("E")) {
