@@ -117,7 +117,7 @@ public class StareComenzi extends Activity implements ComenziDAOListener {
 				hartaButton.setVisibility(View.INVISIBLE);
 
 			textNumeSofer.setText("Sofer:\t" + comandaCurenta.getNumeSofer());
-			textTelSofer.setText("Telefon:\t" + comandaCurenta.getTelSofer());
+			textTelSofer.setText("Tel.:\t" + comandaCurenta.getTelSofer());
 
 			mapFragment.getView().setVisibility(View.INVISIBLE);
 

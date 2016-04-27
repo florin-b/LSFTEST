@@ -1,8 +1,13 @@
 package lite.sfa.test;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import listeners.GenericSpinnerSelection;
 import listeners.OperatiiConcurentaListener;
@@ -10,6 +15,7 @@ import listeners.SpinnerSelectionListener;
 import model.OperatiiConcurenta;
 import model.OperatiiConcurentaImpl;
 import model.UserInfo;
+import patterns.CriteriuArticolConcImpl;
 import utils.UtilsGeneral;
 import adapters.AdapterArticolConcurenta;
 import adapters.AfisPretConcurentaAdapter;
@@ -17,10 +23,13 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -28,8 +37,10 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import beans.BeanArticolConcurenta;
 import beans.BeanCompanieConcurenta;
+import beans.BeanNewPretConcurenta;
 import beans.BeanPretConcurenta;
 import enums.EnumArticoleConcurenta;
 import enums.EnumConcurenta;
@@ -47,9 +58,14 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 	private ListView listViewArticoleConcurenta, listViewPreturi;
 
 	private OperatiiConcurenta operatiiConcurenta;
-	private Spinner spinnerCompetition, spinnerTipActulizare;
+	private Spinner spinnerCompetition, spinnerTipActulizare, spinnerLuna;
 	private String competitionId = "-1";
 	private String tipActualizare = "-1";
+	private String lunaSel = "-1";
+	private List<BeanArticolConcurenta> listArticoleConcurenta;
+
+	private AdapterArticolConcurenta adapterArticole;
+	private EditText editCautaString;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -75,11 +91,18 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 		spinnerCompetition = (Spinner) findViewById(R.id.spinnerCompetition);
 		setSpinnerCompetitionListener();
 
+		spinnerLuna = (Spinner) findViewById(R.id.spinnerLuna);
+
 		operatiiConcurenta.getCompaniiConcurente(UtilsGeneral.newHashMapInstance());
 
 		fillArtTypeList();
 
+		fillSpinnerLuna();
+		setSpinnerLunaListener();
+
 		addBtnPret();
+
+		addSalveazaPreturiBtn();
 
 		listViewArticoleConcurenta = (ListView) findViewById(R.id.listArticole);
 		setListenerListConcurenta();
@@ -92,6 +115,11 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 		artDetLayout.setVisibility(View.INVISIBLE);
 
 		itemSelected.setItemSelectionListener(this);
+
+		editCautaString = (EditText) findViewById(R.id.editCauta);
+		editCautaString.setHint("Introduceti nume sau cod articol");
+		editCautaString.setVisibility(View.INVISIBLE);
+		setListenerCautaString();
 
 	}
 
@@ -126,6 +154,121 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 
 	}
 
+	private void addSalveazaPreturiBtn() {
+		Button salveazaPreturi = (Button) findViewById(R.id.salveazaPreturiBtn);
+		salveazaPreturi.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				performSalveazaPreturi();
+
+			}
+		});
+	}
+
+	private void performSalveazaPreturi() {
+
+		if (listArticoleConcurenta == null)
+			return;
+
+		Iterator<BeanArticolConcurenta> iterator = listArticoleConcurenta.iterator();
+
+		List<BeanNewPretConcurenta> listPreturi = new ArrayList<BeanNewPretConcurenta>();
+
+		while (iterator.hasNext()) {
+			BeanArticolConcurenta articol = iterator.next();
+			if (articol.getValoare().trim().length() > 0) {
+
+				BeanNewPretConcurenta pret = new BeanNewPretConcurenta();
+				pret.setCod(articol.getCod());
+				pret.setValoare(articol.getValoare());
+				pret.setConcurent(competitionId);
+				listPreturi.add(pret);
+
+			}
+
+		}
+
+		if (listPreturi.size() > 0) {
+			adapterArticole.setListArticole(listArticoleConcurenta);
+			savePreturiConcurenta(listPreturi);
+		}
+
+	}
+
+	private void setListenerCautaString() {
+
+		editCautaString.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				showFilteredArts(s.toString());
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+
+			}
+		});
+	}
+
+	private void showFilteredArts(String pattern) {
+
+		CriteriuArticolConcImpl criteriu = new CriteriuArticolConcImpl();
+		adapterArticole.setListArticole(criteriu.gasesteArticole(listArticoleConcurenta, pattern));
+
+	}
+
+	private void savePreturiConcurenta(List<BeanNewPretConcurenta> listPreturi) {
+
+		if (spinnerLuna.getSelectedItemPosition() == 0) {
+			Toast.makeText(getApplicationContext(), "Selectati luna!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		Calendar cal = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("yyyyMMdd");
+		cal.add(Calendar.MONTH, -(spinnerLuna.getCount() - spinnerLuna.getSelectedItemPosition() - 1));
+
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("codAgent", UserInfo.getInstance().getCod());
+		params.put("dataSalvare", df.format(cal.getTime()));
+		params.put("listPreturi", operatiiConcurenta.serializePreturi(listPreturi));
+
+		operatiiConcurenta.saveListPreturi(params);
+
+	}
+
+	private void setSpinnerLunaListener() {
+		spinnerLuna.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				if (position > 0) {
+					Calendar cal = Calendar.getInstance();
+
+					DateFormat df = new SimpleDateFormat("yyyyMM");
+					cal.add(Calendar.MONTH, -(spinnerLuna.getCount() - position - 1));
+					lunaSel = df.format(cal.getTime());
+					getArticoleConcurenta();
+
+				} else
+					lunaSel = "-1";
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				return;
+			}
+		});
+	}
+
 	private void setSpinnerCompetitionListener() {
 		spinnerCompetition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -149,13 +292,14 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 
 	protected void getArticoleConcurenta() {
 
-		if (!competitionId.equals("-1") && !tipActualizare.equals("-1")) {
+		if (!competitionId.equals("-1") && !tipActualizare.equals("-1") && !lunaSel.equals("-1")) {
 
 			artDetLayout.setVisibility(View.INVISIBLE);
 
 			HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 			params.put("codConcurent", competitionId);
 			params.put("tipActualizare", tipActualizare);
+			params.put("data", lunaSel);
 			operatiiConcurenta.getArticoleConcurentaBulk(params);
 
 		}
@@ -183,6 +327,48 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 
 		spinnerTipActulizare.setAdapter(adapterTypes);
 		setSpinnerTipActListener();
+
+	}
+
+	private void fillSpinnerLuna() {
+
+		spinnerLuna = (Spinner) findViewById(R.id.spinnerLuna);
+
+		ArrayList<HashMap<String, String>> listTypes = new ArrayList<HashMap<String, String>>();
+
+		SimpleAdapter adapterTypes = new SimpleAdapter(this, listTypes, R.layout.generic_rowlayout, new String[] { "stringName", "stringId" }, new int[] {
+				R.id.textName, R.id.textId });
+
+		HashMap<String, String> temp;
+
+		temp = new HashMap<String, String>();
+		temp.put("stringName", "Selectati luna");
+		temp.put("stringId", " ");
+		listTypes.add(temp);
+
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, -1);
+
+		String monthName = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, new Locale("ro")).toUpperCase();
+		String monthId = String.format("%02d", cal.get(Calendar.MONTH) + 1);
+
+		temp = new HashMap<String, String>();
+		temp.put("stringName", monthName);
+		temp.put("stringId", monthId);
+		listTypes.add(temp);
+
+		cal.add(Calendar.MONTH, 1);
+
+		monthName = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, new Locale("ro")).toUpperCase();
+		monthId = String.format("%02d", cal.get(Calendar.MONTH) + 1);
+
+		temp = new HashMap<String, String>();
+		temp.put("stringName", monthName);
+		temp.put("stringId", monthId);
+		listTypes.add(temp);
+
+		spinnerLuna.setAdapter(adapterTypes);
+		spinnerLuna.setSelection(2);
 
 	}
 
@@ -261,12 +447,15 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 	}
 
 	private void populateListArticoleConcurenta(List<BeanArticolConcurenta> listArticole) {
-		AdapterArticolConcurenta adapterArticole = new AdapterArticolConcurenta(this, listArticole);
+		this.listArticoleConcurenta = listArticole;
+		adapterArticole = new AdapterArticolConcurenta(this, listArticole);
 		listViewArticoleConcurenta.setAdapter(adapterArticole);
+		editCautaString.setVisibility(View.VISIBLE);
 
 	}
 
 	private void setListenerListConcurenta() {
+
 		listViewArticoleConcurenta.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int pos, long arg3) {
 				BeanArticolConcurenta articol = (BeanArticolConcurenta) parent.getAdapter().getItem(pos);
@@ -332,6 +521,8 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 		case ADD_PRET_CONCURENTA:
 			editPretArt.setText("");
 			getPreturiConcurenta();
+			break;
+		case SAVE_LIST_PRETURI:
 			break;
 		default:
 			break;

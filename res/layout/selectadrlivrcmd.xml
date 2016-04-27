@@ -484,9 +484,18 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="left|bottom"
                     android:layout_marginLeft="30dp"
-                    android:layout_marginRight="180dip"
+                    android:layout_marginRight="20dip"
                     android:layout_weight="0.15"
                     android:text="Camion cu macara" />
+
+                <Spinner
+                    android:id="@+id/spinnerTonaj"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left|bottom"
+                    android:layout_marginRight="180dip"
+                    android:layout_weight="0.1"
+                    android:gravity="left" />
             </LinearLayout>
 
             <LinearLayout
@@ -523,7 +532,7 @@
                     android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|left"
-                    android:gravity="left"
+                    android:gravity="left|bottom"
                     android:paddingLeft="5dip"
                     android:text="Obs. livrare"
                     android:textColor="@color/labelColor"
@@ -542,6 +551,38 @@
                     android:maxLength="100"
                     android:singleLine="true"
                     android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutIndoire"
+                android:layout_width="match_parent"
+                android:layout_height="60dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:gravity="left"
+                    android:paddingLeft="5dip"
+                    android:text="Prelucrare"
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
+
+                <Spinner
+                    android:id="@+id/spinnerIndoire"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left|bottom"
+                    android:layout_marginRight="180dip"
+                    android:layout_weight="0.1"
+                    android:gravity="left" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3" />
             </LinearLayout>
 
             <LinearLayout

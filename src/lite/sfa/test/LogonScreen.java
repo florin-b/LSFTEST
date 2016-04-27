@@ -125,8 +125,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		// etUsername.setText("androag");
 		// etPassword.setText("sfa");
 
-		// etUsername.setText("DCUCU"); // ag mat grele
-		// etPassword.setText("tLGQ1C");
+		 etUsername.setText("DCUCU"); // ag mat grele
+		 etPassword.setText("tLGQ1C");
 
 		// etUsername.setText("AANASTASIU"); //user site
 		// etPassword.setText("wtXTqB");
@@ -370,6 +370,9 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		if (numeFiliala.equals("BACAU"))
 			fl = "BC10";
 
+		if (numeFiliala.equals("BUZAU"))
+			fl = "BZ10";
+		
 		if (numeFiliala.equals("GALATI"))
 			fl = "GL10";
 

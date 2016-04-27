@@ -45,19 +45,35 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_marginLeft="5dip"
-            android:layout_weight="0.6"
+            android:layout_weight="0.5"
             android:textColor="@color/listCodArticol"
             android:textSize="14sp"
             android:typeface="monospace" />
+
+        <Button
+            android:id="@+id/adaugaPret"
+            style="@style/det_button"
+            android:layout_width="wrap_content"
+            android:layout_height="30dip"
+            android:layout_gravity="left"
+            android:layout_marginLeft="10dip"
+            android:background="@drawable/cancel_button_style"
+            android:paddingLeft="15dip"
+            android:paddingRight="15dip"
+            android:text="Actualizeaza pret" />
 
         <TextView
             android:id="@+id/textValoare"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
+            android:layout_marginLeft="20dip"
             android:layout_weight="0.1"
+            android:focusable="true"
+            android:imeOptions="actionDone"
+            android:text="Adauga pret"
             android:textColor="#1E1E1E"
-            android:textSize="15sp"
+            android:textSize="17sp"
             android:typeface="monospace" />
     </LinearLayout>
 

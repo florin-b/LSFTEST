@@ -7,6 +7,7 @@ import java.util.List;
 import listeners.OperatiiConcurentaListener;
 import beans.BeanArticolConcurenta;
 import beans.BeanCompanieConcurenta;
+import beans.BeanNewPretConcurenta;
 import beans.BeanPretConcurenta;
 
 public interface OperatiiConcurenta {
@@ -26,7 +27,11 @@ public interface OperatiiConcurenta {
 	public void getPretConcurenta(HashMap<String, String> params);
 
 	public void addPretConcurenta(HashMap<String, String> params);
-	
+
 	public ArrayList<BeanArticolConcurenta> deserializeArticoleConcurenta(String serializedListArticole);
+
+	public void saveListPreturi(HashMap<String, String> params);
+
+	public String serializePreturi(List<BeanNewPretConcurenta> listPreturi);
 
 }

@@ -6,6 +6,11 @@ public class UtilsComenzi {
 		String numeStare = "";
 
 		switch (codStare) {
+
+		case 1:
+			numeStare = "Masina alocata";
+			break;
+
 		case 2:
 			numeStare = "Borderou tiparit";
 			break;

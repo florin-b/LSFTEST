@@ -7,6 +7,7 @@ public class BeanAdresaLivrare {
 	private String nrStrada;
 	private String codJudet;
 	private String codAdresa;
+	private String tonaj;
 
 	public BeanAdresaLivrare() {
 
@@ -51,5 +52,15 @@ public class BeanAdresaLivrare {
 	public void setCodAdresa(String codAdresa) {
 		this.codAdresa = codAdresa;
 	}
+
+	public String getTonaj() {
+		return tonaj;
+	}
+
+	public void setTonaj(String tonaj) {
+		this.tonaj = tonaj;
+	}
+	
+	
 
 }

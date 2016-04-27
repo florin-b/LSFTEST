@@ -57,7 +57,8 @@ public class DateLivrare {
 	private String idObiectiv = " ";
 	private boolean isAdresaObiectiv;
 	private LatLng coordonateAdresa;
-	
+	private String tonaj;
+	private String prelucrare;
 
 	private DateLivrareAfisare dateLivrareAfisare;
 
@@ -425,7 +426,21 @@ public class DateLivrare {
 		this.coordonateAdresa = coordonateAdresa;
 	}
 
-	
+	public String getTonaj() {
+		return tonaj;
+	}
+
+	public void setTonaj(String tonaj) {
+		this.tonaj = tonaj;
+	}
+
+	public String getPrelucrare() {
+		return prelucrare;
+	}
+
+	public void setPrelucrare(String prelucrare) {
+		this.prelucrare = prelucrare;
+	}
 
 	public void resetAll() {
 		codJudet = "";
@@ -460,7 +475,8 @@ public class DateLivrare {
 		idObiectiv = " ";
 		isAdresaObiectiv = false;
 		coordonateAdresa = null;
-		
+		tonaj = "";
+		prelucrare = "";
 
 	}
 

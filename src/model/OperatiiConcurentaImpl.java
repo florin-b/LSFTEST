@@ -17,6 +17,7 @@ import android.content.Context;
 import android.widget.Toast;
 import beans.BeanArticolConcurenta;
 import beans.BeanCompanieConcurenta;
+import beans.BeanNewPretConcurenta;
 import beans.BeanPretConcurenta;
 import enums.EnumOperatiiConcurenta;
 
@@ -61,6 +62,36 @@ public class OperatiiConcurentaImpl implements OperatiiConcurenta, AsyncTaskList
 		numeComanda = EnumOperatiiConcurenta.ADD_PRET_CONCURENTA;
 		this.params = params;
 		performOperation();
+	}
+
+	public void saveListPreturi(HashMap<String, String> params) {
+		numeComanda = EnumOperatiiConcurenta.SAVE_LIST_PRETURI;
+		this.params = params;
+		performOperation();
+	}
+
+	
+	public String serializePreturi(List<BeanNewPretConcurenta> listPreturi) {
+
+		JSONArray jsonArray = new JSONArray();
+		JSONObject jsonObject = null;
+
+		try {
+
+			for (BeanNewPretConcurenta pret : listPreturi) {
+				jsonObject = new JSONObject();
+				jsonObject.put("cod", pret.getCod());
+				jsonObject.put("concurent", pret.getConcurent());
+				jsonObject.put("valoare", pret.getValoare());
+				jsonArray.put(jsonObject);
+
+			}
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return jsonArray.toString();
 	}
 
 	public List<BeanCompanieConcurenta> deserializeCompConcurente(Object resultList) {
@@ -119,7 +150,6 @@ public class OperatiiConcurentaImpl implements OperatiiConcurenta, AsyncTaskList
 		return preturiList;
 	}
 
-	
 	public ArrayList<BeanArticolConcurenta> deserializeArticoleConcurenta(String serializedListArticole) {
 		BeanArticolConcurenta articol = null;
 		ArrayList<BeanArticolConcurenta> listArticole = new ArrayList<BeanArticolConcurenta>();
@@ -140,7 +170,7 @@ public class OperatiiConcurentaImpl implements OperatiiConcurenta, AsyncTaskList
 					articol.setUmVanz(articolObject.getString("umVanz"));
 					articol.setValoare(articolObject.getString("valoare"));
 					articol.setDataValoare(articolObject.getString("dataValoare"));
-				
+
 					listArticole.add(articol);
 
 				}
@@ -152,9 +182,8 @@ public class OperatiiConcurentaImpl implements OperatiiConcurenta, AsyncTaskList
 
 		return listArticole;
 
-	}	
-	
-	
+	}
+
 	private void performOperation() {
 		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
 		call.getCallResultsFromFragment();
@@ -170,7 +199,5 @@ public class OperatiiConcurentaImpl implements OperatiiConcurenta, AsyncTaskList
 		}
 
 	}
-
-	
 
 }

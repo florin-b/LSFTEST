@@ -861,6 +861,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("idObiectiv", DateLivrare.getInstance().getIdObiectiv());
 			obj.put("isAdresaObiectiv", DateLivrare.getInstance().isAdresaObiectiv());
 			obj.put("coordonateGps", getCoordAdresa());
+			obj.put("tonaj", DateLivrare.getInstance().getTonaj());
+			obj.put("prelucrare", DateLivrare.getInstance().getPrelucrare());
 
 			if (isComandaGed())
 				obj.put("factRed", "NU");

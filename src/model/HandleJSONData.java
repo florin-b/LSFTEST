@@ -226,6 +226,7 @@ public class HandleJSONData {
 					oAdresa.setNrStrada(clienObject.getString("nrStrada"));
 					oAdresa.setCodJudet(clienObject.getString("codJudet"));
 					oAdresa.setCodAdresa(clienObject.getString("codAdresa"));
+					oAdresa.setTonaj(clienObject.getString("tonaj"));
 
 					objectsList.add(oAdresa);
 

@@ -1077,6 +1077,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		dateLivrareInstance.setTipDocInsotitor(String.valueOf(spinnerDocInsot.getSelectedItemPosition() + 1));
 
+		dateLivrareInstance.setTonaj("-1");
+		
 		if (radioAltaAdresa.isChecked() && !DateLivrare.getInstance().isAltaAdresa()) {
 			dateLivrareInstance.setDateLivrare(getAdrLivrareJSON());
 		}

@@ -1435,7 +1435,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		if (codArticol.length() == 8)
 			codArticol = "0000000000" + codArticol;
 
-		if (globalDepozSel.equals("MAV1")) {
+		if (globalDepozSel.equals("MAV1") || globalDepozSel.equals("MAV2")) {
 			varLocalUnitLog = filialaAlternativa.substring(0, 2) + "2" + filialaAlternativa.substring(3, 4);
 		} else if (globalDepozSel.equals("WOOD")) {
 			varLocalUnitLog = filialaAlternativa.substring(0, 2) + "4" + filialaAlternativa.substring(3, 4);

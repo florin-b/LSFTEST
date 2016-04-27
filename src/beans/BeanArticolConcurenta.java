@@ -33,7 +33,9 @@ public class BeanArticolConcurenta {
 	}
 
 	public String getValoare() {
-		return valoare;
+		if (valoare == null)
+			return "";
+		return valoare.trim();
 	}
 
 	public void setValoare(String valoare) {
