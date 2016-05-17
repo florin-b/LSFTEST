@@ -7,15 +7,15 @@
     <Spinner
         android:id="@+id/spinnerJudete"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dip" />
+        android:layout_height="wrap_content" />
 
     <AutoCompleteTextView
         android:id="@+id/textOras"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="20dip"
+        android:layout_marginTop="10dip"
+        android:dropDownHeight="250dp"
         android:gravity="left"
         android:inputType="textNoSuggestions"
         android:maxLength="40"
@@ -27,7 +27,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="20dip"
+        android:layout_marginTop="10dip"
+        android:dropDownHeight="250dp"
         android:gravity="left"
         android:inputType="textNoSuggestions"
         android:maxLength="100"

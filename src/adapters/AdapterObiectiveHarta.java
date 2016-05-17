@@ -10,21 +10,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import beans.BeanObiectivAfisare;
-import enums.EnumStadiuObiectivKA;
+import beans.BeanObiectivHarta;
+import enums.EnumJudete;
 
-public class AdapterObiectiveAfisare extends BaseAdapter {
+public class AdapterObiectiveHarta extends BaseAdapter {
 
-	private List<BeanObiectivAfisare> listObiective;
+	private List<BeanObiectivHarta> listObiective;
 	private Context context;
 
-	public AdapterObiectiveAfisare(Context context, List<BeanObiectivAfisare> listObiective) {
+	public AdapterObiectiveHarta(Context context, List<BeanObiectivHarta> listObiective) {
 		this.context = context;
 		this.listObiective = listObiective;
 	}
 
 	public static class ViewHolder {
-		TextView textNumeObiectiv, textBeneficiar, textStadiu, textDatacreare, textIdObiectiv;
+		TextView textNumeObiectiv, textBeneficiar, textStadiu, textDatacreare, textNrCrt;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -32,28 +32,33 @@ public class AdapterObiectiveAfisare extends BaseAdapter {
 		ViewHolder viewHolder;
 
 		if (convertView == null) {
-			convertView = LayoutInflater.from(context).inflate(R.layout.obiectiv_afis_item, parent, false);
+			convertView = LayoutInflater.from(context).inflate(R.layout.obiectiv_harta_item, parent, false);
 
 			viewHolder = new ViewHolder();
+			viewHolder.textNrCrt = (TextView) convertView.findViewById(R.id.textNrCrt);
 			viewHolder.textNumeObiectiv = (TextView) convertView.findViewById(R.id.textNumeObiectiv);
 			viewHolder.textBeneficiar = (TextView) convertView.findViewById(R.id.textBeneficiar);
 			viewHolder.textStadiu = (TextView) convertView.findViewById(R.id.textStadiu);
 			viewHolder.textDatacreare = (TextView) convertView.findViewById(R.id.textDatacreare);
-			viewHolder.textIdObiectiv = (TextView) convertView.findViewById(R.id.textIdObiectiv);
 
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 
-		BeanObiectivAfisare obiectiv = getItem(position);
+		BeanObiectivHarta obiectiv = getItem(position);
 
-		viewHolder.textIdObiectiv.setText(obiectiv.getId());
+		viewHolder.textNrCrt.setText(String.valueOf(position + 1) + ".");
 		viewHolder.textNumeObiectiv.setText(obiectiv.getNume());
 		viewHolder.textBeneficiar.setText(obiectiv.getBeneficiar());
-		viewHolder.textStadiu.setText(EnumStadiuObiectivKA.getNumeStadiu(Integer.parseInt(obiectiv.getCodStatus())));
+		viewHolder.textStadiu.setText(formatAddress(obiectiv.getAddress()));
 		viewHolder.textDatacreare.setText(UtilsFormatting.formatDate(obiectiv.getData()));
 
+		if (position % 2 == 0)
+			convertView.setBackgroundResource(R.drawable.shadow_dark);
+		else
+			convertView.setBackgroundResource(R.drawable.shadow_light);
+		
 		return convertView;
 	}
 
@@ -61,7 +66,7 @@ public class AdapterObiectiveAfisare extends BaseAdapter {
 		return listObiective.size();
 	}
 
-	public BeanObiectivAfisare getItem(int position) {
+	public BeanObiectivHarta getItem(int position) {
 		return listObiective.get(position);
 	}
 
@@ -69,4 +74,20 @@ public class AdapterObiectiveAfisare extends BaseAdapter {
 		return 0;
 	}
 
+	private String formatAddress(String address) {
+		String formatted = address;
+
+		if (address != null && address.contains("/")) {
+			String[] adrTokens = address.split("/");
+
+			for (int i = 0; i < adrTokens.length; i++)
+				if (i == 0)
+					formatted = EnumJudete.getNumeJudet(Integer.parseInt(adrTokens[i]));
+				else
+					formatted += "/" + adrTokens[i];
+
+		}
+
+		return formatted;
+	}
 }

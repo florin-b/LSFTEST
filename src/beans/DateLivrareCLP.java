@@ -2,23 +2,25 @@ package beans;
 
 public class DateLivrareCLP {
 
-	String persContact;
-	String telefon;
-	String adrLivrare;
-	String oras;
-	String judet;
-	String data;
-	String tipMarfa;
-	String masa;
-	String tipCamion;
-	String tipIncarcare;
-	String tipPlata;
-	String mijlocTransport;
-	String aprobatOC;
-	String deSters;
-	String statusAprov;
-	String valComanda;
-	String obsComanda;
+	private String persContact;
+	private String telefon;
+	private String adrLivrare;
+	private String oras;
+	private String judet;
+	private String data;
+	private String tipMarfa;
+	private String masa;
+	private String tipCamion;
+	private String tipIncarcare;
+	private String tipPlata;
+	private String mijlocTransport;
+	private String aprobatOC;
+	private String deSters;
+	private String statusAprov;
+	private String valComanda;
+	private String obsComanda;
+	private String valTransp;
+	private String procTransp;
 
 	public DateLivrareCLP() {
 
@@ -158,6 +160,22 @@ public class DateLivrareCLP {
 
 	public void setObsComanda(String obsComanda) {
 		this.obsComanda = obsComanda;
+	}
+
+	public String getValTransp() {
+		return valTransp;
+	}
+
+	public void setValTransp(String valTransp) {
+		this.valTransp = valTransp;
+	}
+
+	public String getProcTransp() {
+		return procTransp;
+	}
+
+	public void setProcTransp(String procTransp) {
+		this.procTransp = procTransp;
 	}
 
 }

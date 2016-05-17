@@ -84,7 +84,7 @@ public class MainMenu extends Activity {
 	public int[] btnImageSD = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.modif_icon, R.drawable.preview_icon, R.drawable.blue_basket_icon,
 			R.drawable.cmd_bloc, R.drawable.clp, R.drawable.aprob_clp, R.drawable.afis_clp, R.drawable.box_orange_48, R.drawable.box_green_48,
 			R.drawable.box_yellow_48, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon,
-			R.drawable.dollar_icon, R.drawable.concurenta,  R.drawable.znecesar1_icon,R.drawable.status, R.drawable.reduceri_icon,
+			R.drawable.dollar_icon, R.drawable.concurenta, R.drawable.znecesar1_icon, R.drawable.status, R.drawable.reduceri_icon,
 			R.drawable.viewreduceri_icon, R.drawable.colosseum, R.drawable.chart_icon, R.drawable.agree_icon, R.drawable.constraints, R.drawable.client_info,
 			R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.location_icon, R.drawable.line_chart_icon, R.drawable.despre_icon,
 			R.drawable.exit_icon, R.drawable.blank };
@@ -116,19 +116,20 @@ public class MainMenu extends Activity {
 			R.drawable.exit_icon, R.drawable.blank };
 
 	public String[] btnNamesCVA = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Comenzi simulate", "Creare CLP", "Afisare CLP",
-			"Retur paleti", "Stare retur paleti", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Info client", "Despre", "Iesire" };
+			"Retur paleti", "Stare retur paleti", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Info client", "Despre",
+			"Iesire" };
 
 	public int[] btnImageCVA = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,
 			R.drawable.simulate, R.drawable.clp, R.drawable.afis_clp, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.colosseum,
-			R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.client_info, R.drawable.despre_icon,
-			R.drawable.exit_icon, R.drawable.blank };
+			R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status, R.drawable.client_info,
+			R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
 	public String[] btnNamesCONSGED = { "Utilizator", "Creare cmd GED", "Afisare comanda", "Comenzi simulate", "Retur paleti", "Stare retur paleti", "Vanzari",
-			"Neincasate", "Stocuri", "Preturi", "Preturi concurenta", "Info client", "Despre", "Iesire" };
+			"Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Preturi concurenta", "Info client", "Despre", "Iesire" };
 
 	public int[] btnImageCONSGED = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.preview_icon, R.drawable.simulate,
 			R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon,
-			R.drawable.concurenta, R.drawable.client_info, R.drawable.despre_icon, R.drawable.exit_icon };
+			R.drawable.status, R.drawable.concurenta, R.drawable.client_info, R.drawable.despre_icon, R.drawable.exit_icon };
 
 	public String[] btnNamesKA3 = { "Utilizator", "Creare comanda", "Afisare comanda", "Comenzi simulate", "Retur paleti", "Vanzari", "Neincasate", "Stocuri",
 			"Preturi", "Info client", "Despre", "Iesire" };
@@ -469,7 +470,7 @@ public class MainMenu extends Activity {
 					} else if ((UserInfo.getInstance().getTipUser().equals(EnumTipUser.DV.getTipAcces()) || UserInfo.getInstance().getTipUser()
 							.equals(EnumTipUser.DK.getTipAcces()))
 							&& !UtilsUser.isDV_CONS()) {
-						nextScreen = new Intent(MainMenu.this, AfiseazaObiectiveKA.class);
+						nextScreen = new Intent(MainMenu.this, ObiectiveKA.class);
 
 					} else if ((UserInfo.getInstance().getTipUser().equals(EnumTipUser.SD.getTipAcces()) || UserInfo.getInstance().getTipUser()
 							.equals(EnumTipUser.AV.getTipAcces()))) {

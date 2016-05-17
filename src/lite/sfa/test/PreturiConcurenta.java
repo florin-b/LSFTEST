@@ -300,6 +300,7 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 			params.put("codConcurent", competitionId);
 			params.put("tipActualizare", tipActualizare);
 			params.put("data", lunaSel);
+			params.put("codAgent", UserInfo.getInstance().getCod());
 			operatiiConcurenta.getArticoleConcurentaBulk(params);
 
 		}

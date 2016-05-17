@@ -4,21 +4,21 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textIdObiectiv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:layout_marginLeft="5dip"
-        android:layout_marginTop="5dip"
-        android:textColor="@color/cmpColor1"
-        android:textSize="15sp"
-        android:typeface="monospace" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dip" >
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="5dip" >
+
+        <TextView
+            android:id="@+id/textNrCrt"
+            android:layout_width="30dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="5dip"
+            android:layout_marginTop="5dip"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/textNumeObiectiv"
@@ -37,8 +37,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginBottom="5dip"
-            android:layout_marginRight="5dip"
+            android:layout_marginRight="15dip"
             android:layout_weight="0.4"
+            android:gravity="right"
             android:textColor="#7F7F7F"
             android:textSize="16sp" />
     </LinearLayout>
@@ -54,7 +55,7 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:layout_marginLeft="5dip"
+            android:layout_marginLeft="40dip"
             android:layout_weight="0.6"
             android:textColor="#9AC0CD"
             android:textSize="16sp" />
@@ -65,8 +66,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginBottom="5dip"
-            android:layout_marginRight="5dip"
+            android:layout_marginRight="15dip"
             android:layout_weight="0.4"
+            android:gravity="right"
             android:textColor="#9AC0CD"
             android:textSize="16sp" />
     </LinearLayout>

@@ -97,8 +97,10 @@ public class AfiseazaObiectiveKA extends Activity implements DialogObiectiveKALi
 	}
 
 	private void CreateMenu(Menu menu) {
-		MenuItem mnu1 = menu.add(0, 0, 0, "Optiuni");
+		MenuItem mnu1 = menu.add(0, 0, 0, "Lista");
 		mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+		
 
 	}
 
@@ -119,6 +121,10 @@ public class AfiseazaObiectiveKA extends Activity implements DialogObiectiveKALi
 			optiuniDialog.show();
 			break;
 
+		case 1:
+			addMapFragment();
+			break;
+
 		case android.R.id.home:
 			returnHome();
 			break;
@@ -126,6 +132,10 @@ public class AfiseazaObiectiveKA extends Activity implements DialogObiectiveKALi
 		}
 
 		return super.onOptionsItemSelected(item);
+
+	}
+
+	private void addMapFragment() {
 
 	}
 
@@ -176,7 +186,7 @@ public class AfiseazaObiectiveKA extends Activity implements DialogObiectiveKALi
 		List<BeanUrmarireEveniment> listEvenimente = detaliiObiectiv.getListEvenimente();
 
 		Iterator<BeanUrmarireEveniment> iteratorEv = null;
-		
+
 		for (BeanStadiuObiectiv stadiu : listStadii) {
 
 			client = "";
@@ -220,16 +230,14 @@ public class AfiseazaObiectiveKA extends Activity implements DialogObiectiveKALi
 					strDetalii.append(client);
 					client = "";
 				}
-				
-				
 
 				iteratorEv = listEvenimente.iterator();
 				while (iteratorEv.hasNext()) {
 					BeanUrmarireEveniment eveniment = iteratorEv.next();
 					if (eveniment.getCodDepart().equals(stadiu.getCodDepart()) && eveniment.getCodClient().equals(constructor.getCodClient())) {
-						strDetalii.append(UtilsFormatting.addSpace("", 43) + EnumUrmarireObiective.getNumeEveniment(eveniment.getIdEveniment())
-								+ " :" + UtilsFormatting.addSpace(EnumUrmarireObiective.getNumeEveniment(eveniment.getIdEveniment()), 10)
-								+ eveniment.getData() + " Obs: " + eveniment.getObservatii() + " \n");
+						strDetalii.append(UtilsFormatting.addSpace("", 43) + EnumUrmarireObiective.getNumeEveniment(eveniment.getIdEveniment()) + " :"
+								+ UtilsFormatting.addSpace(EnumUrmarireObiective.getNumeEveniment(eveniment.getIdEveniment()), 10) + eveniment.getData()
+								+ " Obs: " + eveniment.getObservatii() + " \n");
 
 						iteratorEv.remove();
 

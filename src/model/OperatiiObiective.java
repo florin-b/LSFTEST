@@ -19,6 +19,7 @@ import android.content.Context;
 import android.widget.Toast;
 import beans.BeanObiectivAfisare;
 import beans.BeanObiectivDepartament;
+import beans.BeanObiectivHarta;
 import beans.BeanObiectiveConstructori;
 import beans.BeanObiectiveGenerale;
 import beans.BeanStadiuObiectiv;
@@ -48,7 +49,7 @@ public class OperatiiObiective implements AsyncTaskListener {
 		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getNume(), params, (AsyncTaskListener) this, context);
 		call.getCallResultsFromFragment();
 	}
-	
+
 	public void getListObiectiveAV(HashMap<String, String> params) {
 		numeComanda = EnumOperatiiObiective.GET_LIST_OBIECTIVE_AV;
 		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getNume(), params, (AsyncTaskListener) this, context);
@@ -91,6 +92,12 @@ public class OperatiiObiective implements AsyncTaskListener {
 		call.getCallResultsFromFragment();
 	}
 
+	public void getObiectiveHarta(HashMap<String, String> params) {
+		numeComanda = EnumOperatiiObiective.GET_OBIECTIVE_HARTA;
+		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getNume(), params, (AsyncTaskListener) this, context);
+		call.getCallResultsFromFragment();
+	}
+
 	public List<BeanObiectivAfisare> deserializeListaObiective(String result) {
 		List<BeanObiectivAfisare> listaObiective = new ArrayList<BeanObiectivAfisare>();
 		BeanObiectivAfisare obiectiv = null;
@@ -111,6 +118,40 @@ public class OperatiiObiective implements AsyncTaskListener {
 					obiectiv.setData(object.getString("data"));
 					obiectiv.setBeneficiar(object.getString("beneficiar"));
 					obiectiv.setCodStatus(object.getString("codStatus"));
+					listaObiective.add(obiectiv);
+				}
+
+			}
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		return listaObiective;
+	}
+	
+	
+	
+	public List<BeanObiectivHarta> deserializeListaObiectiveHarta(String result) {
+		List<BeanObiectivHarta> listaObiective = new ArrayList<BeanObiectivHarta>();
+		BeanObiectivHarta obiectiv = null;
+
+		try {
+			Object json = new JSONTokener(result).nextValue();
+
+			if (json instanceof JSONArray) {
+
+				JSONArray jsonArray = new JSONArray(result);
+
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject object = jsonArray.getJSONObject(i);
+
+					obiectiv = new BeanObiectivHarta();
+					obiectiv.setId(object.getString("id"));
+					obiectiv.setNume(object.getString("nume"));
+					obiectiv.setData(object.getString("data"));
+					obiectiv.setBeneficiar(object.getString("beneficiar"));
+					obiectiv.setCodStatus(object.getString("codStatus"));
+					obiectiv.setAddress(object.getString("adresa"));
 					listaObiective.add(obiectiv);
 				}
 

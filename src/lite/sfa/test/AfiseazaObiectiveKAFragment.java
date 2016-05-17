@@ -8,14 +8,19 @@ import listeners.DialogObiectiveKAListener;
 import listeners.ObiectiveListener;
 import model.OperatiiObiective;
 import model.UserInfo;
+import model.ViewPagerCustomDuration;
 import utils.UtilsFormatting;
+import utils.UtilsUser;
 import adapters.AdapterObiectiveAfisare;
 import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,51 +33,60 @@ import dialogs.OptiuniObiectKaDialog;
 import enums.EnumDepartExtra;
 import enums.EnumDepartFinisaje;
 import enums.EnumOperatiiObiective;
+import enums.EnumTipUser;
 import enums.EnumUrmarireObiective;
 
-public class AfiseazaObiectiveAgenti extends Activity implements DialogObiectiveKAListener, ObiectiveListener {
+public class AfiseazaObiectiveKAFragment extends Fragment implements DialogObiectiveKAListener, ObiectiveListener {
 
+	ViewPagerCustomDuration pager;
+	ViewPager viewPager;
 	private OptiuniObiectKaDialog optiuniDialog;
-	private OperatiiObiective operatiiObiective;
 	private Spinner spinnerObiective;
 	private TextView detaliiText;
+	private OperatiiObiective operatiiObiective;
 
-	protected void onCreate(Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+		setHasOptionsMenu(true);
+
+		View v = inflater.inflate(R.layout.activity_afis_ob_ka, container, false);
 		super.onCreate(savedInstanceState);
 
-		setTheme(R.style.LRTheme);
-		setContentView(R.layout.activity_afis_ob_ka);
-
-		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
-
-		final ActionBar actionBar = getActionBar();
+		final ActionBar actionBar = getActivity().getActionBar();
 		actionBar.setTitle("Obiective");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-		optiuniDialog = new OptiuniObiectKaDialog(this);
+		optiuniDialog = new OptiuniObiectKaDialog(getActivity());
 		optiuniDialog.setDialogListener(this);
 
-		operatiiObiective = new OperatiiObiective(this);
+		operatiiObiective = new OperatiiObiective(getActivity());
 		operatiiObiective.setObiectiveListener(this);
 
-		setupLayout();
+		setupLayout(v);
+
+		if ((UserInfo.getInstance().getTipUser().equals(EnumTipUser.DV.getTipAcces()) || UserInfo.getInstance().getTipUser()
+				.equals(EnumTipUser.DK.getTipAcces()))
+				&& !UtilsUser.isDV_CONS())
+			optiuniDialog.show();
+		else
+			getListObiective();
+
+		return v;
 
 	}
 
-	private void setupLayout() {
-		spinnerObiective = (Spinner) findViewById(R.id.spinnerObiective);
+	private void setupLayout(View v) {
+		spinnerObiective = (Spinner) v.findViewById(R.id.spinnerObiective);
 		spinnerObiective.setVisibility(View.INVISIBLE);
 		setSpinnerObiectiveListener();
 
-		detaliiText = (TextView) findViewById(R.id.detaliiObiectiv);
+		detaliiText = (TextView) v.findViewById(R.id.detaliiObiectiv);
 		detaliiText.setText("");
-
-		getOperatiiObiective();
 
 	}
 
-	private void getOperatiiObiective() {
-		operatiiObiective = new OperatiiObiective(this);
+	private void getListObiective() {
+		operatiiObiective = new OperatiiObiective(getActivity());
 
 		HashMap<String, String> params = new HashMap<String, String>();
 
@@ -112,20 +126,6 @@ public class AfiseazaObiectiveAgenti extends Activity implements DialogObiective
 		operatiiObiective.getDetaliiObiectiv(params);
 	}
 
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		switch (item.getItemId()) {
-
-		case android.R.id.home:
-			returnHome();
-			break;
-
-		}
-
-		return super.onOptionsItemSelected(item);
-
-	}
-
 	private void displayListObiective(List<BeanObiectivAfisare> listObiective) {
 
 		BeanObiectivAfisare dummyOb = new BeanObiectivAfisare();
@@ -139,7 +139,7 @@ public class AfiseazaObiectiveAgenti extends Activity implements DialogObiective
 
 		listObiective.add(0, dummyOb);
 
-		AdapterObiectiveAfisare adapterOb = new AdapterObiectiveAfisare(getApplicationContext(), listObiective);
+		AdapterObiectiveAfisare adapterOb = new AdapterObiectiveAfisare(getActivity(), listObiective);
 		spinnerObiective.setAdapter(adapterOb);
 
 		spinnerObiective.setVisibility(View.VISIBLE);
@@ -240,12 +240,21 @@ public class AfiseazaObiectiveAgenti extends Activity implements DialogObiective
 
 	}
 
-	private void returnHome() {
-		UserInfo.getInstance().setParentScreen("");
-		Intent nextScreen = new Intent(this, MainMenu.class);
-		startActivity(nextScreen);
+	class ObiectivePagerAdapter extends FragmentStatePagerAdapter {
+		private List<Fragment> fragments;
 
-		finish();
+		public ObiectivePagerAdapter(FragmentManager fm, List<Fragment> fragments) {
+			super(fm);
+			this.fragments = fragments;
+		}
+
+		public Fragment getItem(int position) {
+			return this.fragments.get(position);
+		}
+
+		public int getCount() {
+			return this.fragments.size();
+		}
 	}
 
 	public void selectionComplete(List<BeanObiectivAfisare> listObiective) {

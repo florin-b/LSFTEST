@@ -5,6 +5,7 @@ import java.util.HashMap;
 import listeners.ObiectiveListener;
 import listeners.SelectObiectivListener;
 import model.OperatiiObiective;
+import model.UserInfo;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,8 +13,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import beans.BeanObiectivAfisare;
 import beans.BeanObiectiveGenerale;
 import dialogs.SelectObiectivDialog;
@@ -25,6 +26,12 @@ public class ObiectiveKA extends FragmentActivity implements SelectObiectivListe
 	private OperatiiObiective operatiiObiective;
 	private static EnumMeniuObiectiv meniuObiectiv;
 	private SelectObiectivDialog dialog;
+
+	private static final int CREARE = 1;
+	private static final int MODIFICARE = 2;
+	private static final int URMARIRE = 3;
+	private static final int AFISARE = 4;
+	private static final int HARTA = 5;
 
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -44,9 +51,18 @@ public class ObiectiveKA extends FragmentActivity implements SelectObiectivListe
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu_obiective, menu);
+
+		SubMenu subMenu = menu.addSubMenu(0, Menu.NONE, 0, "Optiuni");
+
+		subMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+		if (UserInfo.getInstance().getTipUser().equals("KA")) {
+			subMenu.add(0, CREARE, 0, "Creare");
+			subMenu.add(0, MODIFICARE, 1, "Modificare");
+			subMenu.add(0, URMARIRE, 2, "Urmarire");
+		}
+		subMenu.add(0, AFISARE, 3, "Afisare");
+		subMenu.add(0, HARTA, 4, "Harta");
 
 		return true;
 	}
@@ -58,24 +74,49 @@ public class ObiectiveKA extends FragmentActivity implements SelectObiectivListe
 
 		FragmentTransaction tx = null;
 		BeanObiectiveGenerale.getInstance().clearInstanceData();
-		int itemId = item.getItemId();
-		if (itemId == R.id.menuCreare) {
+		switch (item.getItemId()) {
+		case CREARE: {
 			meniuObiectiv = EnumMeniuObiectiv.CREARE;
 			tx = getSupportFragmentManager().beginTransaction();
 			tx.replace(R.id.main, Fragment.instantiate(ObiectiveKA.this, "lite.sfa.test.Obiective2"));
 			tx.commit();
-		} else if (itemId == R.id.menuModificare) {
+			break;
+		}
+		case MODIFICARE: {
 			meniuObiectiv = EnumMeniuObiectiv.MODIFICARE;
 			dialog.setTipOperatie(meniuObiectiv);
 			dialog.show();
-		} else if (itemId == R.id.menuUrmarire) {
+			break;
+		}
+		case URMARIRE: {
 			meniuObiectiv = EnumMeniuObiectiv.URMARIRE;
 			dialog.setTipOperatie(meniuObiectiv);
 			dialog.show();
-		} else if (itemId == android.R.id.home) {
-			returnToHome();
+			break;
+		}
+		case AFISARE: {
+			meniuObiectiv = EnumMeniuObiectiv.AFISARE;
+			tx = getSupportFragmentManager().beginTransaction();
+			tx.replace(R.id.main, Fragment.instantiate(ObiectiveKA.this, "lite.sfa.test.AfiseazaObiectiveKAFragment"));
+			tx.commit();
+			break;
+		}
+		case HARTA: {
+			meniuObiectiv = EnumMeniuObiectiv.HARTA;
+			tx = getSupportFragmentManager().beginTransaction();
+			tx.replace(R.id.main, Fragment.instantiate(ObiectiveKA.this, "lite.sfa.test.HartaObiectiveKAFragment"));
+			tx.commit();
+			break;
+
 		}
 
+		case android.R.id.home: {
+			returnToHome();
+
+		}
+		default:
+			break;
+		}
 		return false;
 	}
 

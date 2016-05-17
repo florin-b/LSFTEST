@@ -10,6 +10,18 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Align;
+import android.graphics.Paint.Style;
+import android.graphics.Rect;
+import android.graphics.Typeface;
+import enums.EnumJudete;
+
 public class UtilsFormatting {
 
 	public static String formatDate(String dateString) {
@@ -98,6 +110,60 @@ public class UtilsFormatting {
 		DateFormat dfFin = new SimpleDateFormat("HH:mm:ss");
 
 		return dfFin.format(d);
+	}
+
+	public static Bitmap writeTextOnDrawable(Context context, int drawableId, String text) {
+
+		Bitmap bm = BitmapFactory.decodeResource(context.getResources(), drawableId).copy(Bitmap.Config.ARGB_8888, true);
+
+		Typeface tf = Typeface.create("Helvetica", Typeface.BOLD);
+
+		Paint paint = new Paint();
+		paint.setStyle(Style.FILL);
+		paint.setColor(Color.BLACK);
+		paint.setTypeface(tf);
+		paint.setTextAlign(Align.CENTER);
+		paint.setTextSize(convertToPixels(context, 21));
+
+		Rect textRect = new Rect();
+		paint.getTextBounds(text, 0, text.length(), textRect);
+
+		Canvas canvas = new Canvas(bm);
+
+		if (textRect.width() >= (canvas.getWidth() - 2))
+			paint.setTextSize(convertToPixels(context, 7));
+
+		int xPos = (canvas.getWidth() / 2) - 2;
+
+		int yPos = (int) ((canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 4));
+
+		canvas.drawText(text, xPos, yPos, paint);
+
+		return bm;
+	}
+
+	public static int convertToPixels(Context context, int nDP) {
+		final float conversionScale = context.getResources().getDisplayMetrics().density;
+
+		return (int) ((nDP * conversionScale) + 0.5f);
+
+	}
+
+	public static String formatAddress(String address) {
+		String formatted = address;
+
+		if (address != null && address.contains("/")) {
+			String[] adrTokens = address.split("/");
+
+			for (int i = 0; i < adrTokens.length; i++)
+				if (i == 0)
+					formatted = EnumJudete.getNumeJudet(Integer.parseInt(adrTokens[i]));
+				else
+					formatted += ", " + adrTokens[i];
+
+		}
+
+		return formatted;
 	}
 
 }

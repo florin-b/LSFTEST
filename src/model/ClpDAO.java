@@ -101,6 +101,8 @@ public class ClpDAO implements IClpDAO, AsyncTaskListener {
 				dateLivrare.setStatusAprov(jsonLivrare.getString("statusAprov"));
 				dateLivrare.setValComanda(jsonLivrare.getString("valComanda"));
 				dateLivrare.setObsComanda(jsonLivrare.getString("obsComanda"));
+				dateLivrare.setValTransp(jsonLivrare.getString("valTransp"));
+				dateLivrare.setProcTransp(jsonLivrare.getString("procTransp"));
 
 				ArticolCLP articol;
 				JSONArray jsonArticole = json.getJSONArray("articole");
