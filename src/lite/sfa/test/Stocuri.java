@@ -252,19 +252,25 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 		temp.put("codFiliala", "BU13");
 		listFiliale.add(temp);
 
+		if (UserInfo.getInstance().getCodDepart().equals("05")) {
+			temp = new HashMap<String, String>();
+			temp.put("numeFiliala", "BRASOV CENTRAL");
+			temp.put("codFiliala", "BV90");
+			listFiliale.add(temp);
+		}
+
 		spinnerFiliale.setAdapter(adapterFiliale);
 
 		if (UserInfo.getInstance().getUnitLog().equals("BU10"))
 			spinnerFiliale.setSelection(0);
-
-		if (UserInfo.getInstance().getUnitLog().equals("BU11"))
+		else if (UserInfo.getInstance().getUnitLog().equals("BU11"))
 			spinnerFiliale.setSelection(1);
-
-		if (UserInfo.getInstance().getUnitLog().equals("BU12"))
+		else if (UserInfo.getInstance().getUnitLog().equals("BU12"))
 			spinnerFiliale.setSelection(2);
-
-		if (UserInfo.getInstance().getUnitLog().equals("BU13"))
+		else if (UserInfo.getInstance().getUnitLog().equals("BU13"))
 			spinnerFiliale.setSelection(3);
+		else if (UserInfo.getInstance().getUnitLog().equals("BV90"))
+			spinnerFiliale.setSelection(4);
 
 	}
 

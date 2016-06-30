@@ -67,7 +67,7 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 	String depart = "";
 	String codClientVar = "";
 	String numeClientVar = "";
-	LinearLayout redBtnTable, layoutStocKA, layoutPretMaxKA;
+	LinearLayout redBtnTable, layoutStocKA, layoutPretMaxKA, layoutPretMediuKA;
 	EditText valRedIntText, valRedDecText;
 	public String globalDepozSel = "", artPromoText = "", cantUmb = "", Umb = "", selectedUnitMas = "", globalCodDepartSelectetItem = "";
 
@@ -81,7 +81,7 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 	private TextView textCant;
 
 	private TextView textUM, procDisc, textPretTVA, textMultipluArt;
-	private TextView labelCant, labelStoc, textPretMinKA;
+	private TextView labelCant, labelStoc, textPretMinKA, textPretMediuKA;
 	private Spinner spinnerDepoz, spinnerUnitMas;
 
 	private TextView textPromo;
@@ -140,6 +140,10 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 
 		layoutStocKA = (LinearLayout) findViewById(R.id.layoutStocKA);
 		layoutStocKA.setVisibility(View.INVISIBLE);
+
+		textPretMediuKA = (TextView) findViewById(R.id.textPretMediuKA);
+		layoutPretMediuKA = (LinearLayout) findViewById(R.id.layoutPretMediuKA);
+		layoutPretMediuKA.setVisibility(View.INVISIBLE);
 
 		textPretMinKA = (TextView) findViewById(R.id.textPretMaxKA);
 		layoutPretMaxKA = (LinearLayout) findViewById(R.id.layoutPretMaxKA);
@@ -656,7 +660,6 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 			depSel = "11";
 			uLog = UserInfo.getInstance().getUnitLog().substring(0, 2) + "2" + UserInfo.getInstance().getUnitLog().substring(3, 4);
 		}
-
 		if (UserInfo.getInstance().getTipAcces().equals("9")) {
 			tipUser = "AV";
 		}
@@ -666,6 +669,8 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 		if (UserInfo.getInstance().getTipAcces().equals("14") || UserInfo.getInstance().getTipAcces().equals("12")) {
 			tipUser = "DV";
 		}
+		if (UserInfo.getInstance().getTipAcces().equals("27"))
+			tipUser = "KA";
 
 		String paramUnitMas = textUM.getText().toString();
 
@@ -1179,6 +1184,9 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 
 					layoutPretMaxKA.setVisibility(View.VISIBLE);
 					textPretMinKA.setText(String.valueOf(nf2.format(minimKAPrice)));
+
+					layoutPretMediuKA.setVisibility(View.VISIBLE);
+					textPretMediuKA.setText(nf2.format(Double.valueOf(tokenPret[18])));
 
 				}
 

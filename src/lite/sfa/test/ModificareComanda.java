@@ -519,7 +519,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 						if (isComandaGed())
 							localRedSeparat = "NU";
 
-						if (globalSubCmp.equals("1") && !UserInfo.getInstance().getCodDepart().equals("07"))
+						if (isReducere())
 							localRedSeparat = "X";
 
 						NumberFormat nf3 = NumberFormat.getInstance();
@@ -569,6 +569,11 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		}
 	}
 
+	
+	private boolean isReducere() {
+		return globalSubCmp.equals("1") && !UserInfo.getInstance().getCodDepart().equals("07") && !UserInfo.getInstance().getCodDepart().equals("04");
+	}
+	
 	private void performSaveCmd() {
 		try {
 

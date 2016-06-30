@@ -45,10 +45,27 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_marginLeft="5dip"
-            android:layout_weight="0.5"
+            android:layout_weight="0.4"
             android:textColor="@color/listCodArticol"
             android:textSize="14sp"
             android:typeface="monospace" />
+
+        <Button
+            android:id="@+id/observatii"
+            style="@style/det_button"
+            android:layout_width="wrap_content"
+            android:layout_height="30dip"
+            android:layout_gravity="left"
+            android:layout_marginRight="50dip"
+            android:background="@drawable/cancel_button_style"
+            android:paddingLeft="15dip"
+            android:paddingRight="15dip"
+            android:text="Observatii" />
+
+        <View
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1" />
 
         <Button
             android:id="@+id/adaugaPret"

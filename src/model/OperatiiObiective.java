@@ -152,6 +152,7 @@ public class OperatiiObiective implements AsyncTaskListener {
 					obiectiv.setBeneficiar(object.getString("beneficiar"));
 					obiectiv.setCodStatus(object.getString("codStatus"));
 					obiectiv.setAddress(object.getString("adresa"));
+					obiectiv.setNumeAgent(object.getString("numeAgent"));
 					listaObiective.add(obiectiv);
 				}
 

@@ -7,6 +7,7 @@ public class BeanArticolConcurenta {
 	private String umVanz;
 	private String valoare;
 	private String dataValoare;
+	private String observatii;
 
 	public String getCod() {
 		return cod;
@@ -48,6 +49,14 @@ public class BeanArticolConcurenta {
 
 	public void setDataValoare(String dataValoare) {
 		this.dataValoare = dataValoare;
+	}
+
+	public String getObservatii() {
+		return observatii;
+	}
+
+	public void setObservatii(String observatii) {
+		this.observatii = observatii;
 	}
 
 }

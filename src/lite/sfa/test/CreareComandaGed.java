@@ -1378,6 +1378,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			obj.put("factRed", DateLivrare.getInstance().getFactRed());
 			obj.put("macara", DateLivrare.getInstance().isMasinaMacara() ? "X" : " ");
 			obj.put("coordonateGps", getCoordAdresa());
+			obj.put("prelucrare", DateLivrare.getInstance().getPrelucrare());
 
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();

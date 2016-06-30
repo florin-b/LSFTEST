@@ -68,7 +68,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	String depart = "";
 	String codClientVar = "";
 	String numeClientVar = "";
-	LinearLayout redBtnTable, layoutStocKA, layoutPretMaxKA;
+	LinearLayout redBtnTable, layoutStocKA, layoutPretMaxKA, layoutPretMediuKA;
 	EditText valRedIntText, valRedDecText;
 
 	public String globalDepozSel = "", artPromoText = "", globalCodDepartSelectetItem = "";
@@ -84,7 +84,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	private TextView textStoc;
 	private TextView textCant, procDisc, textPretTVA, textMultipluArt;
 
-	private TextView textUM, textPretMinKA;
+	private TextView textUM, textPretMinKA, textPretMediuKA;
 	private TextView labelCant, labelStoc;
 	private Spinner spinnerDepoz, spinnerUnitMas;
 
@@ -151,6 +151,11 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		layoutStocKA.setVisibility(View.INVISIBLE);
 
 		textPretMinKA = (TextView) findViewById(R.id.textPretMaxKA);
+
+		textPretMediuKA = (TextView) findViewById(R.id.textPretMediuKA);
+		layoutPretMediuKA = (LinearLayout) findViewById(R.id.layoutPretMediuKA);
+		layoutPretMediuKA.setVisibility(View.INVISIBLE);
+
 		layoutPretMaxKA = (LinearLayout) findViewById(R.id.layoutPretMaxKA);
 		layoutPretMaxKA.setVisibility(View.INVISIBLE);
 
@@ -703,6 +708,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		if (UserInfo.getInstance().getTipAcces().equals("14") || UserInfo.getInstance().getTipAcces().equals("12")) {
 			tipUser = "DV";
 		}
+		if (UserInfo.getInstance().getTipAcces().equals("27"))
+			tipUser = "KA";
 
 		String paramUnitMas = textUM.getText().toString();
 
@@ -1233,6 +1240,9 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 					layoutPretMaxKA.setVisibility(View.VISIBLE);
 					textPretMinKA.setText(String.valueOf(nf2.format(minimKAPrice)));
+
+					layoutPretMediuKA.setVisibility(View.VISIBLE);
+					textPretMediuKA.setText(nf2.format(Double.valueOf(tokenPret[18])));
 
 				}
 

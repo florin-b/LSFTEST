@@ -1,6 +1,6 @@
 package dialogs;
 
-import listeners.InputTextDialogListener;
+import listeners.TextDialogListener;
 import lite.sfa.test.R;
 import android.app.Dialog;
 import android.content.Context;
@@ -8,13 +8,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-public class InputTextDialog extends Dialog {
+public class TextDialog extends Dialog {
 
 	private ImageButton btnSave, btnCancel;
 	private EditText editTextValue;
-	private InputTextDialogListener listener;
+	private TextDialogListener listener;
 
-	public InputTextDialog(String dialogName, String initString, Context context) {
+	public TextDialog(String dialogName, String initString, Context context) {
 		super(context);
 
 		setContentView(R.layout.modifica_valoare_linie_obiectiv);
@@ -44,7 +44,7 @@ public class InputTextDialog extends Dialog {
 			public void onClick(View v) {
 
 				if (listener != null) {
-					listener.textSaved(editTextValue.getText().toString().trim());
+					listener.textDialogSaved(editTextValue.getText().toString().trim());
 					dismiss();
 				}
 
@@ -61,7 +61,7 @@ public class InputTextDialog extends Dialog {
 		});
 	}
 
-	public void setInputTextListener(InputTextDialogListener listener) {
+	public void setTextListener(TextDialogListener listener) {
 		this.listener = listener;
 	}
 

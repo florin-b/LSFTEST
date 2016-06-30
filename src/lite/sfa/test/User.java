@@ -77,12 +77,11 @@ public class User extends Activity {
 		// exceptie pentru agenti si sd din BUC
 		if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("10")) {
 			if (UserInfo.getInstance().getUnitLog().equals("BU10") || UserInfo.getInstance().isAltaFiliala()) {
-				if (UserInfo.getInstance().getCodDepart().equals("01")
-						|| UserInfo.getInstance().getCodDepart().equals("02")) {
+				if (UserInfo.getInstance().getCodDepart().equals("01") || UserInfo.getInstance().getCodDepart().equals("02")) {
 
 					listFiliala = new ArrayList<HashMap<String, String>>();
-					adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1,
-							new String[] { "rowText" }, new int[] { R.id.textRowName });
+					adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1, new String[] { "rowText" },
+							new int[] { R.id.textRowName });
 
 					HashMap<String, String> temp;
 					temp = new HashMap<String, String>();
@@ -116,8 +115,7 @@ public class User extends Activity {
 
 			// afisare filiale BUC
 			listFiliala = new ArrayList<HashMap<String, String>>();
-			adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1,
-					new String[] { "rowText" }, new int[] { R.id.textRowName });
+			adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1, new String[] { "rowText" }, new int[] { R.id.textRowName });
 
 			HashMap<String, String> temp;
 
@@ -135,8 +133,8 @@ public class User extends Activity {
 
 		}
 
-		if ((UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("17") || UserInfo
-				.getInstance().getTipAcces().equals("18"))
+		if ((UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces()
+				.equals("18"))
 				&& !UserInfo.getInstance().getUserSite().equals("X"))// KA,
 		// cons
 		// sau
@@ -147,8 +145,7 @@ public class User extends Activity {
 			if (UserInfo.getInstance().getUnitLog().contains("BU")) {
 				// afisare filiale BUC
 				listFiliala = new ArrayList<HashMap<String, String>>();
-				adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1,
-						new String[] { "rowText" }, new int[] { R.id.textRowName });
+				adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1, new String[] { "rowText" }, new int[] { R.id.textRowName });
 
 				HashMap<String, String> temp;
 				temp = new HashMap<String, String>();
@@ -213,8 +210,8 @@ public class User extends Activity {
 		}
 
 		listDepart = new ArrayList<HashMap<String, String>>();
-		adapterDepart = new SimpleAdapter(this, listDepart, R.layout.simplerowlayout_2, new String[] { "rowText",
-				"rowDesc" }, new int[] { R.id.textRowName, R.id.textRowId });
+		adapterDepart = new SimpleAdapter(this, listDepart, R.layout.simplerowlayout_2, new String[] { "rowText", "rowDesc" }, new int[] { R.id.textRowName,
+				R.id.textRowId });
 
 		HashMap<String, String> temp;
 		temp = new HashMap<String, String>();
@@ -309,8 +306,7 @@ public class User extends Activity {
 		Locale.setDefault(locale);
 		Configuration config = new Configuration();
 		config.locale = locale;
-		getBaseContext().getResources()
-				.updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+		getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 
 	}
 
@@ -336,8 +332,6 @@ public class User extends Activity {
 			// TODO
 		}
 	}
-
-	
 
 	// captare evenimente spinner departament
 	public class onSelectedDepart implements OnItemSelectedListener {
@@ -429,15 +423,13 @@ public class User extends Activity {
 			Locale.setDefault(locale);
 			Configuration config = new Configuration();
 			config.locale = locale;
-			getBaseContext().getResources().updateConfiguration(config,
-					getBaseContext().getResources().getDisplayMetrics());
+			getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 		}
 
 		// restart app la idle
 		if (UserInfo.getInstance().getCod().equals("")) {
 
-			Intent i = getBaseContext().getPackageManager()
-					.getLaunchIntentForPackage(getBaseContext().getPackageName());
+			Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
 			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(i);
 		}
@@ -446,8 +438,7 @@ public class User extends Activity {
 
 	private void addExtraFiliale() {
 		listFiliala = new ArrayList<HashMap<String, String>>();
-		adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1, new String[] { "rowText" },
-				new int[] { R.id.textRowName });
+		adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1, new String[] { "rowText" }, new int[] { R.id.textRowName });
 
 		HashMap<String, String> temp;
 

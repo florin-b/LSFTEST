@@ -5,6 +5,7 @@ public class BeanNewPretConcurenta {
 	private String cod;
 	private String concurent;
 	private String valoare;
+	private String observatii;
 
 	public String getCod() {
 		return cod;
@@ -28,6 +29,22 @@ public class BeanNewPretConcurenta {
 
 	public void setValoare(String valoare) {
 		this.valoare = valoare;
+	}
+
+	public String getObservatii() {
+
+		if (observatii != null) {
+			if (observatii.length() <= 200)
+				return observatii;
+			else
+				return observatii.substring(0, 200);
+		} else
+			return " ";
+
+	}
+
+	public void setObservatii(String observatii) {
+		this.observatii = observatii;
 	}
 
 }

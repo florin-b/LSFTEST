@@ -70,7 +70,6 @@ public class OperatiiConcurentaImpl implements OperatiiConcurenta, AsyncTaskList
 		performOperation();
 	}
 
-	
 	public String serializePreturi(List<BeanNewPretConcurenta> listPreturi) {
 
 		JSONArray jsonArray = new JSONArray();
@@ -83,6 +82,7 @@ public class OperatiiConcurentaImpl implements OperatiiConcurenta, AsyncTaskList
 				jsonObject.put("cod", pret.getCod());
 				jsonObject.put("concurent", pret.getConcurent());
 				jsonObject.put("valoare", pret.getValoare());
+				jsonObject.put("observatii", pret.getObservatii());
 				jsonArray.put(jsonObject);
 
 			}
@@ -170,6 +170,7 @@ public class OperatiiConcurentaImpl implements OperatiiConcurenta, AsyncTaskList
 					articol.setUmVanz(articolObject.getString("umVanz"));
 					articol.setValoare(articolObject.getString("valoare"));
 					articol.setDataValoare(articolObject.getString("dataValoare"));
+					articol.setObservatii((articolObject.getString("observatii")));
 
 					listArticole.add(articol);
 

@@ -182,6 +182,7 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 				pret.setCod(articol.getCod());
 				pret.setValoare(articol.getValoare());
 				pret.setConcurent(competitionId);
+				pret.setObservatii(articol.getObservatii());
 				listPreturi.add(pret);
 
 			}
@@ -206,7 +207,6 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				
 
 			}
 

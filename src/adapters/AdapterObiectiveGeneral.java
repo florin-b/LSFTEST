@@ -148,7 +148,7 @@ public class AdapterObiectiveGeneral extends BaseAdapter implements InputTextDia
 
 	private void showModificaValoareDialog() {
 		InputTextDialog dialog = new InputTextDialog(EnumNumeObiective.getNumeObiectiv(position), obiectiv.getValoareObiectiv(position), context);
-		dialog.setModificaObiectivListener(AdapterObiectiveGeneral.this);
+		dialog.setInputTextListener(AdapterObiectiveGeneral.this);
 		dialog.show();
 	}
 

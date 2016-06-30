@@ -352,7 +352,7 @@ public class UrmarireObiective extends Fragment implements InputTextDialogListen
 	private void showInputTextDialog() {
 		InputTextDialog dialog = new InputTextDialog(EnumUrmarireObiective.getNumeEveniment(spinnerOptiuniUrmarire.getSelectedItemPosition() - 1),
 				textObservatii.getText().toString(), getActivity());
-		dialog.setModificaObiectivListener(UrmarireObiective.this);
+		dialog.setInputTextListener(UrmarireObiective.this);
 		dialog.show();
 	}
 

@@ -63,6 +63,9 @@ public class OperatiiClient implements AsyncTaskListener {
 		call.getCallResultsFromFragment();
 	}
 
+	
+	
+	
 	public ArrayList<BeanClient> deserializeListClienti(String serializedListClienti) {
 		BeanClient client = null;
 		ArrayList<BeanClient> listClienti = new ArrayList<BeanClient>();

@@ -742,9 +742,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 						String localRedSeparat = dateLivrareInstance.getRedSeparat();
 
-						
-						
-						if (globalSubCmp.equals("1") && !UserInfo.getInstance().getCodDepart().equals("07"))
+						if (isReducere())
 							localRedSeparat = "X";
 
 						if (dateLivrareInstance.getObsPlata().equals("SO") && dateLivrareInstance.getTipPlata().equals("E")) {
@@ -796,6 +794,10 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			}
 
 		}
+	}
+
+	private boolean isReducere() {
+		return globalSubCmp.equals("1") && !UserInfo.getInstance().getCodDepart().equals("07") && !UserInfo.getInstance().getCodDepart().equals("04");
 	}
 
 	private void performSaveCmd() {

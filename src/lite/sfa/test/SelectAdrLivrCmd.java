@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Locale;
 
 import listeners.AsyncTaskListener;
+import listeners.AutocompleteDialogListener;
 import listeners.MapListener;
 import listeners.ObiectiveListener;
 import listeners.OperatiiAdresaListener;
@@ -77,13 +78,14 @@ import beans.BeanObiectivDepartament;
 import com.google.android.gms.maps.model.LatLng;
 
 import connectors.ConnectionStrings;
+import dialogs.AutoCompleteDialog;
 import dialogs.MapAddressDialog;
 import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
 import enums.EnumOperatiiObiective;
 
 public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnItemClickListener, AsyncTaskListener, OperatiiAdresaListener, ObiectiveListener,
-		MapListener {
+		MapListener, AutocompleteDialogListener {
 
 	private Button saveAdrLivrBtn;
 	private EditText txtPers, txtTel, txtObservatii, txtValoareIncasare;
@@ -130,6 +132,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private LinearLayout layoutPrelucrare04;
 
 	private boolean adresaFromListHasNumber;
+	private BeanAdreseJudet listAdrese;
+
+	private static final int LIST_LOCALITATI = 1;
+	private static final int LIST_ADRESE = 2;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -165,6 +171,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		setListnerBtnPozitieAdresa();
 
 		textStrada = (AutoCompleteTextView) findViewById(R.id.autoCompleteStrada);
+		// setListenerTextStrada();
 
 		txtPers = (EditText) findViewById(R.id.txtPersCont);
 		txtTel = (EditText) findViewById(R.id.txtTelefon);
@@ -804,8 +811,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private void getCmdDateLivrare() {
 
-		// afisare date livrare pentru comenzile existente (la modificare
-		// comanda)
 		try {
 
 			getDateLivrare date = new getDateLivrare(this);
@@ -1105,6 +1110,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private void populateListLocalitati(BeanAdreseJudet listAdrese) {
 
+		this.listAdrese = listAdrese;
 		textLocalitate.setVisibility(View.VISIBLE);
 		textLocalitate.setText(DateLivrare.getInstance().getOras());
 
@@ -1145,6 +1151,43 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			}
 		});
 
+		/*
+		 * textLocalitate.setOnTouchListener(new OnTouchListener() {
+		 * 
+		 * @Override public boolean onTouch(View v, MotionEvent event) {
+		 * 
+		 * switch (event.getAction()) { case MotionEvent.ACTION_DOWN: String
+		 * initString = textLocalitate.getText().toString(); AutoCompleteDialog
+		 * autocompleteDialog = new AutoCompleteDialog(SelectAdrLivrCmd.this,
+		 * initString, listAdrese.getListLocalitati(), LIST_LOCALITATI);
+		 * autocompleteDialog.setAutocompleteListener(SelectAdrLivrCmd.this);
+		 * autocompleteDialog.setTitle("Selectati localitatea");
+		 * autocompleteDialog.show(); break; }
+		 * 
+		 * return false; } });
+		 */
+
+	}
+
+	private void setListenerTextStrada() {
+		textStrada.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+
+				switch (event.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+					String initString = textStrada.getText().toString();
+					AutoCompleteDialog autocompleteDialog = new AutoCompleteDialog(SelectAdrLivrCmd.this, initString, listAdrese.getListStrazi(), LIST_ADRESE);
+					autocompleteDialog.setAutocompleteListener(SelectAdrLivrCmd.this);
+					autocompleteDialog.setTitle("Selectati strada");
+					autocompleteDialog.show();
+					break;
+				}
+
+				return false;
+			}
+		});
 	}
 
 	private void displayObiectiveDepartament(List<BeanObiectivDepartament> obiectiveDepart) {
@@ -1604,6 +1647,22 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	public void addressSelected(LatLng coord) {
 		DateLivrare.getInstance().setCoordonateAdresa(coord);
 		textCoordAdresa.setText(coord.latitude + "," + coord.longitude);
+
+	}
+
+	@Override
+	public void selectionComplete(String selectedItem, int actionId) {
+
+		switch (actionId) {
+		case LIST_LOCALITATI:
+			textLocalitate.setText(selectedItem);
+			break;
+		case LIST_ADRESE:
+			textStrada.setText(selectedItem);
+			break;
+		default:
+			break;
+		}
 
 	}
 

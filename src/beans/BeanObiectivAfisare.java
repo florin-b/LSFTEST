@@ -7,6 +7,7 @@ public class BeanObiectivAfisare {
 	private String data;
 	private String beneficiar;
 	private String codStatus;
+	private String numeAgent;
 
 	public String getId() {
 		return id;
@@ -48,9 +49,18 @@ public class BeanObiectivAfisare {
 		this.codStatus = codStatus;
 	}
 
+	public String getNumeAgent() {
+		return numeAgent;
+	}
+
+	public void setNumeAgent(String numeAgent) {
+		this.numeAgent = numeAgent;
+	}
+
 	@Override
 	public String toString() {
-		return "BeanObiectivAfisare [id=" + id + ", nume=" + nume + ", data=" + data + ", beneficiar=" + beneficiar + ", codStatus=" + codStatus + "]";
+		return "BeanObiectivAfisare [id=" + id + ", nume=" + nume + ", data=" + data + ", beneficiar=" + beneficiar + ", codStatus=" + codStatus
+				+ ", numeAgent=" + numeAgent + "]";
 	}
 
 }

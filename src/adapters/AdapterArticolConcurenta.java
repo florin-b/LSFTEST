@@ -3,6 +3,7 @@ package adapters;
 import java.util.List;
 
 import listeners.InputTextDialogListener;
+import listeners.TextDialogListener;
 import lite.sfa.test.R;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,8 +15,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import beans.BeanArticolConcurenta;
 import dialogs.AdaugaPretDialog;
+import dialogs.TextDialog;
 
-public class AdapterArticolConcurenta extends BaseAdapter implements InputTextDialogListener {
+public class AdapterArticolConcurenta extends BaseAdapter implements InputTextDialogListener, TextDialogListener {
 
 	private int[] colors = new int[] { 0x3098BED9, 0x30E8E8E8 };
 	Context context;
@@ -25,7 +27,7 @@ public class AdapterArticolConcurenta extends BaseAdapter implements InputTextDi
 	static class ViewHolder {
 		public TextView textNumeArticol, textCodArticol, textTipArt, textData;
 		public TextView textValoare;
-		public Button adaugaPret;
+		public Button adaugaPret, observatii;
 	}
 
 	public AdapterArticolConcurenta(Context context, List<BeanArticolConcurenta> listArticole) {
@@ -55,6 +57,7 @@ public class AdapterArticolConcurenta extends BaseAdapter implements InputTextDi
 			viewHolder.textData = (TextView) convertView.findViewById(R.id.textData);
 			viewHolder.textValoare = (TextView) convertView.findViewById(R.id.textValoare);
 			viewHolder.adaugaPret = (Button) convertView.findViewById(R.id.adaugaPret);
+			viewHolder.observatii = (Button) convertView.findViewById(R.id.observatii);
 
 			convertView.setTag(viewHolder);
 
@@ -81,6 +84,18 @@ public class AdapterArticolConcurenta extends BaseAdapter implements InputTextDi
 			}
 		});
 
+		viewHolder.observatii.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				TextDialog inputDialog = new TextDialog("Observatii articol", articol.getObservatii(), context);
+				inputDialog.setTextListener(AdapterArticolConcurenta.this);
+				inputDialog.show();
+				selectedPos = position;
+
+			}
+		});
+
 		convertView.setBackgroundColor(colors[colorPos]);
 		return convertView;
 	}
@@ -100,6 +115,13 @@ public class AdapterArticolConcurenta extends BaseAdapter implements InputTextDi
 	@Override
 	public void textSaved(String textValue) {
 		listArticole.get(selectedPos).setValoare(textValue);
+		notifyDataSetChanged();
+
+	}
+
+	@Override
+	public void textDialogSaved(String textValue) {
+		listArticole.get(selectedPos).setObservatii(textValue);
 		notifyDataSetChanged();
 
 	}

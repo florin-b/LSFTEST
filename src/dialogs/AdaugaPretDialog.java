@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 
 public class AdaugaPretDialog extends Dialog {
 
-	private ImageButton btnSave, btnCancel;
+	private ImageButton btnSave;
 	private EditText editTextValue;
 	private InputTextDialogListener listener;
 

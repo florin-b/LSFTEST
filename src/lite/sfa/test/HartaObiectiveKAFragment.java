@@ -183,7 +183,7 @@ public class HartaObiectiveKAFragment extends Fragment implements ObiectiveListe
 			getListObiective();
 
 		} else
-			Toast.makeText(getActivity(), "Modulul GPS nu este initializat, repetati operatiunea dupa 30 de secunde", Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(), "Modulul GPS nu este initializat, repetati operatiunea dupa 30 de secunde.", Toast.LENGTH_LONG).show();
 	}
 
 	private void initGoogleMap() {
@@ -351,7 +351,11 @@ public class HartaObiectiveKAFragment extends Fragment implements ObiectiveListe
 		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentPosition, 13);
 		map.animateCamera(update);
 
-		AdapterObiectiveHarta adapterOb = new AdapterObiectiveHarta(getActivity(), selectedObjectives);
+		boolean showNumeAgent = true;
+		if (UserInfo.getInstance().getTipUser().equals("KA"))
+			showNumeAgent = false;
+
+		AdapterObiectiveHarta adapterOb = new AdapterObiectiveHarta(getActivity(), selectedObjectives, showNumeAgent);
 		listViewObiective.setAdapter(adapterOb);
 		listViewObiective.setVisibility(View.VISIBLE);
 

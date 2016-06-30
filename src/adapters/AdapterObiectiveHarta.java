@@ -17,14 +17,16 @@ public class AdapterObiectiveHarta extends BaseAdapter {
 
 	private List<BeanObiectivHarta> listObiective;
 	private Context context;
+	private boolean showNumeAgent;
 
-	public AdapterObiectiveHarta(Context context, List<BeanObiectivHarta> listObiective) {
+	public AdapterObiectiveHarta(Context context, List<BeanObiectivHarta> listObiective, boolean showNumeAgent) {
 		this.context = context;
 		this.listObiective = listObiective;
+		this.showNumeAgent = showNumeAgent;
 	}
 
 	public static class ViewHolder {
-		TextView textNumeObiectiv, textBeneficiar, textStadiu, textDatacreare, textNrCrt;
+		TextView textNumeObiectiv, textBeneficiar, textStadiu, textDatacreare, textNrCrt, textNumeAgent;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -40,6 +42,7 @@ public class AdapterObiectiveHarta extends BaseAdapter {
 			viewHolder.textBeneficiar = (TextView) convertView.findViewById(R.id.textBeneficiar);
 			viewHolder.textStadiu = (TextView) convertView.findViewById(R.id.textStadiu);
 			viewHolder.textDatacreare = (TextView) convertView.findViewById(R.id.textDatacreare);
+			viewHolder.textNumeAgent = (TextView) convertView.findViewById(R.id.textNumeAgent);
 
 			convertView.setTag(viewHolder);
 		} else {
@@ -54,11 +57,14 @@ public class AdapterObiectiveHarta extends BaseAdapter {
 		viewHolder.textStadiu.setText(formatAddress(obiectiv.getAddress()));
 		viewHolder.textDatacreare.setText(UtilsFormatting.formatDate(obiectiv.getData()));
 
+		if (showNumeAgent)
+			viewHolder.textNumeAgent.setText(obiectiv.getNumeAgent());
+
 		if (position % 2 == 0)
 			convertView.setBackgroundResource(R.drawable.shadow_dark);
 		else
 			convertView.setBackgroundResource(R.drawable.shadow_light);
-		
+
 		return convertView;
 	}
 
