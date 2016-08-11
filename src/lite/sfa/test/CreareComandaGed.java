@@ -876,14 +876,18 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 			params.put("codArt", localCodArticol);
 
-			if (selectedDepozit.equals("MAV1")) {
-				varLocalUnitLog = CreareComandaGed.filialaAlternativa.substring(0, 2) + "2" + CreareComandaGed.filialaAlternativa.substring(3, 4);
+			if (selectedDepozit.equals("MAV1") || selectedDepozit.equals("MAV2")) {
+				if (CreareComandaGed.filialaAlternativa.equals("BV90"))
+					varLocalUnitLog = "BV92";
+				else
+					varLocalUnitLog = CreareComandaGed.filialaAlternativa.substring(0, 2) + "2" + CreareComandaGed.filialaAlternativa.substring(3, 4);
 			} else {
 				varLocalUnitLog = CreareComandaGed.filialaAlternativa;
 			}
 
 			params.put("filiala", varLocalUnitLog);
 			params.put("depozit", selectedDepozit);
+			params.put("depart", UserInfo.getInstance().getCodDepart());
 
 			AsyncTaskWSCall call = new AsyncTaskWSCall(this, "getStocDepozit", params);
 			call.getCallResults();
@@ -1596,13 +1600,14 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 						performSaveCmdGED();
 					else {
 
-						//if (CreareComandaGed.tipComanda.equals("S") && CreareComandaGed.rezervStoc) { // comanda
-																										// simulata
-																										// cu
-																										// rezervare
-																										// de
-																										// stoc
-						if (CreareComandaGed.tipComanda.equals("S") ) {
+						// if (CreareComandaGed.tipComanda.equals("S") &&
+						// CreareComandaGed.rezervStoc) { // comanda
+						// simulata
+						// cu
+						// rezervare
+						// de
+						// stoc
+						if (CreareComandaGed.tipComanda.equals("S")) {
 							performSaveCmdGED();
 						} else {
 							// este simulare, a fost salvata deja

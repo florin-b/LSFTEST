@@ -45,14 +45,15 @@ public class AfisareClpActivity extends Activity implements ClpDAOListener {
 
 	private Spinner spinnerCmdClp;
 
-	private static ArrayList<HashMap<String, String>> listComenziClp,
-			listArtCmdClp = new ArrayList<HashMap<String, String>>();
+	private static ArrayList<HashMap<String, String>> listComenziClp, listArtCmdClp = new ArrayList<HashMap<String, String>>();
 	public static String selectedCmd = "", selectedCmdSap = "", clpDeSters = "", strCodStatusCmd = "";
 
 	private ListView listViewArtCmdClp;
 
-	private TextView textAdrLivr, textPersContact, textTelefon, textOras, textJudet, textDataLivrare, textTipPlata,
-			textTipTransport, textAprobatOC, textObservatii, textTipMarfa, textMasa, textTipCamion, textTipIncarcare;
+	private TextView textAdrLivr, textPersContact, textTelefon, textOras, textJudet, textDataLivrare, textTipPlata, textTipTransport, textAprobatOC,
+			textObservatii, textTipMarfa, textMasa, textTipCamion, textTipIncarcare;
+
+	private TextView textAcceptDV, textDataInc;
 
 	private LinearLayout layoutCmdCondHead;
 
@@ -101,6 +102,9 @@ public class AfisareClpActivity extends Activity implements ClpDAOListener {
 		textTipIncarcare = (TextView) findViewById(R.id.textTipIncarcare);
 
 		textObservatii = (TextView) findViewById(R.id.textObservatii);
+
+		textAcceptDV = (TextView) findViewById(R.id.textAcceptDV);
+		textDataInc = (TextView) findViewById(R.id.textDataInc);
 
 		layoutCmdCondHead = (LinearLayout) findViewById(R.id.layoutCmdCondHead);
 		layoutCmdCondHead.setVisibility(View.INVISIBLE);
@@ -323,6 +327,9 @@ public class AfisareClpActivity extends Activity implements ClpDAOListener {
 			textAprobatOC.setText(dateLivrare.getAprobatOC());
 			textObservatii.setText(dateLivrare.getObsComanda());
 
+			textAcceptDV.setText(dateLivrare.getAcceptDV());
+			textDataInc.setText(dateLivrare.getDataIncarcare());
+
 			List<ArticolCLP> listArticole = dateComanda.getArticole();
 
 			ArticoleCLPAdapter adapterArticole = new ArticoleCLPAdapter(this, listArticole);
@@ -336,8 +343,7 @@ public class AfisareClpActivity extends Activity implements ClpDAOListener {
 			public void onClick(View v) {
 
 				if (!clpDeSters.equals("0") || strCodStatusCmd.equals("3") || strCodStatusCmd.equals("5")) {
-					Toast.makeText(getApplicationContext(), "Acest document nu poate fi sters!", Toast.LENGTH_LONG)
-							.show();
+					Toast.makeText(getApplicationContext(), "Acest document nu poate fi sters!", Toast.LENGTH_LONG).show();
 				} else {
 					showConfirmationDeletionAlert();
 				}
@@ -349,20 +355,19 @@ public class AfisareClpActivity extends Activity implements ClpDAOListener {
 
 	public void showConfirmationDeletionAlert() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Stergeti comanda?").setCancelable(false)
-				.setPositiveButton("Da", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
+		builder.setMessage("Stergeti comanda?").setCancelable(false).setPositiveButton("Da", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
 
-						tipOpCmdClp = 2; // stergere
-						opereazaComandaClp();
+				tipOpCmdClp = 2; // stergere
+				opereazaComandaClp();
 
-					}
-				}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
+			}
+		}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
 
-					}
-				}).setTitle("Confirmare").setIcon(R.drawable.warning96);
+			}
+		}).setTitle("Confirmare").setIcon(R.drawable.warning96);
 
 		AlertDialog alert = builder.create();
 		alert.show();
@@ -427,15 +432,13 @@ public class AfisareClpActivity extends Activity implements ClpDAOListener {
 			Locale.setDefault(locale);
 			Configuration config = new Configuration();
 			config.locale = locale;
-			getBaseContext().getResources().updateConfiguration(config,
-					getBaseContext().getResources().getDisplayMetrics());
+			getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 		}
 
 		// restart app la idle
 		if (UserInfo.getInstance().getCod().equals("")) {
 
-			Intent i = getBaseContext().getPackageManager()
-					.getLaunchIntentForPackage(getBaseContext().getPackageName());
+			Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
 			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(i);
 		}

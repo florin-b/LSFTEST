@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import listeners.ComenziDAOListener;
+import listeners.SelectAgentDialogListener;
+import model.Agent;
 import model.ComenziDAO;
 import model.UserInfo;
 import utils.MapUtils;
@@ -18,6 +20,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,9 +41,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import dialogs.SelectAgentDialog;
 import enums.EnumComenziDAO;
 
-public class StareComenzi extends Activity implements ComenziDAOListener {
+public class StareComenzi extends Activity implements ComenziDAOListener, SelectAgentDialogListener {
 
 	private Spinner spinnerComenzi;
 	private ComenziDAO operatiiComenzi;
@@ -50,6 +54,7 @@ public class StareComenzi extends Activity implements ComenziDAOListener {
 	private Button hartaButton;
 	private GoogleMap googleMap;
 	private TextView textNumeSofer, textTelSofer;
+	private ActionBar actionBar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +64,7 @@ public class StareComenzi extends Activity implements ComenziDAOListener {
 		setTheme(R.style.LRTheme);
 		setContentView(R.layout.stare_comanda);
 
-		ActionBar actionBar = getActionBar();
+		actionBar = getActionBar();
 		actionBar.setTitle("Stare comenzi");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -82,15 +87,20 @@ public class StareComenzi extends Activity implements ComenziDAOListener {
 		textNumeSofer = (TextView) findViewById(R.id.textNumeSofer);
 		textTelSofer = (TextView) findViewById(R.id.textTelSofer);
 
-		getComenziDeschise();
+		if (!isSDorSM())
+			getComenziDeschise(UserInfo.getInstance().getCod());
 
 	}
 
-	private void getComenziDeschise() {
+	private void getComenziDeschise(String codAgent) {
 		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("codAgent", UserInfo.getInstance().getCod());
+		params.put("codAgent", codAgent);
 		operatiiComenzi.getComenziDeschise(params);
 
+	}
+
+	private boolean isSDorSM() {
+		return UserInfo.getInstance().getTipUserSap().equals("SD") || UserInfo.getInstance().getTipUserSap().equals("SM");
 	}
 
 	private void displayComenziDeschise(List<BeanComandaDeschisa> listComenzi) {
@@ -135,6 +145,19 @@ public class StareComenzi extends Activity implements ComenziDAOListener {
 		});
 	}
 
+	private void CreateMenu(Menu menu) {
+		MenuItem mnu1 = menu.add(0, 0, 0, "Agenti");
+		mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+	}
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		if (isSDorSM())
+			CreateMenu(menu);
+		return true;
+	}
+
 	private void initMap() {
 		if (mapFragment.getView().getVisibility() == View.INVISIBLE) {
 			mapFragment.getView().setVisibility(View.VISIBLE);
@@ -155,7 +178,6 @@ public class StareComenzi extends Activity implements ComenziDAOListener {
 	private void getPozitieMasina() {
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("nrMasina", comandaCurenta.getNrMasina());
-
 		operatiiComenzi.getPozitieMasina(params);
 
 	}
@@ -238,12 +260,22 @@ public class StareComenzi extends Activity implements ComenziDAOListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 
+		case 0:
+			showSelectAgentDialog();
+			break;
+
 		case android.R.id.home:
 			returnToMainMenu();
 			return true;
 
 		}
 		return false;
+	}
+
+	private void showSelectAgentDialog() {
+		SelectAgentDialog selectAgent = new SelectAgentDialog(StareComenzi.this);
+		selectAgent.setAgentDialogListener(this);
+		selectAgent.show();
 	}
 
 	private void returnToMainMenu() {
@@ -275,6 +307,13 @@ public class StareComenzi extends Activity implements ComenziDAOListener {
 			break;
 
 		}
+
+	}
+
+	@Override
+	public void agentSelected(Agent agent) {
+		getComenziDeschise(agent.getCod());
+		actionBar.setTitle("Stare comenzi" + " - " + agent.getNume());
 
 	}
 

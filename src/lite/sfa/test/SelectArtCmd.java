@@ -437,7 +437,6 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 					CreareComanda.filialaAlternativa = UserInfo.getInstance().getUnitLog();
 
 				} else {
-
 					CreareComanda.filialaAlternativa = "BV90";
 				}
 

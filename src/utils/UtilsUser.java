@@ -2,8 +2,6 @@ package utils;
 
 import model.UserInfo;
 
-
-
 public class UtilsUser {
 
 	public static boolean isKA() {
@@ -87,6 +85,17 @@ public class UtilsUser {
 			return true;
 		} else if (isCV()) {
 			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean isUserExceptieBV90Ged() {
+
+		// pentru ag si sd de la 02 si 05 se ofera accesul la BV90
+		if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("10")) {
+			if (UserInfo.getInstance().getCodDepart().equals("02") || UserInfo.getInstance().getCodDepart().equals("05"))
+				return true;
 		}
 
 		return false;

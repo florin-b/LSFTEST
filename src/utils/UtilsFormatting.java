@@ -45,6 +45,26 @@ public class UtilsFormatting {
 
 	}
 
+	public static String formatDateFromSap(String target) {
+
+		String formattedDate = "";
+
+		try {
+			SimpleDateFormat formatFinal = new SimpleDateFormat("yyyyMMdd", Locale.US);
+			Date date = formatFinal.parse(target);
+
+			String pattern = "dd-MM-yyyy";
+			SimpleDateFormat formatInit = new SimpleDateFormat(pattern);
+
+			formattedDate = formatInit.format(date);
+
+		} catch (java.text.ParseException ex) {
+			System.out.println(ex.toString());
+		}
+		return formattedDate;
+
+	}
+
 	public static boolean isNumeric(String stringToCheck) {
 		Pattern pattern = Pattern.compile("^\\d+$");
 		Matcher matcher = pattern.matcher(stringToCheck.trim());

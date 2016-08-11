@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -108,7 +109,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private TextView textCoordAdresa;
 	private EditText textNrStr;
 	private Spinner spinnerIndoire;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -175,6 +176,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			layoutMail.setVisibility(View.VISIBLE);
 			textMail.setText(dateLivrareInstance.getMail().trim().replace("~", "@"));
 
+			setTipTransportOptions();
+
 			if (UserInfo.getInstance().getUserSite().equals("X")) {
 				adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipPlataOnline);
 				adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransportOnline);
@@ -193,7 +196,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			checkMacara = (CheckBox) findViewById(R.id.checkMacara);
 			setMacaraVisible();
 			setListenerCheckMacara();
-			
+
 			spinnerIndoire = (Spinner) findViewById(R.id.spinnerIndoire);
 			setupSpinnerIndoire();
 
@@ -320,6 +323,16 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	}
 
+	private void setTipTransportOptions() {
+		if (UtilsUser.isUserExceptieBV90Ged()) {
+			List<String> tempArray = new ArrayList<String>(Arrays.asList(tipTransport));
+			tempArray.add("TERT - Transport tert");
+			tipTransport = tempArray.toArray(new String[tempArray.size()]);
+
+		}
+
+	}
+
 	private void afisCoordAdresa() {
 
 		if (DateLivrare.getInstance().getCoordonateAdresa() != null) {
@@ -401,7 +414,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		});
 
 	}
-	
+
 	private void setupSpinnerIndoire() {
 
 		String[] indoireValues = { "Tip prelucrare fier-beton 6 m", "TAIERE", "INDOIRE" };
@@ -978,11 +991,10 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		String observatii = "", obsPlata = " ", strMailAddr = " ";
 
 		String nrStrada = "";
-		
+
 		if (textNrStr.getText().toString().trim().length() > 0)
 			nrStrada = " NR " + textNrStr.getText().toString().trim();
-		
-		
+
 		strada = textStrada.getText().toString().trim() + nrStrada;
 
 		DateLivrare dateLivrareInstance = DateLivrare.getInstance();
@@ -1092,7 +1104,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		dateLivrareInstance.setTipDocInsotitor(String.valueOf(spinnerDocInsot.getSelectedItemPosition() + 1));
 
 		dateLivrareInstance.setTonaj("-1");
-		
+
 		if (radioAltaAdresa.isChecked() && !DateLivrare.getInstance().isAltaAdresa()) {
 			dateLivrareInstance.setDateLivrare(getAdrLivrareJSON());
 		}
@@ -1101,7 +1113,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			dateLivrareInstance.setPrelucrare(spinnerIndoire.getSelectedItem().toString());
 		} else
 			dateLivrareInstance.setPrelucrare("-1");
-		
+
 		finish();
 
 	}
@@ -1128,11 +1140,10 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		return true;
 	}
 
-	
 	private String getTipTransport() {
 		return spinnerTransp.getSelectedItem().toString().substring(0, 4);
 	}
-	
+
 	private String getAdrLivrareJSON() {
 		String jsonData = "";
 

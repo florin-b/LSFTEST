@@ -188,6 +188,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 			jsonParametru.put("metodaPlata", parametru.getMetodaPlata());
 			jsonParametru.put("codJudet", parametru.getCodJudet());
 			jsonParametru.put("localitate", parametru.getLocalitate());
+			jsonParametru.put("filialaAlternativa", parametru.getFilialaAlternativa());
 
 		} catch (JSONException e) {
 			e.printStackTrace();

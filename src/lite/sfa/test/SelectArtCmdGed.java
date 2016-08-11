@@ -34,6 +34,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
@@ -42,9 +43,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -134,6 +138,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	private PretArticolGed selectedArticol;
 	private NumberFormat nForm2;
 	private ArticolDB articolDBSelected;
+
+	private String unitLogUnic = "";
 
 	private enum EnumDepoz {
 		MAV1;
@@ -365,6 +371,27 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		return UserInfo.getInstance().getTipUser().equals("WOOD");
 	}
 
+
+
+	private void CreateMenu(Menu menu) {
+
+		if (UtilsUser.isUserExceptieBV90Ged()) {
+			MenuItem mnu1 = menu.add(0, 0, 0, "Filiala");
+			{
+				mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+				populateListViewArticol(new ArrayList<ArticolDB>());
+
+			}
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		CreateMenu(menu);
+		return true;
+	}
+
 	// eveniment selectie unitate masura alternativa
 	public class OnSelectUnitMas implements OnItemSelectedListener {
 		@SuppressWarnings("unchecked")
@@ -431,13 +458,64 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch (item.getItemId()) {
-
+		case 0:
+			showSelectFilArtDialogBox();
+			return true;
 		case android.R.id.home:
 			finish();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+
+	}
+
+	public void showSelectFilArtDialogBox() {
+		dialogSelFilArt = new Dialog(SelectArtCmdGed.this);
+		dialogSelFilArt.setContentView(R.layout.selectfilartdialogbox);
+		dialogSelFilArt.setTitle("Selectati filiala");
+		dialogSelFilArt.setCancelable(false);
+		dialogSelFilArt.show();
+
+		final RadioButton radioFilAg = (RadioButton) dialogSelFilArt.findViewById(R.id.radio1);
+		radioFilAg.setText(UserInfo.getInstance().getUnitLog());
+		radioFilAg.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+			}
+		});
+
+		final RadioButton radioFilBV90 = (RadioButton) dialogSelFilArt.findViewById(R.id.radio2);
+
+		radioFilBV90.setText("BV90");
+		radioFilBV90.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+			}
+		});
+
+		if (CreareComandaGed.filialaAlternativa.equals(UserInfo.getInstance().getUnitLog()))
+			radioFilAg.setChecked(true);
+		else
+			radioFilBV90.setChecked(true);
+
+		Button btnOkFilArt = (Button) dialogSelFilArt.findViewById(R.id.btnOkSelFilArt);
+		btnOkFilArt.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+
+				if (radioFilAg.isChecked()) {
+					CreareComandaGed.filialaAlternativa = UserInfo.getInstance().getUnitLog();
+
+				} else {
+					CreareComandaGed.filialaAlternativa = "BV90";
+				}
+
+				if (!numeArticol.equals("")) {
+					performListArtStoc();
+				}
+				dialogSelFilArt.dismiss();
+
+			}
+		});
 
 	}
 
@@ -702,6 +780,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		paramPret.setTermenPlata(DateLivrare.getInstance().getTermenPlata());
 		paramPret.setCodJudet(getCodJudetPret());
 		paramPret.setLocalitate(getLocalitatePret());
+		paramPret.setFilialaAlternativa(CreareComandaGed.filialaAlternativa);
 
 		params.put("parametruPret", opArticol.serializeParamPretGed(paramPret));
 
@@ -872,6 +951,15 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 					if (textCant.getVisibility() != View.VISIBLE) {
 						return;
+					}
+
+					if (ListaArticoleComandaGed.getInstance().getListArticoleComanda().size() == 0) {
+						unitLogUnic = CreareComandaGed.filialaAlternativa;
+					}
+
+					if (!unitLogUnic.equals(CreareComandaGed.filialaAlternativa)) {
+						//Toast.makeText(getApplicationContext(), "Selectati articole dintr-o singura filiala!", Toast.LENGTH_LONG).show();
+						//return;
 					}
 
 					String cantArticol = textCant.getText().toString().trim();
@@ -1436,16 +1524,24 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			codArticol = "0000000000" + codArticol;
 
 		if (globalDepozSel.equals("MAV1") || globalDepozSel.equals("MAV2")) {
-			varLocalUnitLog = filialaAlternativa.substring(0, 2) + "2" + filialaAlternativa.substring(3, 4);
+			if (CreareComandaGed.filialaAlternativa.equals("BV90"))
+				varLocalUnitLog = "BV92";
+			else
+				varLocalUnitLog = filialaAlternativa.substring(0, 2) + "2" + filialaAlternativa.substring(3, 4);
 		} else if (globalDepozSel.equals("WOOD")) {
 			varLocalUnitLog = filialaAlternativa.substring(0, 2) + "4" + filialaAlternativa.substring(3, 4);
 		} else {
-			varLocalUnitLog = filialaAlternativa.substring(0, 2) + "1" + filialaAlternativa.substring(3, 4);
+
+			if (CreareComandaGed.filialaAlternativa.equals("BV90"))
+				varLocalUnitLog = CreareComandaGed.filialaAlternativa;
+			else
+				varLocalUnitLog = filialaAlternativa.substring(0, 2) + "1" + filialaAlternativa.substring(3, 4);
 		}
 
 		params.put("codArt", codArticol);
 		params.put("filiala", varLocalUnitLog);
 		params.put("depozit", globalDepozSel);
+		params.put("depart", UserInfo.getInstance().getCodDepart());
 
 		opArticol.getStocDepozit(params);
 
