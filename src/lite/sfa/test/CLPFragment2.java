@@ -6,6 +6,7 @@ package lite.sfa.test;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -67,7 +68,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 	private EditText txtNumeArticol, textCantArt;
 
 	String[] depozite = { "V1 - vanzare", "V2 - vanzare", "V3 - vanzare", "G1 - gratuite", "G2 - gratuite", "G3 - gratuite", "D1 - deteriorate",
-			"D2 - deteriorate", "D3 - deteriorate", "DESC", "01RZ", "TAMP", "GAR1" };
+			"D2 - deteriorate", "D3 - deteriorate", "DESC", "TAMP", "GAR1" };
 
 	private static ArrayList<HashMap<String, String>> listArtSelClp = null, listUmVanz = null;
 
@@ -143,7 +144,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		listViewArticole.setOnItemClickListener(new MyOnItemSelectedListener());
 
 		spinnerDepoz = (Spinner) v.findViewById(R.id.spinnerDepozClp);
-		ArrayAdapter<String> adapterSpinnerDepoz = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, depozite);
+		ArrayAdapter<String> adapterSpinnerDepoz = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, getDepozite());
 		adapterSpinnerDepoz.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerDepoz.setAdapter(adapterSpinnerDepoz);
 		spinnerDepoz.setOnItemSelectedListener(new OnSelectDepozit());
@@ -221,6 +222,14 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		Bundle bdl = new Bundle(1);
 		f.setArguments(bdl);
 		return f;
+	}
+
+	private String[] getDepozite() {
+		List<String> listDepozite = new ArrayList<String>(Arrays.asList(depozite));
+		listDepozite.add(UserInfo.getInstance().getCodDepart() + "RZ");
+
+		return listDepozite.toArray(new String[listDepozite.size()]);
+
 	}
 
 	public void addListenerToggle() {
@@ -1174,18 +1183,24 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 	private void showSaveStatus(String status) {
 
+		String strInfo = "";
+		String[] info = { "" };
+
+		if (status.contains(","))
+			info = status.split(",");
+
+		if (info.length > 1 && info[1].trim().length() > 0)
+			strInfo = info[1];
+
 		if (status.startsWith("0")) {
 
-			String[] info = status.split(",");
-
-			if (info[1].trim().length() > 0)
-				Toast.makeText(getActivity(), info[1], Toast.LENGTH_LONG).show();
+			if (info.length > 0 && info[1].trim().length() > 0)
+				Toast.makeText(getActivity(), strInfo, Toast.LENGTH_LONG).show();
 
 			Toast.makeText(getActivity(), "Comanda salvata.", Toast.LENGTH_SHORT).show();
 			clearAllData();
 		} else {
-			Toast.makeText(getActivity(), "Comanda nu a fost salvata.", Toast.LENGTH_SHORT).show();
-
+			Toast.makeText(getActivity(), "Comanda nu a fost salvata. " + strInfo, Toast.LENGTH_LONG).show();
 		}
 	}
 
