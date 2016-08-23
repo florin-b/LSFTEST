@@ -107,7 +107,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		this.params = params;
 		performOperation();
 	}
-	
+
 	@Override
 	public void getCodBare(HashMap<String, String> params) {
 		numeComanda = EnumArticoleDAO.GET_COD_BARE;
@@ -157,6 +157,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 					articol.setDepart(articolObject.getString("depart"));
 					articol.setDepartAprob(articolObject.getString("departAprob"));
 					articol.setUmPalet(articolObject.getString("umPalet").equals("1") ? true : false);
+					articol.setStoc(articolObject.getString("stoc"));
 					listArticole.add(articol);
 
 				}
@@ -375,7 +376,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		List<BeanArticolStoc> listArticole = new ArrayList<BeanArticolStoc>();
 
 		try {
-			Object jsonObject =  new JSONTokener(serializedResult).nextValue();
+			Object jsonObject = new JSONTokener(serializedResult).nextValue();
 
 			if (jsonObject instanceof JSONArray) {
 				JSONArray jsonArray = new JSONArray(serializedResult);
@@ -405,7 +406,5 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 
 		return listArticole;
 	}
-
-	
 
 }

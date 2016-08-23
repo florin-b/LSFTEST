@@ -1,6 +1,17 @@
 package utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import model.UserInfo;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import android.content.Context;
+import android.widget.Toast;
 
 public class UtilsUser {
 
@@ -99,6 +110,95 @@ public class UtilsUser {
 		}
 
 		return false;
+	}
+
+	public static String serializeUserInfo() {
+
+		JSONObject jsonUser = new JSONObject();
+		JSONArray jsonArrayFiliale = new JSONArray();
+
+		try {
+			jsonUser.put("nume", UserInfo.getInstance().getNume());
+			jsonUser.put("filiala", UserInfo.getInstance().getFiliala());
+			jsonUser.put("cod", UserInfo.getInstance().getCod());
+			jsonUser.put("numeDepart", UserInfo.getInstance().getNumeDepart());
+			jsonUser.put("codDepart", UserInfo.getInstance().getCodDepart());
+			jsonUser.put("unitLog", UserInfo.getInstance().getUnitLog());
+			jsonUser.put("initUnitLog", UserInfo.getInstance().getInitUnitLog());
+			jsonUser.put("tipAcces", UserInfo.getInstance().getTipAcces());
+			jsonUser.put("parentScreen", UserInfo.getInstance().getParentScreen());
+			jsonUser.put("filialeDV", UserInfo.getInstance().getFilialeDV());
+			jsonUser.put("altaFiliala", UserInfo.getInstance().isAltaFiliala());
+			jsonUser.put("tipUser", UserInfo.getInstance().getTipUser());
+			jsonUser.put("departExtra", UserInfo.getInstance().getDepartExtra());
+			jsonUser.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
+
+			for (String filiala : UserInfo.getInstance().getExtraFiliale()) {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("filiala", filiala);
+				jsonArrayFiliale.put(jsonObject);
+			}
+
+			jsonUser.put("extraFiliale", jsonArrayFiliale.toString());
+			jsonUser.put("comisionCV", UserInfo.getInstance().getComisionCV());
+			jsonUser.put("coefCorectie", UserInfo.getInstance().getCoefCorectie());
+			jsonUser.put("userSite", UserInfo.getInstance().getUserSite());
+			jsonUser.put("userWood", UserInfo.getInstance().isUserWood());
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return jsonUser.toString();
+
+	}
+
+	public static void deserializeUserInfo(String userInfoSer, Context context) {
+
+		try {
+			List<String> listExtraFiliale = new ArrayList<String>();
+			JSONObject jsonObject = new JSONObject(userInfoSer);
+
+			if (jsonObject instanceof JSONObject) {
+				UserInfo.getInstance().setNume(jsonObject.getString("nume"));
+				UserInfo.getInstance().setFiliala(jsonObject.getString("filiala"));
+				UserInfo.getInstance().setCod(jsonObject.getString("cod"));
+				UserInfo.getInstance().setNumeDepart(jsonObject.getString("numeDepart"));
+				UserInfo.getInstance().setCodDepart(jsonObject.getString("codDepart"));
+				UserInfo.getInstance().setUnitLog(jsonObject.getString("unitLog"));
+				UserInfo.getInstance().setInitUnitLog(jsonObject.getString("initUnitLog"));
+				UserInfo.getInstance().setTipAcces(jsonObject.getString("tipAcces"));
+				UserInfo.getInstance().setParentScreen(jsonObject.getString("parentScreen"));
+				UserInfo.getInstance().setFilialeDV(jsonObject.getString("filialeDV"));
+				UserInfo.getInstance().setAltaFiliala(Boolean.valueOf(jsonObject.getString("altaFiliala")));
+				UserInfo.getInstance().setTipUser(jsonObject.getString("tipUser"));
+				UserInfo.getInstance().setDepartExtra(jsonObject.getString("departExtra"));
+				UserInfo.getInstance().setTipUserSap(jsonObject.getString("tipUserSap"));
+				UserInfo.getInstance().setComisionCV(Double.valueOf(jsonObject.getString("comisionCV")));
+				UserInfo.getInstance().setCoefCorectie(jsonObject.getString("coefCorectie"));
+				UserInfo.getInstance().setUserSite(jsonObject.getString("userSite"));
+				UserInfo.getInstance().setUserWood(Boolean.valueOf(jsonObject.getString("userWood")));
+
+				Object json = new JSONTokener(jsonObject.getString("extraFiliale")).nextValue();
+
+				if (json instanceof JSONArray) {
+					JSONArray jsonArray = new JSONArray(jsonObject.getString("extraFiliale"));
+
+					for (int i = 0; i < jsonArray.length(); i++) {
+						JSONObject compObject = jsonArray.getJSONObject(i);
+						listExtraFiliale.add(compObject.getString("filiala"));
+
+					}
+				}
+
+				UserInfo.getInstance().setExtraFiliale(listExtraFiliale);
+
+			}
+
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
 	}
 
 }

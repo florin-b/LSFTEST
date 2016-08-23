@@ -347,7 +347,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 		}
 
 		public void onNothingSelected(AdapterView<?> parent) {
-			// TODO
+			
 		}
 	}
 
@@ -454,7 +454,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 		stocBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				try {
-					// afisare articole
+					
 					if (txtCodArticol.length() > 0) {
 						try {
 							performGetArticole();
@@ -498,6 +498,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 			params.put("tipCautare", tipCautare);
 			params.put("departament", selectedDepartamentAgent);
 			params.put("filiala", UserInfo.getInstance().getUnitLog());
+			params.put("afisStoc", "1");
 
 			opArticol.getArticoleDistributie(params);
 		}

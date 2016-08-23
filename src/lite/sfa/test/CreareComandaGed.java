@@ -1276,12 +1276,16 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				obj.put("ponderare", listArticole.get(i).getPonderare());
 				myArray.put(obj);
 
-				// exceptie transport
-				if (listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1 && !UtilsUser.isAgentOrSD()) {
+				
+				if (listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1) {
 					alertDV = true;
 					if (!comandaFinala.getComandaBlocata().equals("21"))
 						comandaFinala.setComandaBlocata("1");
-					aprobariCV.add(listArticole.get(i).getDepart());
+
+					if (UtilsUser.isAgentOrSD() && !UserInfo.getInstance().isFilHome())
+						aprobariCV.add(UserInfo.getInstance().getCodDepart());
+					else
+						aprobariCV.add(listArticole.get(i).getDepart());
 				}
 
 				if (UtilsUser.isAgentOrSD() || UtilsUser.isConsWood()) {

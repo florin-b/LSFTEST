@@ -490,6 +490,7 @@ public class MainMenu extends Activity {
 
 					if (nextScreen != null && !isDownloading) {
 						startActivity(nextScreen);
+						nextScreen.removeExtra("UserInfo");
 						finish();
 					}
 
@@ -662,7 +663,6 @@ public class MainMenu extends Activity {
 
 				// exit
 				if (selectedBtnName.equalsIgnoreCase("Iesire")) {
-
 					System.exit(0);
 
 				}
@@ -673,14 +673,7 @@ public class MainMenu extends Activity {
 	}
 
 	private void addExtraInfo(Intent intent) {
-
-		intent.putExtra("nume", UserInfo.getInstance().getNume());
-		intent.putExtra("filiala", UserInfo.getInstance().getFiliala());
-		intent.putExtra("cod", UserInfo.getInstance().getCod());
-		intent.putExtra("unitLog", UserInfo.getInstance().getUnitLog());
-		intent.putExtra("tipAcces", UserInfo.getInstance().getTipAcces());
-		intent.putExtra("tipUser", UserInfo.getInstance().getTipUser());
-		intent.putExtra("tipUserSap", UserInfo.getInstance().getTipUserSap());
+		intent.putExtra("UserInfo", UtilsUser.serializeUserInfo());
 
 	}
 

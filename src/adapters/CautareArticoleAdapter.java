@@ -18,7 +18,7 @@ public class CautareArticoleAdapter extends BaseAdapter {
 	List<ArticolDB> listArticole;
 
 	static class ViewHolder {
-		public TextView textNumeArticol, textCodArticol, textTipArt;
+		public TextView textNumeArticol, textCodArticol, textTipArt, textStoc;
 	}
 
 	public CautareArticoleAdapter(Context context, List<ArticolDB> listArticole) {
@@ -38,6 +38,7 @@ public class CautareArticoleAdapter extends BaseAdapter {
 			viewHolder.textNumeArticol = (TextView) convertView.findViewById(R.id.textNumeArticol);
 			viewHolder.textCodArticol = (TextView) convertView.findViewById(R.id.textCodArticol);
 			viewHolder.textTipArt = (TextView) convertView.findViewById(R.id.textTipArt);
+			viewHolder.textStoc = (TextView) convertView.findViewById(R.id.textStoc);
 
 			convertView.setTag(viewHolder);
 
@@ -49,6 +50,9 @@ public class CautareArticoleAdapter extends BaseAdapter {
 		viewHolder.textNumeArticol.setText(articol.getNume());
 		viewHolder.textCodArticol.setText(articol.getCod());
 		viewHolder.textTipArt.setText(articol.getTipAB());
+
+		if (Double.valueOf(articol.getStoc()) > 0)
+			viewHolder.textStoc.setText(articol.getStoc() + " " + articol.getUmVanz());
 
 		convertView.setBackgroundColor(colors[colorPos]);
 		return convertView;

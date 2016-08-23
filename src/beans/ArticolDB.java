@@ -12,6 +12,7 @@ public class ArticolDB {
 	private String nivel1;
 	private String departAprob;
 	private boolean umPalet;
+	private String stoc;
 
 	public ArticolDB() {
 
@@ -99,10 +100,18 @@ public class ArticolDB {
 		this.umPalet = umPalet;
 	}
 
+	public String getStoc() {
+		return stoc;
+	}
+
+	public void setStoc(String stoc) {
+		this.stoc = stoc;
+	}
+
 	@Override
 	public String toString() {
 		return "ArticolDB [cod=" + cod + ", nume=" + nume + ", umVanz=" + umVanz + ", depart=" + depart + ", tipAB=" + tipAB + ", sintetic=" + sintetic
-				+ ", umVanz10=" + umVanz10 + ", nivel1=" + nivel1 + ", departAprob=" + departAprob + ", umPalet=" + umPalet + "]";
+				+ ", umVanz10=" + umVanz10 + ", nivel1=" + nivel1 + ", departAprob=" + departAprob + ", umPalet=" + umPalet + ", stoc=" + stoc + "]";
 	}
 
 }

@@ -14,10 +14,10 @@ import java.util.Locale;
 import listeners.AsyncTaskListener;
 import model.InfoStrings;
 import model.UserInfo;
+import utils.UtilsUser;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -100,27 +100,26 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		addListenerUserName();
 		addListenerPassword();
 
-		//etUsername.setText("androwood");
-		//etPassword.setText("112");
+		// etUsername.setText("androwood");
+		// etPassword.setText("112");
 
-		//etUsername.setText("androsd");
-		//etPassword.setText("112");
+		// etUsername.setText("androsd");
+		// etPassword.setText("112");
 
 		// DD Wood
 		// etUsername.setText("OCODREANU");
 		// etPassword.setText("Cdw6BU");
 
 		// CAG GL
-		//etUsername.setText("FROTARU");
-		//etPassword.setText("89mLcn");
-		
-		//DV CAG
-		//etUsername.setText("NIONITA");
-		//etPassword.setText("ga9Sm3");		
-		
+		// etUsername.setText("FROTARU");
+		// etPassword.setText("89mLcn");
 
-		 etUsername.setText("SIONITA");
-		 etPassword.setText("SuJste");
+		// DV CAG
+		// etUsername.setText("NIONITA");
+		// etPassword.setText("ga9Sm3");
+
+		//etUsername.setText("SIONITA");
+		//etPassword.setText("SuJste");
 
 		// etUsername.setText("androag");
 		// etPassword.setText("sfa");
@@ -201,19 +200,30 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		// etUsername.setText("ABOGDAN"); // av inst Ploiesti
 		// etPassword.setText("Jg3UuK");
 
-		// etUsername.setText("MDINICA"); // ag electr Gl
-		// etPassword.setText("rxtw93");
+		 etUsername.setText("DTOFAN"); // ag electr Gl
+		 etPassword.setText("6H4YWV");
 
 		// etUsername.setText("CCUZA"); // sd electr Gl
 		// etPassword.setText("84fGx3");
-		 
-		// etUsername.setText("MURSU"); // DV mat grele 
+
+		// etUsername.setText("MURSU"); // DV mat grele
 		// etPassword.setText("CZzMPA");
-		 
-		  
+
+		//etUsername.setText("FROTARU"); // CV Obiective
+		//etPassword.setText("89mLcn");
 
 		globalMyIP = getIPConnection();
 
+		checkBundleExtra();
+
+	}
+
+	private void checkBundleExtra() {
+
+		if (getIntent().hasExtra("UserInfo")) {
+			UtilsUser.deserializeUserInfo(getIntent().getExtras().getString("UserInfo"), getApplicationContext());
+			startMainMenuActivity();
+		}
 	}
 
 	private void addListenerSlider() {
@@ -377,7 +387,7 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 
 		if (numeFiliala.equals("BUZAU"))
 			fl = "BZ10";
-		
+
 		if (numeFiliala.equals("GALATI"))
 			fl = "GL10";
 
@@ -490,6 +500,12 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		finish();
 	}
 
+	private void startMainMenuActivity() {
+		Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);
+		startActivity(nextScreen);
+		finish();
+	}
+
 	public void validateLogin(String result) {
 		if (!result.equals("-1") && result.length() > 0) {
 			String[] token = result.split("#");
@@ -570,12 +586,10 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 						uInfo.setCodDepart("01");
 						uInfo.setNumeDepart("LEMN");
 					}
-
 					
+					uInfo.setFilHome(Boolean.valueOf(token[12]));
 
-					Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);
-					startActivity(nextScreen);
-					finish();
+					startMainMenuActivity();
 
 				} else {
 					lblResult.setText("Acces interzis!");
@@ -593,13 +607,6 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 			slideToUnLock.setChecked(true);
 		}
 
-	}
-
-	private void writeToSharedPreferences() {
-		SharedPreferences prefs = getSharedPreferences("demopref", Context.MODE_WORLD_READABLE);
-		SharedPreferences.Editor editor = prefs.edit();
-		editor.putString("demostring", "demoValue1");
-		editor.commit();
 	}
 
 	public final void onTaskComplete(String methodName, Object result) {

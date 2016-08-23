@@ -611,13 +611,17 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 			NumberFormat nf3 = new DecimalFormat("00000000");
 			String fullCode = nf3.format(Integer.parseInt(UserInfo.getInstance().getCod())).toString();
 
+			String localDivizieAgent = divizieAgent;
+			if (comandaCurenta.getCanalDistrib().equals("20") && comandaCurenta.getAprobariNecesare().trim().length() > 0)
+				localDivizieAgent = "11";
+
 			HashMap<String, String> params = new HashMap<String, String>();
 			params.put("nrCmd", selectedCmd);
 			params.put("nrCmdSAP", selectedCmdSAP);
 			params.put("tipOp", String.valueOf(tipOpCmd));
 			params.put("codUser", fullCode);
 			params.put("codRespingere", codRespingere);
-			params.put("divizieAgent", divizieAgent);
+			params.put("divizieAgent", localDivizieAgent);
 			params.put("elimTransp", getStareElimTransport());
 			params.put("filiala", listComenzi.get(selectedPosComanda).getFiliala());
 			params.put("codStare", comandaCurenta.getCodStare());
@@ -658,7 +662,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 
 			String depart = UserInfo.getInstance().getCodDepart();
 
-			if (UtilsUser.isDV_WOOD())
+			if (UtilsUser.isDV_WOOD() || UserInfo.getInstance().getCod().equals("00010281"))
 				depart = "11";
 
 			params.put("filiala", UserInfo.getInstance().getUnitLog());
@@ -680,6 +684,13 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		HashMap<String, String> params = new HashMap<String, String>();
 
 		String tipCmd = "-1";
+		String codDepart;
+
+		// CMATEI
+		if (UserInfo.getInstance().getCod().equals("00010281"))
+			codDepart = "11";
+		else
+			codDepart = UserInfo.getInstance().getCodDepart();
 
 		if (UserInfo.getInstance().getTipAcces().equals("14") || UserInfo.getInstance().getTipAcces().equals("12")) // admin
 			// sau
@@ -694,7 +705,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		params.put("nrCmd", selectedCmd);
 		params.put("afisCond", tipCmd);
 		params.put("tipUser", UserInfo.getInstance().getTipUser());
-		params.put("departament", UserInfo.getInstance().getCodDepart());
+		params.put("departament", codDepart);
 
 		operatiiComenzi.getArticoleComandaJSON(params);
 
