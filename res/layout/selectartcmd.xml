@@ -380,10 +380,101 @@
                         android:typeface="monospace" />
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/txtImpachetare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right|center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="right|center"
+                    android:textColor="@color/editTextColor1"
+                    android:textSize="17sp"
+                    android:typeface="monospace" />
+
+                <LinearLayout
+                    android:id="@+id/layoutIstoricPret1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone" >
+
+                    <TextView
+                        android:id="@+id/labelIstoricPret"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center"
+                        android:layout_weight="0.1"
+                        android:gravity="left|center"
+                        android:text="Istoric pret: "
+                        android:textColor="@color/editTextColor1"
+                        android:textSize="17sp"
+                        android:typeface="monospace" />
+
+                    <TextView
+                        android:id="@+id/txtIstoricPret1"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center"
+                        android:layout_weight="0.4"
+                        android:gravity="left|center"
+                        android:textColor="@color/editTextColor1"
+                        android:textSize="17sp"
+                        android:typeface="monospace" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutIstoricPret2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone" >
+
+                    <View
+                        android:layout_width="0dip"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.1" />
+
+                    <TextView
+                        android:id="@+id/txtIstoricPret2"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="0.4"
+                        android:gravity="left|center"
+                        android:textColor="@color/editTextColor1"
+                        android:textSize="17sp"
+                        android:typeface="monospace" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutIstoricPret3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone" >
+
+                    <View
+                        android:layout_width="0dip"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.1" />
+
+                    <TextView
+                        android:id="@+id/txtIstoricPret3"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="0.4"
+                        android:gravity="left|center"
+                        android:textColor="@color/editTextColor1"
+                        android:textSize="17sp"
+                        android:typeface="monospace" />
+                </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
                     android:orientation="horizontal" >
 
                     <LinearLayout
@@ -466,7 +557,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dip"
+                            android:layout_marginTop="5dip"
                             android:orientation="horizontal" >
 
                             <TextView

@@ -5,7 +5,6 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
@@ -75,7 +74,6 @@
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
@@ -93,7 +91,6 @@
             android:drawSelectorOnTop="false" />
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/resLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -104,14 +101,12 @@
             android:orientation="vertical" >
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
                 android:orientation="horizontal" >
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
@@ -141,7 +136,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.25"
@@ -160,7 +154,6 @@
                         android:typeface="sans" />
 
                     <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal" >
@@ -192,7 +185,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/layoutStocKA"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -239,7 +231,6 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
@@ -247,7 +238,6 @@
                 android:orientation="horizontal" >
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
@@ -318,7 +308,6 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/RedBtnTable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -326,7 +315,6 @@
                 android:orientation="vertical" >
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal" >
@@ -386,21 +374,32 @@
                         android:typeface="monospace" />
                 </LinearLayout>
 
+                
+                
+                 <TextView
+                    android:id="@+id/txtImpachetare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right|center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="right|center"
+                    android:textColor="@color/editTextColor1"
+                    android:textSize="17sp"
+                    android:typeface="monospace" />
+                
+                
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:orientation="horizontal" >
 
                     <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical" >
 
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
                             android:id="@+id/layoutPretMaxKA"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -423,7 +422,6 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dip"
@@ -461,7 +459,6 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
                             android:id="@+id/layoutPretGEDFTva"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -500,7 +497,6 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
                             android:id="@+id/layoutTransport"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -539,7 +535,6 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            xmlns:android="http://schemas.android.com/apk/res/android"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal" >
@@ -577,7 +572,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
 
@@ -593,7 +587,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
 

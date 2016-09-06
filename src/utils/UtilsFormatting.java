@@ -5,6 +5,7 @@ import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -185,5 +186,26 @@ public class UtilsFormatting {
 
 		return formatted;
 	}
+
+	public static String getMonthNameFromDate(String dateString) {
+
+		if (dateString.trim().equals(""))
+			return "";
+
+		DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yy", Locale.ENGLISH);
+
+		Calendar cal = Calendar.getInstance();
+
+		try {
+			cal.setTime(dateFormat.parse(dateString));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		return cal.getDisplayName(Calendar.MONTH, Calendar.LONG, new Locale("ro"));
+
+	}
+
+
 
 }

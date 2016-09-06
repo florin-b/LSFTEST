@@ -20,6 +20,7 @@ import model.OperatiiArticol;
 import model.OperatiiArticolFactory;
 import model.UserInfo;
 import utils.DepartamentAgent;
+import utils.UtilsFormatting;
 import utils.UtilsGeneral;
 import adapters.CautareArticoleAdapter;
 import android.app.ActionBar;
@@ -118,6 +119,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	private String selectedDepartamentAgent;
 	private ArrayAdapter<String> adapterSpinnerDepozite;
 	private ArticolDB articolDBSelected;
+	private TextView txtImpachetare;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -200,6 +202,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		labelStoc = (TextView) findViewById(R.id.labelStoc);
 		textCondPret = (TextView) findViewById(R.id.textCondPret);
 		textPretTVA = (TextView) findViewById(R.id.textPretTVA);
+		txtImpachetare = (TextView) findViewById(R.id.txtImpachetare);
 
 		textPromo = (TextView) findViewById(R.id.textPromo);
 		addListenerTextPromo();
@@ -1228,6 +1231,10 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 																// client
 				listPrice = Double.parseDouble(tokenPret[8]); // pret de lista
 
+				txtImpachetare.setText(tokenPret[19]);
+
+				afisIstoricPret(tokenPret[20]);
+
 				procDiscClient = 0;
 				minimKAPrice = 0;
 				if (UserInfo.getInstance().getTipAcces().equals("27")) {
@@ -1420,6 +1427,58 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 		} catch (Exception ex) {
 			Toast.makeText(getApplicationContext(), ex.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+	}
+
+	private void afisIstoricPret(String infoIstoric) {
+		LinearLayout layoutIstoric1 = (LinearLayout) findViewById(R.id.layoutIstoricPret1);
+		LinearLayout layoutIstoric2 = (LinearLayout) findViewById(R.id.layoutIstoricPret2);
+		LinearLayout layoutIstoric3 = (LinearLayout) findViewById(R.id.layoutIstoricPret3);
+		
+		layoutIstoric1.setVisibility(View.GONE);
+		layoutIstoric2.setVisibility(View.GONE);
+		layoutIstoric3.setVisibility(View.GONE);
+		
+		if (infoIstoric.contains(":")) {
+			String[] arrayIstoric = infoIstoric.split(":");
+
+			if (arrayIstoric.length > 0 && arrayIstoric[0].contains("@")) {
+				
+				layoutIstoric1.setVisibility(View.VISIBLE);
+
+				String[] arrayPret = arrayIstoric[0].split("@");
+
+				TextView textIstoric1 = (TextView) findViewById(R.id.txtIstoricPret1);
+				textIstoric1.setText(arrayPret[0] + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2] + " - "
+						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3]));
+
+			}
+
+			if (arrayIstoric.length > 1 && arrayIstoric[1].contains("@")) {
+				
+				layoutIstoric2.setVisibility(View.VISIBLE);
+
+				String[] arrayPret = arrayIstoric[1].split("@");
+
+				TextView textIstoric2 = (TextView) findViewById(R.id.txtIstoricPret2);
+				textIstoric2.setText(arrayPret[0] + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2] + " - "
+						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3]));
+
+			}
+
+			if (arrayIstoric.length > 2 && arrayIstoric[2].contains("@")) {
+				
+				layoutIstoric3.setVisibility(View.VISIBLE);
+
+				String[] arrayPret = arrayIstoric[2].split("@");
+
+				TextView textIstoric3 = (TextView) findViewById(R.id.txtIstoricPret3);
+				textIstoric3.setText(arrayPret[0] + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2] + " - "
+						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3]));
+
+			}
+
 		}
 
 	}

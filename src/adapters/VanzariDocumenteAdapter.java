@@ -20,8 +20,6 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import connectors.ConnectionStrings;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -36,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import beans.BeanArticolVanzari;
 import beans.VanzariDocument;
+import connectors.ConnectionStrings;
 
 public class VanzariDocumenteAdapter extends BaseAdapter {
 
@@ -183,7 +182,7 @@ public class VanzariDocumenteAdapter extends BaseAdapter {
 
 		@Override
 		protected void onPostExecute(String result) {
-			// TODO
+			
 
 			try {
 				if (dialog != null) {

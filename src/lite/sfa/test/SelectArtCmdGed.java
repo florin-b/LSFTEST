@@ -138,7 +138,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	private PretArticolGed selectedArticol;
 	private NumberFormat nForm2;
 	private ArticolDB articolDBSelected;
-
+	private TextView txtImpachetare;
+	
 	private String unitLogUnic = "";
 
 	private enum EnumDepoz {
@@ -225,6 +226,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		labelStoc = (TextView) findViewById(R.id.labelStoc);
 		textCondPret = (TextView) findViewById(R.id.textCondPret);
 		textPretGED = (TextView) findViewById(R.id.textPretGED);
+		
+		txtImpachetare = (TextView) findViewById(R.id.txtImpachetare);
 
 		textPromo = (TextView) findViewById(R.id.textPromo);
 		addListenerTextPromo();
@@ -686,7 +689,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			Double.parseDouble(input.replace(",", ""));
 			return true;
 		} catch (Exception ex) {
-			Log.e("Error", ex.toString());
 			return false;
 		}
 	}
@@ -1261,6 +1263,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		initPrice = Double.valueOf(pretArticol.getPret());
 		listPrice = Double.valueOf(pretArticol.getPretLista());
+		
+		txtImpachetare.setText(pretArticol.getImpachetare());
 
 		if (globalDepozSel.substring(2, 3).equals("V")) {
 			if (initPrice / globalCantArt * valMultiplu < cmpArt) {

@@ -25,6 +25,7 @@ public class PretArticolGed {
 	private double discMaxSD;
 	private double discMaxDV;
 	private double discMaxKA;
+	private String impachetare;
 
 	public String getPret() {
 		return pret;
@@ -208,6 +209,14 @@ public class PretArticolGed {
 
 	public void setDiscMaxKA(double discMaxKA) {
 		this.discMaxKA = discMaxKA;
+	}
+
+	public String getImpachetare() {
+		return impachetare;
+	}
+
+	public void setImpachetare(String impachetare) {
+		this.impachetare = impachetare;
 	}
 
 }

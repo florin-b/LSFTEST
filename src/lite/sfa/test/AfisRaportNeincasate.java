@@ -8,8 +8,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import beans.BeanFacturaNeincasata;
-
 import listeners.AsyncTaskListener;
 import model.HandleJSONData;
 import model.UserInfo;
@@ -25,6 +23,7 @@ import android.widget.ListView;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
+import beans.BeanFacturaNeincasata;
 
 public class AfisRaportNeincasate extends Fragment implements AsyncTaskListener {
 
@@ -78,6 +77,7 @@ public class AfisRaportNeincasate extends Fragment implements AsyncTaskListener 
 							R.id.textScadenta, R.id.textAcoperit, R.id.textTipPlata, R.id.textScadentaBO,
 							R.id.textValoare, R.id.textIncasat, R.id.textRest });
 
+			
 			listViewNeincasate.setAdapter(adapterNeincasate);
 
 			if (Neincasate.selectedFiliala.equals("-1")) {

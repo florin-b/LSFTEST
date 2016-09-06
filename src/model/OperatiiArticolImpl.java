@@ -329,6 +329,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 				pretArticol.setDiscMaxSD(Double.valueOf(jsonObject.getString("discMaxSD")));
 				pretArticol.setDiscMaxDV(Double.valueOf(jsonObject.getString("discMaxDV")));
 				pretArticol.setDiscMaxKA(Double.valueOf(jsonObject.getString("discMaxKA")));
+				pretArticol.setImpachetare(jsonObject.getString("impachetare"));
 
 			}
 
