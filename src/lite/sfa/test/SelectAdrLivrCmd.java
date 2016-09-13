@@ -78,7 +78,6 @@ import beans.BeanObiectivDepartament;
 import com.google.android.gms.maps.model.LatLng;
 
 import connectors.ConnectionStrings;
-import dialogs.AutoCompleteDialog;
 import dialogs.MapAddressDialog;
 import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
@@ -171,7 +170,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		setListnerBtnPozitieAdresa();
 
 		textStrada = (AutoCompleteTextView) findViewById(R.id.autoCompleteStrada);
-		// setListenerTextStrada();
 
 		txtPers = (EditText) findViewById(R.id.txtPersCont);
 		txtTel = (EditText) findViewById(R.id.txtTelefon);
@@ -422,7 +420,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private void setupSpinnerTonaj() {
 
-		String[] tonajValues = { "Selectati tonajul", "3.5 T", "10 T" };
+		String[] tonajValues = { "Selectati tonajul", "3.5 T", "10 T", "Fara restrictie de tonaj" };
 
 		ArrayAdapter<String> adapterTonaj = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tonajValues);
 		adapterTonaj.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -455,6 +453,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					checkMacara.setChecked(DateLivrare.getInstance().isMasinaMacara());
 					setMacaraVisible();
 					spinnerTonaj.setVisibility(View.VISIBLE);
+					spinnerTonaj.setSelection(0);
 				} else {
 					checkMacara.setChecked(false);
 					checkMacara.setVisibility(View.INVISIBLE);
@@ -675,7 +674,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					layoutAdrese.setVisibility(View.VISIBLE);
 					layoutAdr1.setVisibility(View.GONE);
 					layoutAdr2.setVisibility(View.GONE);
-					spinnerTonaj.setVisibility(View.VISIBLE);
 					performGetAdreseLivrare();
 
 				}
@@ -702,7 +700,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					layoutAdrese.setVisibility(View.GONE);
 					layoutAdr1.setVisibility(View.VISIBLE);
 					layoutAdr2.setVisibility(View.VISIBLE);
-					spinnerTonaj.setVisibility(View.INVISIBLE);
 
 				}
 
@@ -728,7 +725,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					layoutAdrese.setVisibility(View.GONE);
 					layoutAdr1.setVisibility(View.GONE);
 					layoutAdr2.setVisibility(View.GONE);
-					spinnerTonaj.setVisibility(View.INVISIBLE);
 
 				}
 
@@ -871,7 +867,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		@Override
 		protected void onPostExecute(String result) {
-			// TODO
 
 			try {
 				if (dialog != null) {
@@ -1054,6 +1049,14 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					break;
 				}
 
+			DateLivrare.getInstance().setTonaj(tokLivrare[19]);
+			spinnerTonaj.setSelection(spinnerTonaj.getAdapter().getCount() - 1);
+			for (int i = 0; i < spinnerTonaj.getCount(); i++)
+				if (spinnerTonaj.getItemAtPosition(i).toString().toUpperCase().contains(tokLivrare[19])) {
+					spinnerTonaj.setSelection(i);
+					break;
+				}
+
 		} catch (Exception ex) {
 			Toast.makeText(getApplicationContext(), ex.toString(), Toast.LENGTH_SHORT).show();
 		}
@@ -1151,43 +1154,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			}
 		});
 
-		/*
-		 * textLocalitate.setOnTouchListener(new OnTouchListener() {
-		 * 
-		 * @Override public boolean onTouch(View v, MotionEvent event) {
-		 * 
-		 * switch (event.getAction()) { case MotionEvent.ACTION_DOWN: String
-		 * initString = textLocalitate.getText().toString(); AutoCompleteDialog
-		 * autocompleteDialog = new AutoCompleteDialog(SelectAdrLivrCmd.this,
-		 * initString, listAdrese.getListLocalitati(), LIST_LOCALITATI);
-		 * autocompleteDialog.setAutocompleteListener(SelectAdrLivrCmd.this);
-		 * autocompleteDialog.setTitle("Selectati localitatea");
-		 * autocompleteDialog.show(); break; }
-		 * 
-		 * return false; } });
-		 */
-
-	}
-
-	private void setListenerTextStrada() {
-		textStrada.setOnTouchListener(new OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-
-				switch (event.getAction()) {
-				case MotionEvent.ACTION_DOWN:
-					String initString = textStrada.getText().toString();
-					AutoCompleteDialog autocompleteDialog = new AutoCompleteDialog(SelectAdrLivrCmd.this, initString, listAdrese.getListStrazi(), LIST_ADRESE);
-					autocompleteDialog.setAutocompleteListener(SelectAdrLivrCmd.this);
-					autocompleteDialog.setTitle("Selectati strada");
-					autocompleteDialog.show();
-					break;
-				}
-
-				return false;
-			}
-		});
 	}
 
 	private void displayObiectiveDepartament(List<BeanObiectivDepartament> obiectiveDepart) {
@@ -1362,6 +1328,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			return;
 		}
 
+		if (spinnerTransp.getSelectedItem().toString().toLowerCase().contains("arabesque") && spinnerTonaj.getSelectedItemPosition() == 0) {
+			Toast.makeText(getApplicationContext(), "Selectati tonajul!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+
 		if (spinnerDataLivrare.getSelectedItemPosition() == 0) {
 			Toast.makeText(getApplicationContext(), "Selectati data livrare!", Toast.LENGTH_SHORT).show();
 			return;
@@ -1408,7 +1379,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		dateLivrareInstance.setTipDocInsotitor(String.valueOf(spinnerDocInsot.getSelectedItemPosition() + 1));
 
-		if (spinnerTonaj.getSelectedItemPosition() > 0) {
+		if (isConditiiTonaj(spinnerTransp, spinnerTonaj)) {
 			String[] tonaj = spinnerTonaj.getSelectedItem().toString().split(" ");
 			dateLivrareInstance.setTonaj(tonaj[0]);
 		} else
@@ -1420,6 +1391,12 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			dateLivrareInstance.setPrelucrare("-1");
 
 		finish();
+
+	}
+
+	private boolean isConditiiTonaj(Spinner spinnerTransp, Spinner spinnerTonaj) {
+		return spinnerTransp.getSelectedItem().toString().toLowerCase().contains("arabesque")
+				&& spinnerTonaj.getSelectedItem().toString().split(" ")[1].equals("T");
 
 	}
 
@@ -1487,8 +1464,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				artMapAdresa = (HashMap<String, String>) spinnerAdreseLivrare.getSelectedItem();
 
-				setSpinnerTonajSelection();
-
 				setAdresaLivrareFromList(artMapAdresa);
 
 			}
@@ -1498,29 +1473,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 			}
 		});
-	}
-
-	private void setSpinnerTonajSelection() {
-
-		String tonaj = "-1";
-
-		for (int i = 0; i < adreseList.size(); i++) {
-			if (adreseList.get(i).getCodAdresa().equals(artMapAdresa.get("rowId").toString())) {
-				tonaj = adreseList.get(i).getTonaj();
-				break;
-			}
-		}
-
-		for (int i = 0; i < spinnerTonaj.getAdapter().getCount(); i++) {
-			if (spinnerTonaj.getAdapter().getItem(i).toString().contains(tonaj)) {
-				spinnerTonaj.setSelection(i);
-				break;
-			}
-		}
-
-		if (tonaj.equals("-1"))
-			spinnerTonaj.setSelection(0);
-
 	}
 
 	private void clearAdresaLivrare() {
