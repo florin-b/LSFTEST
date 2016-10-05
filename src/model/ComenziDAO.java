@@ -269,6 +269,9 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 
 				String[] coords = jsonLivrare.getString("coordonateGps").split(",");
 				dateLivrare.setCoordonateAdresa(new LatLng(Double.valueOf(coords[0]), Double.valueOf(coords[1])));
+				
+				dateLivrare.setTonaj(jsonLivrare.getString("tonaj"));
+				
 
 				JSONArray jsonArticole = jsonObject.getJSONArray("articoleComanda");
 				String tipAlert = "", subCmp = "";

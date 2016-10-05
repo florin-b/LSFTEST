@@ -143,6 +143,8 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener {
 
 	public static RadioButton radioClient, radioFiliala;
 
+	public static Spinner spinnerTonaj;
+
 	public static final DLFragment1 newInstance() {
 
 		DLFragment1 f = new DLFragment1();
@@ -274,6 +276,9 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener {
 			spinnerTransp.setAdapter(adapterSpinnerTransport);
 			spinnerTransp.setOnItemSelectedListener(new OnSelectTipTransport());
 
+			spinnerTonaj = (Spinner) v.findViewById(R.id.spinnerTonaj);
+			setupSpinnerTonaj();
+
 			labelLimitaCredit = (TextView) v.findViewById(R.id.labelLimitaCredit);
 			textLimitaCredit = (TextView) v.findViewById(R.id.textLimitaCredit);
 			labelRestCredit = (TextView) v.findViewById(R.id.labelRestCredit);
@@ -320,6 +325,16 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener {
 		}
 
 		return v;
+
+	}
+
+	private void setupSpinnerTonaj() {
+
+		String[] tonajValues = { "Selectati tonajul", "3.5 T", "10 T", "Fara restrictie de tonaj" };
+
+		ArrayAdapter<String> adapterTonaj = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, tonajValues);
+		adapterTonaj.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerTonaj.setAdapter(adapterTonaj);
 
 	}
 
@@ -1057,13 +1072,20 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener {
 	public class OnSelectTipTransport implements OnItemSelectedListener {
 		public void onItemSelected(AdapterView<?> parent, View v, int pos, long id) {
 
+			if (pos == 0) {
+				spinnerTonaj.setVisibility(View.VISIBLE);
+			} else {
+				spinnerTonaj.setVisibility(View.INVISIBLE);
+				spinnerTonaj.setSelection(0);
+			}
+
 			String[] varTransport = spinnerTransp.getSelectedItem().toString().split("-");
 			CreareDispozitiiLivrare.tipTransport = varTransport[0].trim();
 
 		}
 
 		public void onNothingSelected(AdapterView<?> parent) {
-			// TODO
+
 		}
 	}
 

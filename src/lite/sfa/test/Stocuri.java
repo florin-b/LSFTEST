@@ -61,7 +61,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 	String tipAcces;
 
 	private TextView textCodArticol, textCodBare;
-	private TextView textNumeArticol, textCmpArticol;
+	private TextView textNumeArticol, textCmpArticol, textStocImbatranit;
 
 	private static final String METHOD_NAME = "getStocAndroid";
 	private NumberFormat nf2;
@@ -115,6 +115,9 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 
 		textCmpArticol = (TextView) findViewById(R.id.textCmpArticol);
 		textCmpArticol.setVisibility(View.INVISIBLE);
+
+		textStocImbatranit = (TextView) findViewById(R.id.textStocImbatranit);
+		textStocImbatranit.setVisibility(View.INVISIBLE);
 
 		resLayout = (LinearLayout) findViewById(R.id.resLayout);
 		resLayout.setVisibility(View.INVISIBLE);
@@ -347,7 +350,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 		}
 
 		public void onNothingSelected(AdapterView<?> parent) {
-			
+
 		}
 	}
 
@@ -454,7 +457,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 		stocBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				try {
-					
+
 					if (txtCodArticol.length() > 0) {
 						try {
 							performGetArticole();
@@ -674,6 +677,9 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 					textCmpArticol.setVisibility(View.VISIBLE);
 					textCmpArticol.setText("Cmp: " + tokStocArt[1]);
 				}
+
+				textStocImbatranit.setVisibility(View.VISIBLE);
+				textStocImbatranit.setText("Stoc imbatranit: " + tokStocArt[3]);
 
 			} else {
 

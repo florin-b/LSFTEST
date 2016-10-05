@@ -108,7 +108,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private Button btnPozitieAdresa;
 	private TextView textCoordAdresa;
 	private EditText textNrStr;
-	private Spinner spinnerIndoire;
+	private Spinner spinnerIndoire, spinnerTonaj;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -201,6 +201,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			setupSpinnerIndoire();
 
 			spinnerTransp = (Spinner) findViewById(R.id.spinnerTransp);
+			spinnerTonaj = (Spinner) findViewById(R.id.spinnerTonaj);
+			setupSpinnerTonaj();
 
 			adapterSpinnerTransp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinnerTransp.setAdapter(adapterSpinnerTransp);
@@ -412,6 +414,23 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			}
 		});
+
+	}
+
+	private void setupSpinnerTonaj() {
+
+		String[] tonajValues = { "Selectati tonajul", "3.5 T", "10 T", "Fara restrictie de tonaj" };
+
+		ArrayAdapter<String> adapterTonaj = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tonajValues);
+		adapterTonaj.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerTonaj.setAdapter(adapterTonaj);
+
+		if (DateLivrare.getInstance().getTonaj() != null)
+			for (int i = 0; i < spinnerTonaj.getCount(); i++)
+				if (spinnerTonaj.getItemAtPosition(i).toString().toUpperCase().contains(DateLivrare.getInstance().getTonaj())) {
+					spinnerTonaj.setSelection(i);
+					break;
+				}
 
 	}
 
@@ -722,16 +741,24 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		spinnerTransp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
-				if (pos == 1) {
+				if (pos == 0) {
+					spinnerTonaj.setVisibility(View.VISIBLE);
+
+				} else if (pos == 1) {
 					DateLivrare.getInstance().setValTransport(0);
 					DateLivrare.getInstance().setValTransportSAP(0);
 					DateLivrare.getInstance().setMasinaMacara(false);
 					checkMacara.setVisibility(View.INVISIBLE);
+					spinnerTonaj.setVisibility(View.INVISIBLE);
+					spinnerTonaj.setSelection(0);
+
 				}
 
 				else {
 					checkMacara.setChecked(DateLivrare.getInstance().isMasinaMacara());
 					setMacaraVisible();
+					spinnerTonaj.setVisibility(View.INVISIBLE);
+					spinnerTonaj.setSelection(0);
 				}
 
 			}
@@ -1049,6 +1076,11 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			return;
 		}
 
+		if (spinnerTransp.getSelectedItem().toString().toLowerCase().contains("arabesque") && spinnerTonaj.getSelectedItemPosition() == 0) {
+			Toast.makeText(getApplicationContext(), "Selectati tonajul!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+
 		if (radioAltaAdresa.isChecked()) {
 
 			if (DateLivrare.getInstance().getOrasD().trim().equals("")) {
@@ -1109,12 +1141,24 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			dateLivrareInstance.setDateLivrare(getAdrLivrareJSON());
 		}
 
+		if (isConditiiTonaj(spinnerTransp, spinnerTonaj)) {
+			String[] tonaj = spinnerTonaj.getSelectedItem().toString().split(" ");
+			dateLivrareInstance.setTonaj(tonaj[0]);
+		} else
+			dateLivrareInstance.setTonaj("-1");
+
 		if (spinnerIndoire.getVisibility() == View.VISIBLE && spinnerIndoire.getSelectedItemPosition() > 0) {
 			dateLivrareInstance.setPrelucrare(spinnerIndoire.getSelectedItem().toString());
 		} else
 			dateLivrareInstance.setPrelucrare("-1");
 
 		finish();
+
+	}
+
+	private boolean isConditiiTonaj(Spinner spinnerTransp, Spinner spinnerTonaj) {
+		return spinnerTransp.getSelectedItem().toString().toLowerCase().contains("arabesque")
+				&& spinnerTonaj.getSelectedItem().toString().split(" ")[1].equals("T");
 
 	}
 

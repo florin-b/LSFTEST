@@ -47,6 +47,7 @@ import android.widget.SimpleAdapter;
 import android.widget.SlidingDrawer;
 import android.widget.SlidingDrawer.OnDrawerCloseListener;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,19 +56,20 @@ import beans.ArticolDB;
 import enums.EnumArticoleDAO;
 import enums.EnumDlDAO;
 
+
 public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArticolListener {
 
 	Button articoleBtn, saveArtBtnDl, saveDlButton, slideButtonDl;
 	ToggleButton tglButton, tglTipArtBtn;
 	private EditText txtNumeArticol, textCantArt;
 
-	String[] depozite = { "V1 - vanzare", "V2 - vanzare", "V3 - vanzare", "G1 - gratuite", "G2 - gratuite",
-			"G3 - gratuite", "D1 - deteriorate", "D2 - deteriorate", "D3 - deteriorate", "DESC" };
+	String[] depozite = { "V1 - vanzare", "V2 - vanzare", "V3 - vanzare", "G1 - gratuite", "G2 - gratuite", "G3 - gratuite", "D1 - deteriorate",
+			"D2 - deteriorate", "D3 - deteriorate", "DESC" };
 
 	private static ArrayList<HashMap<String, String>> listArticole = null, listArtSelDl = null;
 	public SimpleAdapter adapterListArtDl;
 	public ListView listViewArticole;
-	
+
 	String codArticol = "", numeArticol = "", umArticol = "";
 
 	public String globalDepozSel = "", globalCodDepartSelectetItem = "";
@@ -150,10 +152,9 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 			listArtCmdDl = (ListView) v.findViewById(R.id.listArtCmdDl);
 
 			listArtSelDl = new ArrayList<HashMap<String, String>>();
-			adapterListArtDl = new SimpleAdapter(getActivity(), listArtSelDl, R.layout.custom_art_row_clp,
-					new String[] { "nrCrt", "numeArt", "codArt", "cantArt", "depozit", "Umb" }, new int[] {
-							R.id.textNrCrt, R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt, R.id.textDepozit,
-							R.id.textCantUmb }
+			adapterListArtDl = new SimpleAdapter(getActivity(), listArtSelDl, R.layout.custom_art_row_clp, new String[] { "nrCrt", "numeArt", "codArt",
+					"cantArt", "depozit", "Umb" }, new int[] { R.id.textNrCrt, R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt, R.id.textDepozit,
+					R.id.textCantUmb }
 
 			);
 
@@ -465,8 +466,7 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 				}
 
 				// hide keyb
-				InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(
-						Context.INPUT_METHOD_SERVICE);
+				InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 				mgr.hideSoftInputFromWindow(txtNumeArticol.getWindowToken(), 0);
 
 			}
@@ -712,6 +712,11 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 			}
 		}
 
+		if (CreareDispozitiiLivrare.tipTransport.equals("TRAP") && DLFragment1.spinnerTonaj.getSelectedItemPosition() == 0) {
+			retVal = "Selectati tonajul!";
+			return retVal;
+		}
+
 		return retVal;
 	}
 
@@ -757,8 +762,7 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 				valoareClp = DLFragment1.txtValoareCLP.getText().toString().trim();
 			}
 
-			String varObsClp = DLFragment1.txtObservatiiClp.getText().toString().trim().replace("#", " ")
-					.replace("@", " ");
+			String varObsClp = DLFragment1.txtObservatiiClp.getText().toString().trim().replace("#", " ").replace("@", " ");
 
 			String observatiiClp = varObsClp.equals("") ? " " : varObsClp;
 
@@ -766,18 +770,22 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 			if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("27")) {
 				CreareDispozitiiLivrare.selectedAgent = UserInfo.getInstance().getCod();
 			}
+			
+			String strTonaj = "-1";
 
-			CreareDispozitiiLivrare.comandaFinala = CreareDispozitiiLivrare.codClient + "#"
-					+ CreareDispozitiiLivrare.codJudet + "#" + CreareDispozitiiLivrare.oras + "#"
-					+ CreareDispozitiiLivrare.strada + "#" + CreareDispozitiiLivrare.persCont + "#"
-					+ CreareDispozitiiLivrare.telefon + "#" + CreareDispozitiiLivrare.codFurnizor + "#"
-					+ CreareDispozitiiLivrare.dataLivrare + "#" + CreareDispozitiiLivrare.tipMarfa + "#"
-					+ CreareDispozitiiLivrare.masaMarfa + "#"
+			if (isConditiiTonaj(CreareDispozitiiLivrare.tipTransport, DLFragment1.spinnerTonaj)) {
+				String[] tonaj = DLFragment1.spinnerTonaj.getSelectedItem().toString().split(" ");
+				strTonaj = tonaj[0];
+			}
+
+			CreareDispozitiiLivrare.comandaFinala = CreareDispozitiiLivrare.codClient + "#" + CreareDispozitiiLivrare.codJudet + "#"
+					+ CreareDispozitiiLivrare.oras + "#" + CreareDispozitiiLivrare.strada + "#" + CreareDispozitiiLivrare.persCont + "#"
+					+ CreareDispozitiiLivrare.telefon + "#" + CreareDispozitiiLivrare.codFurnizor + "#" + CreareDispozitiiLivrare.dataLivrare + "#"
+					+ CreareDispozitiiLivrare.tipMarfa + "#" + CreareDispozitiiLivrare.masaMarfa + "#"
 					+ DLFragment1.spinnerTipCamion.getSelectedItem().toString().toUpperCase(Locale.getDefault()) + "#"
-					+ DLFragment1.spinnerTipIncarcare.getSelectedItem().toString().toUpperCase(Locale.getDefault())
-					+ "#" + depozDest + "#" + tipPlata + "#" + valoareClp + "#" + observatiiClp + "#"
-					+ CreareDispozitiiLivrare.codFurnizorProduse + "#" + CreareDispozitiiLivrare.selectedAgent + "#"
-					+ CreareDispozitiiLivrare.tipTransport + "@" + articoleFinale;
+					+ DLFragment1.spinnerTipIncarcare.getSelectedItem().toString().toUpperCase(Locale.getDefault()) + "#" + depozDest + "#" + tipPlata + "#"
+					+ valoareClp + "#" + observatiiClp + "#" + CreareDispozitiiLivrare.codFurnizorProduse + "#" + CreareDispozitiiLivrare.selectedAgent + "#"
+					+ CreareDispozitiiLivrare.tipTransport + "#" + strTonaj + "@" + articoleFinale;
 
 			performSaveDl();
 
@@ -787,6 +795,13 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 
 	}
 
+	
+	private boolean isConditiiTonaj(String tipTransport, Spinner spinnerTonaj) {
+		return tipTransport.equals("TRAP") && spinnerTonaj.getSelectedItem().toString().split(" ")[1].equals("T");
+
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	private String prepareArtForDelivery() {
 
@@ -798,8 +813,7 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 			for (ii = 0; ii < nrArt; ii++) {
 				artMap = (HashMap<String, String>) this.adapterListArtDl.getItem(ii);
 
-				retVal += artMap.get("codArt") + "#" + artMap.get("cantArt") + "#" + artMap.get("Umb") + "#"
-						+ artMap.get("depozit") + "@";
+				retVal += artMap.get("codArt") + "#" + artMap.get("cantArt") + "#" + artMap.get("Umb") + "#" + artMap.get("depozit") + "@";
 
 			}// sf. for
 

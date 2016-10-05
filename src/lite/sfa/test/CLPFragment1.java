@@ -144,6 +144,8 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 	public static RadioButton radioClient, radioFiliala, radioClientPF, radioClientPJ;
 	public static String departamentConsilier = "";
 
+	public static Spinner spinnerTonaj;
+
 	public static final CLPFragment1 newInstance() {
 		CLPFragment1 f = new CLPFragment1();
 		Bundle bdl = new Bundle(1);
@@ -267,6 +269,9 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			spinnerTransportCLP.setAdapter(adapterSpinnerTransport);
 			spinnerTransportCLP.setOnItemSelectedListener(new OnSelectTipTransport());
 
+			spinnerTonaj = (Spinner) v.findViewById(R.id.spinnerTonaj);
+			setupSpinnerTonaj();
+
 			labelLimitaCredit = (TextView) v.findViewById(R.id.labelLimitaCredit);
 			textLimitaCredit = (TextView) v.findViewById(R.id.textLimitaCredit);
 			labelRestCredit = (TextView) v.findViewById(R.id.labelRestCredit);
@@ -338,6 +343,16 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 		}
 
 		return v;
+
+	}
+
+	private void setupSpinnerTonaj() {
+
+		String[] tonajValues = { "Selectati tonajul", "3.5 T", "10 T", "Fara restrictie de tonaj" };
+
+		ArrayAdapter<String> adapterTonaj = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, tonajValues);
+		adapterTonaj.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerTonaj.setAdapter(adapterTonaj);
 
 	}
 
@@ -871,6 +886,13 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 	public class OnSelectTipTransport implements OnItemSelectedListener {
 		public void onItemSelected(AdapterView<?> parent, View v, int pos, long id) {
+
+			if (pos == 0) {
+				spinnerTonaj.setVisibility(View.VISIBLE);
+			} else {
+				spinnerTonaj.setVisibility(View.INVISIBLE);
+				spinnerTonaj.setSelection(0);
+			}
 
 			String[] varTransport = spinnerTransportCLP.getSelectedItem().toString().split("-");
 			CreareClp.tipTransport = varTransport[0].trim();

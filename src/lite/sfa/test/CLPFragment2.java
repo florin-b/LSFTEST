@@ -952,6 +952,12 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 				return retVal;
 			}
 		}
+
+		if (CreareClp.tipTransport.toUpperCase().equals("TRAP") && CLPFragment1.spinnerTonaj.getSelectedItemPosition() == 0) {
+			retVal = "Selectati tonajul!";
+			return retVal;
+		}
+
 		if (CreareClp.codFilialaDest.trim().toString().equalsIgnoreCase("")) {
 			retVal = "Selectati filiala!";
 			return retVal;
@@ -1018,18 +1024,30 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 			}
 
+			String strTonaj = "-1";
+
+			if (isConditiiTonaj(CreareClp.tipTransport, CLPFragment1.spinnerTonaj)) {
+				String[] tonaj = CLPFragment1.spinnerTonaj.getSelectedItem().toString().split(" ");
+				strTonaj = tonaj[0];
+			}
+
 			CreareClp.comandaFinala = localCodClient + "#" + CreareClp.codJudet + "#" + CreareClp.oras + "#" + CreareClp.strada + "#" + CreareClp.persCont
 					+ "#" + CreareClp.telefon + "#" + CreareClp.codFilialaDest + "#" + CreareClp.dataLivrare + "#" + CreareClp.tipPlata + "#"
 					+ CreareClp.tipTransport + "#" + depozDest + "#" + CreareClp.selectedAgent + "#" + cmdFasonate + "#" + numeClientCV + "#" + observatiiCLP
 					+ "#" + CreareClp.tipMarfa + "#" + CreareClp.masaMarfa + "#"
 					+ CLPFragment1.spinnerTipCamion.getSelectedItem().toString().toUpperCase(Locale.getDefault()) + "#"
-					+ CLPFragment1.spinnerTipIncarcare.getSelectedItem().toString().toUpperCase(Locale.getDefault()) + "@" + articoleFinale;
+					+ CLPFragment1.spinnerTipIncarcare.getSelectedItem().toString().toUpperCase(Locale.getDefault()) + "#" + strTonaj + "@" + articoleFinale;
 
 			performSaveClp();
 
 		} catch (Exception ex) {
 			Toast.makeText(getActivity(), ex.toString(), Toast.LENGTH_SHORT).show();
 		}
+
+	}
+
+	private boolean isConditiiTonaj(String tipTransport, Spinner spinnerTonaj) {
+		return tipTransport.equals("TRAP") && spinnerTonaj.getSelectedItem().toString().split(" ")[1].equals("T");
 
 	}
 

@@ -1276,7 +1276,6 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				obj.put("ponderare", listArticole.get(i).getPonderare());
 				myArray.put(obj);
 
-				
 				if (listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1) {
 					alertDV = true;
 					if (!comandaFinala.getComandaBlocata().equals("21"))
@@ -1300,6 +1299,12 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				}
 
 			}
+
+			if (DateLivrare.getInstance().isAdrLivrNoua()) {
+				alertSD = true;
+				comandaFinala.setComandaBlocata("1");
+			}
+
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT).show();
 		}
@@ -1386,6 +1391,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			obj.put("factRed", DateLivrare.getInstance().getFactRed());
 			obj.put("macara", DateLivrare.getInstance().isMasinaMacara() ? "X" : " ");
 			obj.put("coordonateGps", getCoordAdresa());
+			obj.put("tonaj", DateLivrare.getInstance().getTonaj());
 			obj.put("prelucrare", DateLivrare.getInstance().getPrelucrare());
 
 		} catch (Exception ex) {

@@ -182,7 +182,7 @@
                         android:layout_width="0dip"
                         android:layout_height="match_parent"
                         android:layout_weight="0.2"
-                        android:text="Data livrare" />
+                        android:text="Data aprox livr" />
 
                     <TextView
                         android:id="@+id/textDataLivrare"

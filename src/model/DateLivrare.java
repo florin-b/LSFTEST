@@ -106,6 +106,7 @@ public class DateLivrare {
 		this.idObiectiv = dateLivrareAfisare.getIdObiectiv();
 		this.isAdresaObiectiv = dateLivrareAfisare.isAdresaObiectiv();
 		this.coordonateAdresa = dateLivrareAfisare.getCoordonateAdresa();
+		this.tonaj = dateLivrareAfisare.getTonaj();
 
 	}
 

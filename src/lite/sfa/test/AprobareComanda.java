@@ -612,7 +612,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 			String fullCode = nf3.format(Integer.parseInt(UserInfo.getInstance().getCod())).toString();
 
 			String localDivizieAgent = divizieAgent;
-			if (comandaCurenta.getCanalDistrib().equals("20") && comandaCurenta.getAprobariNecesare().trim().length() > 0)
+			if (isConditie11())
 				localDivizieAgent = "11";
 
 			HashMap<String, String> params = new HashMap<String, String>();
@@ -631,6 +631,10 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		} catch (Exception e) {
 			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
 		}
+	}
+
+	private boolean isConditie11() {
+		return comandaCurenta.getCanalDistrib().equals("20") && comandaCurenta.getAprobariNecesare().trim().length() > 0 && !UtilsUser.isSD();
 	}
 
 	private String getStareElimTransport() {
@@ -800,6 +804,8 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 			textComandaBV90.setVisibility(View.VISIBLE);
 		else
 			textComandaBV90.setVisibility(View.INVISIBLE);
+
+		setupContextLayout(comandaCurenta);
 
 	}
 
@@ -1192,13 +1198,18 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 
 				if (tipAprob.contains("SD") || !adrLivrN.equals("-1")) {
 
+					labelAdresa.setVisibility(View.VISIBLE);
+					textAdrLivrNoua.setVisibility(View.VISIBLE);
+
 					if (!adrLivrN.equals("-1")) {
 						btnConditii.setVisibility(View.VISIBLE);
-						labelAdresa.setVisibility(View.VISIBLE);
-						textAdrLivrNoua.setVisibility(View.VISIBLE);
+						labelAdresa.setText("Adresa de livrare noua");
 						textAdrLivrNoua.setText(adrLivrN);
 					} else {
 						btnConditii.setVisibility(View.VISIBLE);
+						labelAdresa.setText("Adresa de livrare");
+						textAdrLivrNoua.setText(listComenzi.get(comandaPos).getAdresaLivrare());
+
 					}
 
 					aprobaCmd.setVisibility(View.VISIBLE);
@@ -1314,10 +1325,13 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 	}
 
 	private void setupContextLayout(BeanComandaCreata comanda) {
-		if (comanda.getCodStare().equals("21"))
+		if (comanda.getCodStare().equals("21") || (comanda.getDivizieComanda().equals("11") && UtilsUser.isSD())) {
+			slidingDrawerAprob.setVisibility(View.GONE);
 			btnConditii.setVisibility(View.INVISIBLE);
-		else
+		} else {
+			slidingDrawerAprob.setVisibility(View.VISIBLE);
 			btnConditii.setVisibility(View.VISIBLE);
+		}
 	}
 
 	private void addListenerSpinnerCmd() {

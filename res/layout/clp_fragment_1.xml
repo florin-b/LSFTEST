@@ -6,7 +6,6 @@
     android:orientation="vertical" >
 
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginBottom="50dip"
@@ -14,14 +13,12 @@
         android:fadeScrollbars="false" >
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/clientData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
@@ -54,7 +51,6 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/layoutTipClient"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -88,7 +84,6 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusableInTouchMode="true"
@@ -120,11 +115,10 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2" />
+                    android:layout_weight="0.1" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/layoutAdr1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -181,11 +175,10 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2" />
+                    android:layout_weight="0.11" />
             </LinearLayout>
 
             <LinearLayout
-                
                 android:id="@+id/layoutAdr2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -220,11 +213,10 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2" />
+                    android:layout_weight="0.1" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
@@ -258,11 +250,10 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.30" />
+                    android:layout_weight="0.20" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
@@ -295,11 +286,10 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="45dip"
-                    android:layout_weight="0.2" />
+                    android:layout_weight="0.1" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
@@ -327,153 +317,145 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="45dip"
-                    android:layout_weight="0.25" />
+                    android:layout_weight="0.15" />
             </LinearLayout>
 
-            
-                <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dip"
-                    android:orientation="horizontal" >
-
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center|left"
-                        android:layout_marginLeft="3dip"
-                        android:gravity="left|center"
-                        android:text="Tip marfa"
-                        android:textColor="@color/detColor4"
-                        android:textSize="16sp" />
-
-                    <EditText
-                        android:id="@+id/txtTipMarfa"
-                        android:layout_width="0dp"
-                        android:layout_height="45dip"
-                        android:layout_gravity="bottom|left"
-                        android:layout_weight="0.25"
-                        android:background="@drawable/edittext_style_1"
-                        android:gravity="left"
-                        android:inputType="text"
-                        android:maxLength="150"
-                        android:nextFocusDown="@+id/txtMasaMarfa"
-                        android:singleLine="true"
-                        android:textColor="@color/editTextColor1"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="45dip"
-                        android:layout_weight="0.20" />
-                </LinearLayout>
-
-                <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dip"
-                    android:orientation="horizontal" >
-
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center|left"
-                        android:layout_marginLeft="3dip"
-                        android:gravity="left|center"
-                        android:maxLength="150"
-                        android:text="Masa"
-                        android:textColor="@color/detColor4"
-                        android:textSize="16sp" />
-
-                    <EditText
-                        android:id="@+id/txtMasaMarfa"
-                        android:layout_width="0dp"
-                        android:layout_height="45dip"
-                        android:layout_gravity="bottom|left"
-                        android:layout_weight="0.25"
-                        android:background="@drawable/edittext_style_1"
-                        android:gravity="left"
-                        android:inputType="text"
-                        android:singleLine="true"
-                        android:textColor="@color/editTextColor1"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="45dip"
-                        android:layout_weight="0.20" />
-                </LinearLayout>
-
-                <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dip"
-                    android:orientation="horizontal" >
-
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center|left"
-                        android:layout_marginLeft="3dip"
-                        android:gravity="left|center"
-                        android:text="Tip camion"
-                        android:textColor="@color/detColor4"
-                        android:textSize="16sp" />
-
-                    <Spinner
-                        android:id="@+id/spinnerTipCamion"
-                        android:layout_width="0dp"
-                        android:layout_height="45dip"
-                        android:layout_gravity="bottom|left"
-                        android:layout_weight="0.25"
-                        android:background="@drawable/dropdown_style_1"
-                        android:gravity="left" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="45dip"
-                        android:layout_weight="0.2" />
-                </LinearLayout>
-
-                <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dip"
-                    android:orientation="horizontal" >
-
-                    <TextView
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center|left"
-                        android:layout_marginLeft="3dip"
-                        android:gravity="left|center"
-                        android:text="Incarcare"
-                        android:textColor="@color/detColor4"
-                        android:textSize="16sp" />
-
-                    <Spinner
-                        android:id="@+id/spinnerTipIncarcare"
-                        android:layout_width="0dp"
-                        android:layout_height="45dip"
-                        android:layout_gravity="bottom|left"
-                        android:layout_weight="0.25"
-                        android:background="@drawable/dropdown_style_1"
-                        android:gravity="left" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="45dip"
-                        android:layout_weight="0.2" />
-                </LinearLayout>
-            
-            
-            
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|left"
+                    android:layout_marginLeft="3dip"
+                    android:gravity="left|center"
+                    android:text="Tip marfa"
+                    android:textColor="@color/detColor4"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/txtTipMarfa"
+                    android:layout_width="0dp"
+                    android:layout_height="45dip"
+                    android:layout_gravity="bottom|left"
+                    android:layout_weight="0.25"
+                    android:background="@drawable/edittext_style_1"
+                    android:gravity="left"
+                    android:inputType="text"
+                    android:maxLength="150"
+                    android:nextFocusDown="@+id/txtMasaMarfa"
+                    android:singleLine="true"
+                    android:textColor="@color/editTextColor1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="45dip"
+                    android:layout_weight="0.1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|left"
+                    android:layout_marginLeft="3dip"
+                    android:gravity="left|center"
+                    android:maxLength="150"
+                    android:text="Masa"
+                    android:textColor="@color/detColor4"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/txtMasaMarfa"
+                    android:layout_width="0dp"
+                    android:layout_height="45dip"
+                    android:layout_gravity="bottom|left"
+                    android:layout_weight="0.25"
+                    android:background="@drawable/edittext_style_1"
+                    android:gravity="left"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:textColor="@color/editTextColor1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="45dip"
+                    android:layout_weight="0.1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|left"
+                    android:layout_marginLeft="3dip"
+                    android:gravity="left|center"
+                    android:text="Tip camion"
+                    android:textColor="@color/detColor4"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerTipCamion"
+                    android:layout_width="0dp"
+                    android:layout_height="45dip"
+                    android:layout_gravity="bottom|left"
+                    android:layout_weight="0.25"
+                    android:background="@drawable/dropdown_style_1"
+                    android:gravity="left" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="45dip"
+                    android:layout_weight="0.1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|left"
+                    android:layout_marginLeft="3dip"
+                    android:gravity="left|center"
+                    android:text="Incarcare"
+                    android:textColor="@color/detColor4"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerTipIncarcare"
+                    android:layout_width="0dp"
+                    android:layout_height="45dip"
+                    android:layout_gravity="bottom|left"
+                    android:layout_weight="0.25"
+                    android:background="@drawable/dropdown_style_1"
+                    android:gravity="left" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="45dip"
+                    android:layout_weight="0.1" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
@@ -505,11 +487,10 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="45dip"
-                    android:layout_weight="0.25" />
+                    android:layout_weight="0.15" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
@@ -537,11 +518,10 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="45dip"
-                    android:layout_weight="0.3" />
+                    android:layout_weight="0.2" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
@@ -566,14 +546,22 @@
                     android:background="@drawable/dropdown_style_1"
                     android:gravity="left" />
 
+                <Spinner
+                    android:id="@+id/spinnerTonaj"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left|bottom"
+                    android:layout_weight="0.1"
+                    android:background="@drawable/dropdown_style_1"
+                    android:gravity="left" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.3" />
+                    android:layout_weight="0.1" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
@@ -601,12 +589,10 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.4" />
+                    android:layout_weight="0.3" />
             </LinearLayout>
 
-            
- 	<LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
@@ -639,11 +625,10 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="45dip"
-                    android:layout_weight="0.2" />
-            </LinearLayout>            
-            
+                    android:layout_weight="0.1" />
+            </LinearLayout>
+
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/layoutSelAgentiClp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -673,11 +658,10 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.4" />
+                    android:layout_weight="0.3" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/layoutDepartament"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -707,11 +691,10 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.4" />
+                    android:layout_weight="0.3" />
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
@@ -726,7 +709,6 @@
     </ScrollView>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >

@@ -41,6 +41,7 @@ public class DateLivrareAfisare {
     private String idObiectiv = " ";
 	private boolean isAdresaObiectiv;
 	private LatLng coordonateAdresa;
+	private String tonaj;
 
     public DateLivrareAfisare() {
 
@@ -358,6 +359,14 @@ public class DateLivrareAfisare {
 
 	public void setCoordonateAdresa(LatLng coordonateAdresa) {
 		this.coordonateAdresa = coordonateAdresa;
+	}
+
+	public String getTonaj() {
+		return tonaj;
+	}
+
+	public void setTonaj(String tonaj) {
+		this.tonaj = tonaj;
 	}
 	
 	
