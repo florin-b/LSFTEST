@@ -22,6 +22,7 @@ public class BeanComandaRetur {
 	private String codClient;
 	private String numeClient;
 	private List<BeanArticolRetur> arrayListArticole;
+	private boolean transBack;
 
 	public BeanComandaRetur() {
 
@@ -165,7 +166,13 @@ public class BeanComandaRetur {
 	public void setArrayListArticole(List<BeanArticolRetur> arrayListArticole) {
 		this.arrayListArticole = arrayListArticole;
 	}
-	
-	
+
+	public boolean isTransBack() {
+		return transBack;
+	}
+
+	public void setTransBack(boolean transBack) {
+		this.transBack = transBack;
+	}
 
 }

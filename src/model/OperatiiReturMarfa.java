@@ -235,6 +235,7 @@ public class OperatiiReturMarfa implements AsyncTaskListener {
 			jsonObject.put("observatii", comandaRetur.getObservatii());
 			jsonObject.put("codclient", comandaRetur.getCodClient());
 			jsonObject.put("numeclient", comandaRetur.getNumeClient());
+			jsonObject.put("transpBack", comandaRetur.isTransBack());
 
 		} catch (Exception ex) {
 			Toast.makeText(context, ex.toString(), Toast.LENGTH_SHORT).show();

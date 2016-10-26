@@ -48,7 +48,7 @@
         android:layout_marginRight="5dp"
         android:layout_marginTop="10dp"
         android:layout_weight="0.55"
-        android:orientation="vertical">
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,6 +63,32 @@
                 android:paddingLeft="50dip"
                 android:paddingRight="50dip"
                 android:text="@string/strCauta" />
+
+            <View
+                android:layout_width="50dip"
+                android:layout_height="match_parent" >
+            </View>
+
+            <Spinner
+                android:id="@+id/spinnerLuna"
+                android:layout_width="0dp"
+                android:layout_height="45dip"
+                android:layout_gravity="bottom|left"
+                android:layout_weight="0.1"
+                android:gravity="left" />
+
+            <View
+                android:layout_width="30dip"
+                android:layout_height="match_parent" >
+            </View>
+
+            <Spinner
+                android:id="@+id/spinnerAn"
+                android:layout_width="0dp"
+                android:layout_height="45dip"
+                android:layout_gravity="bottom|left"
+                android:layout_weight="0.1"
+                android:gravity="left" />
 
             <View
                 android:layout_width="30dip"

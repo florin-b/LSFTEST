@@ -28,7 +28,7 @@ import android.widget.Toast;
 import beans.BeanDocumentRetur;
 import enums.EnumRetur;
 
-public class ReturMarfa extends FragmentActivity implements ClientReturListener, OperatiiReturListener, DocumentReturListener {
+public class ReturPaleti extends FragmentActivity implements ClientReturListener, OperatiiReturListener, DocumentReturListener {
 
 	ViewPagerCustomDuration pager;
 	ViewPager viewPager;
@@ -39,8 +39,8 @@ public class ReturMarfa extends FragmentActivity implements ClientReturListener,
 
 	ClientReturMarfa clientiReturMarfa;
 	DocumenteReturMarfa documenteReturMarfa;
-	DateLivrareReturMarfa dateLivrareReturMarfa;
-	ArticoleReturMarfa articoleReturMarfa;
+	DateLivrareReturPaleti dateLivrareReturMarfa;
+	ArticoleReturPaleti articoleReturMarfa;
 	private String numeClient, codClient;
 	private String nrDocument;
 
@@ -56,8 +56,8 @@ public class ReturMarfa extends FragmentActivity implements ClientReturListener,
 
 		clientiReturMarfa = ClientReturMarfa.newInstance();
 		documenteReturMarfa = DocumenteReturMarfa.newInstance();
-		dateLivrareReturMarfa = DateLivrareReturMarfa.newInstance();
-		articoleReturMarfa = ArticoleReturMarfa.newInstance();
+		dateLivrareReturMarfa = DateLivrareReturPaleti.newInstance();
+		articoleReturMarfa = ArticoleReturPaleti.newInstance();
 
 		docReturListener = documenteReturMarfa;
 		artReturListener = articoleReturMarfa;
@@ -147,7 +147,7 @@ public class ReturMarfa extends FragmentActivity implements ClientReturListener,
 		finish();
 	}
 
-	public void clientSelected(String codClient, String numeClient) {
+	public void clientSelected(String codClient, String numeClient, String interval) {
 		this.numeClient = numeClient;
 		this.codClient = codClient;
 
@@ -159,6 +159,8 @@ public class ReturMarfa extends FragmentActivity implements ClientReturListener,
 		params.put("codClient", codClient);
 		params.put("codDepartament", codDepart);
 		params.put("unitLog", UserInfo.getInstance().getUnitLog());
+		params.put("tipDocument", "PAL");
+		
 		opRetur.getDocumenteClient(params);
 	}
 
@@ -166,6 +168,7 @@ public class ReturMarfa extends FragmentActivity implements ClientReturListener,
 		this.nrDocument = nrDocument;
 		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 		params.put("nrDocument", nrDocument);
+		params.put("tipDocument", "PAL");
 		opRetur.getArticoleDocument(params);
 
 	}

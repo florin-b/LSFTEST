@@ -105,6 +105,16 @@ public class UtilsUser {
 		return false;
 	}
 
+	public static boolean isUserExceptieCONSGED() {
+
+		String filialeExceptie = "AG, BH, CJ, CT, DJ, GL";
+
+		if (UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && filialeExceptie.contains(UserInfo.getInstance().getUnitLog().substring(0, 2)))
+			return true;
+
+		return false;
+	}
+
 	public static boolean isUserExceptieBV90Ged() {
 
 		// pentru ag si sd de la 02 si 05 se ofera accesul la BV90

@@ -85,6 +85,30 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layoutTranspBack"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dip"
+                    android:orientation="horizontal"
+                    android:visibility="gone" >
+
+                    <TextView
+                        style="@style/dateLivrareDlLabel"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.25"
+                        android:text="Obs. transport" />
+
+                    <CheckBox
+                        android:id="@+id/checkTranspBack"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|bottom"
+                        android:layout_weight="0.75"
+                        android:text="Transport cu aceeasi masina" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dip"
@@ -265,7 +289,6 @@
 
                         <EditText
                             android:id="@+id/textStrada"
-
                             android:layout_width="0dip"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.75"

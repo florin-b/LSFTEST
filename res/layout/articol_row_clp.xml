@@ -96,6 +96,14 @@
         android:typeface="sans" />
 
     <TextView
+        android:id="@+id/textDepart"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.0"
+        android:textSize="0sp"
+        android:typeface="sans" />
+
+    <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.05"

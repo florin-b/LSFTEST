@@ -296,7 +296,7 @@
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
-            android:name=".ReturMarfa"
+            android:name=".ReturPaleti"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan" >
@@ -331,13 +331,18 @@
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan" >
         </activity>
-        
         <activity
             android:name=".RealizareTarget"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan" >
-        </activity>        
+        </activity>
+        <activity
+            android:name=".ReturComanda"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
 
         <uses-library
             android:name="com.google.android.maps"

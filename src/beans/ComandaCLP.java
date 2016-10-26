@@ -3,8 +3,8 @@ package beans;
 import java.util.List;
 
 public class ComandaCLP {
-	DateLivrareCLP dateLivrare;
-	List<ArticolCLP> articole;
+	private DateLivrareCLP dateLivrare;
+	private List<ArticolCLP> articole;
 
 	public ComandaCLP() {
 

@@ -35,6 +35,7 @@ import org.json.JSONObject;
 
 import utils.UtilsFormatting;
 import utils.UtilsGeneral;
+import utils.UtilsUser;
 import adapters.ArticolModificareAdapter;
 import adapters.ComandaModificareAdapter;
 import android.app.ActionBar;
@@ -453,7 +454,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 							return false;
 						}
 
-						if (!isCommandaOkToSave()) {
+						if (!isConditiiCmdAccept()) {
 							Toast.makeText(getApplicationContext(), "Comanda nu are toate aprobarile!", Toast.LENGTH_SHORT).show();
 							return false;
 						}
@@ -547,13 +548,14 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 						comanda.setFactRedSeparat(localRedSeparat);
 						comanda.setFilialaAlternativa(ModificareComanda.filialaAlternativaM);
 						comanda.setUserSite(localUserSite);
-						comanda.setUserSiteMail(userSiteMail);
+						comanda.setUserSiteMail(dateLivrareInstance.getMail());
 						comanda.setIsValIncModif(isValIncModif);
 						comanda.setCodJ(codJ);
 						comanda.setAdresaLivrareGed(adrLivrareGED);
 						comanda.setNumeClient(dateLivrareInstance.getNumeClient());
 						comanda.setCnpClient(dateLivrareInstance.getCnpClient());
-
+						comanda.setNecesarAprobariCV(comandaSelectata.getAprobariNecesare());
+						
 						comandaJson = serializeComanda(comanda);
 
 						performSaveCmd();
@@ -569,11 +571,10 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		}
 	}
 
-	
 	private boolean isReducere() {
 		return globalSubCmp.equals("1") && !UserInfo.getInstance().getCodDepart().equals("07") && !UserInfo.getInstance().getCodDepart().equals("04");
 	}
-	
+
 	private void performSaveCmd() {
 		try {
 
@@ -824,6 +825,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("valoareIncasare", comanda.getValoareIncasare());
 			obj.put("conditieID", comanda.getConditieID());
 			obj.put("canalDistrib", ModificareComanda.isComandaDistrib ? "10" : "20");
+			obj.put("necesarAprobariCV", comanda.getNecesarAprobariCV());
 			obj.put("valTransportSap", "0");
 
 		} catch (Exception ex) {
@@ -903,6 +905,24 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 		return isConditiiAcceptate;
 
+	}
+
+	private boolean isConditiiCmdAccept() {
+		if (UtilsUser.isAgentOrSD() && isComandaGed())
+			return isCmdGEDOkToSave();
+		else
+			return isCommandaOkToSave();
+	}
+
+	private boolean isCmdGEDOkToSave() {
+
+		for (ArticolComanda articol : listArticoleComanda) {
+			if (articol.getConditie())
+				return false;
+
+		}
+
+		return true;
 	}
 
 	private boolean isCommandaOkToSave() {

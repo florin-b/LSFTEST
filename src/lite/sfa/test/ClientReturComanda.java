@@ -1,6 +1,8 @@
 package lite.sfa.test;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,25 +23,28 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import beans.BeanClient;
 import enums.EnumClienti;
 
-public class ClientReturMarfa extends Fragment implements OperatiiClientListener {
+public class ClientReturComanda extends Fragment implements OperatiiClientListener {
 
-	OperatiiClient opClient;
-	EditText textNumeClient;
-	ListView clientiList;
-	TextView selectIcon;
+	private OperatiiClient opClient;
+	private EditText textNumeClient;
+	private ListView clientiList;
+	private TextView selectIcon;
+	private Spinner spinnerLuna, spinnerAn;
 
-	ClientReturListener clientListener;
+	private ClientReturListener clientListener;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		View v = inflater.inflate(R.layout.client_retur_marfa, container, false);
+		View v = inflater.inflate(R.layout.client_retur_comanda, container, false);
 
 		opClient = new OperatiiClient(getActivity());
 		opClient.setOperatiiClientListener(this);
@@ -56,6 +61,11 @@ public class ClientReturMarfa extends Fragment implements OperatiiClientListener
 		selectIcon = (TextView) v.findViewById(R.id.selectIcon);
 		selectIcon.setVisibility(View.INVISIBLE);
 
+		spinnerLuna = (Spinner) v.findViewById(R.id.spinnerLuna);
+		spinnerAn = (Spinner) v.findViewById(R.id.spinnerAn);
+
+		loadDataSpinners();
+
 		return v;
 
 	}
@@ -70,11 +80,36 @@ public class ClientReturMarfa extends Fragment implements OperatiiClientListener
 		}
 	}
 
-	public static ClientReturMarfa newInstance() {
-		ClientReturMarfa frg = new ClientReturMarfa();
+	public static ClientReturComanda newInstance() {
+		ClientReturComanda frg = new ClientReturComanda();
 		Bundle bdl = new Bundle();
 		frg.setArguments(bdl);
 		return frg;
+	}
+
+	private void loadDataSpinners() {
+
+		String[] months = { "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie", "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie",
+				"Decembrie" };
+
+		ArrayAdapter<String> adapterLuna = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, months);
+		spinnerLuna.setAdapter(adapterLuna);
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		spinnerLuna.setSelection(cal.get(Calendar.MONTH));
+
+		int year = cal.get(Calendar.YEAR);
+
+		String[] years = new String[2];
+		years[0] = String.valueOf(year - 1);
+		years[1] = String.valueOf(year);
+
+		ArrayAdapter<String> adapterAn = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, years);
+		spinnerAn.setAdapter(adapterAn);
+
+		spinnerAn.setSelection(1);
+
 	}
 
 	private void addListenerClient(Button clientButton) {
@@ -118,11 +153,18 @@ public class ClientReturMarfa extends Fragment implements OperatiiClientListener
 
 				BeanClient client = (BeanClient) arg0.getAdapter().getItem(arg2);
 				if (client != null) {
-					clientListener.clientSelected(client.getCodClient(), client.getNumeClient(), null);
+					clientListener.clientSelected(client.getCodClient(), client.getNumeClient(), getIntervalSel());
 
 				}
 			}
 		});
+	}
+
+	private String getIntervalSel() {
+		String lunaSel = String.format("%02d", spinnerLuna.getSelectedItemPosition() + 1);
+		String anSel = spinnerAn.getSelectedItem().toString();
+
+		return anSel + lunaSel;
 	}
 
 	private void hideSoftKeyboard() {

@@ -799,6 +799,79 @@ public class InfoStrings {
 
 	}
 
+	public static String getClientGenericGed_CONSGED(String filiala, String tipClient) {
+		String codClient = "00";
+
+		if (tipClient.equals("PF")) {
+			if (filiala.equals("AG10"))
+				codClient = "4119000307";
+
+			if (filiala.equals("BH10"))
+				codClient = "4119000240";
+
+			if (filiala.equals("CJ10"))
+				codClient = "4119000235";
+
+			if (filiala.equals("CT10"))
+				codClient = "4119000173";
+
+			if (filiala.equals("DJ10"))
+				codClient = "4119000192";
+
+			if (filiala.equals("GL10"))
+				codClient = "4119000155";
+
+		}
+
+		if (tipClient.equals("PJ")) {
+			if (filiala.equals("AG10"))
+				codClient = "4119000308";
+
+			if (filiala.equals("BH10"))
+				codClient = "4119000241";
+
+			if (filiala.equals("CJ10"))
+				codClient = "4119000236";
+
+			if (filiala.equals("CT10"))
+				codClient = "4119000172";
+
+			if (filiala.equals("DJ10"))
+				codClient = "4119000193";
+
+			if (filiala.equals("GL10"))
+				codClient = "4119000156";
+
+		}
+
+		return codClient;
+	}
+
+	public static String gedPJNeplatitorTVA_CONSGED(String filiala) {
+		String codClient = "00";
+
+		if (filiala.equals("AG10"))
+			codClient = "4119000330";
+
+		if (filiala.equals("BH10"))
+			codClient = "4119000337";
+
+		if (filiala.equals("CJ10"))
+			codClient = "4119000342";
+
+		if (filiala.equals("CT10"))
+			codClient = "4119000343";
+
+		if (filiala.equals("DJ10"))
+			codClient = "4119000344";
+
+		if (filiala.equals("GL10"))
+			codClient = "4119000345";
+
+		return codClient;
+
+	}
+
 	public static String getTipUser(String tipUser) {
 		String tipAcces = "NN";
 

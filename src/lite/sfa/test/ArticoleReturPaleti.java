@@ -35,8 +35,9 @@ import android.widget.Toast;
 import beans.BeanArticolRetur;
 import beans.BeanComandaRetur;
 import enums.EnumRetur;
+import enums.EnumTipRetur;
 
-public class ArticoleReturMarfa extends Fragment implements ListaArtReturListener, OperatiiReturListener {
+public class ArticoleReturPaleti extends Fragment implements ListaArtReturListener, OperatiiReturListener {
 
 	TextView textDocument;
 	ListView listArticoleRetur;
@@ -95,8 +96,8 @@ public class ArticoleReturMarfa extends Fragment implements ListaArtReturListene
 		return v;
 	}
 
-	public static ArticoleReturMarfa newInstance() {
-		ArticoleReturMarfa frg = new ArticoleReturMarfa();
+	public static ArticoleReturPaleti newInstance() {
+		ArticoleReturPaleti frg = new ArticoleReturPaleti();
 		Bundle bdl = new Bundle();
 		frg.setArguments(bdl);
 		return frg;
@@ -155,27 +156,27 @@ public class ArticoleReturMarfa extends Fragment implements ListaArtReturListene
 
 	private boolean isDateReturValide() {
 
-		if (DateLivrareReturMarfa.dataRetur.length() == 0) {
+		if (DateLivrareReturPaleti.dataRetur.length() == 0) {
 			Toast.makeText(getActivity(), "Selectati data retur", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
-		if (DateLivrareReturMarfa.tipTransport.length() == 0) {
+		if (DateLivrareReturPaleti.tipTransport.length() == 0) {
 			Toast.makeText(getActivity(), "Selectati tipul de transport", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
-		if (DateLivrareReturMarfa.motivRetur.length() == 0) {
+		if (DateLivrareReturPaleti.motivRetur.length() == 0) {
 			Toast.makeText(getActivity(), "Selectati motivul de retur", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
-		if (DateLivrareReturMarfa.adresaCodJudet.length() == 0) {
+		if (DateLivrareReturPaleti.adresaCodJudet.length() == 0) {
 			Toast.makeText(getActivity(), "Selectati judetul", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
-		if (DateLivrareReturMarfa.adresaOras.length() == 0) {
+		if (DateLivrareReturPaleti.adresaOras.length() == 0) {
 			Toast.makeText(getActivity(), "Selectati orasul", Toast.LENGTH_SHORT).show();
 			return false;
 		}
@@ -204,7 +205,6 @@ public class ArticoleReturMarfa extends Fragment implements ListaArtReturListene
 
 						showWarningDialog();
 
-						// performSaveRetur();
 					}
 				});
 				myTimer.cancel();
@@ -218,24 +218,25 @@ public class ArticoleReturMarfa extends Fragment implements ListaArtReturListene
 
 		BeanComandaRetur comandaRetur = new BeanComandaRetur();
 		comandaRetur.setNrDocument(nrDocument);
-		comandaRetur.setDataLivrare(DateLivrareReturMarfa.dataRetur);
-		comandaRetur.setTipTransport(DateLivrareReturMarfa.tipTransport);
+		comandaRetur.setDataLivrare(DateLivrareReturPaleti.dataRetur);
+		comandaRetur.setTipTransport(DateLivrareReturPaleti.tipTransport);
 		comandaRetur.setCodAgent(UserInfo.getInstance().getCod());
 		comandaRetur.setTipAgent(UserInfo.getInstance().getTipUser());
-		comandaRetur.setMotivRespingere(DateLivrareReturMarfa.motivRetur);
-		comandaRetur.setNumePersContact(DateLivrareReturMarfa.numePersContact);
-		comandaRetur.setTelPersContact(DateLivrareReturMarfa.telPersContact);
-		comandaRetur.setAdresaCodJudet(DateLivrareReturMarfa.adresaCodJudet);
-		comandaRetur.setAdresaOras(DateLivrareReturMarfa.adresaOras);
-		comandaRetur.setAdresaStrada(DateLivrareReturMarfa.adresaStrada);
-		comandaRetur.setAdresaCodAdresa(DateLivrareReturMarfa.adresaCodAdresa);
+		comandaRetur.setMotivRespingere(DateLivrareReturPaleti.motivRetur);
+		comandaRetur.setNumePersContact(DateLivrareReturPaleti.numePersContact);
+		comandaRetur.setTelPersContact(DateLivrareReturPaleti.telPersContact);
+		comandaRetur.setAdresaCodJudet(DateLivrareReturPaleti.adresaCodJudet);
+		comandaRetur.setAdresaOras(DateLivrareReturPaleti.adresaOras);
+		comandaRetur.setAdresaStrada(DateLivrareReturPaleti.adresaStrada);
+		comandaRetur.setAdresaCodAdresa(DateLivrareReturPaleti.adresaCodAdresa);
 		comandaRetur.setListArticole(opRetur.serializeListArticole(listArticole));
-		comandaRetur.setObservatii(DateLivrareReturMarfa.observatii);
+		comandaRetur.setObservatii(DateLivrareReturPaleti.observatii);
 		comandaRetur.setCodClient(codClient);
 		comandaRetur.setNumeClient(numeClient);
 
 		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 		params.put("dateRetur", opRetur.serializeComandaRetur(comandaRetur));
+		params.put("tipRetur", EnumTipRetur.PALETI.getTipRetur());
 
 		opRetur.saveComandaRetur(params);
 

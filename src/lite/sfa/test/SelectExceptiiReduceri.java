@@ -16,8 +16,6 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import connectors.ConnectionStrings;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -41,6 +39,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import connectors.ConnectionStrings;
 
 public class SelectExceptiiReduceri extends Activity {
 
@@ -593,7 +592,7 @@ public class SelectExceptiiReduceri extends Activity {
 							+ "%') ";
 
 				checkDB = SQLiteDatabase.openDatabase(
-						ConnectionStrings.getInstance().getDatabaseName(), null,
+						ConnectionStrings.getInstance().getNamespace(), null,
 						SQLiteDatabase.OPEN_READWRITE);
 				Cursor cur = checkDB.rawQuery(
 						"SELECT distinct codnivel1,numenivel1 FROM nivel1def where "
@@ -680,7 +679,7 @@ public class SelectExceptiiReduceri extends Activity {
 							+ "%') ";
 
 				checkDB = SQLiteDatabase.openDatabase(
-						ConnectionStrings.getInstance().getDatabaseName(), null,
+						ConnectionStrings.getInstance().getNamespace(), null,
 						SQLiteDatabase.OPEN_READWRITE);
 				Cursor cur = checkDB.rawQuery(
 						"SELECT id,nume,sintetic FROM articoledef where "

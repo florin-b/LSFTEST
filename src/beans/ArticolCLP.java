@@ -1,12 +1,14 @@
 package beans;
 
 public class ArticolCLP {
-	String cod;
-	String nume;
-	String cantitate;
-	String umBaza;
-	String depozit;
-	String status;
+
+	private String cod;
+	private String nume;
+	private String cantitate;
+	private String umBaza;
+	private String depozit;
+	private String status;
+	private String depart;
 
 	public ArticolCLP() {
 
@@ -58,6 +60,20 @@ public class ArticolCLP {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getDepart() {
+		return depart;
+	}
+
+	public void setDepart(String depart) {
+		this.depart = depart;
+	}
+
+	@Override
+	public String toString() {
+		return "ArticolCLP [cod=" + cod + ", nume=" + nume + ", cantitate=" + cantitate + ", umBaza=" + umBaza + ", depozit=" + depozit + ", status=" + status
+				+ ", depart=" + depart + "]";
 	}
 
 }

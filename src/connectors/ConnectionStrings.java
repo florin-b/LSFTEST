@@ -4,7 +4,6 @@
  */
 package connectors;
 
-import android.os.Environment;
 
 public class ConnectionStrings {
 
@@ -12,12 +11,18 @@ public class ConnectionStrings {
 
 	private String myUrl;
 	private String myNamespace;
-	private String myDatabase;
+	
 
 	private ConnectionStrings() {
+		
+		//ARBSQ
 		myUrl = "http://10.1.0.58/AndroidWebServices/TESTService.asmx";
+		
+		//DR
+		//myUrl = "http://172.17.18.24/AndroidWebServices/TESTService.asmx";
+		
 		myNamespace = "http://SFATest.org/";
-		myDatabase = Environment.getExternalStorageDirectory().getPath() + "/download/AndroidLRTest";
+		
 	}
 
 	public static ConnectionStrings getInstance() {
@@ -32,8 +37,6 @@ public class ConnectionStrings {
 		return this.myNamespace;
 	}
 
-	public String getDatabaseName() {
-		return this.myDatabase;
-	}
+	
 
 }

@@ -1184,6 +1184,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		if (UserInfo.getInstance().getTipAcces().equals("10")) // userul
 																// este SD
 		{
+
 			conditiiArticolLayout.setVisibility(View.GONE);
 
 			// este comanda de agent

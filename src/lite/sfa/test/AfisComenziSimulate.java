@@ -12,17 +12,20 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.TreeSet;
 
 import listeners.AsyncTaskListener;
 import listeners.ComenziDAOListener;
 import listeners.OfertaMailListener;
 import listeners.OperatiiArticolListener;
+import listeners.SelectClientListener;
 import model.ArticolComanda;
 import model.ComenziDAO;
 import model.InfoStrings;
 import model.OperatiiArticol;
 import model.OperatiiArticolImpl;
 import model.UserInfo;
+import patterns.CriteriuComenziSimulate;
 import utils.UtilsGeneral;
 import adapters.ArticolSimulatAdapter;
 import adapters.ComandaSimulataAdapter;
@@ -55,10 +58,12 @@ import beans.BeanComandaCreata;
 import beans.BeanComandaSimulata;
 import beans.DateLivrareAfisare;
 import dialogs.OfertaMailDialog;
+import dialogs.SelectClientCmdSimDialog;
 import enums.EnumArticoleDAO;
 import enums.EnumComenziDAO;
 
-public class AfisComenziSimulate extends Activity implements AsyncTaskListener, ComenziDAOListener, OperatiiArticolListener, OfertaMailListener {
+public class AfisComenziSimulate extends Activity implements AsyncTaskListener, ComenziDAOListener, OperatiiArticolListener, OfertaMailListener,
+		SelectClientListener {
 
 	Button creeazaCmdSimBtn, stergeCmdSimBtn;
 	String filiala = "", nume = "", cod = "";
@@ -92,8 +97,6 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 	private String selectedClient = "";
 	private Integer selectedClientIndex = -1;
 
-	private boolean totiClientiiRadioBtnSelected = true;
-
 	private HashMap<String, String> artMap = null;
 
 	private ComenziDAO comenzi;
@@ -104,6 +107,8 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 	private LinearLayout detaliiLayout;
 	private BeanComandaSimulata comandaCurenta;
 	private DateLivrareAfisare dateLivrareCmdCurent;
+
+	private List<BeanComandaCreata> comenziSimulate;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -185,6 +190,8 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 		verificaStocButton.setVisibility(View.INVISIBLE);
 		setListenerVerificaStoc();
 
+		comenziSimulate = new ArrayList<BeanComandaCreata>();
+
 	}
 
 	@Override
@@ -203,6 +210,9 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 	private void CreateMenu(Menu menu) {
 		MenuItem mnu1 = menu.add(0, 0, 0, "Trimite mail");
 		mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+		MenuItem mnu2 = menu.add(0, 1, 1, "Client");
+		mnu2.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
 	}
 
@@ -283,6 +293,10 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 			return true;
 
+		case 1:
+			showDialogSelectClient();
+			return true;
+
 		case android.R.id.home:
 
 			UserInfo.getInstance().setParentScreen("");
@@ -304,6 +318,25 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 		OfertaMailDialog ofertaMail = new OfertaMailDialog(AfisComenziSimulate.this, dateLivrareCmdCurent.getMail());
 		ofertaMail.setOfertaMailListener(AfisComenziSimulate.this);
 		ofertaMail.show();
+	}
+
+	private void showDialogSelectClient() {
+
+		SelectClientCmdSimDialog clientDialog = new SelectClientCmdSimDialog(this, getClientiComenzi());
+		clientDialog.setSelectClientListener(this);
+		clientDialog.show();
+	}
+
+	private TreeSet<String> getClientiComenzi() {
+
+		TreeSet<String> setClienti = new TreeSet<String>();
+
+		setClienti.add("TOTI CLIENTII");
+
+		for (BeanComandaCreata comanda : comenziSimulate)
+			setClienti.add(comanda.getNumeClient());
+
+		return setClienti;
 	}
 
 	private void sendOfertaMail(String adresaMail) {
@@ -533,6 +566,8 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 			ComandaSimulataAdapter adapterComenzi1 = new ComandaSimulataAdapter(copyCollection(cmdList), this);
 			spinnerCmd.setAdapter(adapterComenzi1);
 
+			
+
 		} else {
 			creeazaCmdSimBtn.setVisibility(View.INVISIBLE);
 			stergeCmdSimBtn.setVisibility(View.INVISIBLE);
@@ -654,6 +689,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 		switch (methodName) {
 		case GET_LIST_COMENZI:
 			populateListComenzi((List<BeanComandaCreata>) result);
+			comenziSimulate = (List<BeanComandaCreata>) result;
 			break;
 		case GET_ARTICOLE_COMANDA_JSON:
 			populateArticoleComanda(comenzi.deserializeArticoleComandaLight((String) result));
@@ -691,6 +727,18 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 	@Override
 	public void sendMail(String mailAddress) {
 		sendOfertaMail(mailAddress);
+	}
+
+	@Override
+	public void clientSelected(String numeClient, int position) {
+
+		if (position == 0)
+			populateListComenzi(comenziSimulate);
+		else {
+			List<BeanComandaCreata> comenziFiltrate = new CriteriuComenziSimulate().getCmdByClient(comenziSimulate, numeClient);
+			populateListComenzi(comenziFiltrate);
+		}
+
 	}
 
 }

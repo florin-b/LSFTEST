@@ -1072,9 +1072,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 						String alerteKA = "!";
 
 						// comanda consilier (av) simulata
-						if ((UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance()
-								.getTipAcces().equals("10"))
-								&& CreareComandaGed.tipComanda.equals("S")) {
+						if (isConditiiUserCmdRez() && CreareComandaGed.tipComanda.equals("S")) {
 
 							if (CreareComandaGed.rezervStoc) {
 								comandaBlocata = "20"; // simulare cu rezervare
@@ -1118,6 +1116,11 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			}
 
 		}
+	}
+
+	private boolean isConditiiUserCmdRez() {
+		return UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("9")
+				|| UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18");
 	}
 
 	private void displayAlertPalet() {
@@ -1294,15 +1297,17 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 					if (listArticole.get(i).getTipAlert().contains("DV"))
 						alertDV = true;
 
-					if (alertSD || alertDV)
+					if ((alertSD || alertDV) && !comandaFinala.getComandaBlocata().equals("21"))
 						comandaFinala.setComandaBlocata("1");
 				}
 
 			}
 
-			if (DateLivrare.getInstance().isAdrLivrNoua()) {
+			if (DateLivrare.getInstance().isAdrLivrNoua() && UtilsUser.isAgentOrSD()) {
 				alertSD = true;
-				comandaFinala.setComandaBlocata("1");
+
+				if (!comandaFinala.getComandaBlocata().equals("21"))
+					comandaFinala.setComandaBlocata("1");
 			}
 
 		} catch (Exception ex) {

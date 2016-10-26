@@ -1,6 +1,6 @@
 package model;
 
 public interface ClientReturListener {
-	public void clientSelected(String codClient, String numeClient);
+	public void clientSelected(String codClient, String numeClient, String interval);
 
 }

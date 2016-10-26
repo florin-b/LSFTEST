@@ -3,10 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import connectors.ConnectionStrings;
-
-import beans.ArticolDB;
-
 import listeners.AsyncTaskListener;
 import lite.sfa.test.CreareComanda;
 import android.app.ProgressDialog;
@@ -15,6 +11,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.widget.Toast;
+import beans.ArticolDB;
+import connectors.ConnectionStrings;
 
 public class GetArticoleFromDB extends AsyncTask<Void, Void, List<ArticolDB>> {
 
@@ -67,7 +65,7 @@ public class GetArticoleFromDB extends AsyncTask<Void, Void, List<ArticolDB>> {
 					condArt = " upper(ar.nume) like  upper('" + codArt + "%') ";
 			}
 
-			checkDB = SQLiteDatabase.openDatabase(ConnectionStrings.getInstance().getDatabaseName(), null,
+			checkDB = SQLiteDatabase.openDatabase(ConnectionStrings.getInstance().getNamespace(), null,
 					SQLiteDatabase.OPEN_READWRITE);
 			Cursor cur = checkDB.rawQuery(
 					"SELECT ar.id,ar.nume, ar.umvanz_d, ar.umvanz_g, st.cod_depart, ar.tip_art FROM articoledef ar, sinteticedef st where "

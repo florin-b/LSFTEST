@@ -7,6 +7,7 @@ package lite.sfa.test;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -22,9 +23,11 @@ import model.InfoStrings;
 import model.OperatiiArticol;
 import model.OperatiiArticolFactory;
 import model.UserInfo;
+import patterns.ClpDepartComparator;
 import utils.ScreenUtils;
 import utils.UtilsFormatting;
 import utils.UtilsGeneral;
+import utils.UtilsUser;
 import adapters.CautareArticoleAdapter;
 import android.os.Bundle;
 import android.os.Handler;
@@ -56,8 +59,11 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import beans.AntetComandaCLP;
+import beans.ArticolCLP;
 import beans.ArticolDB;
 import beans.BeanGreutateArticol;
+import beans.ComandaCreataCLP;
 import enums.EnumArticoleDAO;
 import enums.EnumClpDAO;
 
@@ -76,7 +82,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 	public SimpleAdapter adapterUmVanz;
 	public ListView listViewArticole;
 	private Spinner spinnerDepoz, spinnerUMClp;
-	String codArticol = "", numeArticol = "", sintetic = "", selectedUnitMas = "";
+	String codArticol = "", numeArticol = "", sintetic = "", selectedUnitMas = "", depArtSel = "";
 
 	public static String globalDepozSel = "";
 	public static String globalCodDepartSelectetItem = "";
@@ -104,6 +110,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 	private double factorConversie = 1;
 
 	OperatiiArticol opArticol;
+	private ComandaCreataCLP comandaCLP;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -178,8 +185,8 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 		listArtSelClp = new ArrayList<HashMap<String, String>>();
 		adapterListArtClp = new SimpleAdapter(getActivity(), listArtSelClp, R.layout.articol_row_clp, new String[] { "nrCrt", "numeArt", "codArt", "cantArt",
-				"depozit", "Umb", "sintetic", "greutate", "umgreutate" }, new int[] { R.id.textNrCrt, R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt,
-				R.id.textDepozit, R.id.textCantUmb, R.id.textSintetic, R.id.textGreutate, R.id.textUmGreutate }
+				"depozit", "Umb", "sintetic", "greutate", "umgreutate", "depart" }, new int[] { R.id.textNrCrt, R.id.textNumeArt, R.id.textCodArt,
+				R.id.textCantArt, R.id.textDepozit, R.id.textCantUmb, R.id.textSintetic, R.id.textGreutate, R.id.textUmGreutate, R.id.textDepart }
 
 		);
 
@@ -213,6 +220,8 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		spinnerUMClp.setAdapter(adapterUmVanz);
 		spinnerUMClp.setVisibility(View.GONE);
 		spinnerUMClp.setOnItemSelectedListener(new OnSelectUnitMas());
+
+		comandaCLP = new ComandaCreataCLP();
 
 		return v;
 	}
@@ -381,6 +390,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 			temp.put("sintetic", sintetic);
 			temp.put("greutate", nf2.format(greutateCantitate));
 			temp.put("umgreutate", greutateArticol.getUnitMas().toString());
+			temp.put("depart", depArtSel);
 
 			listArtSelClp.add(selectedArtPos, temp);
 			listArtCmdClp.setAdapter(adapterListArtClp);
@@ -423,6 +433,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		numeArticol = "";
 		codArticol = "";
 		sintetic = "";
+		depArtSel = "";
 		selectedUnitMas = "";
 
 		textNumeArticol.setText("");
@@ -461,6 +472,10 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 		if (isCV()) {
 			localDep = CLPFragment1.departamentConsilier;
+		} else if (UtilsUser.isAgentOrSD()) {
+			localDep = UserInfo.getInstance().getCodDepart();
+		} else if (UtilsUser.isKA()) {
+			localDep = "00";
 		}
 
 		if (localDep.length() > 0) {
@@ -498,6 +513,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 				numeArticol = articol.getNume();
 				codArticol = articol.getCod();
 				sintetic = articol.getSintetic();
+				depArtSel = articol.getDepart();
 
 				String umVanz = articol.getUmVanz10();
 
@@ -803,6 +819,9 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 			tokVal = artMap.get("umgreutate");
 			objArticol[ii].setUnitMasPretMediu(tokVal);
 
+			tokVal = artMap.get("depart");
+			objArticol[ii].setDepart(tokVal);
+
 		}// sf. for
 
 		listArtSelClp.clear();
@@ -822,6 +841,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 				temp.put("sintetic", objArticol[ii].getObservatii());
 				temp.put("greutate", nf3.format(objArticol[ii].getCantUmb()));
 				temp.put("umgreutate", objArticol[ii].getUnitMasPretMediu());
+				temp.put("depart", objArticol[ii].getDepart());
 
 				listArtSelClp.add(temp);
 			}
@@ -1031,6 +1051,31 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 				strTonaj = tonaj[0];
 			}
 
+			AntetComandaCLP antetComandaCLP = new AntetComandaCLP();
+
+			antetComandaCLP.setCodClient(localCodClient);
+			antetComandaCLP.setCodJudet(CreareClp.codJudet);
+			antetComandaCLP.setLocalitate(CreareClp.oras);
+			antetComandaCLP.setStrada(CreareClp.strada);
+			antetComandaCLP.setPersCont(CreareClp.persCont);
+			antetComandaCLP.setTelefon(CreareClp.telefon);
+			antetComandaCLP.setCodFilialaDest(CreareClp.codFilialaDest);
+			antetComandaCLP.setDataLivrare(CreareClp.dataLivrare);
+			antetComandaCLP.setTipPlata(CreareClp.tipPlata);
+			antetComandaCLP.setTipTransport(CreareClp.tipTransport);
+			antetComandaCLP.setDepozDest(depozDest);
+			antetComandaCLP.setSelectedAgent(CreareClp.selectedAgent);
+			antetComandaCLP.setCmdFasonate(cmdFasonate);
+			antetComandaCLP.setNumeClientCV(numeClientCV);
+			antetComandaCLP.setObservatiiCLP(observatiiCLP);
+			antetComandaCLP.setTipMarfa(CreareClp.tipMarfa);
+			antetComandaCLP.setMasaMarfa(CreareClp.masaMarfa);
+			antetComandaCLP.setTipCamion(CLPFragment1.spinnerTipCamion.getSelectedItem().toString().toUpperCase(Locale.getDefault()));
+			antetComandaCLP.setTipIncarcare(CLPFragment1.spinnerTipIncarcare.getSelectedItem().toString().toUpperCase(Locale.getDefault()));
+			antetComandaCLP.setTonaj(strTonaj);
+
+			comandaCLP.setAntetComandaCLP(antetComandaCLP);
+
 			CreareClp.comandaFinala = localCodClient + "#" + CreareClp.codJudet + "#" + CreareClp.oras + "#" + CreareClp.strada + "#" + CreareClp.persCont
 					+ "#" + CreareClp.telefon + "#" + CreareClp.codFilialaDest + "#" + CreareClp.dataLivrare + "#" + CreareClp.tipPlata + "#"
 					+ CreareClp.tipTransport + "#" + depozDest + "#" + CreareClp.selectedAgent + "#" + cmdFasonate + "#" + numeClientCV + "#" + observatiiCLP
@@ -1054,6 +1099,8 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 	@SuppressWarnings("unchecked")
 	private String prepareArtForDelivery() {
 
+		List<ArticolCLP> listArticole = new ArrayList<ArticolCLP>();
+
 		String retVal = "";
 		try {
 
@@ -1067,9 +1114,20 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 					cmdFasonate = false;
 				}
 
+				ArticolCLP articolCLP = new ArticolCLP();
+				articolCLP.setCod(artMap.get("codArt"));
+				articolCLP.setCantitate(artMap.get("cantArt"));
+				articolCLP.setUmBaza(artMap.get("Umb"));
+				articolCLP.setDepozit(artMap.get("depozit"));
+				articolCLP.setDepart(artMap.get("depart"));
+				listArticole.add(articolCLP);
+
 				retVal += artMap.get("codArt") + "#" + artMap.get("cantArt") + "#" + artMap.get("Umb") + "#" + artMap.get("depozit") + "@";
 
 			}
+
+			Collections.sort(listArticole, new ClpDepartComparator());
+			comandaCLP.setListaArticoleComanda(listArticole);
 
 		} catch (Exception ex) {
 			Toast.makeText(getActivity(), ex.toString(), Toast.LENGTH_SHORT).show();
@@ -1118,6 +1176,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 			params.put("filiala", UserInfo.getInstance().getUnitLog());
 			params.put("depart", localDep);
 			params.put("alertSD", localAlertSD);
+			params.put("serData", operatiiClp.serializeComandaClp(comandaCLP));
 
 			operatiiClp.salveazaComanda(params);
 
