@@ -171,7 +171,10 @@ public class MainMenu extends Activity {
 		checkStaticVars();
 
 		gridview = (GridView) findViewById(R.id.gridview);
-		gridview.setAdapter(new ButtonAdapter(this));
+		
+		ButtonAdapter btnAdapter = new ButtonAdapter(this);
+		
+		gridview.setAdapter(btnAdapter);
 
 		animation = new AlphaAnimation(1, 0);
 
@@ -271,6 +274,8 @@ public class MainMenu extends Activity {
 
 		public View getView(int position, View convertView, ViewGroup parent) {
 
+			
+			
 			Button btn;
 			Typeface font = Typeface.SERIF;
 
@@ -812,7 +817,7 @@ public class MainMenu extends Activity {
 					}
 
 				} else {
-					if (isUpdateble() && !UtilsUser.isDV_CONS()) {
+					if (isUpdatable() && !UtilsUser.isDV_CONS()) {
 
 						if (timerCheckCmdCond == null) {
 							timerCheckCmdCond = new Timer();
@@ -835,7 +840,7 @@ public class MainMenu extends Activity {
 
 	}
 
-	boolean isUpdateble() {
+	boolean isUpdatable() {
 		return UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("10")
 				|| UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14")
 				|| UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("17")
@@ -1032,7 +1037,7 @@ public class MainMenu extends Activity {
 
 		@Override
 		protected void onPostExecute(String result) {
-			// TODO
+			
 
 			try {
 				if (dialog != null) {
@@ -1110,6 +1115,7 @@ public class MainMenu extends Activity {
 
 			// butonul "Comenzi conditionate"
 			this.cmdCondBtn = (Button) gridview.findViewById(getBtnPosByName("Comenzi conditionate"));
+		
 
 			if (tipRes[0].equals("1")) {
 				this.modifCmdBtn.startAnimation(animation);

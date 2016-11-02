@@ -35,6 +35,7 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import utils.Exceptions;
+import utils.MapUtils;
 import utils.UtilsFormatting;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
@@ -1343,6 +1344,15 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			return;
 		}
 
+		dateLivrareInstance.setTipPlata(spinnerPlata.getSelectedItem().toString().substring(0, 1));
+		dateLivrareInstance.setTransport(spinnerTransp.getSelectedItem().toString().substring(0, 4));
+		dateLivrareInstance.setDataLivrare(spinnerDataLivrare.getSelectedItemPosition() - 1);
+
+		if (!isAdresaCorecta()) {
+			Toast.makeText(getApplicationContext(), "Completati adresa corect sau pozitionati adresa pe harta.", Toast.LENGTH_LONG).show();
+			return;
+		}
+
 		String cantar = "NU";
 		dateLivrareInstance.setCantar("NU");
 
@@ -1357,10 +1367,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		if (spinnerTipReducere.getSelectedItemPosition() == 2) {
 			dateLivrareInstance.setRedSeparat("R");
 		}
-
-		dateLivrareInstance.setTipPlata(spinnerPlata.getSelectedItem().toString().substring(0, 1));
-		dateLivrareInstance.setTransport(spinnerTransp.getSelectedItem().toString().substring(0, 4));
-		dateLivrareInstance.setDataLivrare(spinnerDataLivrare.getSelectedItemPosition() - 1);
 
 		if (layoutValoareIncasare.getVisibility() == View.VISIBLE)
 			dateLivrareInstance.setValoareIncasare(txtValoareIncasare.getText().toString());
@@ -1394,6 +1400,14 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	}
 
+	private boolean isAdresaCorecta() {
+		if (DateLivrare.getInstance().getTransport().equals("TRAP"))
+			return isAdresaGoogleOk();
+		else
+			return true;
+
+	}
+
 	private boolean isConditiiTonaj(Spinner spinnerTransp, Spinner spinnerTonaj) {
 		return spinnerTransp.getSelectedItem().toString().toLowerCase().contains("arabesque")
 				&& spinnerTonaj.getSelectedItem().toString().split(" ")[1].equals("T");
@@ -1402,6 +1416,21 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private String getTipTransport() {
 		return spinnerTransp.getSelectedItem().toString().substring(0, 4);
+	}
+
+	private boolean isAdresaGoogleOk() {
+		return MapUtils.geocodeAddress(getAddressFromForm(), getApplicationContext()).latitude > 0;
+
+	}
+
+	private Address getAddressFromForm() {
+		Address address = new Address();
+
+		address.setCity(DateLivrare.getInstance().getOras());
+		address.setStreet(DateLivrare.getInstance().getStrada());
+		address.setSector(UtilsGeneral.getNumeJudet(DateLivrare.getInstance().getCodJudet()));
+
+		return address;
 	}
 
 	private void setAdresaLivrareFromList(HashMap<String, String> selectedLine) {
@@ -1430,31 +1459,29 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	}
 
+	private void setAdresaLivrare(Address address) {
+
+		textLocalitate.setText(address.getCity());
+		textStrada.setText(address.getStreet().trim());
+
+		if (address.getNumber() != null && address.getNumber().length() > 0)
+			textNrStr.setText(address.getNumber());
+
+	}
+
 	private void valideazaAdresaLivrare() {
 
-		if (isAdresaCompleta()) {
+	
 			HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 			params.put("codJudet", DateLivrare.getInstance().getCodJudet());
 			params.put("localitate", DateLivrare.getInstance().getOras());
 
 			operatiiAdresa.isAdresaValida(params, EnumLocalitate.LOCALITATE_SEDIU);
-		}
+		
 
 	}
 
-	private boolean isAdresaCompleta() {
-
-		if (!CreareComanda.codClientVar.equals("")) {
-
-			if (textNrStr.getText().toString().trim().equals("") && DateLivrare.getInstance().getCoordonateAdresa() == null && getTipTransport().equals("TRAP")) {
-				Toast.makeText(this, "Adresa de livrare imprecisa, pozitionati adresa pe harta", Toast.LENGTH_SHORT).show();
-				return false;
-			}
-
-		}
-
-		return true;
-	}
+	
 
 	private void setListenerSpinnerAdreseLivrare() {
 		spinnerAdreseLivrare.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1596,9 +1623,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	@Override
-	public void addressSelected(LatLng coord) {
+	public void addressSelected(LatLng coord, android.location.Address address) {
 		DateLivrare.getInstance().setCoordonateAdresa(coord);
 		textCoordAdresa.setText(coord.latitude + "," + coord.longitude);
+		setAdresaLivrare(MapUtils.getAddress(address));
 
 	}
 

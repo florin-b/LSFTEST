@@ -8,7 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import listeners.MapListener;
 import model.ClientReturListener;
+import utils.MapUtils;
 import utils.UtilsGeneral;
 import android.app.Activity;
 import android.os.Bundle;
@@ -24,16 +26,23 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
+import beans.Address;
 import beans.BeanAdresaLivrare;
 import beans.BeanPersoanaContact;
+
+import com.google.android.gms.maps.model.LatLng;
+
+import dialogs.MapAddressDialogF4;
 import enums.EnumMotivRespingere;
 
-public class DateLivrareReturPaleti extends Fragment implements OnItemClickListener, OnTouchListener {
+public class DateLivrareReturPaleti extends Fragment implements OnItemClickListener, OnTouchListener, MapListener {
 
 	ClientReturListener clientListener;
 	Spinner spinnerTransport, spinnerDataRetur, spinnerMotivRetur, spinnerAdresaRetur, spinnerJudet;
@@ -47,6 +56,8 @@ public class DateLivrareReturPaleti extends Fragment implements OnItemClickListe
 			telPersContact = "", adresaCodAdresa = "", observatii = "";
 	private String[] arrayPersoane, arrayTelefoane;
 
+	private Button btnPozitieAdresa;
+
 	String[] judete = { "ALBA", "ARAD", "ARGES", "BACAU", "BIHOR", "BISTRITA-NASAUD", "BOTOSANI", "BRAILA", "BRASOV", "BUCURESTI", "BUZAU", "CALARASI",
 			"CARAS-SEVERIN", "CLUJ", "CONSTANTA", "COVASNA", "DAMBOVITA", "DOLJ", "GALATI", "GIURGIU", "GORJ", "HARGHITA", "HUNEDOARA", "IALOMITA", "IASI",
 			"ILFOV", "MARAMURES", "MEHEDINTI", "MURES", "NEAMT", "OLT", "PRAHOVA", "SALAJ", "SATU-MARE", "SIBIU", "SUCEAVA", "TELEORMAN", "TIMIS", "TULCEA",
@@ -54,6 +65,8 @@ public class DateLivrareReturPaleti extends Fragment implements OnItemClickListe
 
 	String[] codJudete = { "01", "02", "03", "04", "05", "06", "07", "09", "08", "40", "10", "51", "11", "12", "13", "14", "15", "16", "17", "52", "18", "19",
 			"20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "31", "30", "32", "33", "34", "35", "36", "38", "37", "39" };
+	
+	public static boolean isAltaAdresa = false;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -95,6 +108,9 @@ public class DateLivrareReturPaleti extends Fragment implements OnItemClickListe
 		textObservatii = (EditText) v.findViewById(R.id.textObservatii);
 		setTextObservatiiListener();
 
+		btnPozitieAdresa = (Button) v.findViewById(R.id.btnPozitieAdresa);
+		setListnerBtnPozitieAdresa();
+
 		return v;
 
 	}
@@ -118,6 +134,44 @@ public class DateLivrareReturPaleti extends Fragment implements OnItemClickListe
 
 			}
 		});
+	}
+
+	private void setListnerBtnPozitieAdresa() {
+		btnPozitieAdresa.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+
+				Address address = new Address();
+
+				address.setCity(textOras.getText().toString().trim());
+				address.setStreet(textStrada.getText().toString().trim());
+				address.setSector(UtilsGeneral.getNumeJudet(adresaCodJudet));
+
+				if (!isAdresaComplet())
+					return;
+
+				android.support.v4.app.FragmentManager fm = getFragmentManager();
+
+				MapAddressDialogF4 mapDialog = new MapAddressDialogF4(address, getActivity(), fm);
+
+				mapDialog.setMapListener(DateLivrareReturPaleti.this);
+				mapDialog.show();
+			}
+		});
+	}
+
+	private boolean isAdresaComplet() {
+		if (spinnerJudet.getSelectedItemPosition() == 0) {
+			Toast.makeText(getActivity(), "Selectati judetul", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+
+		if (textOras.getText().toString().trim().equals("")) {
+			Toast.makeText(getActivity(), "Completati localitatea", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+
+		return true;
 	}
 
 	private void populateSpinnerDataRetur() {
@@ -199,9 +253,11 @@ public class DateLivrareReturPaleti extends Fragment implements OnItemClickListe
 					textStrada.setText("");
 					fillSpinnerJudete();
 					layoutAdresaNoua.setVisibility(View.VISIBLE);
+					isAltaAdresa = true;
 				} else {
 					setDateAdresa(position);
 					layoutAdresaNoua.setVisibility(View.GONE);
+					isAltaAdresa = false;
 				}
 
 			}
@@ -378,6 +434,19 @@ public class DateLivrareReturPaleti extends Fragment implements OnItemClickListe
 		}
 	}
 
+	private void setAdresaLivrare(Address address) {
+
+		textOras.setText(address.getCity());
+
+		String strStrada = address.getStreet().trim();
+
+		if (address.getNumber() != null && address.getNumber().length() > 0)
+			strStrada += " nr. " + address.getNumber();
+
+		textStrada.setText(strStrada);
+
+	}
+
 	public static DateLivrareReturPaleti newInstance() {
 		DateLivrareReturPaleti frg = new DateLivrareReturPaleti();
 		Bundle bdl = new Bundle();
@@ -407,6 +476,12 @@ public class DateLivrareReturPaleti extends Fragment implements OnItemClickListe
 
 		}
 		return false;
+	}
+
+	@Override
+	public void addressSelected(LatLng coord, android.location.Address address) {
+		setAdresaLivrare(MapUtils.getAddress(address));
+
 	}
 
 }

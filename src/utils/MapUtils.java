@@ -1,5 +1,7 @@
 package utils;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -11,7 +13,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class MapUtils {
 
-	public static LatLng geocodeAddress(Address address, Context context) throws Exception {
+	public static LatLng geocodeAddress(Address address, Context context) {
 
 		LatLng coords = null;
 
@@ -43,10 +45,15 @@ public class MapUtils {
 		strAddress.append(address.getCountry());
 
 		Geocoder geoCoder = new Geocoder(context, Locale.getDefault());
-		List<android.location.Address> addresses = geoCoder.getFromLocationName(strAddress.toString(), 1);
+		List<android.location.Address> addresses = new ArrayList<android.location.Address>();
+		try {
+			addresses = geoCoder.getFromLocationName(strAddress.toString(), 1);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		if (addresses.size() > 0) {
-
 			latitude = addresses.get(0).getLatitude();
 			longitude = addresses.get(0).getLongitude();
 
@@ -55,6 +62,24 @@ public class MapUtils {
 		coords = new LatLng(latitude, longitude);
 
 		return coords;
+	}
+
+	public static android.location.Address getAddressFromCoordinate(LatLng coords, Context context) {
+		Geocoder geoCoder = new Geocoder(context, Locale.getDefault());
+
+		android.location.Address address = new android.location.Address(null);
+
+		try {
+
+			List<android.location.Address> tempList = geoCoder.getFromLocation(coords.latitude, coords.longitude, 1);
+
+			if (!tempList.isEmpty())
+				address = tempList.get(0);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return address;
 	}
 
 	public static double distanceXtoY(double lat1, double lon1, double lat2, double lon2, String unit) {
@@ -77,6 +102,45 @@ public class MapUtils {
 
 	private static double rad2deg(double rad) {
 		return (rad * 180 / Math.PI);
+	}
+
+	public static Address getAddress(android.location.Address googleAddress) {
+		Address address = new Address();
+
+		String tempString = "";
+
+		if (googleAddress.getSubAdminArea() != null)
+			tempString = UtilsFormatting.flattenToAscii(googleAddress.getSubAdminArea()).toUpperCase();
+		else
+			tempString = "";
+
+		address.setSector(tempString);
+
+		if (googleAddress.getLocality() != null) {
+			tempString = UtilsFormatting.flattenToAscii(googleAddress.getLocality()).toUpperCase();
+			if (tempString.equalsIgnoreCase("bucharest"))
+				tempString = "BUCURESTI";
+		} else
+			tempString = "";
+
+		address.setCity(tempString);
+
+		if (googleAddress.getThoroughfare() != null)
+			tempString = UtilsFormatting.flattenToAscii(googleAddress.getThoroughfare()).toUpperCase().replace("STRADA", "");
+		else
+			tempString = "";
+
+		address.setStreet(tempString);
+
+		if (googleAddress.getSubThoroughfare() != null)
+			tempString = UtilsFormatting.flattenToAscii(googleAddress.getSubThoroughfare()).toUpperCase();
+		else
+			tempString = "";
+
+		address.setNumber(tempString);
+
+		return address;
+
 	}
 
 }

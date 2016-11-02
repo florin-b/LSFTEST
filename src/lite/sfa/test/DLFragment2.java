@@ -19,6 +19,8 @@ import model.DlDAO;
 import model.OperatiiArticol;
 import model.OperatiiArticolFactory;
 import model.UserInfo;
+import utils.MapUtils;
+import utils.UtilsGeneral;
 import adapters.CautareArticoleAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -52,10 +54,10 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import beans.Address;
 import beans.ArticolDB;
 import enums.EnumArticoleDAO;
 import enums.EnumDlDAO;
-
 
 public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArticolListener {
 
@@ -613,7 +615,7 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 					case MotionEvent.ACTION_DOWN:
 
 						if (!checkDataToSave().equalsIgnoreCase("-1")) {
-							Toast.makeText(getActivity(), checkDataToSave(), Toast.LENGTH_SHORT).show();
+							Toast.makeText(getActivity(), checkDataToSave(), Toast.LENGTH_LONG).show();
 						} else {
 
 							mProgressDl.setVisibility(View.VISIBLE);
@@ -683,6 +685,11 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 					return retVal;
 				}
 			}
+
+			if (!isAdresaCorecta()) {
+				retVal = "Completati adresa corect sau pozitionati adresa pe harta.";
+				return retVal;
+			}
 		}
 
 		if (CreareDispozitiiLivrare.codFurnizor.trim().toString().equalsIgnoreCase("")) {
@@ -718,6 +725,29 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 		}
 
 		return retVal;
+	}
+
+	private boolean isAdresaGoogleOk() {
+		return MapUtils.geocodeAddress(getAddressFromForm(), getActivity()).latitude > 0;
+
+	}
+
+	private boolean isAdresaCorecta() {
+		if (CreareDispozitiiLivrare.tipTransport.toUpperCase().equals("TRAP"))
+			return isAdresaGoogleOk();
+		else
+			return true;
+
+	}
+
+	private Address getAddressFromForm() {
+		Address address = new Address();
+
+		address.setCity(CreareDispozitiiLivrare.oras);
+		address.setStreet(CreareDispozitiiLivrare.strada);
+		address.setSector(UtilsGeneral.getNumeJudet(CreareDispozitiiLivrare.codJudet));
+
+		return address;
 	}
 
 	class UpdateProgress extends TimerTask {
@@ -770,7 +800,7 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 			if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("27")) {
 				CreareDispozitiiLivrare.selectedAgent = UserInfo.getInstance().getCod();
 			}
-			
+
 			String strTonaj = "-1";
 
 			if (isConditiiTonaj(CreareDispozitiiLivrare.tipTransport, DLFragment1.spinnerTonaj)) {
@@ -795,13 +825,11 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 
 	}
 
-	
 	private boolean isConditiiTonaj(String tipTransport, Spinner spinnerTonaj) {
 		return tipTransport.equals("TRAP") && spinnerTonaj.getSelectedItem().toString().split(" ")[1].equals("T");
 
 	}
-	
-	
+
 	@SuppressWarnings("unchecked")
 	private String prepareArtForDelivery() {
 

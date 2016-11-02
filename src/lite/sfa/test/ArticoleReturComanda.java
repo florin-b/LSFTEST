@@ -10,6 +10,7 @@ import listeners.ListaArtReturListener;
 import listeners.OperatiiReturListener;
 import model.OperatiiReturMarfa;
 import model.UserInfo;
+import utils.MapUtils;
 import utils.UtilsGeneral;
 import adapters.ArticoleReturAdapter;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import beans.Address;
 import beans.BeanArticolRetur;
 import beans.BeanComandaRetur;
 import enums.EnumRetur;
@@ -179,7 +181,35 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 			return false;
 		}
 
+		if (!isAdresaCorecta()) {
+			Toast.makeText(getActivity(), "Completati adresa corect sau pozitionati adresa pe harta.", Toast.LENGTH_LONG).show();
+			return false;
+		}
+
 		return true;
+	}
+
+	private boolean isAdresaCorecta() {
+		if (DateLivrareReturComanda.tipTransport.toUpperCase().equals("TRAP") && DateLivrareReturComanda.isAltaAdresa)
+			return isAdresaGoogleOk();
+		else
+			return true;
+
+	}
+
+	private boolean isAdresaGoogleOk() {
+		return MapUtils.geocodeAddress(getAddressFromForm(), getActivity()).latitude > 0;
+
+	}
+
+	private Address getAddressFromForm() {
+		Address address = new Address();
+
+		address.setCity(DateLivrareReturComanda.adresaOras);
+		address.setStreet(DateLivrareReturComanda.adresaStrada);
+		address.setSector(UtilsGeneral.getNumeJudet(DateLivrareReturComanda.adresaCodJudet));
+
+		return address;
 	}
 
 	private boolean hasArticolReturCant() {

@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import listeners.MapListener;
 import listeners.OperatiiAdresaListener;
 import model.HandleJSONData;
 import model.OperatiiAdresa;
@@ -26,6 +27,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import utils.MapUtils;
 import utils.UtilsGeneral;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -61,19 +63,26 @@ import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import beans.Address;
 import beans.BeanAdreseJudet;
 import beans.BeanClient;
 import beans.BeanFurnizor;
 import beans.BeanFurnizorProduse;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import connectors.ConnectionStrings;
+import dialogs.MapAddressDialogF4;
 import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
 
-public class DLFragment1 extends Fragment implements OperatiiAdresaListener {
+public class DLFragment1 extends Fragment implements OperatiiAdresaListener, MapListener {
 
 	private static EditText txtNumeClient, txtPersCont, txtTelefon, txtTipMarfa, txtMasaMarfa;
 
 	private static AutoCompleteTextView txtOras, txtStrada;
+
+	private Button btnPozitieAdresa;
 
 	private static TextView txtDataLivrare, textLimitaCredit, textRestCredit;
 
@@ -176,6 +185,9 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener {
 			listViewClienti = (ListView) v.findViewById(R.id.listClienti);
 			listViewClienti.setOnItemClickListener(new MyOnItemSelectedListener());
 			listViewClienti.setVisibility(View.INVISIBLE);
+
+			btnPozitieAdresa = (Button) v.findViewById(R.id.btnPozitieAdresa);
+			setListnerBtnPozitieAdresa();
 
 			this.slidingDrawer = (SlidingDrawer) v.findViewById(R.id.clientSlidingDrawer);
 			addDrawerListener();
@@ -360,6 +372,44 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener {
 			}
 		});
 
+	}
+
+	private void setListnerBtnPozitieAdresa() {
+		btnPozitieAdresa.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+
+				Address address = new Address();
+
+				address.setCity(txtOras.getText().toString().trim());
+				address.setStreet(txtStrada.getText().toString().trim());
+				address.setSector(UtilsGeneral.getNumeJudet(CreareDispozitiiLivrare.codJudet));
+
+				if (!isAdresaComplet())
+					return;
+
+				android.support.v4.app.FragmentManager fm = getFragmentManager();
+
+				MapAddressDialogF4 mapDialog = new MapAddressDialogF4(address, getActivity(), fm);
+
+				mapDialog.setMapListener(DLFragment1.this);
+				mapDialog.show();
+			}
+		});
+	}
+
+	private boolean isAdresaComplet() {
+		if (spinnerJudetDL.getSelectedItemPosition() == 0) {
+			Toast.makeText(getActivity(), "Selectati judetul", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+
+		if (txtOras.getText().toString().trim().equals("")) {
+			Toast.makeText(getActivity(), "Completati localitatea", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+
+		return true;
 	}
 
 	public void addListenerCautaClient() {
@@ -945,7 +995,7 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener {
 
 		txtTelefon.addTextChangedListener(new TextWatcher() {
 			public void afterTextChanged(Editable s) {
-				// TODO
+				
 
 				try {
 
@@ -1115,7 +1165,7 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener {
 		}
 
 		public void onNothingSelected(AdapterView<?> parent) {
-			// TODO
+			
 		}
 	}
 
@@ -1334,8 +1384,6 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener {
 
 		@Override
 		protected void onPostExecute(String result) {
-			// TODO
-
 			try {
 				if (dialog != null) {
 					dialog.dismiss();
@@ -1353,6 +1401,19 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener {
 				Log.e("Error", e.toString());
 			}
 		}
+
+	}
+
+	private void setAdresaLivrare(Address address) {
+
+		txtOras.setText(address.getCity());
+
+		String strStrada = address.getStreet().trim();
+
+		if (address.getNumber() != null && address.getNumber().length() > 0)
+			strStrada += " nr " + address.getNumber();
+
+		txtStrada.setText(strStrada);
 
 	}
 
@@ -1435,7 +1496,7 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener {
 		}
 
 		public void onNothingSelected(AdapterView<?> parent) {
-			// TODO
+
 		}
 	}
 
@@ -1473,6 +1534,11 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener {
 			break;
 		}
 
+	}
+
+	@Override
+	public void addressSelected(LatLng coord, android.location.Address address) {
+		setAdresaLivrare(MapUtils.getAddress(address));
 	}
 
 }

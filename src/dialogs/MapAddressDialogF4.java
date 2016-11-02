@@ -5,8 +5,8 @@ import lite.sfa.test.R;
 import utils.MapUtils;
 import android.app.ActionBar.LayoutParams;
 import android.app.Dialog;
-import android.app.FragmentManager;
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -17,11 +17,11 @@ import beans.Address;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
-import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapAddressDialog extends Dialog {
+public class MapAddressDialogF4 extends Dialog {
 
 	private Button btnCloseDialog;
 	private GoogleMap map;
@@ -34,15 +34,15 @@ public class MapAddressDialog extends Dialog {
 	private static final int DETAIL_MEDIUM = 15;
 	private static final int DETAIL_HIGH = 18;
 
-	public MapAddressDialog(Address address, Context context, FragmentManager fm) {
+	public MapAddressDialogF4(Address address, Context context, FragmentManager fm2) {
 		super(context);
 		this.context = context;
 		this.address = address;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.adresa_harta);
+		setContentView(R.layout.adresa_harta_f4);
 		setTitle("Pozitionare adresa");
 		setCancelable(true);
-		this.fm = fm;
+		this.fm = fm2;
 		getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
 		setupLayout();
@@ -67,7 +67,7 @@ public class MapAddressDialog extends Dialog {
 				removeMap();
 			} else {
 
-				map = ((MapFragment) fm.findFragmentById(R.id.map)).getMap();
+				map = ((SupportMapFragment ) fm.findFragmentById(R.id.map)).getMap();
 				map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 				map.getUiSettings().setZoomControlsEnabled(true);
 				map.moveCamera(CameraUpdateFactory.newLatLngZoom(coord, detailLevel));
@@ -112,7 +112,7 @@ public class MapAddressDialog extends Dialog {
 	}
 
 	private void removeMap() {
-		MapFragment f = (MapFragment) fm.findFragmentById(R.id.map);
+		SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
 		if (f != null)
 			fm.beginTransaction().remove(f).commit();
 

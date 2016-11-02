@@ -213,7 +213,24 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.1" />
+                    android:layout_weight="0.01" />
+
+                <Button
+                    android:id="@+id/btnPozitieAdresa"
+                    style="@style/ok_button"
+                    android:layout_width="0dip"
+                    android:layout_height="35dip"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginLeft="5dip"
+                    android:layout_marginRight="5dip"
+                    android:layout_weight="0.08"
+                    android:background="@drawable/cancel_button_style"
+                    android:text="Pozitionati adresa pe harta" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.01" />
             </LinearLayout>
 
             <LinearLayout

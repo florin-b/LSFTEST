@@ -265,12 +265,36 @@
 
                         <EditText
                             android:id="@+id/textStrada"
-
                             android:layout_width="0dip"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.75"
                             android:gravity="left"
                             android:inputType="textNoSuggestions" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@id/layoutAdresa"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dip"
+                        android:layout_margin="5dip"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            style="@style/dateLivrareDlLabel"
+                            android:layout_width="0dip"
+                            android:layout_height="35dip"
+                            android:layout_weight="0.25"
+                            android:text="" />
+
+                        <Button
+                            android:id="@+id/btnPozitieAdresa"
+                            style="@style/ok_button"
+                            android:layout_width="0dip"
+                            android:layout_height="30dip"
+                            android:layout_marginTop="5dip"
+                            android:layout_weight="0.75"
+                            android:background="@drawable/cancel_button_style"
+                            android:text="Pozitionati adresa pe harta" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

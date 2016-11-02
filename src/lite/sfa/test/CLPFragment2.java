@@ -24,6 +24,7 @@ import model.OperatiiArticol;
 import model.OperatiiArticolFactory;
 import model.UserInfo;
 import patterns.ClpDepartComparator;
+import utils.MapUtils;
 import utils.ScreenUtils;
 import utils.UtilsFormatting;
 import utils.UtilsGeneral;
@@ -59,6 +60,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import beans.Address;
 import beans.AntetComandaCLP;
 import beans.ArticolCLP;
 import beans.ArticolDB;
@@ -878,8 +880,8 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 					switch (event.getAction()) {
 					case MotionEvent.ACTION_DOWN:
 
-						if (!checkDataToSave().equalsIgnoreCase("-1")) {
-							Toast.makeText(getActivity(), checkDataToSave(), Toast.LENGTH_SHORT).show();
+						if (!validateDataToSave().equalsIgnoreCase("-1")) {
+							Toast.makeText(getActivity(), validateDataToSave(), Toast.LENGTH_LONG).show();
 						} else {
 
 							mProgressClp.setVisibility(View.VISIBLE);
@@ -909,7 +911,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 	}
 
-	private String checkDataToSave() {
+	private String validateDataToSave() {
 		String retVal = "-1";
 
 		if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")) {
@@ -939,6 +941,11 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 			if (CreareClp.strada.trim().toString().equalsIgnoreCase("")) {
 				retVal = "Completati strada!";
+				return retVal;
+			}
+
+			if (!isAdresaCorecta()) {
+				retVal = "Completati adresa corect sau pozitionati adresa pe harta.";
 				return retVal;
 			}
 
@@ -983,7 +990,32 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 			return retVal;
 		}
 
+		
+
 		return retVal;
+	}
+
+	private boolean isAdresaGoogleOk() {
+		return MapUtils.geocodeAddress(getAddressFromForm(), getActivity()).latitude > 0;
+
+	}
+
+	private boolean isAdresaCorecta() {
+		if (CreareClp.tipTransport.toUpperCase().equals("TRAP"))
+			return isAdresaGoogleOk();
+		else
+			return true;
+
+	}
+
+	private Address getAddressFromForm() {
+		Address address = new Address();
+
+		address.setCity(CreareClp.oras);
+		address.setStreet(CreareClp.strada);
+		address.setSector(UtilsGeneral.getNumeJudet(CreareClp.codJudet));
+
+		return address;
 	}
 
 	class UpdateProgress extends TimerTask {
@@ -1029,7 +1061,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 			String numeClientCV = CLPFragment1.textSelClient.getText().toString().trim();
 
-			String observatiiCLP = CLPFragment1.txtObservatiiCLP.getText().toString().trim();
+			String observatiiCLP = CLPFragment1.txtObservatiiCLP.getText().toString().isEmpty() ? " " : CLPFragment1.txtObservatiiCLP.getText().toString();
 
 			String localCodClient = CreareClp.codClient;
 

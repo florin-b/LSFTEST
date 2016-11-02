@@ -13,6 +13,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 
+import listeners.MapListener;
 import listeners.OperatiiAdresaListener;
 import listeners.OperatiiAgentListener;
 import listeners.OperatiiClientListener;
@@ -22,6 +23,7 @@ import model.OperatiiAdresaImpl;
 import model.OperatiiAgent;
 import model.OperatiiClient;
 import model.UserInfo;
+import utils.MapUtils;
 import utils.ScreenUtils;
 import utils.UtilsGeneral;
 import android.app.DatePickerDialog;
@@ -56,15 +58,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import beans.Address;
 import beans.BeanAdreseJudet;
 import beans.BeanClient;
 import beans.DetaliiClient;
+
+import com.google.android.gms.maps.model.LatLng;
+
+import dialogs.MapAddressDialogF4;
 import enums.EnumClienti;
 import enums.EnumDepartamente;
 import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
 
-public class CLPFragment1 extends Fragment implements OperatiiClientListener, OperatiiAgentListener, OperatiiAdresaListener {
+public class CLPFragment1 extends Fragment implements OperatiiClientListener, OperatiiAgentListener, OperatiiAdresaListener, MapListener {
 
 	private static EditText txtPersCont, txtTelefon, txtTipMarfa, txtMasaMarfa;
 	private static AutoCompleteTextView txtOras, txtStrada;
@@ -73,6 +80,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 	private static TextView txtDataLivrare, textLimitaCredit, textRestCredit;
 
 	private Button cautaClientBtn, saveClntBtn;
+	private Button btnPozitieAdresa;
 
 	private static ArrayList<HashMap<String, String>> listClienti = new ArrayList<HashMap<String, String>>();
 	public SimpleAdapter adapterClienti, adapterJudete, adapterFiliale, adapterPlata;
@@ -155,11 +163,12 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 	private OperatiiClient operatiiClient;
 	private OperatiiAgent operatiiAgent;
+	private View v;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		View v = inflater.inflate(R.layout.clp_fragment_1, container, false);
+		v = inflater.inflate(R.layout.clp_fragment_1, container, false);
 
 		try {
 
@@ -185,6 +194,9 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			listViewClienti = (ListView) v.findViewById(R.id.listClienti);
 			listViewClienti.setOnItemClickListener(new MyOnItemSelectedListener());
 			listViewClienti.setVisibility(View.INVISIBLE);
+
+			btnPozitieAdresa = (Button) v.findViewById(R.id.btnPozitieAdresa);
+			setListnerBtnPozitieAdresa();
 
 			this.slidingDrawer = (SlidingDrawer) v.findViewById(R.id.clientSlidingDrawer);
 			addDrawerListener();
@@ -446,6 +458,44 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 		}
 
+	}
+
+	private void setListnerBtnPozitieAdresa() {
+		btnPozitieAdresa.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+
+				Address address = new Address();
+
+				address.setCity(txtOras.getText().toString().trim());
+				address.setStreet(txtStrada.getText().toString().trim());
+				address.setSector(UtilsGeneral.getNumeJudet(CreareClp.codJudet));
+
+				if (!isAdresaComplet())
+					return;
+
+				android.support.v4.app.FragmentManager fm = getFragmentManager();
+
+				MapAddressDialogF4 mapDialog = new MapAddressDialogF4(address, getActivity(), fm);
+
+				mapDialog.setMapListener(CLPFragment1.this);
+				mapDialog.show();
+			}
+		});
+	}
+
+	private boolean isAdresaComplet() {
+		if (spinnerJudetCLP.getSelectedItemPosition() == 0) {
+			Toast.makeText(getActivity(), "Selectati judetul", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+
+		if (txtOras.getText().toString().trim().equals("")) {
+			Toast.makeText(getActivity(), "Completati localitatea", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+
+		return true;
 	}
 
 	private void performClientDetails() {
@@ -943,6 +993,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 					txtStrada.setEnabled(true);
 					txtPersCont.setEnabled(true);
 					txtTelefon.setEnabled(true);
+					btnPozitieAdresa.setEnabled(true);
 
 					layoutSelAgentiClp.setVisibility(View.VISIBLE);
 
@@ -982,6 +1033,8 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 					txtTelefon.setEnabled(false);
 					txtTelefon.setText("");
 					CreareClp.telefon = " ";
+					
+					btnPozitieAdresa.setEnabled(false);
 
 					layoutSelAgentiClp.setVisibility(View.GONE);
 
@@ -1015,6 +1068,19 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 				R.id.textNumeAgent, R.id.textCodAgent });
 
 		spinnerAgentiCLP.setAdapter(adapterAgenti);
+
+	}
+
+	private void setAdresaLivrare(Address address) {
+
+		txtOras.setText(address.getCity());
+
+		String strStrada = address.getStreet().trim();
+
+		if (address.getNumber() != null && address.getNumber().length() > 0)
+			strStrada += " nr " + address.getNumber();
+
+		txtStrada.setText(strStrada);
 
 	}
 
@@ -1082,5 +1148,10 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			break;
 		}
 
+	}
+
+	@Override
+	public void addressSelected(LatLng coord, android.location.Address address) {
+		setAdresaLivrare(MapUtils.getAddress(address));
 	}
 }
