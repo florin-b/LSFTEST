@@ -1023,7 +1023,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		if (textNrStr.getText().toString().trim().length() > 0)
 			nrStrada = " NR " + textNrStr.getText().toString().trim();
 
-		strada = textStrada.getText().toString().trim() + nrStrada;
+		strada = textStrada.getText().toString().trim()+ " " + nrStrada;
 
 		DateLivrare dateLivrareInstance = DateLivrare.getInstance();
 
@@ -1060,8 +1060,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 				return;
 			}
 
-			if (strada.equals("")) {
-				Toast.makeText(getApplicationContext(), "Completati strada!", Toast.LENGTH_SHORT).show();
+			if (strada.trim().equals("") && !hasCoordinates()) {
+				Toast.makeText(getApplicationContext(), "Completati strada sau pozitionati adresa pe harta!", Toast.LENGTH_SHORT).show();
 				return;
 			}
 
@@ -1162,6 +1162,15 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	}
 
+	private boolean hasCoordinates() {
+		if (DateLivrare.getInstance().getCoordonateAdresa() == null)
+			return false;
+		else if (DateLivrare.getInstance().getCoordonateAdresa().latitude == 0)
+			return false;
+
+		return true;
+	}
+
 	private boolean isConditiiTonaj(Spinner spinnerTransp, Spinner spinnerTonaj) {
 		return spinnerTransp.getSelectedItem().toString().toLowerCase().contains("arabesque")
 				&& spinnerTonaj.getSelectedItem().toString().split(" ")[1].equals("T");
@@ -1170,10 +1179,13 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	private void setAdresaLivrare(Address address) {
 
-		textLocalitate.setText(address.getCity());
-		textStrada.setText(address.getStreet());
+		if (address.getCity() != null && !address.getCity().isEmpty())
+			textLocalitate.setText(address.getCity());
 
-		if (address.getNumber() != null && address.getNumber().length() > 0)
+		if (address.getStreet() != null && !address.getStreet().isEmpty())
+			textStrada.setText(address.getStreet());
+
+		if (address.getNumber() != null && !address.getNumber().isEmpty())
 			textNrStr.setText(address.getNumber());
 
 	}
@@ -1292,7 +1304,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	}
 
 	private boolean isAdresaCorecta() {
-		if (DateLivrare.getInstance().getTransport().equals("TRAP"))
+		if (DateLivrare.getInstance().getTransport().equals("TRAP") && !hasCoordinates())
 			return isAdresaGoogleOk();
 		else
 			return true;
@@ -1342,12 +1354,15 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	}
 
 	private void valideazaAdresaResponse(String result) {
-		Boolean response = Boolean.valueOf(result);
 
-		if (response)
-			valideazaDateLivrare();
-		else
-			Toast.makeText(this, "Adresa invalida", Toast.LENGTH_SHORT).show();
+		valideazaDateLivrare();
+		/*
+		 * 
+		 * Boolean response = Boolean.valueOf(result);
+		 * 
+		 * if (response) valideazaDateLivrare(); else Toast.makeText(this,
+		 * "Adresa invalida", Toast.LENGTH_SHORT).show();
+		 */
 
 	}
 

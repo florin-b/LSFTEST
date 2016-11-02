@@ -664,8 +664,8 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 				return retVal;
 			}
 
-			if (CreareDispozitiiLivrare.strada.trim().toString().equalsIgnoreCase("")) {
-				retVal = "Completati strada!";
+			if (CreareDispozitiiLivrare.strada.trim().toString().equalsIgnoreCase("") && !hasCoordinates()) {
+				retVal = "Completati strada sau pozitionati adresa pe harta!";
 				return retVal;
 			}
 
@@ -727,13 +727,22 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 		return retVal;
 	}
 
+	private boolean hasCoordinates() {
+		if (DLFragment1.coordAdresa == null)
+			return false;
+		else if (DLFragment1.coordAdresa.latitude == 0)
+			return false;
+
+		return true;
+	}
+
 	private boolean isAdresaGoogleOk() {
 		return MapUtils.geocodeAddress(getAddressFromForm(), getActivity()).latitude > 0;
 
 	}
 
 	private boolean isAdresaCorecta() {
-		if (CreareDispozitiiLivrare.tipTransport.toUpperCase().equals("TRAP"))
+		if (CreareDispozitiiLivrare.tipTransport.toUpperCase().equals("TRAP") && !hasCoordinates())
 			return isAdresaGoogleOk();
 		else
 			return true;

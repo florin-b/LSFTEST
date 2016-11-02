@@ -939,8 +939,8 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 				return retVal;
 			}
 
-			if (CreareClp.strada.trim().toString().equalsIgnoreCase("")) {
-				retVal = "Completati strada!";
+			if (CreareClp.strada.trim().toString().equalsIgnoreCase("") && !hasCoordinates()) {
+				retVal = "Completati strada sau pozitionati adresa pe harta!";
 				return retVal;
 			}
 
@@ -990,9 +990,16 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 			return retVal;
 		}
 
-		
-
 		return retVal;
+	}
+
+	private boolean hasCoordinates() {
+		if (CLPFragment1.coordAdresa == null)
+			return false;
+		else if (CLPFragment1.coordAdresa.latitude == 0)
+			return false;
+
+		return true;
 	}
 
 	private boolean isAdresaGoogleOk() {
@@ -1001,7 +1008,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 	}
 
 	private boolean isAdresaCorecta() {
-		if (CreareClp.tipTransport.toUpperCase().equals("TRAP"))
+		if (CreareClp.tipTransport.toUpperCase().equals("TRAP") && !hasCoordinates())
 			return isAdresaGoogleOk();
 		else
 			return true;
@@ -1088,7 +1095,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 			antetComandaCLP.setCodClient(localCodClient);
 			antetComandaCLP.setCodJudet(CreareClp.codJudet);
 			antetComandaCLP.setLocalitate(CreareClp.oras);
-			antetComandaCLP.setStrada(CreareClp.strada);
+			antetComandaCLP.setStrada(CreareClp.strada.isEmpty() ? " " : CreareClp.strada);
 			antetComandaCLP.setPersCont(CreareClp.persCont);
 			antetComandaCLP.setTelefon(CreareClp.telefon);
 			antetComandaCLP.setCodFilialaDest(CreareClp.codFilialaDest);

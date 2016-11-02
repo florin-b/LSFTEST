@@ -1199,7 +1199,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					if (!isAdresaComplet())
 						return;
 
-					String nrStrada = "";
+					String nrStrada = " ";
 
 					if (textNrStr.getText().toString().trim().length() > 0)
 						nrStrada = " nr " + textNrStr.getText().toString().trim();
@@ -1298,8 +1298,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			return;
 		}
 
-		if (DateLivrare.getInstance().getStrada().trim().equals("")) {
-			Toast.makeText(getApplicationContext(), "Completati strada!", Toast.LENGTH_SHORT).show();
+		if (DateLivrare.getInstance().getStrada().trim().equals("") && !hasCoordinates() && isAdresaText()) {
+			Toast.makeText(getApplicationContext(), "Completati strada sau pozitionati adresa pe harta!", Toast.LENGTH_SHORT).show();
 			return;
 		}
 
@@ -1401,11 +1401,24 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	private boolean isAdresaCorecta() {
-		if (DateLivrare.getInstance().getTransport().equals("TRAP"))
+		if (DateLivrare.getInstance().getTransport().equals("TRAP") && !hasCoordinates() && isAdresaText())
 			return isAdresaGoogleOk();
 		else
 			return true;
 
+	}
+
+	private boolean isAdresaText() {
+		return radioText != null && radioText.isChecked();
+	}
+
+	private boolean hasCoordinates() {
+		if (DateLivrare.getInstance().getCoordonateAdresa() == null)
+			return false;
+		else if (DateLivrare.getInstance().getCoordonateAdresa().latitude == 0)
+			return false;
+
+		return true;
 	}
 
 	private boolean isConditiiTonaj(Spinner spinnerTransp, Spinner spinnerTonaj) {
@@ -1461,8 +1474,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private void setAdresaLivrare(Address address) {
 
-		textLocalitate.setText(address.getCity());
-		textStrada.setText(address.getStreet().trim());
+		if (address.getCity() != null && !address.getCity().isEmpty())
+			textLocalitate.setText(address.getCity());
+
+		if (address.getStreet() != null && !address.getStreet().isEmpty())
+			textStrada.setText(address.getStreet().trim());
 
 		if (address.getNumber() != null && address.getNumber().length() > 0)
 			textNrStr.setText(address.getNumber());
@@ -1471,17 +1487,13 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private void valideazaAdresaLivrare() {
 
-	
-			HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
-			params.put("codJudet", DateLivrare.getInstance().getCodJudet());
-			params.put("localitate", DateLivrare.getInstance().getOras());
+		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
+		params.put("codJudet", DateLivrare.getInstance().getCodJudet());
+		params.put("localitate", DateLivrare.getInstance().getOras());
 
-			operatiiAdresa.isAdresaValida(params, EnumLocalitate.LOCALITATE_SEDIU);
-		
+		operatiiAdresa.isAdresaValida(params, EnumLocalitate.LOCALITATE_SEDIU);
 
 	}
-
-	
 
 	private void setListenerSpinnerAdreseLivrare() {
 		spinnerAdreseLivrare.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1588,12 +1600,15 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	private void valideazaAdresaResponse(String result) {
-		Boolean response = Boolean.valueOf(result);
 
-		if (response)
-			valideazaDateLivrare();
-		else
-			Toast.makeText(this, "Adresa invalida", Toast.LENGTH_SHORT).show();
+		valideazaDateLivrare();
+
+		/*
+		 * Boolean response = Boolean.valueOf(result);
+		 * 
+		 * if (response) valideazaDateLivrare(); else Toast.makeText(this,
+		 * "Adresa invalida", Toast.LENGTH_SHORT).show();
+		 */
 
 	}
 

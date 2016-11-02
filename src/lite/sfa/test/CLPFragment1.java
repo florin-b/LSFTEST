@@ -153,6 +153,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 	public static String departamentConsilier = "";
 
 	public static Spinner spinnerTonaj;
+	public static com.google.android.gms.maps.model.LatLng coordAdresa;
 
 	public static final CLPFragment1 newInstance() {
 		CLPFragment1 f = new CLPFragment1();
@@ -197,6 +198,8 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 			btnPozitieAdresa = (Button) v.findViewById(R.id.btnPozitieAdresa);
 			setListnerBtnPozitieAdresa();
+
+			coordAdresa = new LatLng(0, 0);
 
 			this.slidingDrawer = (SlidingDrawer) v.findViewById(R.id.clientSlidingDrawer);
 			addDrawerListener();
@@ -1033,7 +1036,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 					txtTelefon.setEnabled(false);
 					txtTelefon.setText("");
 					CreareClp.telefon = " ";
-					
+
 					btnPozitieAdresa.setEnabled(false);
 
 					layoutSelAgentiClp.setVisibility(View.GONE);
@@ -1073,9 +1076,13 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 	private void setAdresaLivrare(Address address) {
 
-		txtOras.setText(address.getCity());
+		if (address.getCity() != null && !address.getCity().isEmpty())
+			txtOras.setText(address.getCity());
 
-		String strStrada = address.getStreet().trim();
+		String strStrada = "";
+
+		if (address.getStreet() != null && !address.getStreet().isEmpty())
+			strStrada = address.getStreet().trim();
 
 		if (address.getNumber() != null && address.getNumber().length() > 0)
 			strStrada += " nr " + address.getNumber();
@@ -1152,6 +1159,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 	@Override
 	public void addressSelected(LatLng coord, android.location.Address address) {
+		coordAdresa = coord;
 		setAdresaLivrare(MapUtils.getAddress(address));
 	}
 }

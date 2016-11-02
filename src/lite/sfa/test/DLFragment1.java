@@ -134,6 +134,8 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener, Map
 
 	private TextView labelCodClient, labelNumeClient, labelAgentiDl;
 
+	public static com.google.android.gms.maps.model.LatLng coordAdresa;
+
 	SlidingDrawer slidingDrawer;
 	public static Spinner spinnerJudetDL, spinnerTipCamion, spinnerTipIncarcare, spinnerDepozDl_Dest, spinnerTipPlata, spinnerAgentiDl, spinnerTransp;
 
@@ -188,6 +190,8 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener, Map
 
 			btnPozitieAdresa = (Button) v.findViewById(R.id.btnPozitieAdresa);
 			setListnerBtnPozitieAdresa();
+
+			coordAdresa = new LatLng(0, 0);
 
 			this.slidingDrawer = (SlidingDrawer) v.findViewById(R.id.clientSlidingDrawer);
 			addDrawerListener();
@@ -945,7 +949,7 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener, Map
 
 				try {
 
-					CreareDispozitiiLivrare.strada = txtStrada.getText().toString().trim();
+					CreareDispozitiiLivrare.strada = txtStrada.getText().toString().isEmpty() ? " " : txtStrada.getText().toString();
 
 				} catch (Exception ex) {
 					Toast.makeText(getActivity(), ex.toString(), Toast.LENGTH_LONG).show();
@@ -995,7 +999,6 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener, Map
 
 		txtTelefon.addTextChangedListener(new TextWatcher() {
 			public void afterTextChanged(Editable s) {
-				
 
 				try {
 
@@ -1165,7 +1168,7 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener, Map
 		}
 
 		public void onNothingSelected(AdapterView<?> parent) {
-			
+
 		}
 	}
 
@@ -1406,7 +1409,8 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener, Map
 
 	private void setAdresaLivrare(Address address) {
 
-		txtOras.setText(address.getCity());
+		if (address.getCity() != null && !address.getCity().isEmpty())
+			txtOras.setText(address.getCity());
 
 		String strStrada = address.getStreet().trim();
 
@@ -1538,6 +1542,7 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener, Map
 
 	@Override
 	public void addressSelected(LatLng coord, android.location.Address address) {
+		coordAdresa = coord;
 		setAdresaLivrare(MapUtils.getAddress(address));
 	}
 
