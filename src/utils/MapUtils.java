@@ -8,14 +8,15 @@ import java.util.Locale;
 import android.content.Context;
 import android.location.Geocoder;
 import beans.Address;
+import beans.GeocodeAddress;
 
 import com.google.android.gms.maps.model.LatLng;
 
 public class MapUtils {
 
-	public static LatLng geocodeAddress(Address address, Context context) {
+	public static GeocodeAddress geocodeAddress(Address address, Context context) {
 
-		LatLng coords = null;
+		GeocodeAddress geoAddress = new GeocodeAddress();
 
 		double latitude = 0;
 		double longitude = 0;
@@ -56,12 +57,13 @@ public class MapUtils {
 		if (addresses.size() > 0) {
 			latitude = addresses.get(0).getLatitude();
 			longitude = addresses.get(0).getLongitude();
+			geoAddress.setGeoStatus(true);
 
 		}
 
-		coords = new LatLng(latitude, longitude);
+		geoAddress.setCoordinates(new LatLng(latitude, longitude));
 
-		return coords;
+		return geoAddress;
 	}
 
 	public static android.location.Address getAddressFromCoordinate(LatLng coords, Context context) {

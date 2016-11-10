@@ -1023,7 +1023,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		if (textNrStr.getText().toString().trim().length() > 0)
 			nrStrada = " NR " + textNrStr.getText().toString().trim();
 
-		strada = textStrada.getText().toString().trim()+ " " + nrStrada;
+		strada = textStrada.getText().toString().trim() + " " + nrStrada;
 
 		DateLivrare dateLivrareInstance = DateLivrare.getInstance();
 
@@ -1312,7 +1312,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	}
 
 	private boolean isAdresaGoogleOk() {
-		return MapUtils.geocodeAddress(getAddressFromForm(), getApplicationContext()).latitude > 0;
+		return MapUtils.geocodeAddress(getAddressFromForm(), getApplicationContext()).isAdresaValida();
 
 	}
 

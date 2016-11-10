@@ -17,4 +17,11 @@
         android:layout_height="1dip"
         android:textSize="1sp" />
 
+    <TextView
+        android:id="@+id/textExtra"
+        android:layout_width="1dip"
+        android:layout_height="1dip"
+        android:textSize="1sp"
+        android:visibility="invisible" />
+
 </LinearLayout>

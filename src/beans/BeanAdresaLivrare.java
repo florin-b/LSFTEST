@@ -8,6 +8,7 @@ public class BeanAdresaLivrare {
 	private String codJudet;
 	private String codAdresa;
 	private String tonaj;
+	private String coords;
 
 	public BeanAdresaLivrare() {
 
@@ -60,7 +61,13 @@ public class BeanAdresaLivrare {
 	public void setTonaj(String tonaj) {
 		this.tonaj = tonaj;
 	}
-	
-	
+
+	public String getCoords() {
+		return coords;
+	}
+
+	public void setCoords(String coords) {
+		this.coords = coords;
+	}
 
 }

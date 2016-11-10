@@ -60,7 +60,7 @@ public class MapAddressDialogF4 extends Dialog {
 				detailLevel = DETAIL_HIGH;
 
 			LatLng coord = null;
-			coord = MapUtils.geocodeAddress(address, context);
+			coord = MapUtils.geocodeAddress(address, context).getCoordinates();
 
 			if (coord.latitude == 0) {
 				textLabel.setText("Adresa inexistenta.");

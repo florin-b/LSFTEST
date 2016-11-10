@@ -30,6 +30,7 @@ public class MapAddressDialog extends Dialog {
 	private Address address;
 	private MapListener mapListener;
 	private TextView textLabel;
+	private LatLng coords;
 
 	private static final int DETAIL_MEDIUM = 15;
 	private static final int DETAIL_HIGH = 18;
@@ -38,6 +39,7 @@ public class MapAddressDialog extends Dialog {
 		super(context);
 		this.context = context;
 		this.address = address;
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.adresa_harta);
 		setTitle("Pozitionare adresa");
@@ -45,7 +47,13 @@ public class MapAddressDialog extends Dialog {
 		this.fm = fm;
 		getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
+	}
+
+	@Override
+	public void show() {
 		setupLayout();
+		super.show();
+
 	}
 
 	private void setupLayout() {
@@ -60,7 +68,7 @@ public class MapAddressDialog extends Dialog {
 				detailLevel = DETAIL_HIGH;
 
 			LatLng coord = null;
-			coord = MapUtils.geocodeAddress(address, context);
+			coord = MapUtils.geocodeAddress(address, context).getCoordinates();
 
 			if (coord.latitude == 0) {
 				textLabel.setText("Adresa inexistenta.");
@@ -71,6 +79,9 @@ public class MapAddressDialog extends Dialog {
 				map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 				map.getUiSettings().setZoomControlsEnabled(true);
 				map.moveCamera(CameraUpdateFactory.newLatLngZoom(coord, detailLevel));
+
+				addMapMarker(map);
+
 				setMapListener();
 			}
 
@@ -94,9 +105,8 @@ public class MapAddressDialog extends Dialog {
 				map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 				map.addMarker(markerOptions);
 
-				
 				android.location.Address address = MapUtils.getAddressFromCoordinate(latLng, context);
-				
+
 				if (mapListener != null)
 					mapListener.addressSelected(latLng, address);
 
@@ -108,6 +118,21 @@ public class MapAddressDialog extends Dialog {
 	public void dismiss() {
 		super.dismiss();
 		removeMap();
+
+	}
+
+	public void setCoords(LatLng coords) {
+		this.coords = coords;
+	}
+
+	private void addMapMarker(GoogleMap map) {
+		if (coords != null && coords.latitude > 0) {
+			MarkerOptions marker = new MarkerOptions();
+
+			marker.position(coords);
+			map.clear();
+			map.addMarker(marker);
+		}
 
 	}
 

@@ -75,6 +75,7 @@ import beans.Address;
 import beans.BeanAdresaLivrare;
 import beans.BeanAdreseJudet;
 import beans.BeanObiectivDepartament;
+import beans.GeocodeAddress;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -134,6 +135,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private boolean adresaFromListHasNumber;
 	private BeanAdreseJudet listAdrese;
 
+	private LinearLayout layoutHarta;
+
 	private static final int LIST_LOCALITATI = 1;
 	private static final int LIST_ADRESE = 2;
 
@@ -158,6 +161,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		this.layoutAdr1 = (LinearLayout) findViewById(R.id.layoutAdr1);
 		this.layoutAdr2 = (LinearLayout) findViewById(R.id.layoutAdr2);
+
+		layoutHarta = (LinearLayout) findViewById(R.id.layoutHarta);
+		layoutHarta.setVisibility(View.GONE);
 
 		textLocalitate = (AutoCompleteTextView) findViewById(R.id.autoCompleteLocalitate);
 		textLocalitate.setVisibility(View.INVISIBLE);
@@ -259,8 +265,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		setListenerSpinnerAdreseLivrare();
 
 		listAdreseLivrare = new ArrayList<HashMap<String, String>>();
-		adapterAdreseLivrare = new SimpleAdapter(this, listAdreseLivrare, R.layout.row_layout_2_items, new String[] { "rowText", "rowId" }, new int[] {
-				R.id.textRowName, R.id.textRowId });
+		adapterAdreseLivrare = new SimpleAdapter(this, listAdreseLivrare, R.layout.row_layout_2_items, new String[] { "rowText", "rowId", "rowExtra" },
+				new int[] { R.id.textRowName, R.id.textRowId, R.id.textExtra });
 
 		spinnerAdreseLivrare.setAdapter(adapterAdreseLivrare);
 		selectedAddrModifCmd = -1;
@@ -675,6 +681,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					layoutAdrese.setVisibility(View.VISIBLE);
 					layoutAdr1.setVisibility(View.GONE);
 					layoutAdr2.setVisibility(View.GONE);
+					layoutHarta.setVisibility(View.GONE);
 					performGetAdreseLivrare();
 
 				}
@@ -701,6 +708,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					layoutAdrese.setVisibility(View.GONE);
 					layoutAdr1.setVisibility(View.VISIBLE);
 					layoutAdr2.setVisibility(View.VISIBLE);
+					layoutHarta.setVisibility(View.VISIBLE);
 
 				}
 
@@ -726,6 +734,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					layoutAdrese.setVisibility(View.GONE);
 					layoutAdr1.setVisibility(View.GONE);
 					layoutAdr2.setVisibility(View.GONE);
+					layoutHarta.setVisibility(View.GONE);
 
 				}
 
@@ -783,6 +792,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 				temp.put("rowText", strAdresa);
 				temp.put("rowId", adreseList.get(i).getCodAdresa());
+				temp.put("rowExtra", adreseList.get(i).getCoords());
 				listAdreseLivrare.add(temp);
 
 			}
@@ -1214,6 +1224,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 				}
 
 				MapAddressDialog mapDialog = new MapAddressDialog(address, SelectAdrLivrCmd.this, fm);
+				mapDialog.setCoords(DateLivrare.getInstance().getCoordonateAdresa());
 				mapDialog.setMapListener(SelectAdrLivrCmd.this);
 				mapDialog.show();
 			}
@@ -1298,25 +1309,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			return;
 		}
 
-		if (DateLivrare.getInstance().getStrada().trim().equals("") && !hasCoordinates() && isAdresaText()) {
-			Toast.makeText(getApplicationContext(), "Completati strada sau pozitionati adresa pe harta!", Toast.LENGTH_SHORT).show();
-			return;
-		}
-
 		if (dateLivrareInstance.getCodJudet().equals("")) {
 			Toast.makeText(getApplicationContext(), "Selectati judetul!", Toast.LENGTH_SHORT).show();
 			return;
-		}
-
-		if (!CreareComanda.codClientVar.equals("")) {
-
-			if (layoutAdrese.getVisibility() == View.VISIBLE) {
-				if (!adresaFromListHasNumber && DateLivrare.getInstance().getCoordonateAdresa() == null && getTipTransport().equals("TRAP")) {
-					Toast.makeText(this, "Adresa de livrare imprecisa, pozitionati adresa pe harta", Toast.LENGTH_SHORT).show();
-					return;
-				}
-
-			}
 		}
 
 		if (pers.equals("") || pers.equals("-")) {
@@ -1427,12 +1422,14 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	}
 
-	private String getTipTransport() {
-		return spinnerTransp.getSelectedItem().toString().substring(0, 4);
-	}
+
 
 	private boolean isAdresaGoogleOk() {
-		return MapUtils.geocodeAddress(getAddressFromForm(), getApplicationContext()).latitude > 0;
+
+		GeocodeAddress geoAddress = MapUtils.geocodeAddress(getAddressFromForm(), getApplicationContext());
+		DateLivrare.getInstance().setCoordonateAdresa(geoAddress.getCoordinates());
+
+		return geoAddress.isAdresaValida();
 
 	}
 
@@ -1469,6 +1466,12 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		DateLivrare.getInstance().setCodJudet(getCodJudet(tokenAdr[0].trim()));
 
 		DateLivrare.getInstance().setAdrLivrNoua(false);
+
+		String[] tokenCoords = selectedLine.get("rowExtra").toString().split(",");
+
+		LatLng gCoords = new LatLng(Double.valueOf(tokenCoords[0]), Double.valueOf(tokenCoords[1]));
+
+		DateLivrare.getInstance().setCoordonateAdresa(gCoords);
 
 	}
 
@@ -1602,13 +1605,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private void valideazaAdresaResponse(String result) {
 
 		valideazaDateLivrare();
-
-		/*
-		 * Boolean response = Boolean.valueOf(result);
-		 * 
-		 * if (response) valideazaDateLivrare(); else Toast.makeText(this,
-		 * "Adresa invalida", Toast.LENGTH_SHORT).show();
-		 */
 
 	}
 

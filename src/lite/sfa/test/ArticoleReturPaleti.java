@@ -203,7 +203,7 @@ public class ArticoleReturPaleti extends Fragment implements ListaArtReturListen
 	}	
 	
 	private boolean isAdresaGoogleOk() {
-		return MapUtils.geocodeAddress(getAddressFromForm(), getActivity()).latitude > 0;
+		return MapUtils.geocodeAddress(getAddressFromForm(), getActivity()).isAdresaValida();
 
 	}
 	

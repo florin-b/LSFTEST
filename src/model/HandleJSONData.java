@@ -228,6 +228,9 @@ public class HandleJSONData {
 					oAdresa.setCodAdresa(clienObject.getString("codAdresa"));
 					oAdresa.setTonaj(clienObject.getString("tonaj"));
 
+					if (clienObject.getString("coords") != null && !clienObject.getString("coords").equals("null"))
+						oAdresa.setCoords(clienObject.getString("coords"));
+
 					objectsList.add(oAdresa);
 
 				}

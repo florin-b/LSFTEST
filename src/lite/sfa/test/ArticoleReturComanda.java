@@ -198,7 +198,7 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 	}
 
 	private boolean isAdresaGoogleOk() {
-		return MapUtils.geocodeAddress(getAddressFromForm(), getActivity()).latitude > 0;
+		return MapUtils.geocodeAddress(getAddressFromForm(), getActivity()).isAdresaValida();
 
 	}
 

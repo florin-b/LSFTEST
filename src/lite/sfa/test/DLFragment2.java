@@ -737,7 +737,7 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 	}
 
 	private boolean isAdresaGoogleOk() {
-		return MapUtils.geocodeAddress(getAddressFromForm(), getActivity()).latitude > 0;
+		return MapUtils.geocodeAddress(getAddressFromForm(), getActivity()).isAdresaValida();
 
 	}
 

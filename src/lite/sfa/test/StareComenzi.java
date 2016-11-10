@@ -193,7 +193,7 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 
 			LatLng coordClient = null;
 			try {
-				coordClient = MapUtils.geocodeAddress(address, this);
+				coordClient = MapUtils.geocodeAddress(address, this).getCoordinates();
 			} catch (Exception e) {
 
 			}
