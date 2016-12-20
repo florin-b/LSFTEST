@@ -190,6 +190,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 			jsonParametru.put("codJudet", parametru.getCodJudet());
 			jsonParametru.put("localitate", parametru.getLocalitate());
 			jsonParametru.put("filialaAlternativa", parametru.getFilialaAlternativa());
+			jsonParametru.put("codClientParavan", parametru.getCodClientParavan());
 
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -330,6 +331,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 				pretArticol.setDiscMaxDV(Double.valueOf(jsonObject.getString("discMaxDV")));
 				pretArticol.setDiscMaxKA(Double.valueOf(jsonObject.getString("discMaxKA")));
 				pretArticol.setImpachetare(jsonObject.getString("impachetare"));
+				pretArticol.setIstoricPret(jsonObject.getString("istoricPret"));
 
 			}
 

@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import beans.BeanDocumentRetur;
 import enums.EnumRetur;
+import enums.EnumTipComanda;
 
 public class ReturPaleti extends FragmentActivity implements ClientReturListener, OperatiiReturListener, DocumentReturListener {
 
@@ -147,12 +148,12 @@ public class ReturPaleti extends FragmentActivity implements ClientReturListener
 		finish();
 	}
 
-	public void clientSelected(String codClient, String numeClient, String interval) {
+	public void clientSelected(String codClient, String numeClient, String interval, EnumTipComanda tipComanda) {
 		this.numeClient = numeClient;
 		this.codClient = codClient;
 
 		String codDepart = UserInfo.getInstance().getCodDepart();
-		if (UtilsUser.isUserGed())
+		if (UtilsUser.isUserGed() || tipComanda == EnumTipComanda.GED)
 			codDepart = "11";
 
 		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
@@ -160,7 +161,7 @@ public class ReturPaleti extends FragmentActivity implements ClientReturListener
 		params.put("codDepartament", codDepart);
 		params.put("unitLog", UserInfo.getInstance().getUnitLog());
 		params.put("tipDocument", "PAL");
-		
+
 		opRetur.getDocumenteClient(params);
 	}
 

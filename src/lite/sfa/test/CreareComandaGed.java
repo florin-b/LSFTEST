@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import patterns.UlSiteComparator;
 import utils.UtilsComenziGed;
 import utils.UtilsUser;
 import adapters.ArticoleGedAdapter;
@@ -94,6 +96,9 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	public static String codClientVar = "";
 	public static String numeClientVar = "";
+
+	public static String codClientParavan = "";
+	public static String numeClientParavan = "";
 
 	public static String numeDepart = "";
 	public static String codDepart = "";
@@ -357,6 +362,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			if (numeClientVar.length() > 0) {
 				Intent nextScreen = new Intent(getApplicationContext(), SelectAdrLivrCmdGed.class);
 				nextScreen.putExtra("codClient", codClientVar);
+				nextScreen.putExtra("parrentClass", "CreareComandaGed");
 
 				startActivity(nextScreen);
 			} else {
@@ -1192,8 +1198,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 			String tipUser = "CV";
 
-			if (UserInfo.getInstance().getTipUserSap().equals("KA3"))
-				tipUser = "KA3";
+			if (UtilsUser.isUserSite())
+				tipUser = "SITE";
 
 			params.put("comanda", comandaFinalaStr);
 			params.put("tipUser", tipUser);
@@ -1243,6 +1249,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			articol.setCantUmb(1);
 			articol.setUmb("BUC");
 			articol.setPonderare(2);
+			articol.setFilialaSite("");
 			tempListArticole.add(articol);
 
 		}
@@ -1254,6 +1261,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		JSONArray myArray = new JSONArray();
 		JSONObject obj = null;
 		TreeSet<String> aprobariCV = new TreeSet<String>();
+
+		Collections.sort(listArticole, new UlSiteComparator());
 
 		alertSD = false;
 		alertDV = false;
@@ -1277,6 +1286,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				obj.put("cantUmb", listArticole.get(i).getCantUmb());
 				obj.put("Umb", listArticole.get(i).getUmb());
 				obj.put("ponderare", listArticole.get(i).getPonderare());
+				obj.put("filialaSite", listArticole.get(i).getFilialaSite());
 				myArray.put(obj);
 
 				if (listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1) {
@@ -1398,6 +1408,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			obj.put("coordonateGps", getCoordAdresa());
 			obj.put("tonaj", DateLivrare.getInstance().getTonaj());
 			obj.put("prelucrare", DateLivrare.getInstance().getPrelucrare());
+			obj.put("clientRaft", DateLivrare.getInstance().isClientRaft());
 
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();

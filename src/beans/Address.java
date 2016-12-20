@@ -7,6 +7,7 @@ public class Address {
 	private String sector;
 	private String city;
 	private String country = "Romania";
+	
 
 	public String getStreet() {
 		return street;

@@ -153,7 +153,7 @@ public class ClientReturComanda extends Fragment implements OperatiiClientListen
 
 				BeanClient client = (BeanClient) arg0.getAdapter().getItem(arg2);
 				if (client != null) {
-					clientListener.clientSelected(client.getCodClient(), client.getNumeClient(), getIntervalSel());
+					clientListener.clientSelected(client.getCodClient(), client.getNumeClient(), getIntervalSel(), null);
 
 				}
 			}

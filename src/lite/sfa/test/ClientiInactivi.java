@@ -46,9 +46,9 @@ public class ClientiInactivi extends Activity {
 	public static String startIntervalRap = "", stopIntervalRap = "";
 	public static String selectedFiliala = "-1", selectedAgent = "-1", tipComanda = "E";
 
-	ListView listViewMenu;
-	DrawerMenuAdapterClInact menuAdapter;
-	DrawerLayout drawer;
+	private ListView listViewMenu;
+	private DrawerMenuAdapterClInact menuAdapter;
+	private DrawerLayout drawer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

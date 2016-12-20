@@ -29,7 +29,7 @@ public class ComandaAprobAdapter extends BaseAdapter {
 
 	static class ViewHolder {
 		public TextView textIdCmd, textClient, textData, textSuma, textStare, textFact, textAprob, textTipClient, textNumeAgent, textFiliala, textSumaTVA,
-				textTermenPlata, textCursValutar, textAdrLivrNoua, textPondereB_30;
+				textTermenPlata, textCursValutar, textAdrLivrNoua, textPondereB_30, textClientRaft;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -54,6 +54,7 @@ public class ComandaAprobAdapter extends BaseAdapter {
 			viewHolder.textCursValutar = (TextView) convertView.findViewById(R.id.textCursValutar);
 			viewHolder.textAdrLivrNoua = (TextView) convertView.findViewById(R.id.textAdrLivrNoua);
 			viewHolder.textPondereB_30 = (TextView) convertView.findViewById(R.id.textPondereB_30);
+			viewHolder.textClientRaft = (TextView) convertView.findViewById(R.id.textClientRaft);
 
 			convertView.setTag(viewHolder);
 
@@ -121,6 +122,11 @@ public class ComandaAprobAdapter extends BaseAdapter {
 
 		viewHolder.textAdrLivrNoua.setText(comanda.getAdresaNoua());
 		viewHolder.textPondereB_30.setText(comanda.getPondere30());
+
+		if (comanda.isClientRaft())
+			viewHolder.textClientRaft.setVisibility(View.VISIBLE);
+		else
+			viewHolder.textClientRaft.setVisibility(View.GONE);
 
 		return convertView;
 	}

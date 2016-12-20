@@ -51,13 +51,14 @@ public class MapUtils {
 			addresses = geoCoder.getFromLocationName(strAddress.toString(), 1);
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			geoAddress.setErrorMessage(e.toString());
 		}
 
 		if (addresses.size() > 0) {
 			latitude = addresses.get(0).getLatitude();
 			longitude = addresses.get(0).getLongitude();
 			geoAddress.setGeoStatus(true);
+			geoAddress.setErrorMessage("Succes");
 
 		}
 

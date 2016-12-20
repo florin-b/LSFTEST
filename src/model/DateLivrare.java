@@ -59,6 +59,7 @@ public class DateLivrare {
 	private LatLng coordonateAdresa;
 	private String tonaj;
 	private String prelucrare;
+	private boolean isClientRaft;
 
 	private DateLivrareAfisare dateLivrareAfisare;
 
@@ -107,7 +108,16 @@ public class DateLivrare {
 		this.isAdresaObiectiv = dateLivrareAfisare.isAdresaObiectiv();
 		this.coordonateAdresa = dateLivrareAfisare.getCoordonateAdresa();
 		this.tonaj = dateLivrareAfisare.getTonaj();
+		this.isClientRaft = dateLivrareAfisare.isClientRaft();
 
+	}
+
+	public boolean isClientRaft() {
+		return isClientRaft;
+	}
+
+	public void setClientRaft(boolean isClientRaft) {
+		this.isClientRaft = isClientRaft;
 	}
 
 	public String getCodJudet() {
@@ -478,6 +488,7 @@ public class DateLivrare {
 		coordonateAdresa = null;
 		tonaj = "";
 		prelucrare = "";
+		isClientRaft = false;
 
 	}
 

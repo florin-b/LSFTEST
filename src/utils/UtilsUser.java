@@ -126,6 +126,26 @@ public class UtilsUser {
 		return false;
 	}
 
+	public static boolean isUserSite() {
+		return UserInfo.getInstance().getUserSite().equalsIgnoreCase("X");
+	}
+
+	public static String getULUserSite(String unitLog, String depozit) {
+
+		if (depozit.equals("MAV1") || depozit.equals("MAV2")) {
+			if (unitLog.equals("BV90"))
+				return "BV92";
+			else
+				return unitLog.substring(0, 2) + "2" + unitLog.substring(3, 4);
+		} else {
+			if (unitLog.equals("BV90"))
+				return unitLog;
+			else
+				return unitLog.substring(0, 2) + "1" + unitLog.substring(3, 4);
+		}
+
+	}
+
 	public static String serializeUserInfo() {
 
 		JSONObject jsonUser = new JSONObject();

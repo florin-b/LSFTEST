@@ -34,6 +34,7 @@ public class BeanComandaCreata {
 	private String telAgent;
 	private String codStare;
 	private double avans;
+	private boolean clientRaft;
 
 	public BeanComandaCreata() {
 
@@ -295,13 +296,24 @@ public class BeanComandaCreata {
 		this.avans = avans;
 	}
 
+	public boolean isClientRaft() {
+		return clientRaft;
+	}
+
+	public void setClientRaft(boolean clientRaft) {
+		this.clientRaft = clientRaft;
+	}
+
+	@Override
 	public String toString() {
 		return "BeanComandaCreata [id=" + id + ", numeClient=" + numeClient + ", codClient=" + codClient + ", data=" + data + ", suma=" + suma + ", moneda="
 				+ moneda + ", monedaTva=" + monedaTva + ", sumaTva=" + sumaTva + ", stare=" + stare + ", cmdSap=" + cmdSap + ", tipClient=" + tipClient
 				+ ", divizieAgent=" + divizieAgent + ", canalDistrib=" + canalDistrib + ", filiala=" + filiala + ", factRed=" + factRed + ", accept1="
 				+ accept1 + ", accept2=" + accept2 + ", numeAgent=" + numeAgent + ", termenPlata=" + termenPlata + ", cursValutar=" + cursValutar
 				+ ", docInsotitor=" + docInsotitor + ", adresaNoua=" + adresaNoua + ", adresaLivrare=" + adresaLivrare + ", divizieComanda=" + divizieComanda
-				+ ", pondere30=" + pondere30 + ", aprobariNecesare=" + aprobariNecesare + ", aprobariPrimite=" + aprobariPrimite + "]";
+				+ ", pondere30=" + pondere30 + ", aprobariNecesare=" + aprobariNecesare + ", aprobariPrimite=" + aprobariPrimite + ", conditiiImpuse="
+				+ conditiiImpuse + ", codClientGenericGed=" + codClientGenericGed + ", telAgent=" + telAgent + ", codStare=" + codStare + ", avans=" + avans
+				+ ", clientRaft=" + clientRaft + "]";
 	}
 
 }

@@ -14,5 +14,7 @@ public interface OperatiiAdresa {
 	public List<String> deserializeListLocalitati(Object values);
 	public void setOperatiiAdresaListener(OperatiiAdresaListener listener);
 	public void isAdresaValida(HashMap<String, String> params, EnumLocalitate tipLocalitate);
+	public void getDateLivrare(HashMap<String, String> params);
+	public void getAdreseLivrareClient(HashMap<String, String> params);
 
 }

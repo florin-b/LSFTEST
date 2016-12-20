@@ -25,6 +25,7 @@ import model.OperatiiAdresaImpl;
 import model.OperatiiClient;
 import model.UserInfo;
 import utils.MapUtils;
+import utils.UtilsAddress;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import android.app.ActionBar;
@@ -103,11 +104,10 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private List<BeanAdresaLivrare> listAdrese = null;
 	private RadioButton radioListAdrese, radioTextAdrese;
 	private LinearLayout layoutHeaderAdrese, layoutListAdrese, layoutAdrOras, layoutAdrStrada;
-	private CheckBox checkMacara;
+	private CheckBox checkMacara, chkbClientLaRaft;
 	private OperatiiAdresa operatiiAdresa;
 	private AutoCompleteTextView textLocalitate, textStrada, textLocalitateLivrare, textStradaLivrare;
 	private Button btnPozitieAdresa;
-	private TextView textCoordAdresa;
 	private EditText textNrStr;
 	private Spinner spinnerIndoire, spinnerTonaj;
 
@@ -140,16 +140,25 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			textNrStr = (EditText) findViewById(R.id.textNrStr);
 
-			textCoordAdresa = (TextView) findViewById(R.id.textCoordAdresa);
-			afisCoordAdresa();
-
 			btnPozitieAdresa = (Button) findViewById(R.id.btnPozitieAdresa);
 			setListnerBtnPozitieAdresa();
+
+			chkbClientLaRaft = (CheckBox) findViewById(R.id.clientRaft);
+			addListenerClientLaRaft();
+
+			Bundle bundle = getIntent().getExtras();
+
+			if (bundle.getString("parrentClass") != null && bundle.getString("parrentClass").equals("ModificareComanda")) {
+				LinearLayout layoutRaft = (LinearLayout) findViewById(R.id.layoutClientRaft);
+				layoutRaft.setVisibility(View.GONE);
+			}
 
 			textLocalitateLivrare = (AutoCompleteTextView) findViewById(R.id.autoCompleteLocLivrare);
 
 			textStrada = (AutoCompleteTextView) findViewById(R.id.autoCompleteStrada);
-			textStrada.setText(DateLivrare.getInstance().getStrada());
+			textStrada.setText(UtilsAddress.getStreetFromAddress(DateLivrare.getInstance().getStrada()));
+
+			textNrStr.setText(UtilsAddress.getStreetNumber(DateLivrare.getInstance().getStrada()));
 
 			textStradaLivrare = (AutoCompleteTextView) findViewById(R.id.autoCompleteStradaLivrare);
 
@@ -168,6 +177,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			txtObsPlata = (EditText) findViewById(R.id.txtObsPlata);
 			txtObsPlata.setText(dateLivrareInstance.getObsPlata());
+
+			chkbClientLaRaft.setChecked(dateLivrareInstance.isClientRaft());
 
 			spinnerPlata = (Spinner) findViewById(R.id.spinnerPlata);
 
@@ -306,6 +317,26 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	}
 
+	private void addListenerClientLaRaft() {
+
+		chkbClientLaRaft.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+				if (isChecked) {
+					chkbClientLaRaft.setText("Da");
+				} else {
+					chkbClientLaRaft.setText("Nu");
+				}
+
+				DateLivrare.getInstance().setClientRaft(isChecked);
+			}
+
+		});
+
+	}
+
 	private void setupListAdreseLayout() {
 
 		layoutAdrOras.setVisibility(View.GONE);
@@ -333,15 +364,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			tipTransport = tempArray.toArray(new String[tempArray.size()]);
 
 		}
-
-	}
-
-	private void afisCoordAdresa() {
-
-		if (DateLivrare.getInstance().getCoordonateAdresa() != null) {
-			textCoordAdresa.setText(DateLivrare.getInstance().getCoordonateAdresa().latitude + "," + DateLivrare.getInstance().getCoordonateAdresa().longitude);
-		} else
-			textCoordAdresa.setText("");
 
 	}
 
@@ -691,27 +713,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	private void addListenerTipPlata() {
 
-		spinnerPlata.setOnTouchListener(new View.OnTouchListener() {
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					if (UserInfo.getInstance().getTipUserSap().equals("KA3")) {
-						if (CreareComandaGed.nrArticoleComanda > 0) {
-							Toast.makeText(getApplicationContext(), "Stergeti mai intai toate articolele", Toast.LENGTH_SHORT).show();
-							return true;
-						}
-					}
-
-					if (existaArticole()) {
-						Toast.makeText(getApplicationContext(), "Stergeti mai intai toate articolele.", Toast.LENGTH_SHORT).show();
-						return true;
-					}
-
-				}
-
-				return false;
-			}
-		});
-
 		spinnerPlata.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -832,7 +833,9 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		textStrada.setThreshold(0);
 		textStrada.setAdapter(adapterStrazi);
-		textStrada.setText(DateLivrare.getInstance().getStrada());
+		textStrada.setText(UtilsAddress.getStreetFromAddress(DateLivrare.getInstance().getStrada()));
+		textNrStr.setText(UtilsAddress.getStreetNumber(DateLivrare.getInstance().getStrada()));
+
 		setListenerTextStrada();
 
 	}
@@ -1278,11 +1281,11 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		if (radioAdresaSediu.isChecked()) {
 			address.setCity(DateLivrare.getInstance().getOras());
-			address.setStreet(DateLivrare.getInstance().getStrada());
+			address.setStreet(UtilsAddress.getStreetNoNumber(DateLivrare.getInstance().getStrada()));
 			address.setSector(UtilsGeneral.getNumeJudet(DateLivrare.getInstance().getCodJudet()));
 		} else if (radioAltaAdresa.isChecked()) {
 			address.setCity(DateLivrare.getInstance().getOrasD());
-			address.setStreet(DateLivrare.getInstance().getAdresaD());
+			address.setStreet(UtilsAddress.getStreetNoNumber(DateLivrare.getInstance().getAdresaD()));
 			address.setSector(UtilsGeneral.getNumeJudet(DateLivrare.getInstance().getCodJudetD()));
 		}
 
@@ -1356,13 +1359,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private void valideazaAdresaResponse(String result) {
 
 		valideazaDateLivrare();
-		/*
-		 * 
-		 * Boolean response = Boolean.valueOf(result);
-		 * 
-		 * if (response) valideazaDateLivrare(); else Toast.makeText(this,
-		 * "Adresa invalida", Toast.LENGTH_SHORT).show();
-		 */
 
 	}
 
@@ -1389,7 +1385,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	@Override
 	public void addressSelected(LatLng coord, android.location.Address address) {
 		DateLivrare.getInstance().setCoordonateAdresa(coord);
-		textCoordAdresa.setText(coord.latitude + "," + coord.longitude);
 		setAdresaLivrare(MapUtils.getAddress(address));
 
 	}

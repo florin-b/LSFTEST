@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -63,11 +64,19 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	private LinearLayout layoutClientPersoana, layoutClientDistrib;
 	private ListView listViewClienti;
 	private BeanClient selectedClient;
-	private TextView textNumeClientDistrib, textCodClientDistrib, textAdrClient, textLimitaCredit, textRestCredit, tipClient, clientBlocat, filialaClient;
+	private TextView textNumeClientDistrib, textCodClientDistrib, textAdrClient, textLimitaCredit, textRestCredit, textTipClient, clientBlocat, filialaClient;
 
 	private RadioButton radioClMeserias;
 	private NumberFormat numberFormat;
 	private CheckBox checkPlatTva;
+	private Button clientBtn;
+	private TextView textClientParavan;
+
+	private enum EnumTipClient {
+		MESERIAS, PARAVAN;
+	}
+
+	private EnumTipClient tipClient;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +86,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 		setTheme(R.style.LRTheme);
 		setContentView(R.layout.selectclientcmd_ged_header);
+
+		tipClient = EnumTipClient.MESERIAS;
 
 		numberFormat = NumberFormat.getInstance();
 		numberFormat.setMinimumFractionDigits(2);
@@ -106,7 +117,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		textAdrClient = (TextView) findViewById(R.id.textAdrClient);
 		textLimitaCredit = (TextView) findViewById(R.id.textLimitaCredit);
 		textRestCredit = (TextView) findViewById(R.id.textRestCredit);
-		tipClient = (TextView) findViewById(R.id.tipClient);
+		textTipClient = (TextView) findViewById(R.id.tipClient);
 		clientBlocat = (TextView) findViewById(R.id.clientBlocat);
 		filialaClient = (TextView) findViewById(R.id.filClient);
 
@@ -172,6 +183,11 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		layoutRezervStocBtn = (LinearLayout) findViewById(R.id.layoutRezervStocBtn);
 		layoutRezervStocBtn.setVisibility(View.INVISIBLE);
 
+		textClientParavan = (TextView) findViewById(R.id.textClientParavan);
+
+		clientBtn = (Button) findViewById(R.id.clientBtn);
+		addListenerClientBtn();
+
 	}
 
 	private void setListenerCautaClientBtn() {
@@ -200,6 +216,22 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		else
 			radioClMeserias.setVisibility(View.INVISIBLE);
 
+	}
+
+	private void addListenerClientBtn() {
+		clientBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				tipClient = EnumTipClient.PARAVAN;
+				CautaClientDialog clientDialog = new CautaClientDialog(SelectClientCmdGed.this);
+				clientDialog.setMeserias(false);
+				clientDialog.setClientObiectivKA(false);
+				clientDialog.setClientSelectedListener(SelectClientCmdGed.this);
+				clientDialog.show();
+			}
+		});
 	}
 
 	private void getListaClienti() {
@@ -280,6 +312,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 				setTextNumeClientEnabled(false);
 
+				tipClient = EnumTipClient.MESERIAS;
 				CautaClientDialog clientDialog = new CautaClientDialog(SelectClientCmdGed.this);
 				clientDialog.setMeserias(true);
 				clientDialog.setClientSelectedListener(SelectClientCmdGed.this);
@@ -478,7 +511,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 		textLimitaCredit.setText(numberFormat.format(Double.valueOf(detaliiClient.getLimitaCredit())));
 		textRestCredit.setText(numberFormat.format(Double.valueOf(detaliiClient.getRestCredit())));
-		tipClient.setText(detaliiClient.getTipClient());
+		textTipClient.setText(detaliiClient.getTipClient());
 		DateLivrare.getInstance().setTermenPlata(detaliiClient.getTermenPlata());
 
 		filialaClient.setText(detaliiClient.getFiliala());
@@ -489,7 +522,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			saveClntBtn.setVisibility(View.INVISIBLE);
 		} else {
 			clientBlocat.setText("");
-			tipClient.setText(detaliiClient.getTipClient());
+			textTipClient.setText(detaliiClient.getTipClient());
 			saveClntBtn.setVisibility(View.VISIBLE);
 		}
 
@@ -515,9 +548,15 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	}
 
 	public void clientSelected(BeanClient client) {
-		txtNumeClientGed.setText(client.getNumeClient());
-		txtCNPClient.setText(client.getCodClient());
-		CreareComandaGed.codClientVar = client.getCodClient();
-		CreareComandaGed.tipClient = client.getTipClient();
+		if (tipClient == EnumTipClient.MESERIAS) {
+			txtNumeClientGed.setText(client.getNumeClient());
+			txtCNPClient.setText(client.getCodClient());
+			CreareComandaGed.codClientVar = client.getCodClient();
+			CreareComandaGed.tipClient = client.getTipClient();
+		} else {
+			CreareComandaGed.codClientParavan = client.getCodClient();
+			CreareComandaGed.numeClientParavan = client.getNumeClient();
+			textClientParavan.setText(CreareComandaGed.numeClientParavan);
+		}
 	}
 }

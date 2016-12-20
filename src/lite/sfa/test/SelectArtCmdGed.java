@@ -4,6 +4,7 @@
  */
 package lite.sfa.test;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,11 +15,13 @@ import listeners.OperatiiArticolListener;
 import model.ArticolComandaGed;
 import model.Constants;
 import model.DateLivrare;
+import model.HelperUserSite;
 import model.ListaArticoleComandaGed;
 import model.OperatiiArticol;
 import model.OperatiiArticolFactory;
 import model.UserInfo;
 import utils.DepartamentAgent;
+import utils.UtilsFormatting;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import adapters.CautareArticoleAdapter;
@@ -56,6 +59,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import beans.ArticolDB;
 import beans.BeanParametruPretGed;
+import beans.DepoziteUl;
 import beans.PretArticolGed;
 import enums.EnumArticoleDAO;
 import enums.EnumDepartExtra;
@@ -139,8 +143,9 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	private NumberFormat nForm2;
 	private ArticolDB articolDBSelected;
 	private TextView txtImpachetare;
-	
+
 	private String unitLogUnic = "";
+	private boolean isFilialaMavSite = false;
 
 	private enum EnumDepoz {
 		MAV1;
@@ -226,7 +231,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		labelStoc = (TextView) findViewById(R.id.labelStoc);
 		textCondPret = (TextView) findViewById(R.id.textCondPret);
 		textPretGED = (TextView) findViewById(R.id.textPretGED);
-		
+
 		txtImpachetare = (TextView) findViewById(R.id.txtImpachetare);
 
 		textPromo = (TextView) findViewById(R.id.textPromo);
@@ -374,10 +379,9 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		return UserInfo.getInstance().getTipUser().equals("WOOD");
 	}
 
-
-
 	private void CreateMenu(Menu menu) {
 
+		// if (UtilsUser.isUserExceptieBV90Ged() || UtilsUser.isUserSite()) {
 		if (UtilsUser.isUserExceptieBV90Ged()) {
 			MenuItem mnu1 = menu.add(0, 0, 0, "Filiala");
 			{
@@ -462,7 +466,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		switch (item.getItemId()) {
 		case 0:
-			showSelectFilArtDialogBox();
+			showFilialaDialogBox();
 			return true;
 		case android.R.id.home:
 			finish();
@@ -473,7 +477,105 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 	}
 
-	public void showSelectFilArtDialogBox() {
+	private void showFilialaDialogBox() {
+		if (UtilsUser.isUserExceptieBV90Ged()) {
+			showFilialaDialogBV90();
+		} else if (UtilsUser.isUserSite()) {
+			showFilialaDialogUserSite();
+		}
+	}
+
+	private void showFilialaDialogUserSite() {
+		dialogSelFilArt = new Dialog(SelectArtCmdGed.this);
+		dialogSelFilArt.setContentView(R.layout.select_fil_site);
+		dialogSelFilArt.setTitle("Selectati filiala");
+		dialogSelFilArt.setCancelable(false);
+		dialogSelFilArt.show();
+
+		List<String> listDepozite = DepoziteUl.getInstance().getListDepozite();
+
+		final RadioButton radioFilAg = (RadioButton) dialogSelFilArt.findViewById(R.id.radio1);
+		radioFilAg.setText(UserInfo.getInstance().getUnitLog());
+		radioFilAg.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+				if (isChecked) {
+					adapterSpinnerDepozite.clear();
+					adapterSpinnerDepozite.addAll(UtilsGeneral.getDepoziteGed());
+					spinnerDepoz.setSelection(0);
+					isFilialaMavSite = false;
+				}
+
+			}
+		});
+
+		final RadioButton radioFilMav = (RadioButton) dialogSelFilArt.findViewById(R.id.radio2);
+
+		if (listDepozite.size() == 2) {
+			radioFilMav.setText("Magazin");
+			radioFilMav.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+					if (isChecked) {
+						adapterSpinnerDepozite.clear();
+						adapterSpinnerDepozite.addAll(UtilsGeneral.getDepoziteMav());
+						adapterSpinnerDepozite.notifyDataSetChanged();
+						spinnerDepoz.setSelection(0);
+						isFilialaMavSite = true;
+					}
+
+				}
+			});
+		} else
+			radioFilMav.setVisibility(View.GONE);
+
+		final RadioButton radioFilBV90 = (RadioButton) dialogSelFilArt.findViewById(R.id.radio3);
+
+		radioFilBV90.setText("BV90");
+		radioFilBV90.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+				if (isChecked) {
+					adapterSpinnerDepozite.clear();
+					adapterSpinnerDepozite.addAll(UtilsGeneral.getDepoziteGed());
+					spinnerDepoz.setSelection(0);
+					isFilialaMavSite = false;
+				}
+			}
+		});
+
+		if (CreareComandaGed.filialaAlternativa.equals(UserInfo.getInstance().getUnitLog()))
+			radioFilAg.setChecked(true);
+		else if (CreareComandaGed.filialaAlternativa.equals("BV90"))
+			radioFilBV90.setChecked(true);
+		else
+			radioFilMav.setChecked(true);
+
+		Button btnOkFilArt = (Button) dialogSelFilArt.findViewById(R.id.btnOkSelFilArt);
+		btnOkFilArt.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+
+				if (radioFilAg.isChecked()) {
+					CreareComandaGed.filialaAlternativa = UserInfo.getInstance().getUnitLog();
+
+				} else if (radioFilMav.isChecked()) {
+					CreareComandaGed.filialaAlternativa = HelperUserSite.getDepozitMavSite();
+				} else {
+					CreareComandaGed.filialaAlternativa = "BV90";
+				}
+
+				if (!numeArticol.equals("")) {
+					performListArtStoc();
+				}
+				dialogSelFilArt.dismiss();
+
+			}
+		});
+
+	}
+
+	private void showFilialaDialogBV90() {
 		dialogSelFilArt = new Dialog(SelectArtCmdGed.this);
 		dialogSelFilArt.setContentView(R.layout.selectfilartdialogbox);
 		dialogSelFilArt.setTitle("Selectati filiala");
@@ -783,6 +885,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		paramPret.setCodJudet(getCodJudetPret());
 		paramPret.setLocalitate(getLocalitatePret());
 		paramPret.setFilialaAlternativa(CreareComandaGed.filialaAlternativa);
+		paramPret.setCodClientParavan(CreareComandaGed.codClientParavan);
 
 		params.put("parametruPret", opArticol.serializeParamPretGed(paramPret));
 
@@ -853,6 +956,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		clearTextField(txtNumeArticol);
 		resultLayout.setVisibility(View.INVISIBLE);
+
+		// if (UtilsUser.isUserSite() && isFilialaMavSite)
+		// UtilsArticole.getArt111Only(resultsList);
+
 		CautareArticoleAdapter adapterArticole = new CautareArticoleAdapter(this, resultsList);
 		setListAdapter(adapterArticole);
 
@@ -899,33 +1006,27 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 	protected void performGetArticole() {
 
-		try {
+		String numeArticol = txtNumeArticol.getText().toString().trim();
+		String tipCautare = "", tipArticol = "";
 
-			String numeArticol = txtNumeArticol.getText().toString().trim();
-			String tipCautare = "", tipArticol = "";
+		if (tglButton.isChecked())
+			tipCautare = "C";
+		else
+			tipCautare = "N";
 
-			if (tglButton.isChecked())
-				tipCautare = "C";
-			else
-				tipCautare = "N";
+		if (tglTipArtBtn.isChecked())
+			tipArticol = "S";
+		else
+			tipArticol = "A";
 
-			if (tglTipArtBtn.isChecked())
-				tipArticol = "S";
-			else
-				tipArticol = "A";
+		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
+		params.put("searchString", numeArticol);
+		params.put("tipArticol", tipArticol);
+		params.put("tipCautare", tipCautare);
+		params.put("filiala", UserInfo.getInstance().getUnitLog());
+		params.put("departament", selectedDepartamentAgent);
 
-			HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
-			params.put("searchString", numeArticol);
-			params.put("tipArticol", tipArticol);
-			params.put("tipCautare", tipCautare);
-			params.put("filiala", UserInfo.getInstance().getUnitLog());
-			params.put("departament", selectedDepartamentAgent);
-
-			opArticol.getArticoleDistributie(params);
-
-		} catch (Exception e) {
-			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-		}
+		opArticol.getArticoleDistributie(params);
 
 	}
 
@@ -957,11 +1058,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 					if (ListaArticoleComandaGed.getInstance().getListArticoleComanda().size() == 0) {
 						unitLogUnic = CreareComandaGed.filialaAlternativa;
-					}
-
-					if (!unitLogUnic.equals(CreareComandaGed.filialaAlternativa)) {
-						//Toast.makeText(getApplicationContext(), "Selectati articole dintr-o singura filiala!", Toast.LENGTH_LONG).show();
-						//return;
 					}
 
 					String cantArticol = textCant.getText().toString().trim();
@@ -1114,6 +1210,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						articol.setDiscountAg(discMaxAV);
 						articol.setDiscountSd(discMaxSD);
 						articol.setUmPalet(articolDBSelected.isUmPalet());
+						articol.setFilialaSite(CreareComandaGed.filialaAlternativa);
 
 						ListaArticoleComandaGed listaArticole = ListaArticoleComandaGed.getInstance();
 						listaArticole.addArticolComanda(articol);
@@ -1263,7 +1360,9 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		initPrice = Double.valueOf(pretArticol.getPret());
 		listPrice = Double.valueOf(pretArticol.getPretLista());
-		
+
+		afisIstoricPret(pretArticol.getIstoricPret());
+
 		txtImpachetare.setText(pretArticol.getImpachetare());
 
 		if (globalDepozSel.substring(2, 3).equals("V")) {
@@ -1407,6 +1506,68 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 	}
 
+	private void afisIstoricPret(String infoIstoric) {
+		LinearLayout layoutIstoric1 = (LinearLayout) findViewById(R.id.layoutIstoricPret1);
+		LinearLayout layoutIstoric2 = (LinearLayout) findViewById(R.id.layoutIstoricPret2);
+		LinearLayout layoutIstoric3 = (LinearLayout) findViewById(R.id.layoutIstoricPret3);
+
+		layoutIstoric1.setVisibility(View.GONE);
+		layoutIstoric2.setVisibility(View.GONE);
+		layoutIstoric3.setVisibility(View.GONE);
+
+		DecimalFormat df = new DecimalFormat("#0.000");
+
+		double valoarePret = 0;
+
+		if (infoIstoric.contains(":")) {
+			String[] arrayIstoric = infoIstoric.split(":");
+
+			if (arrayIstoric.length > 0 && arrayIstoric[0].contains("@")) {
+
+				layoutIstoric1.setVisibility(View.VISIBLE);
+
+				String[] arrayPret = arrayIstoric[0].split("@");
+
+				valoarePret = Double.parseDouble(arrayPret[0]) * Constants.TVA;
+
+				TextView textIstoric1 = (TextView) findViewById(R.id.txtIstoricPret1);
+				textIstoric1.setText(" " + df.format(valoarePret) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2]
+						+ " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3]));
+
+			}
+
+			if (arrayIstoric.length > 1 && arrayIstoric[1].contains("@")) {
+
+				layoutIstoric2.setVisibility(View.VISIBLE);
+
+				String[] arrayPret = arrayIstoric[1].split("@");
+
+				valoarePret = Double.parseDouble(arrayPret[0]) * Constants.TVA;
+
+				TextView textIstoric2 = (TextView) findViewById(R.id.txtIstoricPret2);
+				textIstoric2.setText(df.format(valoarePret) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2]
+						+ " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3]));
+
+			}
+
+			if (arrayIstoric.length > 2 && arrayIstoric[2].contains("@")) {
+
+				layoutIstoric3.setVisibility(View.VISIBLE);
+
+				String[] arrayPret = arrayIstoric[2].split("@");
+
+				valoarePret = Double.parseDouble(arrayPret[0]) * Constants.TVA;
+
+				TextView textIstoric3 = (TextView) findViewById(R.id.txtIstoricPret3);
+				textIstoric3.setText(df.format(valoarePret) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2]
+						+ " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3]));
+
+			}
+
+		}
+
+	}
+
 	private boolean userCannotModifyPrice() {
 		return UserInfo.getInstance().getTipUserSap().equals("CONS-GED");
 	}
@@ -1541,6 +1702,14 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			else
 				varLocalUnitLog = filialaAlternativa.substring(0, 2) + "1" + filialaAlternativa.substring(3, 4);
 		}
+
+		/*
+		 * if (UtilsUser.isUserSite()) { varLocalUnitLog =
+		 * UtilsUser.getULUserSite(CreareComandaGed.filialaAlternativa,
+		 * globalDepozSel);
+		 * 
+		 * }
+		 */
 
 		params.put("codArt", codArticol);
 		params.put("filiala", varLocalUnitLog);

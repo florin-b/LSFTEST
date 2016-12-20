@@ -76,6 +76,8 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 
 	private boolean umPalet;
 
+	private String filialaSite;
+
 	public int getNrCrt() {
 		return nrCrt;
 	}
@@ -539,6 +541,14 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 
 	public void setUmPalet(boolean umPalet) {
 		this.umPalet = umPalet;
+	}
+
+	public String getFilialaSite() {
+		return filialaSite;
+	}
+
+	public void setFilialaSite(String filialaSite) {
+		this.filialaSite = filialaSite;
 	}
 
 	@Override

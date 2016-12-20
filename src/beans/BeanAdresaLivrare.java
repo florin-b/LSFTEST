@@ -70,4 +70,10 @@ public class BeanAdresaLivrare {
 		this.coords = coords;
 	}
 
+	@Override
+	public String toString() {
+		return "BeanAdresaLivrare [oras=" + oras + ", strada=" + strada + ", nrStrada=" + nrStrada + ", codJudet=" + codJudet + ", codAdresa=" + codAdresa
+				+ ", tonaj=" + tonaj + ", coords=" + coords + "]";
+	}
+
 }

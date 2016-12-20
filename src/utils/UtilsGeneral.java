@@ -54,6 +54,10 @@ public class UtilsGeneral {
 		return depoziteGed;
 	}
 
+	public static String[] getDepoziteMav() {
+		return new String[] { "MAV1", "MAV2" };
+	}
+
 	public static String[] getDepoziteWood() {
 		String[] depoziteGed = new String[depoziteDISTRIB.length + 1];
 
@@ -163,6 +167,10 @@ public class UtilsGeneral {
 		if (codPlata.equals("UNI")) {
 			tipPlata = "Card Unicredit";
 		}
+		if (codPlata.equals("E1")) {
+			tipPlata = "Numerar sofer";
+		}
+		
 
 		return tipPlata;
 

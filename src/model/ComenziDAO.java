@@ -269,9 +269,9 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 
 				String[] coords = jsonLivrare.getString("coordonateGps").split(",");
 				dateLivrare.setCoordonateAdresa(new LatLng(Double.valueOf(coords[0]), Double.valueOf(coords[1])));
-				
+
 				dateLivrare.setTonaj(jsonLivrare.getString("tonaj"));
-				
+				dateLivrare.setClientRaft(jsonLivrare.getString("clientRaft").equals("X") ? true : false);
 
 				JSONArray jsonArticole = jsonObject.getJSONArray("articoleComanda");
 				String tipAlert = "", subCmp = "";
@@ -435,6 +435,7 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 					comanda.setCodClientGenericGed(comandaObject.getString("codClientGenericGed"));
 					comanda.setConditiiImpuse(comandaObject.getString("conditiiImpuse"));
 					comanda.setAvans(Double.valueOf(comandaObject.getString("avans")));
+					comanda.setClientRaft(comandaObject.getString("clientRaft").equals("X") ? true : false);
 
 					if (comandaObject.has("telAgent"))
 						comanda.setTelAgent(comandaObject.getString("telAgent"));

@@ -8,6 +8,8 @@ import model.Agent;
 import model.CalculVenit;
 import model.CalculVenitImpl;
 import model.UserInfo;
+import utils.UtilsDates;
+import utils.UtilsUser;
 import adapters.AdapterVenitTCF;
 import adapters.AdapterVenitTPR;
 import android.app.ActionBar;
@@ -16,6 +18,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -32,6 +35,9 @@ public class RealizareTarget extends Activity implements OperatiiVenitListener, 
 	private ListView listTPR, listTCF;
 	private TextView textAntetTcf, textAntetTpr;
 	private LinearLayout layoutAntetTcf, layoutAntetTpr;
+	private int dataRap;
+	private String agentCode;
+	private String agentName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,18 +52,19 @@ public class RealizareTarget extends Activity implements OperatiiVenitListener, 
 		actionBar.setTitle("Realizare target");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
+		dataRap = UtilsDates.getYearMonthDate(0);
+
 		setupLayout();
 
 		calculVenit = new CalculVenitImpl(this);
 		calculVenit.setOperatiiVenitListener(RealizareTarget.this);
 
-		if (!isSD())
-			getCalculVenit(UserInfo.getInstance().getCod());
+		if (!UtilsUser.isSD()) {
+			agentCode = UserInfo.getInstance().getCod();
+			actionBar.setTitle("Realizare target" + " " + UtilsDates.getMonthName(String.valueOf(dataRap)));
+			getCalculVenit(agentCode, dataRap);
+		}
 
-	}
-
-	private boolean isSD() {
-		return UserInfo.getInstance().getTipUserSap().equals("SD");
 	}
 
 	private void setupLayout() {
@@ -78,12 +85,13 @@ public class RealizareTarget extends Activity implements OperatiiVenitListener, 
 
 	}
 
-	private void getCalculVenit(String codAgent) {
+	private void getCalculVenit(String codAgent, int dataRap) {
 
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("codAgent", codAgent);
 		params.put("departament", UserInfo.getInstance().getCodDepart());
 		params.put("filiala", UserInfo.getInstance().getUnitLog());
+		params.put("dataRap", String.valueOf(dataRap));
 
 		calculVenit.getVenitTPR_TCF(params);
 
@@ -111,22 +119,37 @@ public class RealizareTarget extends Activity implements OperatiiVenitListener, 
 	}
 
 	private void CreateMenu(Menu menu) {
-		MenuItem mnu1 = menu.add(0, 0, 0, "Agenti");
-		mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+		SubMenu fileMenu = menu.addSubMenu(0, Menu.NONE, 1, "Luna");
+		fileMenu.add(0, 1, UtilsDates.getYearMonthDate(-1), UtilsDates.getDateMonthString(-1).toUpperCase());
+		fileMenu.add(0, 2, UtilsDates.getYearMonthDate(0), UtilsDates.getDateMonthString(0).toUpperCase());
+
+		fileMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+		if (UtilsUser.isSD()) {
+			MenuItem mnu2 = menu.add(0, 3, 1, "Agenti");
+			mnu2.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		}
 
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		if (isSD())
-			CreateMenu(menu);
+
+		CreateMenu(menu);
 		return true;
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 
-		case 0:
+		case 1:
+		case 2:
+			dataRap = item.getOrder();
+			getCalculVenit(agentCode, dataRap);
+			break;
+
+		case 3:
 			showSelectAgentDialog();
 			break;
 
@@ -176,13 +199,23 @@ public class RealizareTarget extends Activity implements OperatiiVenitListener, 
 	@Override
 	public void operatiiVenitComplete(EnumOperatiiVenit numeComanda, Object result) {
 		afiseazaVenit(result);
+		setActionBarTitle();
+
+	}
+
+	private void setActionBarTitle() {
+		if (UtilsUser.isSD() && agentName != null)
+			actionBar.setTitle("Realizare target" + " " + agentName + " - " + UtilsDates.getMonthName(String.valueOf(dataRap)));
+		else
+			actionBar.setTitle("Realizare target" + " - " + UtilsDates.getMonthName(String.valueOf(dataRap)));
 
 	}
 
 	@Override
 	public void agentSelected(Agent agent) {
-		actionBar.setTitle("Realizare target" + " - " + agent.getNume());
-		getCalculVenit(agent.getCod());
+		agentCode = agent.getCod();
+		agentName = agent.getNume();
+		getCalculVenit(agent.getCod(), dataRap);
 
 	}
 

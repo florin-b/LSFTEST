@@ -658,14 +658,7 @@ public class MainMenu extends Activity {
 
 				}
 
-				// retea
-				if (selectedBtnName.equalsIgnoreCase("Retea")) {
-
-					Intent nextScreen = new Intent(MainMenu.this, Retea.class);
-					startActivity(nextScreen);
-					finish();
-
-				}
+				
 
 				if (selectedBtnName.equalsIgnoreCase("Comenzi conditionate")) {
 

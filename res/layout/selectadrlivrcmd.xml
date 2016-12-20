@@ -222,18 +222,10 @@
                     android:paddingRight="20dip"
                     android:text="Pozitionati adresa pe harta" />
 
-                <TextView
-                    android:id="@+id/textCoordAdresa"
+                <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|left"
-                    android:layout_marginRight="180dip"
-                    android:layout_weight="0.25"
-                    android:gravity="right"
-                    android:text=""
-                    android:textColor="@color/labelColor"
-                    android:textSize="17sp"
-                    android:typeface="serif" />
+                    android:layout_weight="0.25" />
             </LinearLayout>
 
             <LinearLayout
@@ -552,6 +544,31 @@
                     android:maxLength="100"
                     android:singleLine="true"
                     android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutClientRaft"
+                android:layout_width="match_parent"
+                android:layout_height="60dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:gravity="left|bottom"
+                    android:paddingLeft="5dip"
+                    android:text="Client la raft"
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
+
+                <CheckBox
+                    android:id="@+id/clientRaft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:text="Nu" />
             </LinearLayout>
 
             <LinearLayout

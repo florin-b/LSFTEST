@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import listeners.AsyncTaskListener;
 import listeners.AutocompleteDialogListener;
 import listeners.MapListener;
 import listeners.ObiectiveListener;
@@ -27,28 +26,18 @@ import model.OperatiiAdresa;
 import model.OperatiiAdresaImpl;
 import model.OperatiiObiective;
 import model.UserInfo;
-
-import org.ksoap2.HeaderProperty;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
-
 import utils.Exceptions;
 import utils.MapUtils;
-import utils.UtilsFormatting;
+import utils.UtilsAddress;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
+import adapters.AdapterAdreseLivrare;
 import adapters.AdapterObiective;
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -69,7 +58,6 @@ import android.widget.ListPopupWindow;
 import android.widget.RadioButton;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 import beans.Address;
 import beans.BeanAdresaLivrare;
@@ -79,19 +67,16 @@ import beans.GeocodeAddress;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import connectors.ConnectionStrings;
 import dialogs.MapAddressDialog;
 import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
 import enums.EnumOperatiiObiective;
 
-public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnItemClickListener, AsyncTaskListener, OperatiiAdresaListener, ObiectiveListener,
-		MapListener, AutocompleteDialogListener {
+public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnItemClickListener, OperatiiAdresaListener, ObiectiveListener, MapListener,
+		AutocompleteDialogListener {
 
 	private Button saveAdrLivrBtn;
 	private EditText txtPers, txtTel, txtObservatii, txtValoareIncasare;
-
-	private static final String METHOD_NAME = "getAdreseLivrareClient";
 
 	String[] tipPlata = { "B - Bilet la ordin", "C - Cec", "E - Plata in numerar", "O - Ordin de plata" };
 
@@ -109,11 +94,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private ArrayAdapter<String> adapterDataLivrare, adapterTermenPlata, adapterResponsabil;
 	private LinearLayout layoutAdrese, layoutAdr1, layoutAdr2, layoutValoareIncasare;
 	private String globalCodClient = "";
-	private HashMap<String, String> artMapAdresa = null;
+
 	private RadioButton radioLista, radioText, radioObiectiv;
 	private boolean adrNouaModifCmd = false;
 	private int selectedAddrModifCmd = -1;
-	private CheckBox checkMacara;
+	private CheckBox checkMacara, chkbClientLaRaft;
 	private Spinner spinnerObiective;
 	private LinearLayout layoutObiective;
 
@@ -126,14 +111,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private BeanObiectivDepartament obiectivSelectat;
 	private AutoCompleteTextView textLocalitate, textStrada;
 	private Button btnPozitieAdresa;
-	private TextView textCoordAdresa;
 	private EditText textNrStr;
 	private Spinner spinnerTonaj, spinnerIndoire;
 	private ArrayList<BeanAdresaLivrare> adreseList;
 	private LinearLayout layoutPrelucrare04;
-
-	private boolean adresaFromListHasNumber;
-	private BeanAdreseJudet listAdrese;
 
 	private LinearLayout layoutHarta;
 
@@ -169,9 +150,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		textLocalitate.setVisibility(View.INVISIBLE);
 
 		textNrStr = (EditText) findViewById(R.id.textNrStr);
-
-		textCoordAdresa = (TextView) findViewById(R.id.textCoordAdresa);
-		afisCoordAdresa();
 
 		btnPozitieAdresa = (Button) findViewById(R.id.btnPozitieAdresa);
 		setListnerBtnPozitieAdresa();
@@ -217,6 +195,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		txtTel.setText(listTel[0]);
 
 		txtObservatii = (EditText) findViewById(R.id.txtObservatii);
+
+		chkbClientLaRaft = (CheckBox) findViewById(R.id.clientRaft);
+		addListenerClientLaRaft();
 
 		CreareComanda.dateLivrare = "";
 
@@ -265,10 +246,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		setListenerSpinnerAdreseLivrare();
 
 		listAdreseLivrare = new ArrayList<HashMap<String, String>>();
-		adapterAdreseLivrare = new SimpleAdapter(this, listAdreseLivrare, R.layout.row_layout_2_items, new String[] { "rowText", "rowId", "rowExtra" },
-				new int[] { R.id.textRowName, R.id.textRowId, R.id.textExtra });
-
-		spinnerAdreseLivrare.setAdapter(adapterAdreseLivrare);
 		selectedAddrModifCmd = -1;
 
 		if (CreareComanda.termenPlata.trim().length() > 0) {
@@ -287,7 +264,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 			if (!ModificareComanda.codClientVar.equals("")) {
 				globalCodClient = ModificareComanda.codClientVar;
-				afisCoordAdresa();
+
+				LinearLayout layoutRaft = (LinearLayout) findViewById(R.id.layoutClientRaft);
+				layoutRaft.setVisibility(View.GONE);
 
 			}
 
@@ -402,6 +381,26 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	}
 
+	private void addListenerClientLaRaft() {
+
+		chkbClientLaRaft.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+				if (isChecked) {
+					chkbClientLaRaft.setText("Da");
+				} else {
+					chkbClientLaRaft.setText("Nu");
+				}
+
+				DateLivrare.getInstance().setClientRaft(isChecked);
+			}
+
+		});
+
+	}
+
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 		try {
@@ -442,14 +441,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		ArrayAdapter<String> adapterIndoire = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, indoireValues);
 		adapterIndoire.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerIndoire.setAdapter(adapterIndoire);
-
-	}
-
-	private void afisCoordAdresa() {
-		if (DateLivrare.getInstance().getCoordonateAdresa() != null && DateLivrare.getInstance().getCoordonateAdresa().latitude != 0)
-			textCoordAdresa.setText(DateLivrare.getInstance().getCoordonateAdresa().latitude + "," + DateLivrare.getInstance().getCoordonateAdresa().longitude);
-		else
-			textCoordAdresa.setText("");
 
 	}
 
@@ -744,17 +735,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	protected void performGetAdreseLivrare() {
 
-		try {
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("codClient", globalCodClient);
 
-			HashMap<String, String> params = new HashMap<String, String>();
-			params.put("codClient", globalCodClient);
-
-			AsyncTaskWSCall call = new AsyncTaskWSCall(this, METHOD_NAME, params);
-			call.getCallResults();
-
-		} catch (Exception e) {
-			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-		}
+		operatiiAdresa.getAdreseLivrareClient(params);
 
 	}
 
@@ -779,26 +763,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		adreseList = objClientList.decodeJSONAdresaLivrare();
 
 		if (adreseList.size() > 0) {
-			listAdreseLivrare.clear();
 
-			HashMap<String, String> temp;
-
-			String strAdresa = "";
-			for (int i = 0; i < adreseList.size(); i++) {
-				temp = new HashMap<String, String>();
-
-				strAdresa = getNumeJudet(adreseList.get(i).getCodJudet()) + "; " + adreseList.get(i).getOras() + "; " + adreseList.get(i).getStrada() + "; "
-						+ adreseList.get(i).getNrStrada() + ";";
-
-				temp.put("rowText", strAdresa);
-				temp.put("rowId", adreseList.get(i).getCodAdresa());
-				temp.put("rowExtra", adreseList.get(i).getCoords());
-				listAdreseLivrare.add(temp);
-
-			}
-
-			spinnerAdreseLivrare.setAdapter(adapterAdreseLivrare);
-			adapterAdreseLivrare.notifyDataSetChanged();
+			AdapterAdreseLivrare adapterAdrese = new AdapterAdreseLivrare(this, adreseList);
+			spinnerAdreseLivrare.setAdapter(adapterAdrese);
 
 			if (!ModificareComanda.selectedCmd.equals("")) {
 				if (!adrNouaModifCmd)
@@ -806,8 +773,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 				else
 					spinnerAdreseLivrare.setSelection(selectedAddrModifCmd);
 			}
-
-		} else {
 
 		}
 
@@ -818,84 +783,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private void getCmdDateLivrare() {
 
-		try {
-
-			getDateLivrare date = new getDateLivrare(this);
-			date.execute(("dummy"));
-
-		} catch (Exception e) {
-			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-		}
-
-	}
-
-	private class getDateLivrare extends AsyncTask<String, Void, String> {
-		String errMessage = "";
-
-		Context mContext;
-		private ProgressDialog dialog;
-
-		private getDateLivrare(Context context) {
-			super();
-			this.mContext = context;
-		}
-
-		protected void onPreExecute() {
-			this.dialog = new ProgressDialog(mContext);
-			this.dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			this.dialog.setMessage("Incarcare date livrare...");
-			this.dialog.setCancelable(false);
-			this.dialog.show();
-		}
-
-		@Override
-		protected String doInBackground(String... url) {
-			String response = "";
-			try {
-
-				SoapObject request = new SoapObject(ConnectionStrings.getInstance().getNamespace(), "getCmdDateLivrare");
-
-				request.addProperty("idCmd", ModificareComanda.selectedCmd);
-
-				SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-				envelope.dotNet = true;
-
-				envelope.setOutputSoapObject(request);
-
-				HttpTransportSE androidHttpTransport = new HttpTransportSE(ConnectionStrings.getInstance().getUrl(), 25000);
-
-				List<HeaderProperty> headerList = new ArrayList<HeaderProperty>();
-				headerList.add(new HeaderProperty("Authorization", "Basic " + org.kobjects.base64.Base64.encode("bflorin:bflorin".getBytes())));
-
-				androidHttpTransport.call(ConnectionStrings.getInstance().getNamespace() + "getCmdDateLivrare", envelope, headerList);
-				Object result = envelope.getResponse();
-				response = result.toString();
-			} catch (Exception e) {
-				errMessage = e.getMessage();
-			}
-			return response;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-
-			try {
-				if (dialog != null) {
-					dialog.dismiss();
-					dialog = null;
-				}
-
-				if (!errMessage.equals("")) {
-					Toast toast = Toast.makeText(getApplicationContext(), errMessage, Toast.LENGTH_SHORT);
-					toast.show();
-
-				} else {
-					fillDateLivrare(result);
-				}
-			} catch (Exception e) {
-				Log.e("Error", e.toString());
-			}
-		}
+		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
+		params.put("idCmd", ModificareComanda.selectedCmd);
+		operatiiAdresa.getDateLivrare(params);
 
 	}
 
@@ -923,7 +813,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 						break;
 					}
 
-				}// sf. for
+				}
 
 				DateLivrare.getInstance().setOras(tokLivrare[7]);
 
@@ -934,14 +824,17 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 			} else {
 				radioLista.setChecked(true);
-				int nrAdrese = listAdreseLivrare.size();
+
+				int nrAdrese = spinnerAdreseLivrare.getAdapter().getCount();
+
 				int j = 0;
 				String adr_number = "";
 
 				for (j = 0; j < nrAdrese; j++) {
 
-					artMapLivr = (HashMap<String, String>) this.adapterAdreseLivrare.getItem(j);
-					adr_number = artMapLivr.get("rowId").toString();
+					BeanAdresaLivrare adresaLivrare = (BeanAdresaLivrare) spinnerAdreseLivrare.getAdapter().getItem(j);
+
+					adr_number = adresaLivrare.getCodAdresa();
 
 					if (tokLivrare[15].equals(adr_number)) {
 						spinnerAdreseLivrare.setSelection(j);
@@ -1068,6 +961,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					break;
 				}
 
+			DateLivrare.getInstance().setClientRaft(tokLivrare[20].equals("X") ? true : false);
+
 		} catch (Exception ex) {
 			Toast.makeText(getApplicationContext(), ex.toString(), Toast.LENGTH_SHORT).show();
 		}
@@ -1124,7 +1019,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private void populateListLocalitati(BeanAdreseJudet listAdrese) {
 
-		this.listAdrese = listAdrese;
 		textLocalitate.setVisibility(View.VISIBLE);
 		textLocalitate.setText(DateLivrare.getInstance().getOras());
 
@@ -1203,7 +1097,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 				if (radioText.isChecked()) {
 					address.setCity(textLocalitate.getText().toString().trim());
 					address.setStreet(textStrada.getText().toString().trim());
-					address.setNumber(textNrStr.getText().toString().trim());
 					address.setSector(UtilsGeneral.getNumeJudet(DateLivrare.getInstance().getCodJudet()));
 
 					if (!isAdresaComplet())
@@ -1259,7 +1152,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	}
 
-	@SuppressWarnings("unchecked")
 	private void valideazaDateLivrare() {
 		String adresa = "";
 		String pers = "";
@@ -1272,9 +1164,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			// din lista
 
 			if (listAdreseLivrare.size() > 0) {
-				artMapAdresa = (HashMap<String, String>) spinnerAdreseLivrare.getSelectedItem();
-
-				setAdresaLivrareFromList(artMapAdresa);
+				BeanAdresaLivrare adresaLivrare = (BeanAdresaLivrare) spinnerAdreseLivrare.getSelectedItem();
+				setAdresaLivrareFromList(adresaLivrare);
 
 			}
 
@@ -1422,8 +1313,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	}
 
-
-
 	private boolean isAdresaGoogleOk() {
 
 		GeocodeAddress geoAddress = MapUtils.geocodeAddress(getAddressFromForm(), getApplicationContext());
@@ -1437,41 +1326,36 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		Address address = new Address();
 
 		address.setCity(DateLivrare.getInstance().getOras());
-		address.setStreet(DateLivrare.getInstance().getStrada());
+		address.setStreet(UtilsAddress.getStreetNoNumber(DateLivrare.getInstance().getStrada()));
 		address.setSector(UtilsGeneral.getNumeJudet(DateLivrare.getInstance().getCodJudet()));
 
 		return address;
 	}
 
-	private void setAdresaLivrareFromList(HashMap<String, String> selectedLine) {
+	private void setAdresaLivrareFromList(BeanAdresaLivrare adresaLivrare) {
 
-		String[] tokenAdr = selectedLine.get("rowText").toString().split(";");
-		DateLivrare.getInstance().setAddrNumber(artMapAdresa.get("rowId").toString());
+		DateLivrare.getInstance().setAddrNumber(adresaLivrare.getCodAdresa());
+		DateLivrare.getInstance().setNumeJudet(UtilsGeneral.getNumeJudet(adresaLivrare.getCodJudet()));
 
-		DateLivrare.getInstance().setNumeJudet(tokenAdr[0].trim());
-
-		if (!tokenAdr[1].trim().equals("")) {
-			DateLivrare.getInstance().setOras(tokenAdr[1].trim());
-		} else {
+		if (!adresaLivrare.getOras().trim().equals(""))
+			DateLivrare.getInstance().setOras(adresaLivrare.getOras());
+		else
 			DateLivrare.getInstance().setOras("-");
-		}
 
-		if (!tokenAdr[2].trim().equals("")) {
-			DateLivrare.getInstance().setStrada(tokenAdr[2].trim() + " " + tokenAdr[3].trim());
-			adresaFromListHasNumber = UtilsFormatting.streetHasNumber(DateLivrare.getInstance().getStrada());
+		if (!adresaLivrare.getStrada().trim().equals("")) {
+			DateLivrare.getInstance().setStrada(adresaLivrare.getStrada() + " " + adresaLivrare.getNrStrada());
+
 		} else {
 			DateLivrare.getInstance().setStrada("-");
-			adresaFromListHasNumber = false;
-		}
-		DateLivrare.getInstance().setCodJudet(getCodJudet(tokenAdr[0].trim()));
 
+		}
+
+		DateLivrare.getInstance().setCodJudet(adresaLivrare.getCodJudet());
 		DateLivrare.getInstance().setAdrLivrNoua(false);
 
-		String[] tokenCoords = selectedLine.get("rowExtra").toString().split(",");
+		String[] tokenCoords = adresaLivrare.getCoords().split(",");
 
-		LatLng gCoords = new LatLng(Double.valueOf(tokenCoords[0]), Double.valueOf(tokenCoords[1]));
-
-		DateLivrare.getInstance().setCoordonateAdresa(gCoords);
+		DateLivrare.getInstance().setCoordonateAdresa(new LatLng(Double.valueOf(tokenCoords[0]), Double.valueOf(tokenCoords[1])));
 
 	}
 
@@ -1501,12 +1385,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private void setListenerSpinnerAdreseLivrare() {
 		spinnerAdreseLivrare.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-			@SuppressWarnings("unchecked")
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				artMapAdresa = (HashMap<String, String>) spinnerAdreseLivrare.getSelectedItem();
-
-				setAdresaLivrareFromList(artMapAdresa);
+				BeanAdresaLivrare adresaLivrare = (BeanAdresaLivrare) spinnerAdreseLivrare.getAdapter().getItem(position);
+				setAdresaLivrareFromList(adresaLivrare);
 
 			}
 
@@ -1522,7 +1404,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		DateLivrare.getInstance().setStrada("");
 		DateLivrare.getInstance().setCodJudet("");
 		DateLivrare.getInstance().setCoordonateAdresa(null);
-		textCoordAdresa.setText("");
 
 		spinnerJudet.setSelection(0);
 		textLocalitate.setText("");
@@ -1559,51 +1440,13 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	}
 
-	private String getNumeJudet(String codJudet) {
-		String numeJudet = "nedefinit";
-
-		int i = 0;
-		for (i = 0; i < UtilsGeneral.codJudete.length; i++) {
-			if (codJudet.equals(UtilsGeneral.codJudete[i])) {
-				numeJudet = UtilsGeneral.codJudete[i];
-				break;
-			}
-
-		}
-
-		return numeJudet;
-	}
-
-	private String getCodJudet(String numeJudet) {
-		String codJudet = "00";
-
-		int i = 0;
-		for (i = 0; i < UtilsGeneral.codJudete.length; i++) {
-			if (numeJudet.equals(UtilsGeneral.codJudete[i])) {
-				codJudet = UtilsGeneral.codJudete[i];
-				break;
-			}
-
-		}
-
-		return codJudet;
-	}
-
 	@Override
 	public void onBackPressed() {
 		finish();
 		return;
 	}
 
-	public void onTaskComplete(String methodName, Object result) {
-		if (methodName.equals(METHOD_NAME)) {
-			fillListAdrese((String) result);
-		}
-
-	}
-
 	private void valideazaAdresaResponse(String result) {
-
 		valideazaDateLivrare();
 
 	}
@@ -1615,6 +1458,12 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			break;
 		case IS_ADRESA_VALIDA:
 			valideazaAdresaResponse((String) result);
+			break;
+		case GET_DATE_LIVRARE:
+			fillDateLivrare((String) result);
+			break;
+		case GET_ADRESE_LIVR_CLIENT:
+			fillListAdrese((String) result);
 			break;
 		default:
 			break;
@@ -1636,7 +1485,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	@Override
 	public void addressSelected(LatLng coord, android.location.Address address) {
 		DateLivrare.getInstance().setCoordonateAdresa(coord);
-		textCoordAdresa.setText(coord.latitude + "," + coord.longitude);
 		setAdresaLivrare(MapUtils.getAddress(address));
 
 	}

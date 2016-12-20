@@ -5,7 +5,6 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -29,7 +28,6 @@
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -103,5 +101,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/client_ged_distrib" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.02" />
+
+        <TextView
+            android:id="@+id/textClientParavan"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.2"
+            android:gravity="left"
+            android:text="Client cu istoric"
+            android:textColor="#A2B5CD"
+            android:textSize="16sp"
+            android:typeface="serif" />
+
+        <Button
+            android:id="@+id/clientBtn"
+            style="@style/ok_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dip"
+            android:background="@drawable/ok_button_style"
+            android:paddingLeft="50dip"
+            android:paddingRight="50dip"
+            android:text="@string/strCauta" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5" />
+    </LinearLayout>
 
 </LinearLayout>

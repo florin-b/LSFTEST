@@ -17,6 +17,7 @@ public class BeanParametruPretGed {
 	private String codJudet;
 	private String localitate;
 	private String filialaAlternativa;
+	private String codClientParavan;
 
 	public String getClient() {
 		return client;
@@ -138,11 +139,20 @@ public class BeanParametruPretGed {
 		this.filialaAlternativa = filialaAlternativa;
 	}
 
+	public String getCodClientParavan() {
+		return codClientParavan;
+	}
+
+	public void setCodClientParavan(String codClientParavan) {
+		this.codClientParavan = codClientParavan;
+	}
+
 	@Override
 	public String toString() {
 		return "BeanParametruPretGed [client=" + client + ", articol=" + articol + ", cantitate=" + cantitate + ", depart=" + depart + ", um=" + um + ", ul="
 				+ ul + ", depoz=" + depoz + ", codUser=" + codUser + ", canalDistrib=" + canalDistrib + ", tipUser=" + tipUser + ", metodaPlata=" + metodaPlata
-				+ ", termenPlata=" + termenPlata + ", codJudet=" + codJudet + ", localitate=" + localitate + ", filialaAlternativa=" + filialaAlternativa + "]";
+				+ ", termenPlata=" + termenPlata + ", codJudet=" + codJudet + ", localitate=" + localitate + ", filialaAlternativa=" + filialaAlternativa
+				+ ", codClientParavan=" + codClientParavan + "]";
 	}
 
 }

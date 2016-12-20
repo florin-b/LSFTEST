@@ -143,19 +143,15 @@ public class ArticolComandaGed extends ArticolComanda implements Comparable<Arti
 
 	@Override
 	public String toString() {
-		return "ArticolComandaGed [pretUnitarGed=" + pretUnitarGed + ", " + "  marjaClient=" + marjaClient
-				+ ", marjaCorectata=" + marjaCorectata + ", reducerePonderata=" + reducerePonderata + ", marjaGed="
-				+ marjaGed + ", tipAlertPret=" + tipAlertPret + ", adaosMinimArticol=" + adaosMinimArticol
-				+ ", adaosClientCorectat=" + adaosClientCorectat + ", adaosMinimAcceptat=" + adaosMinimAcceptat
-				+ ", ponderare=" + ponderare + ", nrCrt=" + nrCrt + ", numeArticol=" + numeArticol + ", codArticol="
-				+ codArticol + ", depozit=" + depozit + ", cantitate=" + cantitate + ", um=" + um + ", pret=" + pret
-				+ ", moneda=" + moneda + ", procent=" + procent + ", observatii=" + observatii + ", conditie="
-				+ conditie + ", promotie=" + promotie + ", procentFact=" + procentFact + ", pretUnit=" + pretUnit
-				+ ", discClient=" + discClient + ", tipAlert=" + tipAlert + ", procAprob=" + procAprob + ", multiplu="
-				+ multiplu + ", infoArticol=" + infoArticol + ", cantUmb=" + cantUmb + ", Umb=" + Umb + ", alteValori="
-				+ alteValori + ", depart=" + depart + ", tipArt=" + tipArt + ", taxaVerde=" + taxaVerde
-				+ ", pretUnitarPonderat=" + pretUnitarPonderat + ", pretUnitarClient=" + pretUnitarClient
-				+ ", deficit=" + deficit + "]\n\n";
+		return "ArticolComandaGed [pretUnitarGed=" + pretUnitarGed + ", " + "  marjaClient=" + marjaClient + ", marjaCorectata=" + marjaCorectata
+				+ ", reducerePonderata=" + reducerePonderata + ", marjaGed=" + marjaGed + ", tipAlertPret=" + tipAlertPret + ", adaosMinimArticol="
+				+ adaosMinimArticol + ", adaosClientCorectat=" + adaosClientCorectat + ", adaosMinimAcceptat=" + adaosMinimAcceptat + ", ponderare="
+				+ ponderare + ", nrCrt=" + nrCrt + ", numeArticol=" + numeArticol + ", codArticol=" + codArticol + ", depozit=" + depozit + ", cantitate="
+				+ cantitate + ", um=" + um + ", pret=" + pret + ", moneda=" + moneda + ", procent=" + procent + ", observatii=" + observatii + ", conditie="
+				+ conditie + ", promotie=" + promotie + ", procentFact=" + procentFact + ", pretUnit=" + pretUnit + ", discClient=" + discClient
+				+ ", tipAlert=" + tipAlert + ", procAprob=" + procAprob + ", multiplu=" + multiplu + ", infoArticol=" + infoArticol + ", cantUmb=" + cantUmb
+				+ ", Umb=" + Umb + ", alteValori=" + alteValori + ", depart=" + depart + ", tipArt=" + tipArt + ", taxaVerde=" + taxaVerde
+				+ ", pretUnitarPonderat=" + pretUnitarPonderat + ", pretUnitarClient=" + pretUnitarClient + ", deficit=" + deficit + "]\n\n";
 	}
 
 }

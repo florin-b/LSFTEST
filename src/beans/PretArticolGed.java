@@ -26,6 +26,7 @@ public class PretArticolGed {
 	private double discMaxDV;
 	private double discMaxKA;
 	private String impachetare;
+	private String istoricPret;
 
 	public String getPret() {
 		return pret;
@@ -217,6 +218,14 @@ public class PretArticolGed {
 
 	public void setImpachetare(String impachetare) {
 		this.impachetare = impachetare;
+	}
+
+	public String getIstoricPret() {
+		return istoricPret;
+	}
+
+	public void setIstoricPret(String istoricPret) {
+		this.istoricPret = istoricPret;
 	}
 
 }

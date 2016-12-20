@@ -100,10 +100,11 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		addListenerUserName();
 		addListenerPassword();
 
-		 etUsername.setText("androag");
-		 etPassword.setText("112");
+		etUsername.setText("androag");
+		etPassword.setText("112");
 
-		
+		//etUsername.setText("GILINCA");
+		//etPassword.setText("HV3G4M");
 
 		// DD Wood
 		// etUsername.setText("OCODREANU");
@@ -117,8 +118,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		// etUsername.setText("NIONITA");
 		// etPassword.setText("ga9Sm3");
 
-		//etUsername.setText("SIONITA");
-		//etPassword.setText("SuJste");
+		// etUsername.setText("SIONITA");
+		// etPassword.setText("SuJste");
 
 		// etUsername.setText("androag");
 		// etPassword.setText("sfa");
@@ -208,8 +209,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		// etUsername.setText("MURSU"); // DV mat grele
 		// etPassword.setText("CZzMPA");
 
-		//etUsername.setText("FROTARU"); // CV Obiective
-		//etPassword.setText("89mLcn");
+		// etUsername.setText("FROTARU"); // CV Obiective
+		// etPassword.setText("89mLcn");
 
 		globalMyIP = getIPConnection();
 
@@ -585,7 +586,7 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 						uInfo.setCodDepart("01");
 						uInfo.setNumeDepart("LEMN");
 					}
-					
+
 					uInfo.setFilHome(Boolean.valueOf(token[12]));
 
 					startMainMenuActivity();

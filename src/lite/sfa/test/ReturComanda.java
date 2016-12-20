@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import beans.BeanDocumentRetur;
 import enums.EnumRetur;
+import enums.EnumTipComanda;
 
 public class ReturComanda extends FragmentActivity implements ClientReturListener, OperatiiReturListener, DocumentReturListener {
 
@@ -145,7 +146,7 @@ public class ReturComanda extends FragmentActivity implements ClientReturListene
 		finish();
 	}
 
-	public void clientSelected(String codClient, String numeClient, String interval) {
+	public void clientSelected(String codClient, String numeClient, String interval, EnumTipComanda tipComanda) {
 		this.numeClient = numeClient;
 		this.codClient = codClient;
 

@@ -58,6 +58,22 @@ public class OperatiiAdresaImpl implements OperatiiAdresa, AsyncTaskListener {
 
 	}
 
+	@Override
+	public void getDateLivrare(HashMap<String, String> params) {
+		numeComanda = EnumOperatiiAdresa.GET_DATE_LIVRARE;
+		this.params = params;
+		performOperation();
+
+	}
+	
+	@Override
+	public void getAdreseLivrareClient(HashMap<String, String> params) {
+		numeComanda = EnumOperatiiAdresa.GET_ADRESE_LIVR_CLIENT;
+		this.params = params;
+		performOperation();
+
+	}
+
 	public List<String> deserializeListLocalitati(Object resultList) {
 
 		List<String> listLocalitati = new ArrayList<String>();

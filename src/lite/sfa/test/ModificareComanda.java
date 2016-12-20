@@ -264,6 +264,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 				if (isUserCV() || isComandaGed()) {
 					nextScreenLivr = new Intent(getApplicationContext(), SelectAdrLivrCmdGed.class);
 					nextScreenLivr.putExtra("codClient", selectedClientCode);
+					nextScreenLivr.putExtra("parrentClass", "ModificareComanda");
 
 				} else {
 					nextScreenLivr = new Intent(getApplicationContext(), SelectAdrLivrCmd.class);
@@ -333,59 +334,9 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 				textCantar.setText("Da");
 			// ***************sf. cantar
 
-			// ***************tip reducere
-			if (dateLivrareInstance.getRedSeparat().equals(" ")) {
-				textFactRed.setText("1 factura (red. in pret)");
-			}
-			if (dateLivrareInstance.getRedSeparat().equals("X")) {
-				textFactRed.setText("2 facturi");
-			}
-			if (dateLivrareInstance.getRedSeparat().equals("R")) {
-				textFactRed.setText("1 factura (red. separat)");
-			}
-			// ***************sf. tip reducere
-
-			// ***************tip plata
-			String localTipPlata = "";
-			if (dateLivrareInstance.getTipPlata().equals("B")) {
-				localTipPlata = "Bilet la ordin";
-			}
-			if (dateLivrareInstance.getTipPlata().equals("C")) {
-				localTipPlata = "Cec";
-			}
-			if (dateLivrareInstance.getTipPlata().equals("E")) {
-				localTipPlata = "Plata in numerar";
-			}
-			if (dateLivrareInstance.getTipPlata().equals("L")) {
-				localTipPlata = "Plata interna buget-trezorerie";
-			}
-			if (dateLivrareInstance.getTipPlata().equals("O")) {
-				localTipPlata = "Ordin de plata";
-			}
-			if (dateLivrareInstance.getTipPlata().equals("U")) {
-				localTipPlata = "Plata interna-alte institutii";
-			}
-			if (dateLivrareInstance.getTipPlata().equals("W")) {
-				localTipPlata = "Plata in strainatate-banci";
-			}
-
-			textTipPlata.setText(localTipPlata);
-			// ***************sf. tip plata
-
-			// ***************tip transport
-			String tipTransp = "";
-			if (dateLivrareInstance.getTransport().equals("TCLI")) {
-				tipTransp = "Transport client";
-			}
-			if (dateLivrareInstance.getTransport().equals("TRAP")) {
-				tipTransp = "Transport Arabesque";
-			}
-			if (dateLivrareInstance.getTransport().equals("TERT")) {
-				tipTransp = "Transport terti";
-			}
-
-			textTransport.setText(tipTransp);
-			// ***************sf. tip transport
+			textFactRed.setText(UtilsGeneral.getTipReducere(dateLivrareInstance.getRedSeparat()));
+			textTipPlata.setText(UtilsGeneral.getDescTipPlata(dateLivrareInstance.getTipPlata()));
+			textTransport.setText(UtilsGeneral.getDescTipTransport(dateLivrareInstance.getTransport()));
 
 		}
 
@@ -555,7 +506,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 						comanda.setNumeClient(dateLivrareInstance.getNumeClient());
 						comanda.setCnpClient(dateLivrareInstance.getCnpClient());
 						comanda.setNecesarAprobariCV(comandaSelectata.getAprobariNecesare());
-						
+
 						comandaJson = serializeComanda(comanda);
 
 						performSaveCmd();
@@ -870,6 +821,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("coordonateGps", getCoordAdresa());
 			obj.put("tonaj", DateLivrare.getInstance().getTonaj());
 			obj.put("prelucrare", DateLivrare.getInstance().getPrelucrare());
+			obj.put("clientRaft", DateLivrare.getInstance().isClientRaft());
 
 			if (isComandaGed())
 				obj.put("factRed", "NU");

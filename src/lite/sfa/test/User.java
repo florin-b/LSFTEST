@@ -8,8 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+import listeners.HelperSiteListener;
+import model.HelperUserSite;
 import model.InfoStrings;
 import model.UserInfo;
+import utils.UtilsUser;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -25,7 +28,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import enums.EnumFiliale;
 
-public class User extends Activity {
+public class User extends Activity implements HelperSiteListener {
 
 	Button buttonUpdate, buttonInstall;
 	String filiala = "", nume = "", cod = "";
@@ -37,6 +40,8 @@ public class User extends Activity {
 	private Spinner spinnerFiliala, spinnerDepart;
 	private static ArrayList<HashMap<String, String>> listFiliala = null, listDepart = null;
 	public SimpleAdapter adapterFiliala, adapterDepart;
+
+	private HelperUserSite helperSite;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -311,7 +316,7 @@ public class User extends Activity {
 	}
 
 	// captare evenimente spinner filiale
-	public class onSelectedFiliala implements OnItemSelectedListener {
+	private class onSelectedFiliala implements OnItemSelectedListener {
 
 		@SuppressWarnings("unchecked")
 		public void onItemSelected(AdapterView<?> parent, View v, int pos, long id) {
@@ -326,11 +331,27 @@ public class User extends Activity {
 			filUser.setText(UserInfo.getInstance().getFiliala());
 			UserInfo.getInstance().setAltaFiliala(true);
 
+			getDepoziteUserSite(localSelectedFil);
+
 		}
 
 		public void onNothingSelected(AdapterView<?> parent) {
-			// TODO
+
 		}
+	}
+
+	private void getDepoziteUserSite(String filiala) {
+
+		if (UtilsUser.isUserSite()) {
+			helperSite = new HelperUserSite(this);
+			helperSite.setHelperSiteListener(User.this);
+
+			HashMap<String, String> params = new HashMap<String, String>();
+			params.put("ul", filiala);
+
+			helperSite.getDepoziteUl(params);
+		}
+
 	}
 
 	// captare evenimente spinner departament
@@ -482,6 +503,14 @@ public class User extends Activity {
 
 		finish();
 		return;
+	}
+
+	@Override
+	public void helperSiteComplete(String numeComanda, Object result) {
+
+		if (helperSite != null)
+			helperSite.setDepoziteUl((String) result);
+
 	}
 
 }

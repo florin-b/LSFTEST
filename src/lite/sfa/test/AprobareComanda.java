@@ -7,6 +7,7 @@ package lite.sfa.test;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -18,6 +19,7 @@ import model.ArticolComanda;
 import model.ComenziDAO;
 import model.SerializeConditiiComanda;
 import model.UserInfo;
+import patterns.ComandaAprobareComparator;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import adapters.ArticolAprobareAdapter;
@@ -871,6 +873,8 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 
 		this.listComenzi = cmdList;
 
+		Collections.sort(cmdList, new ComandaAprobareComparator());
+		
 		ComandaAprobAdapter adapter = new ComandaAprobAdapter(cmdList, this);
 		spinnerComenzi.setAdapter(adapter);
 

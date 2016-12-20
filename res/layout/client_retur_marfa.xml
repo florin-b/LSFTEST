@@ -48,7 +48,7 @@
         android:layout_marginRight="5dp"
         android:layout_marginTop="10dp"
         android:layout_weight="0.55"
-        android:orientation="vertical">
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -68,6 +68,29 @@
                 android:layout_width="30dip"
                 android:layout_height="match_parent" >
             </View>
+
+            <RadioGroup
+                android:id="@+id/groupTipDistrib"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/radioDistrib"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Comanda distributie"
+                    android:textColor="@color/artRowColor1" />
+
+                <RadioButton
+                    android:id="@+id/radioGed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Comanda Ged"
+                    android:textColor="@color/artRowColor1" />
+            </RadioGroup>
         </LinearLayout>
 
         <TextView

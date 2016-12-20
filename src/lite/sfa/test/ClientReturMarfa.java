@@ -22,18 +22,26 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import beans.BeanClient;
 import enums.EnumClienti;
+import enums.EnumTipComanda;
 
 public class ClientReturMarfa extends Fragment implements OperatiiClientListener {
 
-	OperatiiClient opClient;
-	EditText textNumeClient;
-	ListView clientiList;
-	TextView selectIcon;
+	private OperatiiClient opClient;
+	private EditText textNumeClient;
+	private ListView clientiList;
+	private TextView selectIcon;
+	private RadioGroup groupTipDistrib;
+	private RadioButton radioDistrib, radioGed;
+	private EnumTipComanda tipComanda;
 
 	ClientReturListener clientListener;
 
@@ -56,6 +64,19 @@ public class ClientReturMarfa extends Fragment implements OperatiiClientListener
 		selectIcon = (TextView) v.findViewById(R.id.selectIcon);
 		selectIcon.setVisibility(View.INVISIBLE);
 
+		radioDistrib = (RadioButton) v.findViewById(R.id.radioDistrib);
+		radioGed = (RadioButton) v.findViewById(R.id.radioGed);
+
+		tipComanda = EnumTipComanda.DISTRIBUTIE;
+		addRadioDistribListener();
+		addRadioGedListener();
+
+		groupTipDistrib = (RadioGroup) v.findViewById(R.id.groupTipDistrib);
+		if (!UtilsUser.isCV())
+			groupTipDistrib.setVisibility(View.VISIBLE);
+		else
+			groupTipDistrib.setVisibility(View.GONE);
+
 		return v;
 
 	}
@@ -77,6 +98,39 @@ public class ClientReturMarfa extends Fragment implements OperatiiClientListener
 		return frg;
 	}
 
+	private void addRadioDistribListener() {
+		radioDistrib.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked) {
+					tipComanda = EnumTipComanda.DISTRIBUTIE;
+					clearSelection();
+				}
+
+			}
+		});
+	}
+
+	private void addRadioGedListener() {
+		radioGed.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked) {
+					tipComanda = EnumTipComanda.GED;
+					clearSelection();
+				}
+
+			}
+		});
+	}
+
+	private void clearSelection() {
+		textNumeClient.setText("");
+		clientiList.setAdapter(new CautareClientiAdapter(getActivity(), new ArrayList<BeanClient>()));
+	}
+
 	private void addListenerClient(Button clientButton) {
 		clientButton.setOnClickListener(new OnClickListener() {
 
@@ -96,7 +150,8 @@ public class ClientReturMarfa extends Fragment implements OperatiiClientListener
 			params.put("depart", "00");
 			params.put("departAg", UserInfo.getInstance().getCodDepart());
 			params.put("unitLog", UserInfo.getInstance().getUnitLog());
-			if (UtilsUser.isUserGed())
+
+			if (UtilsUser.isUserGed() || tipComanda == EnumTipComanda.GED)
 				opClient.getListClientiCV(params);
 			else
 				opClient.getListClienti(params);
@@ -118,7 +173,7 @@ public class ClientReturMarfa extends Fragment implements OperatiiClientListener
 
 				BeanClient client = (BeanClient) arg0.getAdapter().getItem(arg2);
 				if (client != null) {
-					clientListener.clientSelected(client.getCodClient(), client.getNumeClient(), null);
+					clientListener.clientSelected(client.getCodClient(), client.getNumeClient(), null, tipComanda);
 
 				}
 			}
