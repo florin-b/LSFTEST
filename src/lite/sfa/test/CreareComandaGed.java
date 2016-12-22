@@ -1093,7 +1093,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 						comandaFinala = new Comanda();
 						comandaFinala.setNumeClient(CreareComandaGed.numeClientVar);
 						comandaFinala.setCodClient(CreareComandaGed.codClientVar);
-						comandaFinala.setCnpClient(CreareComandaGed.cnpClient);
+						comandaFinala.setCnpClient(CreareComandaGed.cnpClient.length() == 0 ? " " : CreareComandaGed.cnpClient);
 						comandaFinala.setComandaBlocata(comandaBlocata);
 						comandaFinala.setNrCmdSap(cmdSAP);
 						comandaFinala.setAlerteKA(alerteKA);

@@ -15,6 +15,7 @@ import model.InfoStrings;
 import model.ListaArticoleComandaGed;
 import model.OperatiiClient;
 import model.UserInfo;
+import utils.UtilsCheck;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import adapters.CautareClientiAdapter;
@@ -69,8 +70,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	private RadioButton radioClMeserias;
 	private NumberFormat numberFormat;
 	private CheckBox checkPlatTva;
-	private Button clientBtn;
-	private TextView textClientParavan;
+	private Button clientBtn, verificaID;
+	private TextView textClientParavan, labelIDClient;
 
 	private enum EnumTipClient {
 		MESERIAS, PARAVAN;
@@ -146,6 +147,12 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		layoutTextJ = (LinearLayout) findViewById(R.id.layoutTextJ);
 		layoutTextJ.setVisibility(View.GONE);
 
+		labelIDClient = (TextView) findViewById(R.id.labelIdClient);
+		labelIDClient.setText("CNP");
+
+		verificaID = (Button) findViewById(R.id.verificaId);
+		setListenerVerificaID();
+
 		radioClDistrib = (RadioButton) findViewById(R.id.radioClDistrib);
 		radioClPJ = (RadioButton) findViewById(R.id.radioClPJ);
 		radioClPF = (RadioButton) findViewById(R.id.radioClPF);
@@ -187,6 +194,36 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 		clientBtn = (Button) findViewById(R.id.clientBtn);
 		addListenerClientBtn();
+
+	}
+
+	private void setListenerVerificaID() {
+
+		verificaID.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				checkCNP(true);
+
+			}
+		});
+
+	}
+
+	private boolean checkCNP(boolean showValidMessage) {
+		if (txtCNPClient.getText().toString().trim().length() > 0) {
+			if (UtilsCheck.isCnpValid(txtCNPClient.getText().toString().trim())) {
+
+				if (showValidMessage)
+					Toast.makeText(getApplicationContext(), "CNP valid", Toast.LENGTH_SHORT).show();
+
+				return true;
+			} else {
+				Toast.makeText(getApplicationContext(), "CNP invalid", Toast.LENGTH_SHORT).show();
+				return false;
+			}
+		}
+		return true;
 
 	}
 
@@ -255,12 +292,14 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				if (isChecked) {
 					layoutClientPersoana.setVisibility(View.GONE);
 					layoutClientDistrib.setVisibility(View.VISIBLE);
-
+					verificaID.setVisibility(View.GONE);
+					labelIDClient.setText("CUI");
 					clearDateLivrare();
 
 				} else {
 					layoutClientPersoana.setVisibility(View.VISIBLE);
 					layoutClientDistrib.setVisibility(View.GONE);
+
 				}
 
 			}
@@ -276,6 +315,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					layoutTextJ.setVisibility(View.VISIBLE);
 					checkPlatTva.setChecked(true);
 					checkPlatTva.setVisibility(View.VISIBLE);
+					verificaID.setVisibility(View.GONE);
+					labelIDClient.setText("CUI");
 					setTextNumeClientEnabled(true);
 					clearDateLivrare();
 				}
@@ -292,7 +333,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					layoutLabelJ.setVisibility(View.GONE);
 					layoutTextJ.setVisibility(View.GONE);
 					checkPlatTva.setVisibility(View.INVISIBLE);
-
+					verificaID.setVisibility(View.VISIBLE);
+					labelIDClient.setText("CNP");
 					setTextNumeClientEnabled(true);
 					clearDateLivrare();
 				}
@@ -309,6 +351,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				layoutLabelJ.setVisibility(View.GONE);
 				layoutTextJ.setVisibility(View.GONE);
 				checkPlatTva.setVisibility(View.INVISIBLE);
+
+				verificaID.setVisibility(View.GONE);
+				labelIDClient.setText("COD");
 
 				setTextNumeClientEnabled(false);
 
@@ -394,9 +439,14 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 						return;
 					}
 
-					if (txtCNPClient.getText().toString().trim().length() == 0) {
-						Toast.makeText(getApplicationContext(), "Completati CNP / CUI client!", Toast.LENGTH_SHORT).show();
+					if (!radioClPF.isChecked() && txtCNPClient.getText().toString().trim().length() == 0) {
+						Toast.makeText(getApplicationContext(), "Completati CUI client!", Toast.LENGTH_SHORT).show();
 						return;
+					}
+
+					if (radioClPF.isChecked()) {
+						if (!checkCNP(false))
+							return;
 					}
 
 					if (radioClPF.isChecked()) {

@@ -69,12 +69,12 @@
             android:layout_weight="0.02" />
 
         <TextView
+            android:id="@+id/labelIdClient"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_weight="0.9"
             android:gravity="left"
-            android:text="CNP / CUI"
             android:textColor="#A2B5CD"
             android:textSize="16sp"
             android:typeface="serif" />
@@ -104,7 +104,7 @@
             android:textSize="19sp"
             android:typeface="monospace" />
 
-        <TextView
+        <View
             android:layout_width="0dp"
             android:layout_height="40dip"
             android:layout_weight="0.05" />
@@ -118,10 +118,20 @@
             android:text="Platitor de TVA"
             android:textColor="@color/detColor4" />
 
+        <Button
+            android:id="@+id/verificaId"
+            style="@style/ok_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dip"
+            android:background="@drawable/ok_button_style"
+            android:paddingLeft="50dip"
+            android:paddingRight="50dip"
+            android:text="Verifica cnp" />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="40dip"
-            android:layout_weight="0.6" />
+            android:layout_weight="0.4" />
     </LinearLayout>
 
     <LinearLayout
