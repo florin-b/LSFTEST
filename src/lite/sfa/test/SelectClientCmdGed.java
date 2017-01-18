@@ -40,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import beans.BeanClient;
 import beans.DetaliiClient;
+import beans.PlatitorTva;
 import dialogs.CautaClientDialog;
 import enums.EnumClienti;
 
@@ -69,8 +70,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 	private RadioButton radioClMeserias;
 	private NumberFormat numberFormat;
-	private CheckBox checkPlatTva;
-	private Button clientBtn, verificaID;
+	private CheckBox checkPlatTva, checkFacturaPF;
+	private Button clientBtn, verificaID, verificaTva;
 	private TextView textClientParavan, labelIDClient;
 
 	private enum EnumTipClient {
@@ -100,6 +101,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 		operatiiClient = new OperatiiClient(this);
 		operatiiClient.setOperatiiClientListener(this);
+
+		checkFacturaPF = (CheckBox) findViewById(R.id.checkFacturaPF);
+		setListenerFacturaPF();
 
 		checkPlatTva = (CheckBox) findViewById(R.id.checkPlatTva);
 		checkPlatTva.setVisibility(View.INVISIBLE);
@@ -153,6 +157,10 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		verificaID = (Button) findViewById(R.id.verificaId);
 		setListenerVerificaID();
 
+		verificaTva = (Button) findViewById(R.id.verificaTva);
+		verificaTva.setVisibility(View.GONE);
+		setListenerVerificaTva();
+
 		radioClDistrib = (RadioButton) findViewById(R.id.radioClDistrib);
 		radioClPJ = (RadioButton) findViewById(R.id.radioClPJ);
 		radioClPF = (RadioButton) findViewById(R.id.radioClPF);
@@ -197,6 +205,37 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 	}
 
+	private void setListenerVerificaTva() {
+		verificaTva.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				if (!txtCNPClient.getText().toString().isEmpty()) {
+					HashMap<String, String> params = new HashMap<String, String>();
+					params.put("cuiClient", txtCNPClient.getText().toString().trim());
+					operatiiClient.getStarePlatitorTva(params);
+				}
+
+			}
+		});
+	}
+
+	private void setListenerFacturaPF() {
+		checkFacturaPF.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				if (checkFacturaPF.isChecked())
+					checkFacturaPF.setText("Se emite factura");
+				else
+					checkFacturaPF.setText("Nu se emite factura");
+
+			}
+		});
+	}
+
 	private void setListenerVerificaID() {
 
 		verificaID.setOnClickListener(new OnClickListener() {
@@ -219,6 +258,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 				return true;
 			} else {
+
 				Toast.makeText(getApplicationContext(), "CNP invalid", Toast.LENGTH_SHORT).show();
 				return false;
 			}
@@ -286,6 +326,34 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
 	}
 
+	private void updateStareTva(PlatitorTva platitorTva) {
+
+		String stare = "";
+
+		if (platitorTva.isPlatitor()) {
+			checkPlatTva.setChecked(true);
+		} else {
+			checkPlatTva.setChecked(false);
+			stare = " nu";
+		}
+
+		String message = "";
+
+		if (platitorTva.getErrMessage().length() > 0) {
+			message = platitorTva.getErrMessage();
+			txtNumeClientGed.setText("");
+			txtCodJ.setText("");
+		} else {
+			message = platitorTva.getNumeClient() + stare + " este platitor de tva.";
+			txtNumeClientGed.setText(platitorTva.getNumeClient());
+			txtCodJ.setText(platitorTva.getNrInreg());
+
+		}
+
+		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+	}
+
 	private void addListenerRadioClDistrib() {
 		radioClDistrib.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -293,6 +361,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					layoutClientPersoana.setVisibility(View.GONE);
 					layoutClientDistrib.setVisibility(View.VISIBLE);
 					verificaID.setVisibility(View.GONE);
+					verificaTva.setVisibility(View.GONE);
 					labelIDClient.setText("CUI");
 					clearDateLivrare();
 
@@ -316,7 +385,10 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					checkPlatTva.setChecked(true);
 					checkPlatTva.setVisibility(View.VISIBLE);
 					verificaID.setVisibility(View.GONE);
+					checkFacturaPF.setVisibility(View.GONE);
+					verificaTva.setVisibility(View.VISIBLE);
 					labelIDClient.setText("CUI");
+					txtCodJ.setText("");
 					setTextNumeClientEnabled(true);
 					clearDateLivrare();
 				}
@@ -334,6 +406,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					layoutTextJ.setVisibility(View.GONE);
 					checkPlatTva.setVisibility(View.INVISIBLE);
 					verificaID.setVisibility(View.VISIBLE);
+					verificaTva.setVisibility(View.GONE);
+					checkFacturaPF.setVisibility(View.VISIBLE);
 					labelIDClient.setText("CNP");
 					setTextNumeClientEnabled(true);
 					clearDateLivrare();
@@ -353,6 +427,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				checkPlatTva.setVisibility(View.INVISIBLE);
 
 				verificaID.setVisibility(View.GONE);
+				checkFacturaPF.setVisibility(View.GONE);
 				labelIDClient.setText("COD");
 
 				setTextNumeClientEnabled(false);
@@ -453,14 +528,23 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 						CreareComandaGed.tipClient = "PF";
 						DateLivrare.getInstance().setTipPersClient("PF");
 
-						if (UtilsUser.isConsWood())
-							CreareComandaGed.codClientVar = InfoStrings.getClientGenericGedWood(UserInfo.getInstance().getUnitLog(), "PF");
-						else {
-							if (UtilsUser.isUserExceptieCONSGED())
-								CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed_CONSGED(UserInfo.getInstance().getUnitLog(), "PF");
-							else
-								CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PF");
+						if (!checkFacturaPF.isChecked()) {
+							CreareComandaGed.codClientVar = InfoStrings.getClientGed_FaraFactura(UserInfo.getInstance().getUnitLog());
+							DateLivrare.getInstance().setFacturaCmd(false);
+						} else {
+
+							DateLivrare.getInstance().setFacturaCmd(true);
+
+							if (UtilsUser.isConsWood())
+								CreareComandaGed.codClientVar = InfoStrings.getClientGenericGedWood(UserInfo.getInstance().getUnitLog(), "PF");
+							else {
+								if (UtilsUser.isUserExceptieCONSGED())
+									CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed_CONSGED(UserInfo.getInstance().getUnitLog(), "PF");
+								else
+									CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PF");
+							}
 						}
+
 					}
 
 					if (radioClPJ.isChecked()) {
@@ -590,6 +674,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			break;
 		case GET_DETALII_CLIENT:
 			listClientDetails(operatiiClient.deserializeDetaliiClient((String) result));
+			break;
+		case GET_STARE_TVA:
+			updateStareTva(operatiiClient.deserializePlatitorTva((String) result));
 			break;
 		default:
 			break;

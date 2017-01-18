@@ -60,6 +60,7 @@ public class DateLivrare {
 	private String tonaj;
 	private String prelucrare;
 	private boolean isClientRaft;
+	private boolean isFacturaCmd;
 
 	private DateLivrareAfisare dateLivrareAfisare;
 
@@ -453,6 +454,14 @@ public class DateLivrare {
 		this.prelucrare = prelucrare;
 	}
 
+	public boolean isFacturaCmd() {
+		return isFacturaCmd;
+	}
+
+	public void setFacturaCmd(boolean isFacturaCmd) {
+		this.isFacturaCmd = isFacturaCmd;
+	}
+
 	public void resetAll() {
 		codJudet = "";
 		numeJudet = "";
@@ -489,6 +498,7 @@ public class DateLivrare {
 		tonaj = "";
 		prelucrare = "";
 		isClientRaft = false;
+		isFacturaCmd = false;
 
 	}
 

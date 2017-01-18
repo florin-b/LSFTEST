@@ -18,6 +18,7 @@ import android.widget.Toast;
 import beans.BeanAdresaLivrare;
 import beans.BeanClient;
 import beans.DetaliiClient;
+import beans.PlatitorTva;
 import enums.EnumClienti;
 
 public class OperatiiClient implements AsyncTaskListener {
@@ -63,9 +64,12 @@ public class OperatiiClient implements AsyncTaskListener {
 		call.getCallResultsFromFragment();
 	}
 
-	
-	
-	
+	public void getStarePlatitorTva(HashMap<String, String> params) {
+		numeComanda = EnumClienti.GET_STARE_TVA;
+		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
+		call.getCallResultsFromFragment();
+	}
+
 	public ArrayList<BeanClient> deserializeListClienti(String serializedListClienti) {
 		BeanClient client = null;
 		ArrayList<BeanClient> listClienti = new ArrayList<BeanClient>();
@@ -162,6 +166,28 @@ public class OperatiiClient implements AsyncTaskListener {
 		}
 
 		return objectsList;
+	}
+
+	public PlatitorTva deserializePlatitorTva(String result) {
+		PlatitorTva platitorTva = new PlatitorTva();
+
+		try {
+			JSONObject jsonObject = new JSONObject(result);
+
+			if (jsonObject instanceof JSONObject) {
+
+				platitorTva.setPlatitor(Boolean.parseBoolean(jsonObject.getString("isPlatitor")));
+				platitorTva.setNumeClient(jsonObject.getString("numeClient"));
+				platitorTva.setNrInreg(jsonObject.getString("nrInreg"));
+				platitorTva.setErrMessage(jsonObject.getString("errMessage") != "null" ? jsonObject.getString("errMessage") : "");
+
+			}
+
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		return platitorTva;
 	}
 
 	public void onTaskComplete(String methodName, Object result) {

@@ -27,13 +27,12 @@ public class SelectIntervalDialog extends Dialog {
 
 	String[] options = { "Astazi", "In ultimele 7 zile", "In ultimele 30 de zile", "In intervalul" };
 
-	String[] days = { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16",
-			"17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" };
+	String[] days = { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23",
+			"24", "25", "26", "27", "28", "29", "30", "31" };
 
-	String[] month = { "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie", "Iulie", "August", "Septembrie",
-			"Octombrie", "Noiembrie", "Decembrie" };
+	String[] month = { "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie", "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie", "Decembrie" };
 
-	String[] years = { "2012", "2013", "2014", "2015", "2016" };
+	String[] years = { "2012", "2013", "2014", "2015", "2016", "2017", "2018" };
 	Spinner spinnerSelInterval;
 	LinearLayout layoutSelInterval;
 	IntervalDialogListener listener;
@@ -74,8 +73,8 @@ public class SelectIntervalDialog extends Dialog {
 		spinnerSelInterval = (Spinner) findViewById(R.id.spinnerSelInterval);
 
 		ArrayList<HashMap<String, String>> listOptInterval = new ArrayList<HashMap<String, String>>();
-		SimpleAdapter adapterOptions = new SimpleAdapter(context, listOptInterval, R.layout.customrowselinterval,
-				new String[] { "optInterval" }, new int[] { R.id.textTipInterval });
+		SimpleAdapter adapterOptions = new SimpleAdapter(context, listOptInterval, R.layout.customrowselinterval, new String[] { "optInterval" },
+				new int[] { R.id.textTipInterval });
 
 		HashMap<String, String> temp;
 
@@ -97,8 +96,8 @@ public class SelectIntervalDialog extends Dialog {
 		yearStop = (Spinner) findViewById(R.id.yearStop);
 
 		ArrayList<HashMap<String, String>> listIntervalDay = new ArrayList<HashMap<String, String>>();
-		SimpleAdapter adapterDay = new SimpleAdapter(context, listIntervalDay, R.layout.customrowintervalstart,
-				new String[] { "startInterval" }, new int[] { R.id.textStartInterval });
+		SimpleAdapter adapterDay = new SimpleAdapter(context, listIntervalDay, R.layout.customrowintervalstart, new String[] { "startInterval" },
+				new int[] { R.id.textStartInterval });
 
 		for (int ii = 0; ii < days.length; ii++) {
 			temp = new HashMap<String, String>();
@@ -110,8 +109,8 @@ public class SelectIntervalDialog extends Dialog {
 		dayStop.setAdapter(adapterDay);
 
 		ArrayList<HashMap<String, String>> listIntervalMonth = new ArrayList<HashMap<String, String>>();
-		SimpleAdapter adapterMonth = new SimpleAdapter(context, listIntervalMonth, R.layout.customrowintervalstart,
-				new String[] { "startInterval" }, new int[] { R.id.textStartInterval });
+		SimpleAdapter adapterMonth = new SimpleAdapter(context, listIntervalMonth, R.layout.customrowintervalstart, new String[] { "startInterval" },
+				new int[] { R.id.textStartInterval });
 
 		for (int ii = 0; ii < month.length; ii++) {
 			temp = new HashMap<String, String>();
@@ -123,8 +122,8 @@ public class SelectIntervalDialog extends Dialog {
 		monthStop.setAdapter(adapterMonth);
 
 		ArrayList<HashMap<String, String>> listIntervalYear = new ArrayList<HashMap<String, String>>();
-		SimpleAdapter adapterYear = new SimpleAdapter(context, listIntervalYear, R.layout.customrowintervalstart,
-				new String[] { "startInterval" }, new int[] { R.id.textStartInterval });
+		SimpleAdapter adapterYear = new SimpleAdapter(context, listIntervalYear, R.layout.customrowintervalstart, new String[] { "startInterval" },
+				new int[] { R.id.textStartInterval });
 
 		for (int ii = 0; ii < years.length; ii++) {
 			temp = new HashMap<String, String>();
@@ -146,53 +145,22 @@ public class SelectIntervalDialog extends Dialog {
 		dayStop.setSelection(mDay - 1);
 		monthStop.setSelection(mMonth);
 
-		if (mYear == 2012) {
-			yearStart.setSelection(0);
-			yearStop.setSelection(0);
-		}
-
-		if (mYear == 2013) {
-			yearStart.setSelection(0);
-			yearStop.setSelection(1);
-		}
-
-		if (mYear == 2014) {
-			yearStart.setSelection(0);
-			yearStop.setSelection(2);
-		}
-
-		if (!dataSelStart.equals("")) {
-			String[] tokenStart = dataSelStart.split("#");
-
-			dayStart.setSelection(Integer.valueOf(tokenStart[0]) - 1);
-			monthStart.setSelection(Integer.valueOf(tokenStart[1]) - 1);
-
-			if (tokenStart[2].equals("2012"))
-				yearStart.setSelection(0);
-
-			if (tokenStart[2].equals("2013"))
-				yearStart.setSelection(1);
-
-			if (tokenStart[2].equals("2014"))
-				yearStart.setSelection(2);
-
-			String[] tokenStop = dataSelStop.split("#");
-			dayStop.setSelection(Integer.valueOf(tokenStop[0]) - 1);
-			monthStop.setSelection(Integer.valueOf(tokenStop[1]) - 1);
-
-			if (tokenStop[2].equals("2012"))
-				yearStop.setSelection(0);
-
-			if (tokenStop[2].equals("2013"))
-				yearStop.setSelection(1);
-
-			if (tokenStop[2].equals("2014"))
-				yearStop.setSelection(2);
-
-		}
+		setInitYear(mYear);
 
 		btnOkInterval = (Button) findViewById(R.id.btnOkInterval);
 		setBtnOkListener();
+
+	}
+
+	private void setInitYear(int currentYear) {
+
+		for (int i = 0; i < yearStop.getAdapter().getCount(); i++) {
+			if (yearStop.getAdapter().getItem(i).toString().contains(String.valueOf(currentYear))) {
+				yearStart.setSelection(i);
+				yearStop.setSelection(i);
+				break;
+			}
+		}
 
 	}
 
@@ -250,19 +218,15 @@ public class SelectIntervalDialog extends Dialog {
 				artMap = (HashMap<String, String>) yearStop.getSelectedItem();
 				String strYearStop = artMap.get("startInterval");
 
-				dataSelStart = strDayStart + "#" + nf3.format(monthStart.getSelectedItemPosition() + 1) + "#"
-						+ strYearStart;
-				dataSelStop = strDayStop + "#" + nf3.format(monthStop.getSelectedItemPosition() + 1) + "#"
-						+ strYearStop;
+				dataSelStart = strDayStart + "#" + nf3.format(monthStart.getSelectedItemPosition() + 1) + "#" + strYearStart;
+				dataSelStop = strDayStop + "#" + nf3.format(monthStop.getSelectedItemPosition() + 1) + "#" + strYearStop;
 
-				if (!isDateValid(strDayStart + "." + nf3.format(monthStart.getSelectedItemPosition() + 1) + "."
-						+ strYearStart)) {
+				if (!isDateValid(strDayStart + "." + nf3.format(monthStart.getSelectedItemPosition() + 1) + "." + strYearStart)) {
 					Toast.makeText(context, "Data inceput interval este invalida!", Toast.LENGTH_SHORT).show();
 					return;
 				}
 
-				if (!isDateValid(strDayStop + "." + nf3.format(monthStop.getSelectedItemPosition() + 1) + "."
-						+ strYearStop)) {
+				if (!isDateValid(strDayStop + "." + nf3.format(monthStop.getSelectedItemPosition() + 1) + "." + strYearStop)) {
 					Toast.makeText(context, "Data sfarsit interval este invalida!", Toast.LENGTH_SHORT).show();
 					return;
 				}
