@@ -27,6 +27,8 @@ public class PretArticolGed {
 	private double discMaxKA;
 	private String impachetare;
 	private String istoricPret;
+	private double valTrap;
+	private String errMsg;
 
 	public String getPret() {
 		return pret;
@@ -226,6 +228,22 @@ public class PretArticolGed {
 
 	public void setIstoricPret(String istoricPret) {
 		this.istoricPret = istoricPret;
+	}
+
+	public double getValTrap() {
+		return valTrap;
+	}
+
+	public void setValTrap(double valTrap) {
+		this.valTrap = valTrap;
+	}
+
+	public String getErrMsg() {
+		return errMsg;
+	}
+
+	public void setErrMsg(String errMsg) {
+		this.errMsg = errMsg;
 	}
 
 }

@@ -13,12 +13,11 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import connectors.ConnectionStrings;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
+import connectors.ConnectionStrings;
 
 public class WebServiceCall extends AsyncTask<Void, Void, String> {
 	String errMessage = "";
@@ -65,6 +64,9 @@ public class WebServiceCall extends AsyncTask<Void, Void, String> {
 			androidHttpTransport
 					.call(ConnectionStrings.getInstance().getNamespace() + methodName, envelope, headerList);
 			Object result = envelope.getResponse();
+			
+			
+			
 			response = result.toString();
 		} catch (Exception e) {
 			errMessage = e.getMessage();

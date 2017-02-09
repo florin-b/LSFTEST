@@ -250,20 +250,19 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	}
 
 	private boolean checkCNP(boolean showValidMessage) {
-		if (txtCNPClient.getText().toString().trim().length() > 0) {
-			if (UtilsCheck.isCnpValid(txtCNPClient.getText().toString().trim())) {
 
-				if (showValidMessage)
-					Toast.makeText(getApplicationContext(), "CNP valid", Toast.LENGTH_SHORT).show();
+		if (UtilsCheck.isCnpValid(txtCNPClient.getText().toString().trim())) {
 
-				return true;
-			} else {
+			if (showValidMessage)
+				Toast.makeText(getApplicationContext(), "CNP valid", Toast.LENGTH_SHORT).show();
 
+			return true;
+		} else {
+
+			if (showValidMessage)
 				Toast.makeText(getApplicationContext(), "CNP invalid", Toast.LENGTH_SHORT).show();
-				return false;
-			}
+			return false;
 		}
-		return true;
 
 	}
 
@@ -519,9 +518,14 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 						return;
 					}
 
-					if (radioClPF.isChecked()) {
-						if (!checkCNP(false))
-							return;
+					if (radioClPF.isChecked() && checkFacturaPF.isChecked() && !checkCNP(false) && !UtilsUser.isUserSite()) {
+						Toast.makeText(getApplicationContext(), "Pentru emiterea facturii cnp-ul este obligatoriu.", Toast.LENGTH_SHORT).show();
+						return;
+					}
+
+					if (radioClPF.isChecked() && UtilsUser.isUserSite() && hasCnp() && !checkCNP(false)) {
+						Toast.makeText(getApplicationContext(), "CNP invalid", Toast.LENGTH_SHORT).show();
+						return;
 					}
 
 					if (radioClPF.isChecked()) {
@@ -529,32 +533,63 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 						DateLivrare.getInstance().setTipPersClient("PF");
 
 						if (!checkFacturaPF.isChecked()) {
-							CreareComandaGed.codClientVar = InfoStrings.getClientGed_FaraFactura(UserInfo.getInstance().getUnitLog());
+
+							if (UtilsUser.isConsWood()) {
+								CreareComandaGed.codClientVar = InfoStrings.getClientGenericGedWood_faraFact(UserInfo.getInstance().getUnitLog(), "PF");
+							} else {
+								if (UtilsUser.isUserExceptieCONSGED())
+									CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed_CONSGED_faraFactura(UserInfo.getInstance().getUnitLog(),
+											"PF");
+								else
+									CreareComandaGed.codClientVar = InfoStrings.getClientGed_FaraFactura(UserInfo.getInstance().getUnitLog());
+
+							}
+
 							DateLivrare.getInstance().setFacturaCmd(false);
+
 						} else {
+
+							if (UtilsUser.isUserSite()) {
+
+								if (hasCnp())
+									CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PF");
+								else
+									CreareComandaGed.codClientVar = InfoStrings.getClientCVO_cuFact_faraCnp(UserInfo.getInstance().getUnitLog(), "PF");
+
+							}
+
+							else {
+								if (UtilsUser.isConsWood())
+									CreareComandaGed.codClientVar = InfoStrings.getClientGenericGedWood(UserInfo.getInstance().getUnitLog(), "PF");
+								else {
+									if (UtilsUser.isUserExceptieCONSGED())
+										CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed_CONSGED(UserInfo.getInstance().getUnitLog(), "PF");
+									else
+										CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PF");
+								}
+							}
 
 							DateLivrare.getInstance().setFacturaCmd(true);
 
-							if (UtilsUser.isConsWood())
-								CreareComandaGed.codClientVar = InfoStrings.getClientGenericGedWood(UserInfo.getInstance().getUnitLog(), "PF");
-							else {
-								if (UtilsUser.isUserExceptieCONSGED())
-									CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed_CONSGED(UserInfo.getInstance().getUnitLog(), "PF");
-								else
-									CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PF");
-							}
 						}
 
+						CreareComandaGed.cnpClient = txtCNPClient.getText().toString().trim();
+						
 					}
 
 					if (radioClPJ.isChecked()) {
 						CreareComandaGed.tipClient = "PJ";
 						DateLivrare.getInstance().setTipPersClient("PJ");
 
+						CreareComandaGed.cnpClient = txtCNPClient.getText().toString().trim();
+
 						if (UtilsUser.isConsWood())
 							CreareComandaGed.codClientVar = InfoStrings.getClientGenericGedWood(UserInfo.getInstance().getUnitLog(), "PJ");
 						else {
 							if (checkPlatTva.isChecked()) {
+
+								CreareComandaGed.cnpClient = "RO" + txtCNPClient.getText().toString().trim();
+
 								if (UtilsUser.isUserExceptieCONSGED())
 									CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed_CONSGED(UserInfo.getInstance().getUnitLog(), "PJ");
 								else
@@ -581,10 +616,12 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 						CreareComandaGed.rezervStoc = false;
 
 					CreareComandaGed.numeClientVar = txtNumeClientGed.getText().toString().trim();
-					CreareComandaGed.cnpClient = txtCNPClient.getText().toString().trim();
 
 					if (layoutTextJ.getVisibility() == View.VISIBLE)
 						CreareComandaGed.codJ = txtCodJ.getText().toString().trim();
+
+					
+
 				}
 
 				if (radioClDistrib.isChecked()) {
@@ -610,6 +647,10 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			}
 		});
 
+	}
+
+	private boolean hasCnp() {
+		return !txtCNPClient.getText().toString().isEmpty();
 	}
 
 	private void setListViewClientiListener() {

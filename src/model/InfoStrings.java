@@ -525,6 +525,215 @@ public class InfoStrings {
 
 	}
 
+	public static String getClientGenericGedWood_faraFact(String filiala, String tipClient) {
+		String codClient = "00";
+
+		if (tipClient.equals("PF")) {
+			if (filiala.equals("AG10"))
+				codClient = "4119000320";
+
+			if (filiala.equals("BH10"))
+				codClient = "4119000321";
+
+			if (filiala.equals("BV10"))
+				codClient = "4119000322";
+
+			if (filiala.equals("CJ10"))
+				codClient = "4119000323";
+
+			if (filiala.equals("CT10"))
+				codClient = "4119000324";
+
+			if (filiala.equals("DJ10"))
+				codClient = "4119000325";
+
+			if (filiala.equals("GL10"))
+				codClient = "4119000326";
+
+			if (filiala.equals("IS10"))
+				codClient = "4119000327";
+
+		}
+
+		return codClient;
+
+	}
+
+	public static String getClientGenericGed_CONSGED_faraFactura(String filiala, String tipClient) {
+		String codClient = "00";
+
+		if (tipClient.equals("PF")) {
+			if (filiala.equals("AG10"))
+				codClient = "4119000286";
+
+			if (filiala.equals("BH10"))
+				codClient = "4119000290";
+
+			if (filiala.equals("CJ10"))
+				codClient = "4119000295";
+
+			if (filiala.equals("CT10"))
+				codClient = "4119000296";
+
+			if (filiala.equals("DJ10"))
+				codClient = "4119000297";
+
+			if (filiala.equals("GL10"))
+				codClient = "4119000298";
+
+		}
+
+		return codClient;
+	}
+
+	public static String getClientCVO_cuFact_faraCnp(String filiala, String tipClient) {
+
+		String codClient = "00";
+
+		if (filiala.equals("AG10"))
+			codClient = "4119000386";
+
+		if (filiala.equals("BC10"))
+			codClient = "4119000388";
+
+		if (filiala.equals("BH10"))
+			codClient = "4119000390";
+
+		if (filiala.equals("BV10"))
+			codClient = "4119000393";
+
+		if (filiala.equals("BZ10"))
+			codClient = "4119000394";
+
+		if (filiala.equals("CJ10"))
+			codClient = "4119000395";
+
+		if (filiala.equals("CT10"))
+			codClient = "4119000396";
+
+		if (filiala.equals("DJ10"))
+			codClient = "4119000397";
+
+		if (filiala.equals("GL10"))
+			codClient = "4119000398";
+
+		if (filiala.equals("HD10"))
+			codClient = "4119000399";
+
+		if (filiala.equals("IS10"))
+			codClient = "4119000400";
+
+		if (filiala.equals("MM10"))
+			codClient = "4119000401";
+
+		if (filiala.equals("MS10"))
+			codClient = "4119000402";
+
+		if (filiala.equals("NT10"))
+			codClient = "4119000403";
+
+		if (filiala.equals("PH10"))
+			codClient = "4119000404";
+
+		if (filiala.equals("SB10"))
+			codClient = "4119000405";
+
+		if (filiala.equals("TM10"))
+			codClient = "4119000406";
+
+		if (filiala.equals("VN10"))
+			codClient = "4119000407";
+
+		if (filiala.equals("BU13")) // Andronache
+			codClient = "4119000387";
+
+		if (filiala.equals("BU10")) // Glina
+			codClient = "4119000389";
+
+		if (filiala.equals("BU11")) // Militari
+			codClient = "4119000391";
+
+		if (filiala.equals("BU12")) // Otopeni
+			codClient = "4119000392";
+
+		return codClient;
+
+	}
+
+	public static String getClientGed_FaraFactura(String filiala) {
+
+		String codClient = "00";
+
+		if (filiala.equals("AG10"))
+			codClient = "4119000365";
+
+		if (filiala.equals("BC10"))
+			codClient = "4119000363";
+
+		if (filiala.equals("BH10"))
+			codClient = "4119000366";
+
+		if (filiala.equals("BV10"))
+			codClient = "4119000372";
+
+		if (filiala.equals("BZ10"))
+			codClient = "4119000374";
+
+		if (filiala.equals("CJ10"))
+			codClient = "4119000375";
+
+		if (filiala.equals("CT10"))
+			codClient = "4119000376";
+
+		if (filiala.equals("DJ10"))
+			codClient = "4119000367";
+
+		if (filiala.equals("GL10"))
+			codClient = "4119000373";
+
+		if (filiala.equals("HD10"))
+			codClient = "4119000377";
+
+		if (filiala.equals("IS10"))
+			codClient = "4119000380";
+
+		if (filiala.equals("MM10"))
+			codClient = "4119000382";
+
+		if (filiala.equals("MS10"))
+			codClient = "4119000383";
+
+		if (filiala.equals("NT10"))
+			codClient = "4119000384";
+
+		if (filiala.equals("PH10"))
+			codClient = "4119000385";
+
+		if (filiala.equals("SB10"))
+			codClient = "4119000378";
+
+		if (filiala.equals("TM10"))
+			codClient = "4119000381";
+
+		if (filiala.equals("VN10"))
+			codClient = "4119000379";
+
+		if (filiala.equals("BU13")) // Andronache
+			codClient = "4119000362";
+
+		if (filiala.equals("BU10")) // Glina
+			codClient = "4119000364";
+
+		if (filiala.equals("BU11")) // Militari
+			codClient = "4119000370";
+
+		if (filiala.equals("BU12")) // Otopeni
+			codClient = "4119000371";
+
+		return codClient;
+
+	}
+
 	public static String getClientGenericGedWood(String filiala, String tipClient) {
 		String codClient = "00";
 
@@ -872,8 +1081,8 @@ public class InfoStrings {
 
 	}
 
-	public static String getClientGed_FaraFactura(String filiala) {
-		
+	public static String getClientGed_FaraFactura_OBSOLETE(String filiala) {
+
 		String codClient = "00";
 
 		if (filiala.equals("AG10"))

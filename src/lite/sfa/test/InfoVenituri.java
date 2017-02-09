@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-import beans.BeanInfoVenituri;
-
 import listeners.AsyncTaskListener;
 import model.HandleJSONData;
 import model.UserInfo;
@@ -30,23 +28,23 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import beans.BeanInfoVenituri;
 
 public class InfoVenituri extends Activity implements AsyncTaskListener {
 
 	Spinner spinnerLuna;
 	Spinner spinnerAn, spinnerFiliale;
 	Button btnAfisResult;
-	String[] strArrayLuna = { "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie", "Iulie", "August",
-			"Septembrie", "Octombrie", "Noiembrie", "Decembrie" };
-	
+	String[] strArrayLuna = { "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie", "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie",
+			"Decembrie" };
+
 	String[] strArrayAn = { "2013", "2014", "2015", "2016", "2017" };
 
-	String[] strArrayNumeFiliale = { "Andronache", "Bacau", "Baia-Mare", "Brasov", "Constanta", "Cluj", "Craiova",
-			"Focsani", "Galati", "Glina", "Iasi", "Militari", "Oradea", "Otopeni", "Piatra-Neamt", "Pitesti",
-			"Ploiesti", "Timisoara", "Tg. Mures" };
-	
-	String[] strArrayCodFiliale = { "BU13", "BC10", "MM10", "BV10", "CT10", "CJ10", "DJ10", "VN10", "GL10", "BU10",
-			"IS10", "BU11", "BH10", "BU12", "NT10", "AG10", "PH10", "TM10", "MS10" };
+	String[] strArrayNumeFiliale = { "Andronache", "Bacau", "Baia-Mare", "Brasov", "Constanta", "Cluj", "Craiova", "Focsani", "Galati", "Glina", "Iasi",
+			"Militari", "Oradea", "Otopeni", "Piatra-Neamt", "Pitesti", "Ploiesti", "Timisoara", "Tg. Mures" };
+
+	String[] strArrayCodFiliale = { "BU13", "BC10", "MM10", "BV10", "CT10", "CJ10", "DJ10", "VN10", "GL10", "BU10", "IS10", "BU11", "BH10", "BU12", "NT10",
+			"AG10", "PH10", "TM10", "MS10" };
 
 	LinearLayout layoutSelFiliala, layoutHeaderVenituri;
 	SimpleAdapter adapterFiliale, adapterVenituri;
@@ -56,16 +54,13 @@ public class InfoVenituri extends Activity implements AsyncTaskListener {
 	ArrayList<HashMap<String, String>> arrayListVenituri = new ArrayList<HashMap<String, String>>();
 	private TextView textVenit1, textVenit2, textVenitTotal, textMarja1, textMarja2, textMarjaTotal;
 
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 
 		setTheme(R.style.LRTheme);
 		setContentView(R.layout.info_venituri_layout);
-		
-		
+
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
 		ActionBar actionBar = getActionBar();
@@ -75,13 +70,11 @@ public class InfoVenituri extends Activity implements AsyncTaskListener {
 		spinnerLuna = (Spinner) findViewById(R.id.spinnerLuna);
 		spinnerAn = (Spinner) findViewById(R.id.spinnerAn);
 
-		ArrayAdapter<String> adapterSpinnerLuna = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
-				strArrayLuna);
+		ArrayAdapter<String> adapterSpinnerLuna = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strArrayLuna);
 		adapterSpinnerLuna.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerLuna.setAdapter(adapterSpinnerLuna);
 
-		ArrayAdapter<String> adapterSpinnerAn = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
-				strArrayAn);
+		ArrayAdapter<String> adapterSpinnerAn = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strArrayAn);
 		adapterSpinnerAn.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerAn.setAdapter(adapterSpinnerAn);
 
@@ -119,10 +112,9 @@ public class InfoVenituri extends Activity implements AsyncTaskListener {
 		layoutHeaderVenituri.setVisibility(View.INVISIBLE);
 
 		listResultsVenituri = (ListView) findViewById(R.id.listResultsVenituri);
-		adapterVenituri = new SimpleAdapter(this, arrayListVenituri, R.layout.customrow_info_venituri, new String[] {
-				"tipInterval", "textVenitNetP", "MP", "textVenitNetP1", "MP1", "textVenitNetPT", "MPT" }, new int[] {
-				R.id.textTipInterval, R.id.textVenitNetP, R.id.textMP, R.id.textVenitNetP1, R.id.textMP1,
-				R.id.textVenitNetTotal, R.id.textMTotal });
+		adapterVenituri = new SimpleAdapter(this, arrayListVenituri, R.layout.customrow_info_venituri, new String[] { "tipInterval", "textVenitNetP", "MP",
+				"textVenitNetP1", "MP1", "textVenitNetPT", "MPT" }, new int[] { R.id.textTipInterval, R.id.textVenitNetP, R.id.textMP, R.id.textVenitNetP1,
+				R.id.textMP1, R.id.textVenitNetTotal, R.id.textMTotal });
 
 		listResultsVenituri.setAdapter(adapterVenituri);
 
@@ -168,8 +160,8 @@ public class InfoVenituri extends Activity implements AsyncTaskListener {
 	private void populateListFiliale() {
 		spinnerFiliale.setOnItemSelectedListener(new OnSelectFiliala());
 		ArrayList<HashMap<String, String>> listFiliale = new ArrayList<HashMap<String, String>>();
-		adapterFiliale = new SimpleAdapter(this, listFiliale, R.layout.rowlayoutagenti, new String[] { "numeFiliala",
-				"codFiliala" }, new int[] { R.id.textNumeAgent, R.id.textCodAgent });
+		adapterFiliale = new SimpleAdapter(this, listFiliale, R.layout.rowlayoutagenti, new String[] { "numeFiliala", "codFiliala" }, new int[] {
+				R.id.textNumeAgent, R.id.textCodAgent });
 
 		HashMap<String, String> temp;
 		temp = new HashMap<String, String>(1, 0.75f);
@@ -202,7 +194,7 @@ public class InfoVenituri extends Activity implements AsyncTaskListener {
 		}
 
 		public void onNothingSelected(AdapterView<?> arg0) {
-			// TODO Auto-generated method stub
+			
 
 		}
 
@@ -296,20 +288,16 @@ public class InfoVenituri extends Activity implements AsyncTaskListener {
 
 				if (UserInfo.getInstance().getCodDepart().equals("04")) {
 					temp.put("tipInterval", getIntervalDesc(Integer.valueOf(infoVenituriArray.get(i).getId())));
-					temp.put("textVenitNetP",
-							nf2.format(Double.parseDouble(infoVenituriArray.get(i).getVenitNetP040())));
+					temp.put("textVenitNetP", nf2.format(Double.parseDouble(infoVenituriArray.get(i).getVenitNetP040())));
 					temp.put("MP", nf2.format(Double.parseDouble(infoVenituriArray.get(i).getmP040())));
-					temp.put("textVenitNetP1",
-							nf2.format(Double.parseDouble(infoVenituriArray.get(i).getVenitNetP041())));
+					temp.put("textVenitNetP1", nf2.format(Double.parseDouble(infoVenituriArray.get(i).getVenitNetP041())));
 					temp.put("MP1", nf2.format(Double.parseDouble(infoVenituriArray.get(i).getmP041())));
 					temp.put(
 							"textVenitNetPT",
 							nf2.format(Double.parseDouble(infoVenituriArray.get(i).getVenitNetP040())
 									+ Double.parseDouble(infoVenituriArray.get(i).getVenitNetP041())));
-					temp.put(
-							"MPT",
-							nf2.format(Double.parseDouble(infoVenituriArray.get(i).getmP040())
-									+ Double.parseDouble(infoVenituriArray.get(i).getmP041())));
+					temp.put("MPT",
+							nf2.format(Double.parseDouble(infoVenituriArray.get(i).getmP040()) + Double.parseDouble(infoVenituriArray.get(i).getmP041())));
 
 				} else {
 					temp.put("tipInterval", getIntervalDesc(Integer.valueOf(infoVenituriArray.get(i).getId())));
@@ -372,7 +360,7 @@ public class InfoVenituri extends Activity implements AsyncTaskListener {
 
 	public void onTaskComplete(String methodName, Object result) {
 		if (methodName.equals("getInfoVenituriData")) {
-			populateResultList((String)result);
+			populateResultList((String) result);
 		}
 
 	}

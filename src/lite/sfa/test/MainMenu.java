@@ -45,6 +45,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -100,14 +101,17 @@ public class MainMenu extends Activity {
 			R.drawable.client_info, R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.location_icon, R.drawable.line_chart_icon,
 			R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
+	// Robert 14.12.2016 - Clienti Facturati
 	public String[] btnNamesKA = { "Utilizator", "Creare comanda", "Modificare comanda", "Afisare comanda", "Cmz.blocate limita credit", "Creare CLP",
 			"Afisare CLP", "Creare DL", "Afisare DL", "Obiective", "Retur paleti", "Stare retur paleti", "Retur comenzi", "Vanzari", "Neincasate", "Stocuri",
-			"Preturi", "Stare comenzi", "Info client", "Adrese clienti", "Despre", "Iesire" };
-
+			"Preturi", "Stare comenzi", "Info client", "Clienti facturati", "Adrese clienti", "Despre", "Iesire" };
+	// Robert-adaugat drawable client_info pentru clienti facturati
 	public int[] btnImageKA = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.modif_icon, R.drawable.preview_icon, R.drawable.cmd_bloc,
 			R.drawable.clp, R.drawable.afis_clp, R.drawable.box_orange_48, R.drawable.box_yellow_48, R.drawable.colosseum, R.drawable.retur_marfa,
 			R.drawable.status_retur_48, R.drawable.retur_comanda, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon,
-			R.drawable.status, R.drawable.client_info, R.drawable.location_icon, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
+			R.drawable.status, R.drawable.client_info, R.drawable.clienti_inactivi, R.drawable.location_icon, R.drawable.despre_icon, R.drawable.exit_icon,
+			R.drawable.blank };
+	// ///// sfarsit //////
 
 	public String[] btnNamesDK = { "Utilizator", "Afisare comanda", "Cmz.blocate limita credit", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi",
 			"Info client", "Adrese clienti", "Despre", "Iesire" };
@@ -171,9 +175,9 @@ public class MainMenu extends Activity {
 		checkStaticVars();
 
 		gridview = (GridView) findViewById(R.id.gridview);
-		
+
 		ButtonAdapter btnAdapter = new ButtonAdapter(this);
-		
+
 		gridview.setAdapter(btnAdapter);
 
 		animation = new AlphaAnimation(1, 0);
@@ -274,15 +278,26 @@ public class MainMenu extends Activity {
 
 		public View getView(int position, View convertView, ViewGroup parent) {
 
-			
-			
 			Button btn;
 			Typeface font = Typeface.SERIF;
 
 			if (convertView == null) {
 
 				btn = new Button(mContext);
-				btn.setLayoutParams(new GridView.LayoutParams(LayoutParams.MATCH_PARENT, 120));
+
+				// Add Petru
+				DisplayMetrics metrics = new DisplayMetrics();
+				getWindowManager().getDefaultDisplay().getMetrics(metrics);
+				int width = metrics.widthPixels;
+				int height = metrics.heightPixels;
+
+				if ((width <= 1024) && (height <= 552)) {
+					btn.setLayoutParams(new GridView.LayoutParams(LayoutParams.MATCH_PARENT, 120));
+				}
+
+				else {
+					btn.setLayoutParams(new GridView.LayoutParams(LayoutParams.MATCH_PARENT, 150));
+				}
 
 			} else {
 				btn = (Button) convertView;
@@ -658,8 +673,6 @@ public class MainMenu extends Activity {
 
 				}
 
-				
-
 				if (selectedBtnName.equalsIgnoreCase("Comenzi conditionate")) {
 
 					Intent nextScreen = new Intent(MainMenu.this, ComenziConditionate.class);
@@ -672,6 +685,15 @@ public class MainMenu extends Activity {
 				if (selectedBtnName.equalsIgnoreCase("Despre")) {
 
 					Intent nextScreen = new Intent(MainMenu.this, Update.class);
+					startActivity(nextScreen);
+					finish();
+
+				}
+
+				// Clienti facturati KA - Robert
+				if (selectedBtnName.equalsIgnoreCase("Clienti facturati")) {
+
+					Intent nextScreen = new Intent(MainMenu.this, ClientiFacturati.class);
 					startActivity(nextScreen);
 					finish();
 
@@ -1030,7 +1052,6 @@ public class MainMenu extends Activity {
 
 		@Override
 		protected void onPostExecute(String result) {
-			
 
 			try {
 				if (dialog != null) {
@@ -1108,7 +1129,6 @@ public class MainMenu extends Activity {
 
 			// butonul "Comenzi conditionate"
 			this.cmdCondBtn = (Button) gridview.findViewById(getBtnPosByName("Comenzi conditionate"));
-		
 
 			if (tipRes[0].equals("1")) {
 				this.modifCmdBtn.startAnimation(animation);

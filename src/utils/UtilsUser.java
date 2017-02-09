@@ -19,6 +19,10 @@ public class UtilsUser {
 		return UserInfo.getInstance().getTipUser().equals("KA") || UserInfo.getInstance().getTipUser().equals("DK");
 	}
 
+	public static boolean isUserKA() {
+		return UserInfo.getInstance().getTipUser().equals("KA");
+	}
+
 	public static boolean isCV() {
 		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM");
 	}

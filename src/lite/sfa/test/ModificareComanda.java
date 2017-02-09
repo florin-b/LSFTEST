@@ -51,6 +51,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -67,11 +68,12 @@ import beans.BeanConditii;
 import beans.BeanConditiiArticole;
 import beans.BeanConditiiHeader;
 import beans.DateLivrareAfisare;
+import dialogs.AprobariDialog;
 import enums.EnumComenziDAO;
 
 public class ModificareComanda extends Activity implements AsyncTaskListener, ComenziDAOListener, ArticolModificareListener, Observer {
 
-	Button quitBtn, stocBtn, clientBtn, articoleBtn, livrareBtn, salveazaComandaBtn, stergeComandaBtn, btnCommentariiCond;
+	Button quitBtn, stocBtn, clientBtn, articoleBtn, livrareBtn, salveazaComandaBtn, stergeComandaBtn, btnCommentariiCond, aprobareBtn;
 	String filiala = "", nume = "", cod = "", globalSubCmp = "0";
 	public static String unitLog = "";
 	public static String numeDepart = "";
@@ -207,6 +209,13 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 		this.stergeComandaBtn = (Button) findViewById(R.id.delCmdBtn);
 
+		aprobareBtn = (Button) findViewById(R.id.aprobareBtn);
+
+		if (UtilsUser.isUserKA()) {
+			aprobareBtn.setVisibility(View.VISIBLE);
+			openAprobareDialog();
+		}
+
 		addListenerDelCmdBtn();
 
 		mProgress = (ProgressBar) findViewById(R.id.progress_bar_savecmd);
@@ -214,6 +223,26 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 		loadListComenzi();
 
+	}
+
+	public void openAprobareDialog() {
+		aprobareBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				try {
+
+					AprobariDialog aprove = new AprobariDialog(ModificareComanda.this);
+					aprove.getAproveData(selectedCmd);
+					aprove.show();
+
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
+
+			}
+		});
 	}
 
 	private void CreateMenu(Menu menu) {
@@ -567,7 +596,12 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		if (InfoStrings.getClientGenericGed(tempDistribUL, "PF").equals(selectedClientCode)
 				|| InfoStrings.getClientGenericGed(tempDistribUL, "PJ").equals(selectedClientCode)
 				|| InfoStrings.getClientGenericGedWood(tempDistribUL, "PF").equals(selectedClientCode)
-				|| InfoStrings.getClientGenericGedWood(tempDistribUL, "PJ").equals(selectedClientCode))
+				|| InfoStrings.getClientGenericGedWood(tempDistribUL, "PJ").equals(selectedClientCode)
+				|| InfoStrings.getClientGenericGedWood_faraFact(tempDistribUL, "PF").equals(selectedClientCode)
+				|| InfoStrings.getClientGenericGed_CONSGED_faraFactura(tempDistribUL, "PF").equals(selectedClientCode)
+				|| InfoStrings.getClientCVO_cuFact_faraCnp(tempDistribUL, "").equals(selectedClientCode)
+				|| InfoStrings.getClientGed_FaraFactura(tempDistribUL).equals(selectedClientCode))
+
 			return true;
 		else
 			return false;
@@ -1244,10 +1278,14 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			salveazaComandaBtn.setVisibility(View.VISIBLE);
 			stergeComandaBtn.setVisibility(View.VISIBLE);
 
+			if (UtilsUser.isUserKA())
+				aprobareBtn.setVisibility(View.VISIBLE);
+
 		} else {
 			spinnerComenzi.setVisibility(View.INVISIBLE);
 			salveazaComandaBtn.setVisibility(View.INVISIBLE);
 			stergeComandaBtn.setVisibility(View.INVISIBLE);
+			aprobareBtn.setVisibility(View.INVISIBLE);
 
 		}
 

@@ -1,11 +1,15 @@
 package utils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import lite.sfa.test.R;
+import model.UserInfo;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,18 +44,33 @@ public class UtilsGeneral {
 	public static String[] tipReducere = { "1 factura (red. in pret)", "2 facturi", "1 factura (red. separat)" };
 
 	public static String[] getDepoziteDistributie() {
-		return depoziteDISTRIB;
+		List<String> listDepozite = new ArrayList<String>(Arrays.asList(depoziteDISTRIB));
+
+		if (UserInfo.getInstance().getCodDepart().equals("02"))
+			listDepozite.add("92V1");
+
+		return listDepozite.toArray(new String[listDepozite.size()]);
 	}
 
 	public static String[] getDepoziteGed() {
-		String[] depoziteGed = new String[depoziteDISTRIB.length + 2];
 
-		System.arraycopy(depoziteDISTRIB, 0, depoziteGed, 0, depoziteDISTRIB.length);
+		List<String> listDepozite = new ArrayList<String>(Arrays.asList(depoziteDISTRIB));
 
-		depoziteGed[depoziteGed.length - 2] = "MAV1";
-		depoziteGed[depoziteGed.length - 1] = "MAV2";
+		listDepozite.add("MAV1");
+		listDepozite.add("MAV2");
+		
 
-		return depoziteGed;
+		return listDepozite.toArray(new String[listDepozite.size()]);
+
+	}
+
+	public static String[] getDepoziteSite() {
+		List<String> listDepozite = new ArrayList<String>(Arrays.asList(getDepoziteGed()));
+		listDepozite.add("92V1");
+		listDepozite.add("95V1");
+
+		return listDepozite.toArray(new String[listDepozite.size()]);
+
 	}
 
 	public static String[] getDepoziteMav() {
@@ -170,7 +189,6 @@ public class UtilsGeneral {
 		if (codPlata.equals("E1")) {
 			tipPlata = "Numerar sofer";
 		}
-		
 
 		return tipPlata;
 

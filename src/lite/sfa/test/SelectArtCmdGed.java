@@ -21,6 +21,7 @@ import model.OperatiiArticol;
 import model.OperatiiArticolFactory;
 import model.UserInfo;
 import utils.DepartamentAgent;
+import utils.UtilsArticole;
 import utils.UtilsFormatting;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
@@ -138,7 +139,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	private ArrayAdapter<String> adapterSpinnerDepozite;
 	private LinearLayout layoutPretGEDFTva;
 	private TextView textPretGEDFTva, textTransport;
-	private double procentTVA, procentTransport;
+	private double procentTVA, procentTransport, valoareTransport;
 	private PretArticolGed selectedArticol;
 	private NumberFormat nForm2;
 	private ArticolDB articolDBSelected;
@@ -245,6 +246,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		if (isWood())
 			arrayListDepozite.addAll(Arrays.asList(UtilsGeneral.getDepoziteWood()));
+		else if (UtilsUser.isUserSite())
+			arrayListDepozite.addAll(Arrays.asList(UtilsGeneral.getDepoziteSite()));
 		else
 			arrayListDepozite.addAll(Arrays.asList(UtilsGeneral.getDepoziteGed()));
 
@@ -381,8 +384,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 	private void CreateMenu(Menu menu) {
 
-		// if (UtilsUser.isUserExceptieBV90Ged() || UtilsUser.isUserSite()) {
-		if (UtilsUser.isUserExceptieBV90Ged()) {
+		if (UtilsUser.isUserExceptieBV90Ged() || UtilsUser.isUserSite()) {
 			MenuItem mnu1 = menu.add(0, 0, 0, "Filiala");
 			{
 				mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -501,7 +503,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 				if (isChecked) {
 					adapterSpinnerDepozite.clear();
-					adapterSpinnerDepozite.addAll(UtilsGeneral.getDepoziteGed());
+					adapterSpinnerDepozite.addAll(UtilsGeneral.getDepoziteSite());
 					spinnerDepoz.setSelection(0);
 					isFilialaMavSite = false;
 				}
@@ -511,7 +513,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		final RadioButton radioFilMav = (RadioButton) dialogSelFilArt.findViewById(R.id.radio2);
 
-		if (listDepozite.size() == 2) {
+		if (HelperUserSite.hasDepozitMagazin(listDepozite)) {
 			radioFilMav.setText("Magazin");
 			radioFilMav.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -531,18 +533,22 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		final RadioButton radioFilBV90 = (RadioButton) dialogSelFilArt.findViewById(R.id.radio3);
 
-		radioFilBV90.setText("BV90");
-		radioFilBV90.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		if (listDepozite.contains("BV90")) {
+			radioFilBV90.setText("BV90");
+			radioFilBV90.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-				if (isChecked) {
-					adapterSpinnerDepozite.clear();
-					adapterSpinnerDepozite.addAll(UtilsGeneral.getDepoziteGed());
-					spinnerDepoz.setSelection(0);
-					isFilialaMavSite = false;
+					if (isChecked) {
+						adapterSpinnerDepozite.clear();
+						adapterSpinnerDepozite.addAll(UtilsGeneral.getDepoziteSite());
+						spinnerDepoz.setSelection(0);
+						isFilialaMavSite = false;
+					}
 				}
-			}
-		});
+			});
+		} else {
+			radioFilBV90.setVisibility(View.GONE);
+		}
 
 		if (CreareComandaGed.filialaAlternativa.equals(UserInfo.getInstance().getUnitLog()))
 			radioFilAg.setChecked(true);
@@ -661,7 +667,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 						textPretGED.setText(nf2.format(initPrice / globalCantArt * valMultiplu));
 						textPretGEDFTva.setText(nf2.format((initPrice / globalCantArt * valMultiplu) / procentTVA));
-						textTransport.setText(nForm2.format(initPrice * (procentTransport / 100)));
+						textTransport.setText(nForm2.format(initPrice * (procentTransport / 100) + valoareTransport));
 
 					} else {
 
@@ -683,7 +689,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 						textPretGED.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu)));
 						textPretGEDFTva.setText(nf2.format((initPrice / globalCantArt * valMultiplu) / procentTVA));
-						textTransport.setText(nForm2.format(initPrice * (procentTransport / 100)));
+						textTransport.setText(nForm2.format(initPrice * (procentTransport / 100) + valoareTransport));
 
 					}
 				}
@@ -732,7 +738,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 										finalPrice = newPr;
 										textPretGEDFTva.setText(nf2.format(finalPrice / procentTVA));
 
-										textTransport.setText(nForm2.format(((finalPrice / valMultiplu) * globalCantArt) * (procentTransport / 100)));
+										textTransport.setText(nForm2.format(((finalPrice / valMultiplu) * globalCantArt) * (procentTransport / 100)
+												+ valoareTransport));
 
 									}
 								}
@@ -740,7 +747,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 							} else {
 								txtPretArt.setText(nf2.format(initPrice / globalCantArt * valMultiplu));
 								textPretGEDFTva.setText(nf2.format((initPrice / globalCantArt * valMultiplu) / procentTVA));
-								textTransport.setText(nForm2.format((initPrice) * (procentTransport / 100)));
+								textTransport.setText(nForm2.format((initPrice) * (procentTransport / 100) + valoareTransport));
 
 							}
 
@@ -756,7 +763,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 								txtPretArt.setText(nf2.format(procR));
 								finalPrice = Double.parseDouble(textProcRed.getText().toString());
 								textPretGEDFTva.setText(nf2.format(finalPrice / procentTVA));
-								textTransport.setText(nForm2.format(((finalPrice / valMultiplu) * globalCantArt) * (procentTransport / 100)));
+								textTransport.setText(nForm2.format(((finalPrice / valMultiplu) * globalCantArt) * (procentTransport / 100) + valoareTransport));
 
 							} else {
 								txtPretArt.setText("0");
@@ -957,8 +964,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		clearTextField(txtNumeArticol);
 		resultLayout.setVisibility(View.INVISIBLE);
 
-		// if (UtilsUser.isUserSite() && isFilialaMavSite)
-		// UtilsArticole.getArt111Only(resultsList);
+		if (UtilsUser.isUserSite() && isFilialaMavSite)
+			UtilsArticole.getArt111Only(resultsList);
 
 		CautareArticoleAdapter adapterArticole = new CautareArticoleAdapter(this, resultsList);
 		setListAdapter(adapterArticole);
@@ -1169,7 +1176,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						articol.setNumeArticol(numeArticol);
 						articol.setCodArticol(codArticol);
 						articol.setCantitate(Double.valueOf(cantArticol));
-						articol.setPretUnitGed(Double.valueOf(pretUnitGed));
+						articol.setPretUnitGed(pretUnitGed);
 						articol.setUm(localUnitMas);
 						articol.setDepozit(globalDepozSel);
 						articol.setPretUnitarClient(pretUnitClient);
@@ -1205,7 +1212,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						articol.setPretMediu(pretMediuDistrib);
 						articol.setAdaosMediu(adaosMediuDistrib);
 						articol.setTipArt(tipArticol);
-						articol.setValTransport((articol.getPretUnitarClient() * articol.getCantUmb()) * (selectedArticol.getProcTransport() / 100));
+						articol.setValTransport((articol.getPretUnitarClient() * articol.getCantUmb()) * (selectedArticol.getProcTransport() / 100)
+								+ selectedArticol.getValTrap());
 						articol.setProcTransport(selectedArticol.getProcTransport());
 						articol.setDiscountAg(discMaxAV);
 						articol.setDiscountSd(discMaxSD);
@@ -1365,6 +1373,11 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		txtImpachetare.setText(pretArticol.getImpachetare());
 
+		if (!pretArticol.getErrMsg().isEmpty()) {
+			Toast.makeText(getApplicationContext(), pretArticol.getErrMsg(), Toast.LENGTH_LONG).show();
+			return;
+		}
+
 		if (globalDepozSel.substring(2, 3).equals("V")) {
 			if (initPrice / globalCantArt * valMultiplu < cmpArt) {
 				Toast.makeText(getApplicationContext(), "Pret sub cmp!", Toast.LENGTH_LONG).show();
@@ -1407,7 +1420,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		textPretGEDFTva.setText(nf.format(valoareFaraTva));
 
 		procentTransport = pretArticol.getProcTransport();
-		double pretTransport = (initPrice) * (pretArticol.getProcTransport() / 100);
+		valoareTransport = pretArticol.getValTrap();
+		double pretTransport = (initPrice) * (pretArticol.getProcTransport() / 100) + pretArticol.getValTrap();
 		textTransport.setText(nForm2.format(pretTransport));
 
 		// agentii nu pot modifica pretul
@@ -1703,13 +1717,9 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 				varLocalUnitLog = filialaAlternativa.substring(0, 2) + "1" + filialaAlternativa.substring(3, 4);
 		}
 
-		/*
-		 * if (UtilsUser.isUserSite()) { varLocalUnitLog =
-		 * UtilsUser.getULUserSite(CreareComandaGed.filialaAlternativa,
-		 * globalDepozSel);
-		 * 
-		 * }
-		 */
+		if (UtilsUser.isUserSite()) {
+			varLocalUnitLog = UtilsUser.getULUserSite(CreareComandaGed.filialaAlternativa, globalDepozSel);
+		}
 
 		params.put("codArt", codArticol);
 		params.put("filiala", varLocalUnitLog);

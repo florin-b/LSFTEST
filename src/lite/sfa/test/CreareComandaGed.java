@@ -891,6 +891,10 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				varLocalUnitLog = CreareComandaGed.filialaAlternativa;
 			}
 
+			if (UtilsUser.isUserSite()) {
+				varLocalUnitLog = UtilsUser.getULUserSite(CreareComandaGed.filialaAlternativa, selectedDepozit);
+			}
+
 			params.put("filiala", varLocalUnitLog);
 			params.put("depozit", selectedDepozit);
 			params.put("depart", UserInfo.getInstance().getCodDepart());

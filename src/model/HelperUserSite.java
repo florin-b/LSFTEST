@@ -43,8 +43,12 @@ public class HelperUserSite implements AsyncTaskListener {
 
 		List<String> listDepozite = new ArrayList<String>();
 
-		if (depozite != null && depozite.length() > 0 && depozite.contains(",")) {
-			listDepozite = Arrays.asList(depozite.split(","));
+		if (depozite != null && depozite.trim().length() > 0) {
+
+			if (depozite.contains(","))
+				listDepozite = Arrays.asList(depozite.split(","));
+			else
+				listDepozite.add(depozite);
 
 		}
 
@@ -71,6 +75,20 @@ public class HelperUserSite implements AsyncTaskListener {
 		}
 
 		return UserInfo.getInstance().getUnitLog();
+	}
+
+	public static boolean hasDepozitMagazin(List<String> listDepozite) {
+		if (listDepozite.size() == 0)
+			return false;
+
+		if (listDepozite.size() == 1 && !listDepozite.contains("BV90"))
+			return true;
+
+		if (listDepozite.size() == 1 && listDepozite.contains("BV90"))
+			return false;
+
+		return true;
+
 	}
 
 }
