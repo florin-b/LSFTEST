@@ -55,6 +55,7 @@ import android.widget.Toast;
 import beans.Address;
 import beans.BeanAdresaLivrare;
 import beans.BeanAdreseJudet;
+import beans.GeocodeAddress;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -1049,8 +1050,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		if (strMailAddr.trim().length() == 0)
 			strMailAddr = " ";
 
-		
-
 		if (!(layoutListAdrese.getVisibility() == View.VISIBLE) && !(DateLivrare.getInstance().isAltaAdresa())) {
 			if (dateLivrareInstance.getCodJudet().equals("")) {
 				Toast.makeText(getApplicationContext(), "Selectati judetul!", Toast.LENGTH_SHORT).show();
@@ -1102,7 +1101,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			}
 
 		}
-		
+
 		dateLivrareInstance.setPersContact(pers);
 		dateLivrareInstance.setNrTel(telefon);
 
@@ -1327,7 +1326,11 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	}
 
 	private boolean isAdresaGoogleOk() {
-		return MapUtils.geocodeAddress(getAddressFromForm(), getApplicationContext()).isAdresaValida();
+
+		GeocodeAddress geoAddress = MapUtils.geocodeAddress(getAddressFromForm(), getApplicationContext());
+		DateLivrare.getInstance().setCoordonateAdresa(geoAddress.getCoordinates());
+
+		return geoAddress.isAdresaValida();
 
 	}
 

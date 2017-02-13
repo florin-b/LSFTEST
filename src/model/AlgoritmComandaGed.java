@@ -39,8 +39,6 @@ public class AlgoritmComandaGed {
 
 				if (articol.getPromotie() <= 0) {
 
-					
-
 					pretUnitarClient = articol.getPretUnitarClient();
 
 					if (pretUnitarClient == 0)
@@ -53,8 +51,9 @@ public class AlgoritmComandaGed {
 						pretUnitarGed = pretUnitarClient;
 
 					cantitate = articol.getCantitate();
-					
-					cmp = round(articol.getCmp() * Constants.TVA, 3); // cmp cu tva
+
+					cmp = round(articol.getCmp() * Constants.TVA, 3); // cmp cu
+																		// tva
 
 					marjaBrutaClient += (pretUnitarClient - cmp) * cantitate;
 					articol.setMarjaClient((pretUnitarClient - cmp) * cantitate);
@@ -75,7 +74,7 @@ public class AlgoritmComandaGed {
 
 							double marjaBruta = (pretGed) * articol.getMultiplu() - articol.getCmp() * Constants.TVA;
 
-							pretMediuDistrib = (pretGed) * articol.getMultiplu() - marjaBruta * 0.2;
+							pretMediuDistrib = (pretGed) * articol.getMultiplu() - marjaBruta * 0.19;
 							adaosMediuDistrib = pretMediuDistrib - articol.getCmp() * Constants.TVA;
 
 						}
@@ -83,8 +82,8 @@ public class AlgoritmComandaGed {
 
 					if (pretMediuDistrib == 0) // se ia in calcul pretul ged
 					{
-						pretMediuDistrib = round(pretUnitarGed * 0.8064516129032258, 3); // fara
-																							// tva
+						pretMediuDistrib = round(pretUnitarGed / Constants.TVA, 3); // fara
+																					// tva
 
 						adaosMediuDistrib = 0;
 					}
