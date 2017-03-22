@@ -8,27 +8,63 @@
         android:id="@+id/spinnerFiliale"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dip" />
+        android:layout_margin="5dip" />
 
-    <Spinner
-        android:id="@+id/spinnerAgenti"
+    <LinearLayout
+        android:id="@+id/layoutAgenti"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dip" />
+        android:layout_marginTop="5dip"
+        android:orientation="horizontal" >
 
-    <Spinner
-        android:id="@+id/spinnerInterval"
+        <TextView
+            android:id="@+id/labelAgenti"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:gravity="center_horizontal"
+            android:text="[Optional]"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/spinnerAgenti"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:layout_weight="0.7" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutInterval"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dip" />
-    
-   
-    
-     <LinearLayout
+        android:layout_marginTop="5dip"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/labelInterval"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:gravity="center_horizontal"
+            android:text="[Optional]"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/spinnerInterval"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:layout_weight="0.7" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
-        android:layout_marginTop="100dip"
+        android:layout_marginTop="70dip"
         android:gravity="right|bottom"
         android:orientation="horizontal" >
 

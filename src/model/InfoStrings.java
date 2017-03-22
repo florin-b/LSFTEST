@@ -553,6 +553,9 @@ public class InfoStrings {
 			if (filiala.equals("IS10"))
 				codClient = "4119000327";
 
+			if (filiala.equals("MM10"))
+				codClient = "4119000412";
+
 		}
 
 		return codClient;
@@ -765,6 +768,9 @@ public class InfoStrings {
 			if (filiala.equals("TM10"))
 				codClient = "4119000251";
 
+			if (filiala.equals("MM10"))
+				codClient = "4119000357";
+
 		}
 
 		if (tipClient.equals("PJ")) {
@@ -794,6 +800,9 @@ public class InfoStrings {
 
 			if (filiala.equals("TM10"))
 				codClient = "4119000252";
+
+			if (filiala.equals("MM10"))
+				codClient = "4119000358";
 
 		}
 

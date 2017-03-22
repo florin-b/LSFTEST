@@ -1291,6 +1291,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				obj.put("Umb", listArticole.get(i).getUmb());
 				obj.put("ponderare", listArticole.get(i).getPonderare());
 				obj.put("filialaSite", listArticole.get(i).getFilialaSite());
+				obj.put("istoricPret", listArticole.get(i).getIstoricPret());
+				
 				myArray.put(obj);
 
 				if (listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1) {

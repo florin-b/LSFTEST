@@ -1,5 +1,8 @@
 package dialogs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import listeners.MapListener;
 import lite.sfa.test.R;
 import utils.MapUtils;
@@ -82,6 +85,42 @@ public class MapAddressDialog extends Dialog {
 				map.getUiSettings().setZoomControlsEnabled(true);
 				map.moveCamera(CameraUpdateFactory.newLatLngZoom(coord, detailLevel));
 
+				
+				
+				//-------------
+				
+				/*
+				List<beans.LatLng> zoneA = ZoneBucuresti.getZona(EnumZona.ZONA_A);
+				PolygonOptions polyOptionsA = new PolygonOptions();
+				polyOptionsA.addAll(getGoogleCoords(zoneA));
+				polyOptionsA.strokeColor(Color.BLUE);
+				polyOptionsA.strokeWidth(3);
+				
+				
+				List<beans.LatLng> zoneB1 = ZoneBucuresti.getZona(EnumZona.ZONA_B1);
+				PolygonOptions polyOptionsB1 = new PolygonOptions();
+				polyOptionsB1.addAll(getGoogleCoords(zoneB1));
+				polyOptionsB1.strokeColor(Color.BLACK);
+				polyOptionsB1.strokeWidth(3);
+				
+				
+				List<beans.LatLng> zoneB2 = ZoneBucuresti.getZona(EnumZona.ZONA_B2);
+				PolygonOptions polyOptionsB2 = new PolygonOptions();
+				polyOptionsB2.addAll(getGoogleCoords(zoneB2));
+				polyOptionsB2.strokeColor(Color.RED);
+				polyOptionsB2.strokeWidth(3);
+				
+				
+				map.addPolygon(polyOptionsA);
+				map.addPolygon(polyOptionsB1);
+				map.addPolygon(polyOptionsB2);
+				*/
+				
+				
+				
+				//--------------
+				
+				
 				addMapMarker(map);
 
 				setMapListener();
@@ -120,6 +159,19 @@ public class MapAddressDialog extends Dialog {
 	public void dismiss() {
 		super.dismiss();
 		removeMap();
+
+	}
+
+	private List<LatLng> getGoogleCoords(List<beans.LatLng> brutCoords) {
+		List<LatLng> listCoords = new ArrayList<LatLng>();
+
+		for (beans.LatLng coord : brutCoords) {
+			LatLng oneCoord = new LatLng(coord.getLat(), coord.getLng());
+			listCoords.add(oneCoord);
+
+		}
+
+		return listCoords;
 
 	}
 

@@ -28,7 +28,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 import beans.Address;
 import beans.BeanClientBorderou;
@@ -53,7 +52,6 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 	private android.app.Fragment mapFragment;
 	private Button hartaButton;
 	private GoogleMap googleMap;
-	private TextView textNumeSofer, textTelSofer;
 	private ActionBar actionBar;
 
 	@Override
@@ -84,8 +82,6 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 
 		operatiiComenzi = ComenziDAO.getInstance(this);
 		operatiiComenzi.setComenziDAOListener(this);
-		textNumeSofer = (TextView) findViewById(R.id.textNumeSofer);
-		textTelSofer = (TextView) findViewById(R.id.textTelSofer);
 
 		if (!isSDorSM())
 			getComenziDeschise(UserInfo.getInstance().getCod());
@@ -109,8 +105,13 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 			ComandaDeschisaAdapter adapter = new ComandaDeschisaAdapter(this, listComenzi);
 			spinnerComenzi.setVisibility(View.VISIBLE);
 			spinnerComenzi.setAdapter(adapter);
-		} else
+		} else {
 			Toast.makeText(getApplicationContext(), "Nu exista comenzi", Toast.LENGTH_SHORT).show();
+			spinnerComenzi.setVisibility(View.GONE);
+			listClientiBorderou.setVisibility(View.GONE);
+			mapFragment.getView().setVisibility(View.GONE);
+			hartaButton.setVisibility(View.GONE);
+		}
 
 	}
 
@@ -125,9 +126,6 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 				hartaButton.setVisibility(View.VISIBLE);
 			else
 				hartaButton.setVisibility(View.INVISIBLE);
-
-			textNumeSofer.setText("Sofer:\t" + comandaCurenta.getNumeSofer());
-			textTelSofer.setText("Tel.:\t" + comandaCurenta.getTelSofer());
 
 			mapFragment.getView().setVisibility(View.INVISIBLE);
 

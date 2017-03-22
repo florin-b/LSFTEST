@@ -14,6 +14,7 @@ import java.util.Locale;
 import listeners.AsyncTaskListener;
 import model.InfoStrings;
 import model.UserInfo;
+import utils.UtilsGeneral;
 import utils.UtilsUser;
 import android.app.Activity;
 import android.content.Context;
@@ -100,11 +101,11 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		addListenerUserName();
 		addListenerPassword();
 
-		//etUsername.setText("androag");
-		//etPassword.setText("112");
+		etUsername.setText("androag");
+		etPassword.setText("112");
 
-		etUsername.setText("GILINCA");
-		etPassword.setText("HV3G4M");
+		// etUsername.setText("GILINCA");
+		// etPassword.setText("HV3G4M");
 
 		// DD Wood
 		// etUsername.setText("OCODREANU");
@@ -154,7 +155,7 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		// etUsername.setText("CNAZARE"); //ag. 03 (parc)
 		// etPassword.setText("m9hF3K");
 
-		// etUsername.setText("MANDONE"); //ag fero
+		// etUsername.setText("MANDONE"); // ag fero
 		// etPassword.setText("MXkf8n");
 
 		// etUsername.setText("androdv");
@@ -212,6 +213,12 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		// etUsername.setText("FROTARU"); // CV Obiective
 		// etPassword.setText("89mLcn");
 
+		// CBORUNCEANU //av 09 Glina
+		// XJF8Vp
+
+		//etUsername.setText("CMATEI2"); 
+		//etPassword.setText("YM64CR");
+
 		globalMyIP = getIPConnection();
 
 		checkBundleExtra();
@@ -230,7 +237,7 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		slideToUnLock.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				// TODO Auto-generated method stub
+
 				if (buttonView.isChecked()) {
 
 				} else {
@@ -379,116 +386,6 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		}
 	}
 
-	public String getFiliala(String numeFiliala) {
-		String fl = "NN10";
-
-		if (numeFiliala.equals("BACAU"))
-			fl = "BC10";
-
-		if (numeFiliala.equals("BUZAU"))
-			fl = "BZ10";
-
-		if (numeFiliala.equals("GALATI"))
-			fl = "GL10";
-
-		if (numeFiliala.equals("PITESTI"))
-			fl = "AG10";
-
-		if (numeFiliala.equals("TIMISOARA"))
-			fl = "TM10";
-
-		if (numeFiliala.equals("ORADEA"))
-			fl = "BH10";
-
-		if (numeFiliala.equals("FOCSANI"))
-			fl = "VN10";
-
-		if (numeFiliala.equals("GLINA"))
-			fl = "BU10";
-
-		if (numeFiliala.equals("ANDRONACHE"))
-			fl = "BU13";
-
-		if (numeFiliala.equals("OTOPENI"))
-			fl = "BU12";
-
-		if (numeFiliala.equals("CLUJ"))
-			fl = "CJ10";
-
-		if (numeFiliala.equals("BAIA"))
-			fl = "MM10";
-
-		if (numeFiliala.equals("MILITARI"))
-			fl = "BU11";
-
-		if (numeFiliala.equals("CONSTANTA"))
-			fl = "CT10";
-
-		if (numeFiliala.equals("BRASOV"))
-			fl = "BV10";
-
-		if (numeFiliala.equals("PLOIESTI"))
-			fl = "PH10";
-
-		if (numeFiliala.equals("PIATRA"))
-			fl = "NT10";
-
-		if (numeFiliala.equals("MURES"))
-			fl = "MS10";
-
-		if (numeFiliala.equals("IASI"))
-			fl = "IS10";
-
-		if (numeFiliala.equals("CRAIOVA"))
-			fl = "DJ10";
-
-		return fl;
-
-	}
-
-	public String getDepart(String numeDepart) {
-		String dpt = "00";
-
-		if (numeDepart.equals("CHIM"))
-			dpt = "07";
-
-		if (numeDepart.equals("DIVE"))
-			dpt = "10";
-
-		if (numeDepart.equals("ELEC"))
-			dpt = "05";
-
-		if (numeDepart.equals("FERO"))
-			dpt = "02";
-
-		if (numeDepart.equals("GIPS"))
-			dpt = "06";
-
-		if (numeDepart.equals("INST"))
-			dpt = "08";
-
-		if (numeDepart.equals("LEMN"))
-			dpt = "01";
-
-		if (numeDepart.equals("MATE"))
-			dpt = "04";
-
-		if (numeDepart.equals("PARC"))
-			dpt = "03";
-
-		if (numeDepart.equals("CHIM"))
-			dpt = "07";
-
-		if (numeDepart.equals("HIDR"))
-			dpt = "09";
-
-		if (numeDepart.equals("LEFA"))
-			dpt = "02";
-
-		return dpt;
-
-	}
-
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -496,7 +393,7 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 	}
 
 	@Override
-	public void onUserLeaveHint() { // this only executes when Home is selected.
+	public void onUserLeaveHint() {
 		finish();
 	}
 
@@ -559,9 +456,9 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 					uInfo.setFiliala(token[2].toString());
 					uInfo.setCod(tempAgCod);
 					uInfo.setNumeDepart(token[1].toString());
-					uInfo.setCodDepart(getDepart(token[1].toString()));
-					uInfo.setUnitLog(getFiliala(token[2].toString()));
-					uInfo.setInitUnitLog(getFiliala(token[2].toString()));
+					uInfo.setCodDepart(UtilsGeneral.getDepart(token[1].toString()));
+					uInfo.setUnitLog(UtilsGeneral.getFiliala(token[2].toString()));
+					uInfo.setInitUnitLog(UtilsGeneral.getFiliala(token[2].toString()));
 					uInfo.setTipAcces(token[5].toString());
 
 					if (token[10].toLowerCase(Locale.getDefault()).equals("w")) {
@@ -588,6 +485,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 					}
 
 					uInfo.setFilHome(Boolean.valueOf(token[12]));
+
+					uInfo.setFtpIP(token[13]);
 
 					startMainMenuActivity();
 

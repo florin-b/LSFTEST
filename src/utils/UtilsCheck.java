@@ -10,6 +10,9 @@ public class UtilsCheck {
 			return false;
 		}
 
+		if (cnp.equals("0000000000000"))
+			return false;
+
 		int ccontrol = -1;
 
 		int suma = Integer.parseInt(Character.toString(cnp.charAt(0))) * 2 + Integer.parseInt(Character.toString(cnp.charAt(1))) * 7

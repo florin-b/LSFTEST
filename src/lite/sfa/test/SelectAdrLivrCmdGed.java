@@ -26,6 +26,7 @@ import model.OperatiiClient;
 import model.UserInfo;
 import utils.MapUtils;
 import utils.UtilsAddress;
+import utils.UtilsComenzi;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import android.app.ActionBar;
@@ -72,9 +73,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private TextView txtObsPlata, textMail;
 
 	private static final String METHOD_NAME = "getClientJud";
-
-	String[] tipPlata = { "B - Bilet la ordin", "C - Cec", "E - Plata in numerar", "O - Ordin de plata", "BRD - Card BRD", "ING - Card ING",
-			"UNI - Card Unicredit", "E1 - Numerar sofer" };
 
 	String[] tipPlataOnline = { "E - Numerar la livrare", "INS - Card online", "O - Virament bancar" };
 
@@ -196,7 +194,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 				adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransportOnline);
 
 			} else {
-				adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipPlata);
+				adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, UtilsComenzi.tipPlataGed());
 				adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransport);
 
 			}
@@ -1171,6 +1169,12 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			dateLivrareInstance.setPrelucrare(spinnerIndoire.getSelectedItem().toString());
 		} else
 			dateLivrareInstance.setPrelucrare("-1");
+
+		// beans.LatLng coordAdresa = new
+		// beans.LatLng(dateLivrareInstance.getCoordonateAdresa().latitude,dateLivrareInstance.getCoordonateAdresa().longitude);
+		// EnumZona zona = ZoneBucuresti.getZonaBucuresti(coordAdresa);
+		// Toast.makeText(getApplicationContext(), zona.toString(),
+		// Toast.LENGTH_LONG).show();
 
 		finish();
 

@@ -4,6 +4,7 @@
  */
 package lite.sfa.test;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,6 +57,7 @@ import android.widget.ToggleButton;
 import beans.ArticolDB;
 import enums.EnumArticoleDAO;
 import enums.EnumDepartExtra;
+import enums.EnumTipComanda;
 
 public class SelectArtModificareCmd extends ListActivity implements OperatiiArticolListener {
 
@@ -110,6 +112,7 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 
 	private ArticolDB articolDBSelected;
 	private TextView txtImpachetare;
+	private String istoricPret;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -975,6 +978,9 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 						unArticol.setTipAlert(tipAlert);
 						unArticol.setStatus(" ");
 						unArticol.setDepartAprob(articolDBSelected.getDepartAprob());
+						
+						if (procRedFin > 0)
+							unArticol.setIstoricPret(istoricPret);
 
 						ListaArticoleModificareComanda listaComanda = ListaArticoleModificareComanda.getInstance();
 						listaComanda.addArticolComanda(unArticol);
@@ -1173,6 +1179,8 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 				txtImpachetare.setText(tokenPret[19]);
 				
 				afisIstoricPret(tokenPret[20]);
+				
+				istoricPret = UtilsFormatting.getIstoricPret(tokenPret[20], EnumTipComanda.DISTRIBUTIE);
 
 				procDiscClient = 0;
 				minimKAPrice = 0;
@@ -1342,6 +1350,8 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 		layoutIstoric2.setVisibility(View.GONE);
 		layoutIstoric3.setVisibility(View.GONE);
 		
+		DecimalFormat df = new DecimalFormat("#0.00");
+		
 		if (infoIstoric.contains(":")) {
 			String[] arrayIstoric = infoIstoric.split(":");
 
@@ -1352,8 +1362,8 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 				String[] arrayPret = arrayIstoric[0].split("@");
 
 				TextView textIstoric1 = (TextView) findViewById(R.id.txtIstoricPret1);
-				textIstoric1.setText(arrayPret[0] + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " / " + arrayPret[1] + " " + arrayPret[2] + " - "
-						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3]));
+				textIstoric1.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " / " + arrayPret[1] + " " + arrayPret[2] + " - "
+						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 
@@ -1364,8 +1374,8 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 				String[] arrayPret = arrayIstoric[1].split("@");
 
 				TextView textIstoric2 = (TextView) findViewById(R.id.txtIstoricPret2);
-				textIstoric2.setText(arrayPret[0] + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " / " + arrayPret[1] + " " + arrayPret[2] + " - "
-						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3]));
+				textIstoric2.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " / " + arrayPret[1] + " " + arrayPret[2] + " - "
+						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 
@@ -1376,8 +1386,8 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 				String[] arrayPret = arrayIstoric[2].split("@");
 
 				TextView textIstoric3 = (TextView) findViewById(R.id.txtIstoricPret3);
-				textIstoric3.setText(arrayPret[0] + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " / " + arrayPret[1] + " " + arrayPret[2] + " - "
-						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3]));
+				textIstoric3.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " / " + arrayPret[1] + " " + arrayPret[2] + " - "
+						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 

@@ -330,6 +330,7 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 					articol.setDepartSintetic(articolObject.getString("departSintetic"));
 					articol.setCoefCorectie(Double.valueOf(articolObject.getString("coefCorectie")));
 					articol.setDepartAprob(articolObject.getString("departAprob"));
+					articol.setIstoricPret(articolObject.getString("istoricPret").trim());
 
 					listArticole.add(articol);
 

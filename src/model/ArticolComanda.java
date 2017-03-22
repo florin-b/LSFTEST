@@ -78,6 +78,8 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 
 	private String filialaSite;
 
+	private String istoricPret;
+
 	public int getNrCrt() {
 		return nrCrt;
 	}
@@ -549,6 +551,20 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 
 	public void setFilialaSite(String filialaSite) {
 		this.filialaSite = filialaSite;
+	}
+
+	public String getIstoricPret() {
+		if (istoricPret == null)
+			return " ";
+
+		if (istoricPret.isEmpty())
+			return " ";
+
+		return istoricPret;
+	}
+
+	public void setIstoricPret(String istoricPret) {
+		this.istoricPret = istoricPret;
 	}
 
 	@Override

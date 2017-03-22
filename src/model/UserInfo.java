@@ -31,6 +31,7 @@ public class UserInfo {
 	private String userSite = "";
 	private boolean userWood = false;
 	private boolean filHome = false;
+	private String ftpIP = "";
 
 	private static UserInfo instance = new UserInfo();
 
@@ -217,6 +218,14 @@ public class UserInfo {
 
 	public void setFilHome(boolean filHome) {
 		this.filHome = filHome;
+	}
+
+	public String getFtpIP() {
+		return ftpIP;
+	}
+
+	public void setFtpIP(String ftpIP) {
+		this.ftpIP = ftpIP;
 	}
 
 	@Override

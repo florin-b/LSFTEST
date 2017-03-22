@@ -1,6 +1,7 @@
 package utils;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -11,6 +12,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import model.Constants;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,8 +24,11 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import enums.EnumJudete;
+import enums.EnumTipComanda;
 
 public class UtilsFormatting {
+
+	private static NumberFormat nf2 = new DecimalFormat("#0.00");
 
 	public static String formatDate(String dateString) {
 
@@ -187,12 +192,19 @@ public class UtilsFormatting {
 		return formatted;
 	}
 
-	public static String getMonthNameFromDate(String dateString) {
+	public static String getMonthNameFromDate(String dateString, int formatStyle) {
 
 		if (dateString.trim().equals(""))
 			return "";
 
 		DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yy", Locale.ENGLISH);
+		;
+
+		if (formatStyle == Calendar.LONG)
+			dateFormat = new SimpleDateFormat("dd-MMM-yy", Locale.ENGLISH);
+
+		if (formatStyle == Calendar.SHORT)
+			dateFormat = new SimpleDateFormat("dd-mm-yy", Locale.ENGLISH);
 
 		Calendar cal = Calendar.getInstance();
 
@@ -202,10 +214,37 @@ public class UtilsFormatting {
 			e.printStackTrace();
 		}
 
-		return cal.getDisplayName(Calendar.MONTH, Calendar.LONG, new Locale("ro"));
+		return cal.getDisplayName(Calendar.MONTH, formatStyle, new Locale("ro"));
 
 	}
 
+	public static String getIstoricPret(String istoric, EnumTipComanda tipComanda) {
+		StringBuilder formatted = new StringBuilder();
 
+		double valTva = 1;
 
+		if (tipComanda != null && tipComanda == EnumTipComanda.GED)
+			valTva = Constants.TVA;
+
+		if (istoric != null && istoric.contains(":")) {
+			String[] arrayIstoric = istoric.split(":");
+
+			for (String item : arrayIstoric) {
+				String[] token = item.split("@");
+
+				if (!formatted.toString().isEmpty())
+					formatted.append("#");
+
+				formatted.append(nf2.format(Double.valueOf(token[0].trim()) * valTva));
+				formatted.append(" / ");
+				formatted.append(token[2]);
+				formatted.append(" ");
+				formatted.append(getMonthNameFromDate(token[3], Calendar.SHORT));
+
+			}
+
+		}
+
+		return formatted.toString();
+	}
 }

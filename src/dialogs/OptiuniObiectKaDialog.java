@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 import enums.EnumFilialeKA;
@@ -34,6 +35,7 @@ public class OptiuniObiectKaDialog extends Dialog implements OperatiiAgentListen
 	private ImageButton buttonOk, buttonCancel;
 	private OperatiiObiective operatiiObiective;
 	private DialogObiectiveKAListener listener;
+	private LinearLayout layoutInterval, layoutAgenti;
 
 	public OptiuniObiectKaDialog(Context context) {
 		super(context);
@@ -55,14 +57,19 @@ public class OptiuniObiectKaDialog extends Dialog implements OperatiiAgentListen
 		setupSpinnerFiliale();
 
 		spinnerInterval = (Spinner) findViewById(R.id.spinnerInterval);
-		spinnerInterval.setVisibility(View.INVISIBLE);
+
 		setupSpinnerInterval();
 
 		spinnerAgenti = (Spinner) findViewById(R.id.spinnerAgenti);
-		spinnerAgenti.setVisibility(View.INVISIBLE);
+
+		layoutInterval = (LinearLayout) findViewById(R.id.layoutInterval);
+		layoutAgenti = (LinearLayout) findViewById(R.id.layoutAgenti);
+
+		layoutAgenti.setVisibility(View.INVISIBLE);
+		layoutInterval.setVisibility(View.INVISIBLE);
 
 		if (isUserDV())
-			spinnerAgenti.setVisibility(View.GONE);
+			layoutAgenti.setVisibility(View.GONE);
 
 		buttonOk = (ImageButton) findViewById(R.id.btnOk);
 		setListenerBtnOk();
@@ -86,9 +93,8 @@ public class OptiuniObiectKaDialog extends Dialog implements OperatiiAgentListen
 			public void onClick(View v) {
 				if (isInputValid()) {
 					getListObiective();
+					dismiss();
 				}
-
-				dismiss();
 
 			}
 		});
@@ -119,18 +125,6 @@ public class OptiuniObiectKaDialog extends Dialog implements OperatiiAgentListen
 			return false;
 		}
 
-		if (isUserDK()) {
-			if (spinnerAgenti.getSelectedItemPosition() == 0) {
-				Toast.makeText(getContext(), "Selectati agentul ", Toast.LENGTH_SHORT).show();
-				return false;
-			}
-		}
-
-		if (spinnerInterval.getSelectedItemPosition() == 0) {
-			Toast.makeText(getContext(), "Selectati intervalul ", Toast.LENGTH_SHORT).show();
-			return false;
-		}
-
 		return true;
 	}
 
@@ -158,8 +152,10 @@ public class OptiuniObiectKaDialog extends Dialog implements OperatiiAgentListen
 
 				if (position > 0) {
 					selectedFiliala = ((EnumFilialeKA) spinnerFiliale.getSelectedItem()).getCod();
-					spinnerInterval.setVisibility(View.VISIBLE);
-					getListaAgenti(selectedFiliala);
+					layoutInterval.setVisibility(View.VISIBLE);
+
+					if (isUserDK())
+						getListaAgenti(selectedFiliala);
 				}
 
 			}
@@ -180,8 +176,7 @@ public class OptiuniObiectKaDialog extends Dialog implements OperatiiAgentListen
 	}
 
 	private void getListaAgenti(String filiala) {
-		if (isUserDK())
-			operatiiAgent.getListaAgenti(filiala, getDepartUser(), getContext(), true);
+		operatiiAgent.getListaAgenti(filiala, getDepartUser(), getContext(), true);
 	}
 
 	private String getDepartUser() {
@@ -199,7 +194,7 @@ public class OptiuniObiectKaDialog extends Dialog implements OperatiiAgentListen
 
 	private void populateSpinnerAgenti(List<Agent> listAgenti) {
 
-		spinnerAgenti.setVisibility(View.VISIBLE);
+		layoutAgenti.setVisibility(View.VISIBLE);
 		spinnerAgenti.setAdapter(new ArrayAdapter<Agent>(getContext(), android.R.layout.simple_list_item_1, listAgenti));
 		spinnerAgenti.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 

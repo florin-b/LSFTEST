@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import beans.ValoriComanda;
 
@@ -23,9 +24,6 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 	int[] colors = new int[] { 0x3098BED9, 0x30E8E8E8 };
 	double procentCmp, multiplu;
 
-	
-	
-	
 	private double valoareCmp;
 
 	private NumberFormat nf3;
@@ -43,8 +41,10 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 	}
 
 	public static class ViewHolder {
-		TextView textNrCrt, textNumeArt, textCodArt, textCantArt, textUmArt, textPretArt, textMonedaArt, textDepozit, textStatusArt, textProcRed,
-				textAddCond, textCmp, textProcCmp, textDisClient, textProcAprob, textMultipAprob, textInfoArticol, textPretSpecial;
+		TextView textNrCrt, textNumeArt, textCodArt, textCantArt, textUmArt, textPretArt, textMonedaArt, textDepozit, textStatusArt, textProcRed, textAddCond,
+				textCmp, textProcCmp, textDisClient, textProcAprob, textMultipAprob, textInfoArticol, textPretSpecial, textIstoricPret;
+
+		LinearLayout layoutIstoricPret;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -77,6 +77,8 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 			viewHolder.textMultipAprob = (TextView) convertView.findViewById(R.id.textMultipAprob);
 			viewHolder.textInfoArticol = (TextView) convertView.findViewById(R.id.textInfoArticol);
 			viewHolder.textPretSpecial = (TextView) convertView.findViewById(R.id.textPretSpecial);
+			viewHolder.textIstoricPret = (TextView) convertView.findViewById(R.id.textIstoricPret);
+			viewHolder.layoutIstoricPret = (LinearLayout) convertView.findViewById(R.id.layoutIstoricPret);
 
 			convertView.setTag(viewHolder);
 
@@ -134,9 +136,14 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 		viewHolder.textMultipAprob.setText(nf2.format(articol.getMultiplu()));
 		viewHolder.textInfoArticol.setText(articol.getInfoArticol());
 
+		if (articol.getIstoricPret() != null && !articol.getIstoricPret().trim().isEmpty()) {
+			viewHolder.layoutIstoricPret.setVisibility(View.VISIBLE);
+			viewHolder.textIstoricPret.setText(articol.getIstoricPret());
+		} else
+			viewHolder.layoutIstoricPret.setVisibility(View.GONE);
+
 		if (isPretSpecial(articol.getInfoArticol()))
 			viewHolder.textPretSpecial.setText("(*)");
-
 
 		if (colorPos % 2 == 0)
 			convertView.setBackgroundResource(R.drawable.shadow_dark);

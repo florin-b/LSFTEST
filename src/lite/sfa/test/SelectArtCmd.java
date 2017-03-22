@@ -4,12 +4,12 @@
  */
 package lite.sfa.test;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import listeners.OperatiiArticolListener;
 import model.ArticolComanda;
@@ -57,6 +57,7 @@ import android.widget.ToggleButton;
 import beans.ArticolDB;
 import enums.EnumArticoleDAO;
 import enums.EnumDepartExtra;
+import enums.EnumTipComanda;
 
 public class SelectArtCmd extends ListActivity implements OperatiiArticolListener {
 
@@ -98,6 +99,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	private double listPrice = 0, procDiscClient = 0;
 	private double discMaxAV = 0, discMaxSD = 0;
 	private double pretVanzare = 0, procentAprob = 0, selectedCant = 0;
+	private String istoricPret;
 
 	NumberFormat nf2;
 
@@ -1047,6 +1049,10 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						unArticol.setDepartAprob(articolDBSelected.getDepartAprob());
 						unArticol.setUmPalet(articolDBSelected.isUmPalet());
 
+						if (procRedFin > 0)
+							unArticol.setIstoricPret(istoricPret);
+						
+
 						ListaArticoleComanda listaComanda = ListaArticoleComanda.getInstance();
 						listaComanda.addArticolComanda(unArticol);
 
@@ -1234,6 +1240,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				txtImpachetare.setText(tokenPret[19]);
 
 				afisIstoricPret(tokenPret[20]);
+
+				istoricPret = UtilsFormatting.getIstoricPret(tokenPret[20], EnumTipComanda.DISTRIBUTIE);
 
 				procDiscClient = 0;
 				minimKAPrice = 0;
@@ -1435,47 +1443,49 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		LinearLayout layoutIstoric1 = (LinearLayout) findViewById(R.id.layoutIstoricPret1);
 		LinearLayout layoutIstoric2 = (LinearLayout) findViewById(R.id.layoutIstoricPret2);
 		LinearLayout layoutIstoric3 = (LinearLayout) findViewById(R.id.layoutIstoricPret3);
-		
+
 		layoutIstoric1.setVisibility(View.GONE);
 		layoutIstoric2.setVisibility(View.GONE);
 		layoutIstoric3.setVisibility(View.GONE);
 		
+		DecimalFormat df = new DecimalFormat("#0.00");
+
 		if (infoIstoric.contains(":")) {
 			String[] arrayIstoric = infoIstoric.split(":");
 
 			if (arrayIstoric.length > 0 && arrayIstoric[0].contains("@")) {
-				
+
 				layoutIstoric1.setVisibility(View.VISIBLE);
 
 				String[] arrayPret = arrayIstoric[0].split("@");
 
 				TextView textIstoric1 = (TextView) findViewById(R.id.txtIstoricPret1);
-				textIstoric1.setText(arrayPret[0] + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2] + " - "
-						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3]));
+				textIstoric1.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2] + " - "
+						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 
 			if (arrayIstoric.length > 1 && arrayIstoric[1].contains("@")) {
-				
+
 				layoutIstoric2.setVisibility(View.VISIBLE);
 
 				String[] arrayPret = arrayIstoric[1].split("@");
 
 				TextView textIstoric2 = (TextView) findViewById(R.id.txtIstoricPret2);
-				textIstoric2.setText(arrayPret[0] + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2] + " - "
-						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3]));
+				textIstoric2.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2] + " - "
+						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 
 			if (arrayIstoric.length > 2 && arrayIstoric[2].contains("@")) {
-				
+
 				layoutIstoric3.setVisibility(View.VISIBLE);
 
 				String[] arrayPret = arrayIstoric[2].split("@");
 
 				TextView textIstoric3 = (TextView) findViewById(R.id.txtIstoricPret3);
-				textIstoric3.setText(arrayPret[0] + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2] + " - "
-						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3]));
+				textIstoric3.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2] + " - "
+						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 
@@ -1485,7 +1495,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	private boolean noDiscount(String artPromo) {
 
-		if (artPromo.toUpperCase(Locale.getDefault()).equals("X"))
+		if (artPromo.equalsIgnoreCase("X"))
 			return true;
 		else if ((CreareComanda.canalDistrib.equals("20") || globalCodDepartSelectetItem.equals("11"))
 				&& !(globalDepozSel.equals("MAV1") && articolDBSelected.getDepart().equals("11") && !articolDBSelected.getDepartAprob().equals("00")))

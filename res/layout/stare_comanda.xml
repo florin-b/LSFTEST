@@ -48,36 +48,10 @@
             android:layout_marginTop="15dp"
             android:orientation="horizontal" >
 
-            <LinearLayout
+            <View
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
-                android:layout_gravity="top|center_horizontal"
-                android:layout_weight="0.1"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/textNumeSofer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="left"
-                    android:textColor="@color/warningColor2"
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:id="@+id/textTelSofer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="left"
-                    android:textColor="@color/warningColor2"
-                    android:textSize="17sp" />
-            </LinearLayout>
-
-              <View
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="0.01" >
+                android:layout_weight="0.1" >
             </View>
 
             <Button
@@ -87,14 +61,14 @@
                 android:layout_height="40dip"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:background="@drawable/cancel_button_style"
-                android:paddingLeft="15dip"
-                android:paddingRight="15dip"
-                android:text="Arata pe harta" />
+                android:paddingLeft="40dip"
+                android:paddingRight="40dip"
+                android:text="Harta" />
 
             <View
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
-                android:layout_weight="0.02" >
+                android:layout_weight="0.1" >
             </View>
         </LinearLayout>
 

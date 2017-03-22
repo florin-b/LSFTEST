@@ -736,6 +736,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		articol.setUmb("BUC");
 		articol.setDepart(listArticoleComanda.get(0).getDepart());
 		articol.setObservatii("");
+		articol.setIstoricPret("");
 		listArticoleComanda.add(articol);
 
 	}
@@ -772,6 +773,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 				obj.put("observatii", listArticoleComanda.get(i).getTipAlert());
 				obj.put("departAprob", listArticoleComanda.get(i).getDepartAprob());
+				obj.put("istoricPret", listArticoleComanda.get(i).getIstoricPret());
 				myArray.put(obj);
 			}
 		} catch (Exception ex) {

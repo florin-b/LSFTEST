@@ -64,6 +64,7 @@ import beans.DepoziteUl;
 import beans.PretArticolGed;
 import enums.EnumArticoleDAO;
 import enums.EnumDepartExtra;
+import enums.EnumTipComanda;
 
 public class SelectArtCmdGed extends ListActivity implements OperatiiArticolListener {
 
@@ -1220,6 +1221,9 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						articol.setUmPalet(articolDBSelected.isUmPalet());
 						articol.setFilialaSite(CreareComandaGed.filialaAlternativa);
 
+						if (procRedFin > 0)
+							articol.setIstoricPret(selectedArticol.getIstoricPret());
+
 						ListaArticoleComandaGed listaArticole = ListaArticoleComandaGed.getInstance();
 						listaArticole.addArticolComanda(articol);
 
@@ -1370,6 +1374,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		listPrice = Double.valueOf(pretArticol.getPretLista());
 
 		afisIstoricPret(pretArticol.getIstoricPret());
+		
+		selectedArticol.setIstoricPret(UtilsFormatting.getIstoricPret(pretArticol.getIstoricPret(), EnumTipComanda.GED));
 
 		txtImpachetare.setText(pretArticol.getImpachetare());
 
@@ -1529,7 +1535,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		layoutIstoric2.setVisibility(View.GONE);
 		layoutIstoric3.setVisibility(View.GONE);
 
-		DecimalFormat df = new DecimalFormat("#0.000");
+		DecimalFormat df = new DecimalFormat("#0.00");
 
 		double valoarePret = 0;
 
@@ -1546,7 +1552,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 				TextView textIstoric1 = (TextView) findViewById(R.id.txtIstoricPret1);
 				textIstoric1.setText(" " + df.format(valoarePret) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2]
-						+ " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3]));
+						+ " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 
@@ -1560,7 +1566,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 				TextView textIstoric2 = (TextView) findViewById(R.id.txtIstoricPret2);
 				textIstoric2.setText(df.format(valoarePret) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2]
-						+ " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3]));
+						+ " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 
@@ -1574,7 +1580,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 				TextView textIstoric3 = (TextView) findViewById(R.id.txtIstoricPret3);
 				textIstoric3.setText(df.format(valoarePret) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2]
-						+ " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3]));
+						+ " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 

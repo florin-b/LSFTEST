@@ -21,7 +21,7 @@ public class ComandaDeschisaAdapter extends BaseAdapter {
 	private NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
 
 	static class ViewHolder {
-		public TextView textIdCmd, textClient, textSuma, textLocalitate, textStrada, textStare;
+		public TextView textIdCmd, textClient, textSuma, textLocalitate, textStrada, textStare, textSofer;
 	}
 
 	public ComandaDeschisaAdapter(Context context, List<BeanComandaDeschisa> listComenzi) {
@@ -43,6 +43,7 @@ public class ComandaDeschisaAdapter extends BaseAdapter {
 			viewHolder.textLocalitate = (TextView) convertView.findViewById(R.id.textLocalitate);
 			viewHolder.textStrada = (TextView) convertView.findViewById(R.id.textStrada);
 			viewHolder.textStare = (TextView) convertView.findViewById(R.id.textStare);
+			viewHolder.textSofer = (TextView) convertView.findViewById(R.id.textSofer);
 
 			convertView.setTag(viewHolder);
 		} else {
@@ -57,6 +58,12 @@ public class ComandaDeschisaAdapter extends BaseAdapter {
 		viewHolder.textLocalitate.setText(comanda.getLocalitate());
 		viewHolder.textStrada.setText(comanda.getStrada());
 		viewHolder.textStare.setText(UtilsComenzi.getStareComanda(comanda.getCodStareComanda()));
+
+		String sofer = comanda.getNumeSofer();
+		if (comanda.getTelSofer() != null && !comanda.getTelSofer().isEmpty())
+			sofer += " / " + comanda.getTelSofer();
+
+		viewHolder.textSofer.setText(sofer);
 
 		return convertView;
 

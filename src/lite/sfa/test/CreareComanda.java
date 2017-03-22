@@ -981,6 +981,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 				articolCmd.setUmb(tokUmb);
 				articolCmd.setDepart(articol.getDepart());
 				articolCmd.setDepartAprob(articol.getDepartAprob());
+				articolCmd.setIstoricPret(articol.getIstoricPret());
 				if (isArtGedExceptie(articol))
 					articolCmd.setObservatii(articol.getObservatii());
 
@@ -1014,6 +1015,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 					articolCmd.setUmb("BUC");
 					articolCmd.setDepart(articol.getDepart());
 					articolCmd.setObservatii("");
+					articolCmd.setIstoricPret("");
 					listArticole.add(articolCmd);
 
 					retVal += "000000000000000000" + "#" + "1" + "#" + " " + "#" + String.valueOf(dblLocalTaxaVerde) + "#" + "0" + "#" + "BUC" + "#" + "0"
@@ -1074,6 +1076,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 				obj.put("depart", listArticole.get(i).getDepart());
 				obj.put("observatii", listArticole.get(i).getObservatii());
 				obj.put("departAprob", listArticole.get(i).getDepartAprob());
+				obj.put("istoricPret", listArticole.get(i).getIstoricPret());
 				myArray.put(obj);
 			}
 		} catch (Exception ex) {

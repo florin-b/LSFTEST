@@ -929,34 +929,38 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		}
 
 		if (CLPFragment1.radioClient.isChecked()) {
-			if (CreareClp.codJudet.trim().toString().equalsIgnoreCase("")) {
-				retVal = "Selectati judetul!";
-				return retVal;
-			}
 
-			if (CreareClp.oras.trim().toString().equalsIgnoreCase("")) {
-				retVal = "Completati orasul!";
-				return retVal;
-			}
+			if (!CreareClp.tipTransport.equalsIgnoreCase("TCLI")) {
 
-			if (CreareClp.strada.trim().toString().equalsIgnoreCase("") && !hasCoordinates()) {
-				retVal = "Completati strada sau pozitionati adresa pe harta!";
-				return retVal;
-			}
+				if (CreareClp.codJudet.trim().equalsIgnoreCase("")) {
+					retVal = "Selectati judetul!";
+					return retVal;
+				}
 
-			if (!isAdresaCorecta()) {
-				retVal = "Completati adresa corect sau pozitionati adresa pe harta.";
-				return retVal;
-			}
+				if (CreareClp.oras.trim().equalsIgnoreCase("")) {
+					retVal = "Completati orasul!";
+					return retVal;
+				}
 
-			if (CreareClp.persCont.trim().toString().equalsIgnoreCase("")) {
-				retVal = "Completati persoana de contact!";
-				return retVal;
-			}
+				if (CreareClp.strada.trim().equalsIgnoreCase("") && !hasCoordinates()) {
+					retVal = "Completati strada sau pozitionati adresa pe harta!";
+					return retVal;
+				}
 
-			if (CreareClp.telefon.trim().toString().equalsIgnoreCase("")) {
-				retVal = "Completati nr. telefon!";
-				return retVal;
+				if (!isAdresaCorecta()) {
+					retVal = "Completati adresa corect sau pozitionati adresa pe harta.";
+					return retVal;
+				}
+
+				if (CreareClp.persCont.trim().equalsIgnoreCase("")) {
+					retVal = "Completati persoana de contact!";
+					return retVal;
+				}
+
+				if (CreareClp.telefon.trim().equalsIgnoreCase("")) {
+					retVal = "Completati nr. telefon!";
+					return retVal;
+				}
 			}
 
 			if (CLPFragment1.spinnerAgentiCLP.getVisibility() == View.VISIBLE) {
@@ -968,13 +972,13 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 		}
 
-		if (CreareClp.tipTransport.toUpperCase().equals("TRAP")) {
+		if (CreareClp.tipTransport.equalsIgnoreCase("TRAP")) {
 			if (CreareClp.tipMarfa.trim().toString().equalsIgnoreCase("")) {
 				retVal = "Completati tipul de marfa!";
 				return retVal;
 			}
 
-			if (CreareClp.masaMarfa.trim().toString().equalsIgnoreCase("")) {
+			if (CreareClp.masaMarfa.trim().equalsIgnoreCase("")) {
 				retVal = "Completati masa !";
 				return retVal;
 			}
@@ -1008,7 +1012,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 	}
 
 	private boolean isAdresaCorecta() {
-		if (CreareClp.tipTransport.toUpperCase().equals("TRAP") && !hasCoordinates())
+		if (CreareClp.tipTransport.equalsIgnoreCase("TRAP") && !hasCoordinates())
 			return isAdresaGoogleOk();
 		else
 			return true;
@@ -1096,8 +1100,8 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 			antetComandaCLP.setCodJudet(CreareClp.codJudet);
 			antetComandaCLP.setLocalitate(CreareClp.oras);
 			antetComandaCLP.setStrada(CreareClp.strada.isEmpty() ? " " : CreareClp.strada);
-			antetComandaCLP.setPersCont(CreareClp.persCont);
-			antetComandaCLP.setTelefon(CreareClp.telefon);
+			antetComandaCLP.setPersCont(CreareClp.persCont.isEmpty() ? " " : CreareClp.persCont );
+			antetComandaCLP.setTelefon(CreareClp.telefon.isEmpty() ? " " : CreareClp.telefon);
 			antetComandaCLP.setCodFilialaDest(CreareClp.codFilialaDest);
 			antetComandaCLP.setDataLivrare(CreareClp.dataLivrare);
 			antetComandaCLP.setTipPlata(CreareClp.tipPlata);
