@@ -133,4 +133,11 @@ public class DetaliiClient {
 		this.tipClient = tipClient;
 	}
 
+	@Override
+	public String toString() {
+		return "DetaliiClient [regiune=" + regiune + ", oras=" + oras + ", strada=" + strada + ", nrStrada=" + nrStrada + ", limitaCredit=" + limitaCredit
+				+ ", restCredit=" + restCredit + ", stare=" + stare + ", persContact=" + persContact + ", telefon=" + telefon + ", filiala=" + filiala
+				+ ", motivBlocare=" + motivBlocare + ", cursValutar=" + cursValutar + ", termenPlata=" + termenPlata + ", tipClient=" + tipClient + "]";
+	}
+
 }

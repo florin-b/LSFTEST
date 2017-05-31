@@ -100,6 +100,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	private double discMaxAV = 0, discMaxSD = 0;
 	private double pretVanzare = 0, procentAprob = 0, selectedCant = 0;
 	private String istoricPret;
+	private double procReducereCmp = 0;
 
 	NumberFormat nf2;
 
@@ -1005,8 +1006,13 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 							}
 						}
 
-						if (finalPrice < cmpArt) {
+						if ((finalPrice / valMultiplu) < cmpArt) {
+
+							Toast.makeText(getApplicationContext(), "Procentul de reducere este mai mare decat cel acceptat.", Toast.LENGTH_LONG).show();
+
 							subCmp = "1";
+							return;
+
 						}
 
 						double procRedFact = 0; // factura de reducere
@@ -1051,7 +1057,6 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 						if (procRedFin > 0)
 							unArticol.setIstoricPret(istoricPret);
-						
 
 						ListaArticoleComanda listaComanda = ListaArticoleComanda.getInstance();
 						listaComanda.addArticolComanda(unArticol);
@@ -1211,15 +1216,14 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 				String[] tokenPret = pretResponse.split("#");
 
-				valMultiplu = 1;
-				valMultiplu = Double.parseDouble(tokenPret[13].toString().trim());
+				valMultiplu = Double.parseDouble(tokenPret[13].trim());
 
 				globalCantArt = Double.parseDouble(tokenPret[14]);
 
 				cantUmb = tokenPret[14].toString();
 				Umb = tokenPret[15].toString();
 
-				cmpArt = nf2.parse(tokenPret[17]).doubleValue();
+				cmpArt = Double.parseDouble(tokenPret[17]);
 
 				saveArtBtn.setVisibility(View.VISIBLE);
 
@@ -1242,6 +1246,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				afisIstoricPret(tokenPret[20]);
 
 				istoricPret = UtilsFormatting.getIstoricPret(tokenPret[20], EnumTipComanda.DISTRIBUTIE);
+
+				procReducereCmp = Double.parseDouble(tokenPret[21]);
 
 				procDiscClient = 0;
 				minimKAPrice = 0;
@@ -1447,7 +1453,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		layoutIstoric1.setVisibility(View.GONE);
 		layoutIstoric2.setVisibility(View.GONE);
 		layoutIstoric3.setVisibility(View.GONE);
-		
+
 		DecimalFormat df = new DecimalFormat("#0.00");
 
 		if (infoIstoric.contains(":")) {
@@ -1460,8 +1466,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				String[] arrayPret = arrayIstoric[0].split("@");
 
 				TextView textIstoric1 = (TextView) findViewById(R.id.txtIstoricPret1);
-				textIstoric1.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2] + " - "
-						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
+				textIstoric1.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " "
+						+ arrayPret[2] + " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 
@@ -1472,8 +1478,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				String[] arrayPret = arrayIstoric[1].split("@");
 
 				TextView textIstoric2 = (TextView) findViewById(R.id.txtIstoricPret2);
-				textIstoric2.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2] + " - "
-						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
+				textIstoric2.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " "
+						+ arrayPret[2] + " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 
@@ -1484,8 +1490,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				String[] arrayPret = arrayIstoric[2].split("@");
 
 				TextView textIstoric3 = (TextView) findViewById(R.id.txtIstoricPret3);
-				textIstoric3.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2] + " - "
-						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
+				textIstoric3.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " "
+						+ arrayPret[2] + " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 

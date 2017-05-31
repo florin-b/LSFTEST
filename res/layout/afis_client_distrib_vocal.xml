@@ -1,0 +1,96 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutAfisClient"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:id="@+id/resLayout"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_weight="0.55"
+        android:background="@drawable/rounded_shape"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            style="@style/dateLivrareDlLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                style="@style/dateLivrareDlLabel"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="0.15"
+                android:text="Nume client" />
+
+            <TextView
+                android:id="@+id/afisClient"
+                style="@style/dateLivrareDlValori"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/dateLivrareDlLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                style="@style/dateLivrareDlLabel"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="0.15"
+                android:text="Limita credit" />
+
+            <TextView
+                android:id="@+id/afisLimitaCredit"
+                style="@style/dateLivrareDlValori"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/dateLivrareDlLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                style="@style/dateLivrareDlLabel"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="0.15"
+                android:text="Rest credit" />
+
+            <TextView
+                android:id="@+id/afisRestCredit"
+                style="@style/dateLivrareDlValori"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_weight="0.45" >
+
+        <Button
+            android:id="@+id/stergeClientButton"
+            style="@style/ok_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dip"
+            android:layout_gravity="right"
+            android:background="@drawable/ok_button_style"
+            android:paddingLeft="50dip"
+            android:paddingRight="50dip"
+            android:text="Sterge" />
+    </LinearLayout>
+
+</LinearLayout>

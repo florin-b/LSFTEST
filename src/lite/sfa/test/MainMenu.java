@@ -188,7 +188,6 @@ public class MainMenu extends Activity {
 
 		animation.setRepeatMode(Animation.REVERSE);
 
-
 		// verificare update doar la logon
 		if (UserInfo.getInstance().getParentScreen().equals("logon")) {
 
@@ -358,6 +357,8 @@ public class MainMenu extends Activity {
 					else
 						className = CreareComanda.class;
 
+					// className = TestVoice.class;
+
 					Intent nextScreen = new Intent(MainMenu.this, className);
 					startActivity(nextScreen);
 					finish();
@@ -494,7 +495,8 @@ public class MainMenu extends Activity {
 					Intent nextScreen = null;
 					boolean isDownloading = false;
 
-					if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.KA.getTipAcces())) {
+					if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.KA.getTipAcces())
+							|| UserInfo.getInstance().getTipUser().equals(EnumTipUser.SK.getTipAcces())) {
 						nextScreen = new Intent(MainMenu.this, ObiectiveKA.class);
 					} else if ((UserInfo.getInstance().getTipUser().equals(EnumTipUser.DV.getTipAcces()) || UserInfo.getInstance().getTipUser()
 							.equals(EnumTipUser.DK.getTipAcces()))
@@ -1283,7 +1285,7 @@ public class MainMenu extends Activity {
 			nrBtns = btnNamesDV.length;
 		}
 
-		if (UserInfo.getInstance().getTipUser().equals("KA") && !UserInfo.getInstance().getTipUserSap().equals("KA3")) {
+		if (UserInfo.getInstance().getTipUser().equals("KA") || UserInfo.getInstance().getTipUser().equals("SK")) {
 			nrBtns = btnNamesKA.length;
 		}
 
@@ -1327,7 +1329,7 @@ public class MainMenu extends Activity {
 			btnName = btnNamesDV[btnPos];
 		}
 
-		if (UserInfo.getInstance().getTipUser().equals("KA") && !UserInfo.getInstance().getTipUserSap().equals("KA3")) {
+		if (UserInfo.getInstance().getTipUser().equals("KA") || UserInfo.getInstance().getTipUser().equals("SK")) {
 			btnName = btnNamesKA[btnPos];
 		}
 
@@ -1372,7 +1374,7 @@ public class MainMenu extends Activity {
 			btnImg = btnImageDV[btnPos];
 		}
 
-		if (UserInfo.getInstance().getTipUser().equals("KA") && !UserInfo.getInstance().getTipUserSap().equals("KA3")) {
+		if (UserInfo.getInstance().getTipUser().equals("KA") || UserInfo.getInstance().getTipUser().equals("SK")) {
 			btnImg = btnImageKA[btnPos];
 		}
 
@@ -1434,7 +1436,7 @@ public class MainMenu extends Activity {
 			}
 		}
 
-		if (UserInfo.getInstance().getTipUser().equals("KA") && !UserInfo.getInstance().getTipUserSap().equals("KA3")) {
+		if (UserInfo.getInstance().getTipUser().equals("KA") || UserInfo.getInstance().getTipUser().equals("SK")) {
 
 			for (int i = 0; i < btnNamesKA.length; i++) {
 				if (btnNamesKA[i].equalsIgnoreCase(btnName)) {

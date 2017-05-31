@@ -120,7 +120,7 @@ public class OptiuniObiectKaDialog extends Dialog implements OperatiiAgentListen
 	}
 
 	private boolean isInputValid() {
-		if (spinnerFiliale.getSelectedItemPosition() == 0) {
+		if (spinnerFiliale.getAdapter().getCount() > 1 && spinnerFiliale.getSelectedItemPosition() == 0) {
 			Toast.makeText(getContext(), "Selectati filiala ", Toast.LENGTH_SHORT).show();
 			return false;
 		}
@@ -145,7 +145,8 @@ public class OptiuniObiectKaDialog extends Dialog implements OperatiiAgentListen
 	}
 
 	private void setupSpinnerFiliale() {
-		spinnerFiliale.setAdapter(new ArrayAdapter<EnumFilialeKA>(getContext(), android.R.layout.simple_list_item_1, EnumFilialeKA.values()));
+
+		spinnerFiliale.setAdapter(new ArrayAdapter<EnumFilialeKA>(getContext(), android.R.layout.simple_list_item_1, getFiliale()));
 		spinnerFiliale.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -167,12 +168,23 @@ public class OptiuniObiectKaDialog extends Dialog implements OperatiiAgentListen
 
 	}
 
+	private EnumFilialeKA[] getFiliale() {
+		if (isUserSK())
+			return EnumFilialeKA.getFilialeSK();
+		else
+			return EnumFilialeKA.values();
+	}
+
 	private boolean isUserDK() {
 		return UserInfo.getInstance().getTipUser().equals(EnumTipUser.DK.getTipAcces());
 	}
 
 	private boolean isUserDV() {
 		return UserInfo.getInstance().getTipUser().equals(EnumTipUser.DV.getTipAcces());
+	}
+
+	private boolean isUserSK() {
+		return UserInfo.getInstance().getTipUser().equals(EnumTipUser.SK.getTipAcces());
 	}
 
 	private void getListaAgenti(String filiala) {

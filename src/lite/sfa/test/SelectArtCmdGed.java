@@ -489,13 +489,17 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	}
 
 	private void showFilialaDialogUserSite() {
+
+		List<String> listDepozite = DepoziteUl.getInstance().getListDepozite();
+
+		if (listDepozite == null)
+			return;
+
 		dialogSelFilArt = new Dialog(SelectArtCmdGed.this);
 		dialogSelFilArt.setContentView(R.layout.select_fil_site);
 		dialogSelFilArt.setTitle("Selectati filiala");
 		dialogSelFilArt.setCancelable(false);
 		dialogSelFilArt.show();
-
-		List<String> listDepozite = DepoziteUl.getInstance().getListDepozite();
 
 		final RadioButton radioFilAg = (RadioButton) dialogSelFilArt.findViewById(R.id.radio1);
 		radioFilAg.setText(UserInfo.getInstance().getUnitLog());
@@ -1374,7 +1378,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		listPrice = Double.valueOf(pretArticol.getPretLista());
 
 		afisIstoricPret(pretArticol.getIstoricPret());
-		
+
 		selectedArticol.setIstoricPret(UtilsFormatting.getIstoricPret(pretArticol.getIstoricPret(), EnumTipComanda.GED));
 
 		txtImpachetare.setText(pretArticol.getImpachetare());

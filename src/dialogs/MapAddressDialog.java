@@ -5,11 +5,13 @@ import java.util.List;
 
 import listeners.MapListener;
 import lite.sfa.test.R;
+import main.ZoneBucuresti;
 import utils.MapUtils;
 import android.app.ActionBar.LayoutParams;
 import android.app.Dialog;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -24,6 +26,9 @@ import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
+
+import enums.EnumZona;
 
 public class MapAddressDialog extends Dialog {
 
@@ -83,45 +88,10 @@ public class MapAddressDialog extends Dialog {
 				map = ((MapFragment) fm.findFragmentById(R.id.map)).getMap();
 				map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 				map.getUiSettings().setZoomControlsEnabled(true);
-				map.moveCamera(CameraUpdateFactory.newLatLngZoom(coord, detailLevel));
-
-				
-				
-				//-------------
-				
-				/*
-				List<beans.LatLng> zoneA = ZoneBucuresti.getZona(EnumZona.ZONA_A);
-				PolygonOptions polyOptionsA = new PolygonOptions();
-				polyOptionsA.addAll(getGoogleCoords(zoneA));
-				polyOptionsA.strokeColor(Color.BLUE);
-				polyOptionsA.strokeWidth(3);
-				
-				
-				List<beans.LatLng> zoneB1 = ZoneBucuresti.getZona(EnumZona.ZONA_B1);
-				PolygonOptions polyOptionsB1 = new PolygonOptions();
-				polyOptionsB1.addAll(getGoogleCoords(zoneB1));
-				polyOptionsB1.strokeColor(Color.BLACK);
-				polyOptionsB1.strokeWidth(3);
-				
-				
-				List<beans.LatLng> zoneB2 = ZoneBucuresti.getZona(EnumZona.ZONA_B2);
-				PolygonOptions polyOptionsB2 = new PolygonOptions();
-				polyOptionsB2.addAll(getGoogleCoords(zoneB2));
-				polyOptionsB2.strokeColor(Color.RED);
-				polyOptionsB2.strokeWidth(3);
-				
-				
-				map.addPolygon(polyOptionsA);
-				map.addPolygon(polyOptionsB1);
-				map.addPolygon(polyOptionsB2);
-				*/
-				
-				
-				
-				//--------------
-				
-				
 				addMapMarker(map);
+
+				addZoneBucuresti(map);
+				map.moveCamera(CameraUpdateFactory.newLatLngZoom(coord, detailLevel));
 
 				setMapListener();
 			}
@@ -143,13 +113,14 @@ public class MapAddressDialog extends Dialog {
 				MarkerOptions markerOptions = new MarkerOptions();
 				markerOptions.position(latLng);
 				map.clear();
-				map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 				map.addMarker(markerOptions);
+				addZoneBucuresti(map);
+				map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
-				android.location.Address address = MapUtils.getAddressFromCoordinate(latLng, context);
+				android.location.Address locAddress = MapUtils.getAddressFromCoordinate(latLng, context);
 
 				if (mapListener != null)
-					mapListener.addressSelected(latLng, address);
+					mapListener.addressSelected(latLng, locAddress);
 
 			}
 		});
@@ -210,6 +181,35 @@ public class MapAddressDialog extends Dialog {
 
 	public void setMapListener(MapListener listener) {
 		this.mapListener = listener;
+	}
+
+	public void addZoneBucuresti(GoogleMap map) {
+
+		if (!address.getCity().equalsIgnoreCase("bucuresti"))
+			return;
+
+		List<beans.LatLng> zoneA = ZoneBucuresti.getZona(EnumZona.ZONA_A);
+
+		PolygonOptions polyOptionsA = new PolygonOptions();
+		polyOptionsA.addAll(getGoogleCoords(zoneA));
+		polyOptionsA.strokeColor(Color.RED);
+		polyOptionsA.strokeWidth(3);
+
+		List<beans.LatLng> zoneB1 = ZoneBucuresti.getZona(EnumZona.ZONA_B1);
+		PolygonOptions polyOptionsB1 = new PolygonOptions();
+		polyOptionsB1.addAll(getGoogleCoords(zoneB1));
+		polyOptionsB1.strokeColor(Color.BLACK);
+		polyOptionsB1.strokeWidth(3);
+
+		List<beans.LatLng> zoneB2 = ZoneBucuresti.getZona(EnumZona.ZONA_B2);
+		PolygonOptions polyOptionsB2 = new PolygonOptions();
+		polyOptionsB2.addAll(getGoogleCoords(zoneB2));
+		polyOptionsB2.strokeColor(Color.BLACK);
+		polyOptionsB2.strokeWidth(3);
+
+		map.addPolygon(polyOptionsA);
+		map.addPolygon(polyOptionsB1);
+		map.addPolygon(polyOptionsB2);
 	}
 
 }

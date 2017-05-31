@@ -64,8 +64,9 @@ public class AfiseazaObiectiveKAFragment extends Fragment implements DialogObiec
 
 		setupLayout(v);
 
-		if ((UserInfo.getInstance().getTipUser().equals(EnumTipUser.DV.getTipAcces()) || UserInfo.getInstance().getTipUser()
-				.equals(EnumTipUser.DK.getTipAcces()))
+		if ((UserInfo.getInstance().getTipUser().equals(EnumTipUser.DV.getTipAcces())
+				|| UserInfo.getInstance().getTipUser().equals(EnumTipUser.DK.getTipAcces()) || UserInfo.getInstance().getTipUser()
+				.equals(EnumTipUser.SK.getTipAcces()))
 				&& !UtilsUser.isDV_CONS())
 			optiuniDialog.show();
 		else

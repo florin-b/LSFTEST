@@ -8,6 +8,8 @@ import beans.DateLivrareAfisare;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import enums.EnumZona;
+
 public class DateLivrare {
 
 	private static DateLivrare instance = new DateLivrare();
@@ -32,7 +34,7 @@ public class DateLivrare {
 	private String dateLivrare = "";
 	private String termenPlata = "";
 	private String obsLivrare = "";
-	private Integer dataLivrare = 0;
+	private String dataLivrare = "";
 	private boolean adrLivrNoua = false;
 	private String tipDocInsotitor = "1"; // 1 = factura, 2 = aviz
 	private String obsPlata = " ";
@@ -61,6 +63,7 @@ public class DateLivrare {
 	private String prelucrare;
 	private boolean isClientRaft;
 	private boolean isFacturaCmd;
+	private EnumZona zonaBucuresti;
 
 	private DateLivrareAfisare dateLivrareAfisare;
 
@@ -223,14 +226,6 @@ public class DateLivrare {
 
 	public void setObsLivrare(String obsLivrare) {
 		this.obsLivrare = obsLivrare;
-	}
-
-	public Integer getDataLivrare() {
-		return dataLivrare;
-	}
-
-	public void setDataLivrare(Integer dataLivrare) {
-		this.dataLivrare = dataLivrare;
 	}
 
 	public boolean isAdrLivrNoua() {
@@ -462,6 +457,22 @@ public class DateLivrare {
 		this.isFacturaCmd = isFacturaCmd;
 	}
 
+	public String getDataLivrare() {
+		return dataLivrare;
+	}
+
+	public void setDataLivrare(String dataLivrare) {
+		this.dataLivrare = dataLivrare;
+	}
+
+	public EnumZona getZonaBucuresti() {
+		return zonaBucuresti;
+	}
+
+	public void setZonaBucuresti(EnumZona zonaBucuresti) {
+		this.zonaBucuresti = zonaBucuresti;
+	}
+
 	public void resetAll() {
 		codJudet = "";
 		numeJudet = "";
@@ -476,7 +487,6 @@ public class DateLivrare {
 		dateLivrare = "";
 		termenPlata = "";
 		obsLivrare = "";
-		dataLivrare = 0;
 		adrLivrNoua = false;
 		tipDocInsotitor = "1";
 		obsPlata = " ";
@@ -499,6 +509,8 @@ public class DateLivrare {
 		prelucrare = "";
 		isClientRaft = false;
 		isFacturaCmd = false;
+		dataLivrare = "";
+		zonaBucuresti = null;
 
 	}
 

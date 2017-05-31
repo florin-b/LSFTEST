@@ -191,9 +191,12 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 
 		// etUsername.setText("androdv"); //KA Buc
 		// etPassword.setText("sfa");
+		getArticoleComandaVanzare
+		// etUsername.setText("DDIACONU2"); //ag hidr Buc
+		// etPassword.setText("bRB8ZX");
 
-		// etUsername.setText("BDUMITRU"); //ag lemn Buc
-		// etPassword.setText("XNPwzY");
+		// etUsername.setText("CNETCU1"); //ka Buc
+		// etPassword.setText("JL9rjp");
 
 		// etUsername.setText("LPADURARU"); // sd parc Gl
 		// etPassword.setText("tTXHRk");
@@ -216,9 +219,15 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		// CBORUNCEANU //av 09 Glina
 		// XJF8Vp
 
-		//etUsername.setText("CMATEI2"); 
-		//etPassword.setText("YM64CR");
+		// etUsername.setText("CMATEI2");
+		// etPassword.setText("YM64CR");
 
+		//etUsername.setText("GBADULESCU"); // SDKA
+		//etPassword.setText("9dsFx8");
+
+		//etUsername.setText("SALEXANDRESCU"); // DV hidro
+		//etPassword.setText("6ge4Rh");
+		 
 		globalMyIP = getIPConnection();
 
 		checkBundleExtra();
@@ -422,7 +431,7 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 			if (token[0].equals("3")) {
 
 				if (token[5].equals("8") || token[5].equals("9") || token[5].equals("10") || token[5].equals("14") || token[5].equals("12")
-						|| token[5].equals("27") || token[5].equals("35") || token[5].equals("17") || token[5].equals("18")) // doar
+						|| token[5].equals("27") || token[5].equals("35") || token[5].equals("17") || token[5].equals("18") || token[5].equals("32")) // doar
 				// agentii,
 				// admin , sd , dv, dd, ka, dir ka, cons, sm
 				{

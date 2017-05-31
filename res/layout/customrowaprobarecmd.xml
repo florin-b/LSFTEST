@@ -284,7 +284,6 @@
             android:layout_gravity="right"
             android:layout_weight="0.4"
             android:gravity="right"
-            android:inputType="textMultiLine"
             android:textColor="#707070"
             android:textSize="15sp"
             android:typeface="monospace" />

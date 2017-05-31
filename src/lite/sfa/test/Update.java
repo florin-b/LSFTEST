@@ -48,8 +48,7 @@ public class Update extends Activity {
 	public static String unitLog = "";
 	public static String numeDepart = "";
 	public static String codDepart = "";
-	private TextView currVer, installDate, newVersion, newVersionLabel, releaseDate, releaseDateLabel, currVerCode,
-			newVersionCodeLabel, newVersionCode;
+	private TextView currVer, installDate, newVersion, newVersionLabel, releaseDate, releaseDateLabel, currVerCode, newVersionCodeLabel, newVersionCode;
 	public FTPClient mFTPClient = null;
 	String version = "0", buildVer = "0";
 	String tipAcces;
@@ -143,6 +142,7 @@ public class Update extends Activity {
 		buttonUpdate.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				performCheckUpdateThread();
+
 			}
 		});
 
@@ -165,8 +165,6 @@ public class Update extends Activity {
 		});
 
 	}
-
-	
 
 	public void performInstallUpdate() {
 		try {
@@ -372,13 +370,12 @@ public class Update extends Activity {
 
 		if (f.exists()) {
 			Intent intent = new Intent(Intent.ACTION_VIEW);
-			intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/download/"
-					+ "LiteSFATest.apk")), "application/vnd.android.package-archive");
+			intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/download/" + "LiteSFATest.apk")),
+					"application/vnd.android.package-archive");
 			startActivity(intent);
 			finish();
 		} else {
-			Toast toast = Toast.makeText(getApplicationContext(), "Fisier corupt, repetati operatiunea!",
-					Toast.LENGTH_SHORT);
+			Toast toast = Toast.makeText(getApplicationContext(), "Fisier corupt, repetati operatiunea!", Toast.LENGTH_SHORT);
 			toast.show();
 		}
 	}
@@ -429,8 +426,7 @@ public class Update extends Activity {
 						buttonInstall.setVisibility(View.GONE);
 					}
 				} else {
-					Toast.makeText(getApplicationContext(), "Nu exista versiune pentru actualizare!",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), "Nu exista versiune pentru actualizare!", Toast.LENGTH_SHORT).show();
 				}
 			}
 

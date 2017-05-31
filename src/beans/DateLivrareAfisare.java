@@ -17,7 +17,7 @@ public class DateLivrareAfisare {
 	private String dateLivrare = "";
 	private String termenPlata = "";
 	private String obsLivrare = "";
-	private Integer dataLivrare = 0;
+	private String dataLivrare = "";
 	private boolean adrLivrNoua = false;
 	private String tipDocInsotitor = "1"; // 1 = factura, 2 = aviz
 	private String obsPlata = " ";
@@ -152,13 +152,7 @@ public class DateLivrareAfisare {
 		this.obsLivrare = obsLivrare;
 	}
 
-	public Integer getDataLivrare() {
-		return dataLivrare;
-	}
 
-	public void setDataLivrare(Integer dataLivrare) {
-		this.dataLivrare = dataLivrare;
-	}
 
 	public boolean isAdrLivrNoua() {
 		return adrLivrNoua;
@@ -367,6 +361,14 @@ public class DateLivrareAfisare {
 
 	public void setClientRaft(boolean isClientRaft) {
 		this.isClientRaft = isClientRaft;
+	}
+
+	public String getDataLivrare() {
+		return dataLivrare;
+	}
+
+	public void setDataLivrare(String dataLivrare) {
+		this.dataLivrare = dataLivrare;
 	}
 
 }

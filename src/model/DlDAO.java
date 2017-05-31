@@ -91,6 +91,7 @@ public class DlDAO implements IDlDAO, AsyncTaskListener {
 				dateLivrare.setStatusAprov(jsonLivrare.getString("statusAprov"));
 				dateLivrare.setValComanda(jsonLivrare.getString("valComanda"));
 				dateLivrare.setObsComanda(jsonLivrare.getString("obsComanda"));
+				dateLivrare.setNrCT(jsonLivrare.getString("nrCT"));
 				
 
 				ArticolCLP articol;

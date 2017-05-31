@@ -177,8 +177,8 @@ public class ListaArticoleComanda extends Observable {
 				roundedProcRed = "0";
 
 			// pret unitar
-			newUnitPrice = (valTotArt / articol.getCantitate()) * articol.getMultiplu() - (valTotArt / articol.getCantitate())
-					* articol.getMultiplu() * (Double.valueOf(roundedProcRed) / 100);
+			newUnitPrice = (valTotArt / articol.getCantitate()) * articol.getMultiplu() - (valTotArt / articol.getCantitate()) * articol.getMultiplu()
+					* (Double.valueOf(roundedProcRed) / 100);
 
 			// valoare articol
 			newTotalPrice = valTotArt - valTotArt * (Double.valueOf(roundedProcRed) / 100);
@@ -298,6 +298,10 @@ public class ListaArticoleComanda extends Observable {
 			ArticolComanda articol;
 			while (iterator.hasNext()) {
 				articol = iterator.next();
+
+				if (articol.getInfoArticol() == null || !articol.getInfoArticol().contains(";"))
+					continue;
+
 				tokInfoArt = articol.getInfoArticol().split(";");
 
 				for (int ii = 0; ii < tokInfoArt.length; ii++) {

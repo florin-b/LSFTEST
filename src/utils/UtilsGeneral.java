@@ -239,6 +239,9 @@ public class UtilsGeneral {
 	public static String getTipReducere(String codReducere) {
 		String tipReducere = "";
 
+		if (codReducere == null)
+			return tipReducere;
+
 		if (codReducere.equals("X")) {
 			tipReducere = "2 facturi";
 		}
@@ -504,7 +507,7 @@ public class UtilsGeneral {
 
 		if (numeFiliala.equals("SIBIU"))
 			fl = "SB10";
-		
+
 		if (numeFiliala.equals("DEVA"))
 			fl = "HD10";
 

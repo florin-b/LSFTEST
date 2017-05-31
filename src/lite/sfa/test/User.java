@@ -138,8 +138,8 @@ public class User extends Activity implements HelperSiteListener {
 
 		}
 
-		if ((UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces()
-				.equals("18"))
+		if ((UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("32")
+				|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18"))
 				&& !UserInfo.getInstance().getUserSite().equals("X"))// KA,
 		// cons
 		// sau
@@ -368,7 +368,7 @@ public class User extends Activity implements HelperSiteListener {
 		}
 
 		public void onNothingSelected(AdapterView<?> parent) {
-			// TODO
+
 		}
 	}
 
@@ -379,7 +379,7 @@ public class User extends Activity implements HelperSiteListener {
 			retVal = "Administrator";
 		} else if (codAcc.equals("9")) {
 			retVal = "Agent";
-		} else if (codAcc.equals("10")) {
+		} else if (codAcc.equals("10") || codAcc.equals("32")) {
 			retVal = "Sef departament";
 		}
 

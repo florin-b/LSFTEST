@@ -28,6 +28,7 @@ import model.Comanda;
 import model.ComenziDAO;
 import model.Constants;
 import model.DateLivrare;
+import model.HelperTranspBuc;
 import model.InfoStrings;
 import model.ListaArticoleComanda;
 import model.UserInfo;
@@ -135,6 +136,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 	private NumberFormat nf3;
 	private List<ArticolComanda> listArticole = null;
 	private String comandaJson;
+	private Comanda comandaFinala = new Comanda();
 
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -522,6 +524,23 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			dateLivrareInstance.setCodAgent(UserInfo.getInstance().getCod());
 			dateLivrareInstance.setFactRed(factRed);
 
+			if (dateLivrareInstance.getZonaBucuresti() != null) {
+
+				HelperTranspBuc.eliminaCostTransportZoneBuc(ListaArticoleComanda.getInstance().getListArticoleComanda());
+
+				if (HelperTranspBuc.isCondTranspZonaBuc(dateLivrareInstance, dateLivrareInstance.getZonaBucuresti())) {
+
+					HelperTranspBuc.adaugaTransportBucuresti(ListaArticoleComanda.getInstance().getListArticoleComanda(),
+							dateLivrareInstance.getZonaBucuresti());
+
+					ArticoleCreareAdapter adapterArticole = new ArticoleCreareAdapter(new ArrayList<ArticolComanda>(), this);
+					adapterArticole.setListArticole(ListaArticoleComanda.getInstance().getListArticoleComanda());
+					listArtCmd.setAdapter(adapterArticole);
+					calculTotalComanda();
+				}
+
+			}
+
 		}
 
 	}
@@ -540,7 +559,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 				ListaArticoleComanda.getInstance().removeArticolComanda(listViewSelPos);
 				displayArticoleComanda();
 
-				newTotal();
+				calculTotalComanda();
 				listViewSelPos = -1;
 
 				// pentru comenzile cu total negociat se calculeaza reducerile
@@ -704,6 +723,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 	}
 
+
 	private boolean isCondPF10_000() {
 		return CreareComanda.tipClientVar.equals("PF") && DateLivrare.getInstance().getTipPlata().equals("E") && totalComanda > 10000;
 	}
@@ -764,26 +784,23 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 								+ UserInfo.getInstance().getUserSite() + "#" + userSiteMail + "#" + isValIncModif + "#" + codJ + "#" + adrLivrareGED + "@"
 								+ articoleFinaleStr;
 
-						Comanda comanda = new Comanda();
-						comanda.setCodClient(codClientVar);
-						comanda.setComandaBlocata(comandaBlocata);
-						comanda.setNrCmdSap(cmdSAP);
-						comanda.setAlerteKA(alerteKA);
-						comanda.setFactRedSeparat(localRedSeparat);
-						comanda.setFilialaAlternativa(CreareComanda.filialaAlternativa);
-						comanda.setUserSite(UserInfo.getInstance().getUserSite());
-						comanda.setUserSiteMail(userSiteMail);
-						comanda.setIsValIncModif(isValIncModif);
-						comanda.setCodJ(codJ);
-						comanda.setAdresaLivrareGed(adrLivrareGED);
+						// Comanda comanda = new Comanda();
+						comandaFinala.setCodClient(codClientVar);
+						comandaFinala.setComandaBlocata(comandaBlocata);
+						comandaFinala.setNrCmdSap(cmdSAP);
+						comandaFinala.setAlerteKA(alerteKA);
+						comandaFinala.setFactRedSeparat(localRedSeparat);
+						comandaFinala.setFilialaAlternativa(CreareComanda.filialaAlternativa);
+						comandaFinala.setUserSite(UserInfo.getInstance().getUserSite());
+						comandaFinala.setUserSiteMail(userSiteMail);
+						comandaFinala.setIsValIncModif(isValIncModif);
+						comandaFinala.setCodJ(codJ);
+						comandaFinala.setAdresaLivrareGed(adrLivrareGED);
 
-						comandaJson = serializeComanda(comanda);
+						comandaJson = serializeComanda(comandaFinala);
 						articoleFinaleStr = serializedResult;
 
-						if (comandaHasPalet())
-							displayAlertPalet();
-						else
-							displayArtComplDialog();
+						trateazaConditiiSuplimentare();
 
 					}
 				});
@@ -794,6 +811,14 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			}
 
 		}
+	}
+
+	private void trateazaConditiiSuplimentare() {
+
+		if (comandaHasPalet())
+			displayAlertPalet();
+		else
+			displayArtComplDialog();
 	}
 
 	private boolean isReducere() {
@@ -1114,6 +1139,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			obj.put("conditieID", comanda.getConditieID());
 			obj.put("canalDistrib", CreareComanda.canalDistrib);
 			obj.put("valTransportSap", "0");
+			obj.put("nrDocumentClp", comanda.getNrDocumentClp());
 
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
@@ -1226,7 +1252,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 	}
 
-	private void newTotal() {
+	private void calculTotalComanda() {
 
 		totalComanda = ListaArticoleComanda.getInstance().getTotalComanda();
 		textTotalCmd.setText(String.format("%.02f", totalComanda));
@@ -1598,5 +1624,9 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		}
 
 	}
+
+
+
+
 
 }

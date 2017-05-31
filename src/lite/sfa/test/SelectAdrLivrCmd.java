@@ -4,11 +4,11 @@
  */
 package lite.sfa.test;
 
-import java.sql.Date;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -17,6 +17,7 @@ import listeners.AutocompleteDialogListener;
 import listeners.MapListener;
 import listeners.ObiectiveListener;
 import listeners.OperatiiAdresaListener;
+import main.ZoneBucuresti;
 import model.ArticolComanda;
 import model.Constants;
 import model.DateLivrare;
@@ -29,12 +30,14 @@ import model.UserInfo;
 import utils.Exceptions;
 import utils.MapUtils;
 import utils.UtilsAddress;
+import utils.UtilsDates;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import adapters.AdapterAdreseLivrare;
 import adapters.AdapterObiective;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -52,25 +55,30 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
 import android.widget.RadioButton;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import beans.Address;
 import beans.BeanAdresaLivrare;
 import beans.BeanAdreseJudet;
 import beans.BeanObiectivDepartament;
 import beans.GeocodeAddress;
+import beans.StatusIntervalLivrare;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import dialogs.MapAddressDialog;
+import dialogs.SelectDateDialog;
 import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
 import enums.EnumOperatiiObiective;
+import enums.EnumZona;
 
 public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnItemClickListener, OperatiiAdresaListener, ObiectiveListener, MapListener,
 		AutocompleteDialogListener {
@@ -88,8 +96,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	public SimpleAdapter adapterJudete, adapterAdreseLivrare;
 
-	private Spinner spinnerPlata, spinnerTransp, spinnerJudet, spinnerTermenPlata, spinnerDataLivrare, spinnerAdreseLivrare, spinnerDocInsot,
-			spinnerTipReducere, spinnerResponsabil;
+	private Spinner spinnerPlata, spinnerTransp, spinnerJudet, spinnerTermenPlata, spinnerAdreseLivrare, spinnerDocInsot, spinnerTipReducere,
+			spinnerResponsabil;
 	private static ArrayList<HashMap<String, String>> listJudete = null, listAdreseLivrare = null;
 	private ArrayAdapter<String> adapterDataLivrare, adapterTermenPlata, adapterResponsabil;
 	private LinearLayout layoutAdrese, layoutAdr1, layoutAdr2, layoutValoareIncasare;
@@ -120,6 +128,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private static final int LIST_LOCALITATI = 1;
 	private static final int LIST_ADRESE = 2;
+	private TextView textDataLivrare;
+	private Button btnDataLivrare;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -234,12 +244,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		adapterTermenPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
 		adapterTermenPlata.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerTermenPlata.setAdapter(adapterTermenPlata);
-
-		spinnerDataLivrare = (Spinner) findViewById(R.id.spinnerDataLivrare);
-		adapterDataLivrare = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-		adapterDataLivrare.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinnerDataLivrare.setAdapter(adapterDataLivrare);
-		fillSpinnerDataLivrare();
 
 		spinnerAdreseLivrare = (Spinner) findViewById(R.id.spinnerAdreseLivrare);
 
@@ -377,9 +381,59 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		layoutAdrese.setVisibility(View.VISIBLE);
 		layoutAdr1.setVisibility(View.GONE);
 		layoutAdr2.setVisibility(View.GONE);
+
+		textDataLivrare = (TextView) findViewById(R.id.textDataLivrare);
+
+		if (!DateLivrare.getInstance().getDataLivrare().isEmpty())
+			textDataLivrare.setText(DateLivrare.getInstance().getDataLivrare());
+
+		btnDataLivrare = (Button) findViewById(R.id.btnDataLivrare);
+		addListenerDataLivrare();
+
 		performGetAdreseLivrare();
 
 	}
+
+	private void addListenerDataLivrare() {
+		btnDataLivrare.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				Locale.setDefault(new Locale("ro"));
+
+				int year = Calendar.getInstance().get(Calendar.YEAR);
+				int month = Calendar.getInstance().get(Calendar.MONTH);
+				int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+				SelectDateDialog datePickerDialog = new SelectDateDialog(SelectAdrLivrCmd.this, datePickerListener, year, month, day);
+				datePickerDialog.setTitle("Data livrare");
+
+				datePickerDialog.show();
+
+			}
+		});
+	}
+
+	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
+
+		public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
+
+			if (view.isShown()) {
+
+				SimpleDateFormat displayFormat = new SimpleDateFormat("dd.MM.yyyy");
+				Calendar calendar = new GregorianCalendar(selectedYear, selectedMonth, selectedDay);
+
+				StatusIntervalLivrare statusInterval = UtilsDates.getStatusIntervalLivrare(calendar.getTime());
+
+				if (statusInterval.isValid()) {
+					textDataLivrare.setText(displayFormat.format(calendar.getTime()));
+					DateLivrare.getInstance().setDataLivrare(displayFormat.format(calendar.getTime()));
+				} else
+					Toast.makeText(getApplicationContext(), statusInterval.getMessage(), Toast.LENGTH_LONG).show();
+			}
+
+		}
+	};
 
 	private void addListenerClientLaRaft() {
 
@@ -531,34 +585,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			}
 		});
 
-	}
-
-	private void fillSpinnerDataLivrare() {
-
-		adapterDataLivrare.add("Selectati data livrare");
-
-		adapterDataLivrare.add("Astazi");
-
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.UK);
-		Calendar c1 = Calendar.getInstance();
-		c1.add(Calendar.DAY_OF_MONTH, 1);
-		Date resultdate = new Date(c1.getTimeInMillis());
-		adapterDataLivrare.add(sdf.format(resultdate));
-
-		c1.add(Calendar.DAY_OF_MONTH, 1);
-		resultdate = new Date(c1.getTimeInMillis());
-		adapterDataLivrare.add(sdf.format(resultdate));
-
-		c1.add(Calendar.DAY_OF_MONTH, 1);
-		resultdate = new Date(c1.getTimeInMillis());
-		adapterDataLivrare.add(sdf.format(resultdate));
-
-		c1.add(Calendar.DAY_OF_MONTH, 1);
-		resultdate = new Date(c1.getTimeInMillis());
-		adapterDataLivrare.add(sdf.format(resultdate));
-
-		adapterDataLivrare.notifyDataSetChanged();
-		spinnerDataLivrare.setAdapter(adapterDataLivrare);
 	}
 
 	private void addListenerTipPlata() {
@@ -895,32 +921,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			if (tokLivrare[5].equals("TCLI"))
 				spinnerTransp.setSelection(1);
 
-			// data livrare
-			Calendar cal1 = Calendar.getInstance();
-			Calendar cal2 = Calendar.getInstance();
-
-			cal1.set(cal1.get(Calendar.YEAR), cal1.get(Calendar.MONTH) + 1, cal1.get(Calendar.DAY_OF_MONTH));
-			cal2.set(Integer.parseInt(tokLivrare[11].substring(0, 4)), Integer.parseInt(tokLivrare[11].substring(4, 6)),
-					Integer.parseInt(tokLivrare[11].substring(6, 8)));
-
-			long diff1 = cal2.getTimeInMillis() - cal1.getTimeInMillis();
-			long diffDays = diff1 / (24 * 60 * 60 * 1000);
-
-			if (diffDays <= 0)
-				spinnerDataLivrare.setSelection(1);
-
-			if (diffDays == 1)
-				spinnerDataLivrare.setSelection(2);
-
-			if (diffDays == 2)
-				spinnerDataLivrare.setSelection(3);
-
-			if (diffDays == 3)
-				spinnerDataLivrare.setSelection(4);
-
-			if (diffDays >= 4)
-				spinnerDataLivrare.setSelection(5);
-
 			// obs livrare
 			txtObservatii.setText(tokLivrare[10]);
 
@@ -1160,8 +1160,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		DateLivrare dateLivrareInstance = DateLivrare.getInstance();
 
-		if (layoutAdrese.getVisibility() == View.VISIBLE) { // adresa
-			// din lista
+		if (layoutAdrese.getVisibility() == View.VISIBLE) {
 
 			if (listAdreseLivrare.size() > 0) {
 				BeanAdresaLivrare adresaLivrare = (BeanAdresaLivrare) spinnerAdreseLivrare.getSelectedItem();
@@ -1220,7 +1219,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			return;
 		}
 
-		if (spinnerDataLivrare.getSelectedItemPosition() == 0) {
+		if (DateLivrare.getInstance().getDataLivrare().isEmpty()) {
 			Toast.makeText(getApplicationContext(), "Selectati data livrare!", Toast.LENGTH_SHORT).show();
 			return;
 		}
@@ -1232,7 +1231,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		dateLivrareInstance.setTipPlata(spinnerPlata.getSelectedItem().toString().substring(0, 1));
 		dateLivrareInstance.setTransport(spinnerTransp.getSelectedItem().toString().substring(0, 4));
-		dateLivrareInstance.setDataLivrare(spinnerDataLivrare.getSelectedItemPosition() - 1);
 
 		if (!isAdresaCorecta()) {
 			Toast.makeText(getApplicationContext(), "Completati adresa corect sau pozitionati adresa pe harta.", Toast.LENGTH_LONG).show();
@@ -1281,6 +1279,13 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			dateLivrareInstance.setPrelucrare(spinnerIndoire.getSelectedItem().toString());
 		} else
 			dateLivrareInstance.setPrelucrare("-1");
+
+		if (dateLivrareInstance.getOras().equalsIgnoreCase("bucuresti")) {
+			beans.LatLng coordAdresa = new beans.LatLng(dateLivrareInstance.getCoordonateAdresa().latitude, dateLivrareInstance.getCoordonateAdresa().longitude);
+			EnumZona zona = ZoneBucuresti.getZonaBucuresti(coordAdresa);
+
+			dateLivrareInstance.setZonaBucuresti(zona);
+		}
 
 		finish();
 

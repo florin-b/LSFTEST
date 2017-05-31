@@ -4,14 +4,11 @@
     android:layout_height="wrap_content" >
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="50dip"
@@ -20,8 +17,6 @@
             android:orientation="vertical" >
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/layoutSelFiliala"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -50,6 +45,18 @@
                     android:layout_marginTop="20dip"
                     android:background="@drawable/spinner_style_2"
                     android:scrollbarStyle="outsideInset" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="20dip" />
+
+                <Spinner
+                    android:id="@+id/spinnerAgenti"
+                    android:layout_width="250dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dip"
+                    android:background="@drawable/spinner_style_2"
+                    android:scrollbarStyle="outsideInset" />
             </LinearLayout>
 
             <TextView
@@ -68,8 +75,6 @@
                 android:background="@color/backColorObiective1" />
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dip"
@@ -92,8 +97,6 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dip"
@@ -117,7 +120,6 @@
         </LinearLayout>
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/layoutHeaderVenituri"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -216,7 +218,6 @@
         </LinearLayout>
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="left"

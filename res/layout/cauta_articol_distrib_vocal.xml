@@ -1,0 +1,278 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutCautaArticol"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal" >
+
+        <RadioGroup
+            android:layout_width="0dip"
+            android:layout_height="45dip"
+            android:layout_weight="0.1"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/radio_cod"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cod" />
+
+            <RadioButton
+                android:id="@+id/radio_nume"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
+                android:checked="true"
+                android:text="Nume" />
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/txtNumeArt"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left|bottom"
+            android:layout_marginLeft="10dip"
+            android:layout_weight="0.2"
+            android:inputType="textNoSuggestions"
+            android:maxLength="30"
+            android:singleLine="true"
+            android:textColor="@color/editTextColor1"
+            android:typeface="monospace" />
+
+        <Button
+            android:id="@+id/articoleBtn"
+            style="@style/ok_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="10dip"
+            android:layout_weight="0.07"
+            android:background="@drawable/ok_button_style"
+            android:text="@string/strCauta" />
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="0.05"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="Depozit" />
+
+        <Spinner
+            android:id="@+id/spinnerDepozite"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left|bottom"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:layout_weight="0.08"
+            android:typeface="sans" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0.45"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/labelSelArticol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Selecteaza"
+                android:textSize="19sp" />
+
+            <ListView
+                android:id="@+id/listResArticole"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/resLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="0.55"
+            android:background="@drawable/rounded_shape"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textNumeArticol"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/detColor1"
+                android:textSize="17sp"
+                android:typeface="sans" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/labelStoc"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_weight="0.1"
+                    android:gravity="left"
+                    android:text="Stoc"
+                    android:textColor="@color/detColor2"
+                    android:textSize="17sp"
+                    android:typeface="sans" />
+
+                <TextView
+                    android:id="@+id/textStoc"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:textColor="@color/detColor2"
+                    android:textSize="17sp"
+                    android:typeface="sans" />
+
+                <TextView
+                    android:id="@+id/textUm"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:gravity="left"
+                    android:textColor="@color/detColor2"
+                    android:textSize="17sp"
+                    android:typeface="sans" />
+
+                <View
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/labelCantitate"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_weight="0.1"
+                    android:gravity="left|center_vertical"
+                    android:text="Cantitate"
+                    android:textColor="@color/detColor2"
+                    android:textSize="17sp"
+                    android:typeface="sans" />
+
+                <EditText
+                    android:id="@+id/textCantitate"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:inputType="number|numberDecimal"
+                    android:textColor="@color/detColor2"
+                    android:textSize="17sp"
+                    android:typeface="sans" />
+
+                <View
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/pretArticol"
+                style="@style/ok_button"
+                android:layout_width="wrap_content"
+                android:layout_height="40dip"
+                android:layout_gravity="left"
+                android:layout_margin="10dip"
+                android:background="@drawable/ok_button_style"
+                android:paddingLeft="50dip"
+                android:paddingRight="50dip"
+                android:text="Pret" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/labelValoare"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_weight="0.1"
+                    android:gravity="left"
+                    android:text="Valoare"
+                    android:textColor="@color/detColor2"
+                    android:textSize="17sp"
+                    android:typeface="sans" />
+
+                <EditText
+                    android:id="@+id/textValoare"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:inputType="number|numberDecimal"
+                    android:textColor="@color/detColor2"
+                    android:textSize="17sp"
+                    android:typeface="sans" />
+
+                <TextView
+                    android:id="@+id/textReducere"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:textColor="@color/detColor2"
+                    android:textSize="17sp"
+                    android:typeface="sans" />
+
+                <View
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/adaugaArticol"
+                style="@style/ok_button"
+                android:layout_width="wrap_content"
+                android:layout_height="40dip"
+                android:layout_gravity="left"
+                android:layout_margin="10dip"
+                android:background="@drawable/ok_button_style"
+                android:paddingLeft="50dip"
+                android:paddingRight="50dip"
+                android:text="Adauga" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

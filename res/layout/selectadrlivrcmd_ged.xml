@@ -438,14 +438,33 @@
                     android:textSize="17sp"
                     android:typeface="serif" />
 
-                <Spinner
-                    android:id="@+id/spinnerDataLivrare"
+                <TextView
+                    android:id="@+id/textDataLivrare"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginLeft="3dip"
+                    android:gravity="left"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
+
+                <Button
+                    android:id="@+id/btnDataLivrare"
+                    style="@style/ok_button"
+                    android:layout_width="0dip"
+                    android:layout_height="40dip"
+                    android:layout_gravity="bottom|left"
+                    android:layout_weight="0.2"
+                    android:background="@drawable/cancel_button_style"
+                    android:paddingLeft="20dip"
+                    android:paddingRight="20dip"
+                    android:text="Selectati data livrare" />
+
+                <View
                     android:layout_width="0dp"
-                    android:layout_height="45dip"
-                    android:layout_gravity="left|bottom"
-                    android:layout_marginRight="180dip"
-                    android:layout_weight="0.25"
-                    android:gravity="left" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.35" />
             </LinearLayout>
 
             <LinearLayout

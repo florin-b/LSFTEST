@@ -568,6 +568,31 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((codArticol == null) ? 0 : codArticol.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ArticolComanda other = (ArticolComanda) obj;
+		if (codArticol == null) {
+			if (other.codArticol != null)
+				return false;
+		} else if (!codArticol.equals(other.codArticol))
+			return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		return "ArticolComanda [nrCrt=" + nrCrt + ", numeArticol=" + numeArticol + ", codArticol=" + codArticol + ", depozit=" + depozit + ", cantitate="
 				+ cantitate + ", um=" + um + ", pret=" + pret + "]";

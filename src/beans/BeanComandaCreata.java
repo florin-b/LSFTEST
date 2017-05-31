@@ -35,6 +35,7 @@ public class BeanComandaCreata {
 	private String codStare;
 	private double avans;
 	private boolean clientRaft;
+	
 
 	public BeanComandaCreata() {
 
@@ -303,6 +304,8 @@ public class BeanComandaCreata {
 	public void setClientRaft(boolean clientRaft) {
 		this.clientRaft = clientRaft;
 	}
+
+	
 
 	@Override
 	public String toString() {

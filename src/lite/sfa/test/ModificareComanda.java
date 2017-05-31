@@ -25,6 +25,7 @@ import model.Comanda;
 import model.ComenziDAO;
 import model.Constants;
 import model.DateLivrare;
+import model.HelperTranspBuc;
 import model.InfoStrings;
 import model.ListaArticoleComandaGed;
 import model.ListaArticoleModificareComanda;
@@ -366,6 +367,25 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			textFactRed.setText(UtilsGeneral.getTipReducere(dateLivrareInstance.getRedSeparat()));
 			textTipPlata.setText(UtilsGeneral.getDescTipPlata(dateLivrareInstance.getTipPlata()));
 			textTransport.setText(UtilsGeneral.getDescTipTransport(dateLivrareInstance.getTransport()));
+
+			if (!isUserCV() && !isComandaGed()) {
+
+				if (dateLivrareInstance.getZonaBucuresti() != null) {
+
+					HelperTranspBuc.eliminaCostTransportZoneBuc(listArticoleComanda);
+
+					if (HelperTranspBuc.isCondTranspZonaBuc(dateLivrareInstance, dateLivrareInstance.getZonaBucuresti())) {
+						HelperTranspBuc.adaugaTransportBucuresti(listArticoleComanda, dateLivrareInstance.getZonaBucuresti());
+
+					}
+
+					adapterArticole.setListArticole(listArticoleComanda);
+					adapterArticole.notifyDataSetChanged();
+					listViewArticole.setAdapter(adapterArticole);
+
+				}
+
+			}
 
 		}
 

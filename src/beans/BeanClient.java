@@ -34,4 +34,9 @@ public class BeanClient {
 		this.tipClient = tipClient;
 	}
 
+	@Override
+	public String toString() {
+		return "BeanClient [numeClient=" + numeClient + ", codClient=" + codClient + ", tipClient=" + tipClient + "]";
+	}
+
 }

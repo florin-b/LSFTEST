@@ -1,7 +1,13 @@
 package utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
+
+import model.Constants;
+import beans.StatusIntervalLivrare;
 
 public class UtilsDates {
 
@@ -82,6 +88,68 @@ public class UtilsDates {
 		}
 
 		return monthName;
+
+	}
+
+	public static String getCurrentDate() {
+		return new SimpleDateFormat("dd.MM.yyyy").format(new Date());
+	}
+
+	private static Date getDateMidnight() {
+		Calendar c = new GregorianCalendar();
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		return c.getTime();
+	}
+
+	public static int dateDiffinDays(Date dateStop) {
+
+		long diff = dateStop.getTime() - getDateMidnight().getTime() + 1000;
+
+		if (diff < 0)
+			return -1;
+
+		return (int) (diff / (24 * 60 * 60 * 1000));
+
+	}
+
+	public static StatusIntervalLivrare getStatusIntervalLivrare(Date dateStop) {
+
+		StatusIntervalLivrare statusInterval = new StatusIntervalLivrare();
+
+		int dateDiff = dateDiffinDays(dateStop);
+
+		if (dateDiff < 0) {
+			statusInterval.setValid(false);
+			statusInterval.setMessage("Data livrare incorecta.");
+			return statusInterval;
+		}
+
+		if (dateDiff > getNrZileLivrare()) {
+			statusInterval.setValid(false);
+			statusInterval.setMessage("Livrarea trebuie sa se faca in cel mult " + getNrZileLivrare() + " zile de la data curenta.");
+			return statusInterval;
+		}
+		
+		statusInterval.setValid(true);
+
+		return statusInterval;
+	}
+
+	private static int getNrZileLivrare() {
+		if (UtilsUser.isAV() || UtilsUser.isKA())
+			return Constants.NR_ZILE_LIVRARE_AG;
+		else
+			return Constants.NR_ZILE_LIVRARE_CVA;
+	}
+
+	public Date addDaysToDate(Date date, int days) {
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.DATE, days);
+		return cal.getTime();
 
 	}
 

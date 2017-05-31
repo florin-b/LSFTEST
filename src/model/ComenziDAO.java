@@ -257,7 +257,7 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 				dateLivrare.setTipPersClient(jsonLivrare.getString("tipPersClient"));
 				dateLivrare.setMail(jsonLivrare.getString("mail"));
 				dateLivrare.setObsPlata(jsonLivrare.getString("obsPlata"));
-				dateLivrare.setDataLivrare(Integer.valueOf(jsonLivrare.getString("dataLivrare")));
+				dateLivrare.setDataLivrare(jsonLivrare.getString("dataLivrare"));
 				dateLivrare.setAdresaD(jsonLivrare.getString("adresaD"));
 				dateLivrare.setOrasD(jsonLivrare.getString("orasD"));
 				dateLivrare.setCodJudetD(jsonLivrare.getString("codJudetD"));
@@ -274,7 +274,7 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 				dateLivrare.setClientRaft(jsonLivrare.getString("clientRaft").equals("X") ? true : false);
 
 				JSONArray jsonArticole = jsonObject.getJSONArray("articoleComanda");
-				String tipAlert = "", subCmp = "";
+				String tipAlert, subCmp;
 				for (int i = 0; i < jsonArticole.length(); i++) {
 					JSONObject articolObject = jsonArticole.getJSONObject(i);
 

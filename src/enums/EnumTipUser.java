@@ -72,6 +72,20 @@ public enum EnumTipUser {
 		}
 	},
 
+	SK {
+		public String getDescription() {
+			return "Sef departament";
+		}
+
+		public String getTipAcces() {
+			return "SK";
+		}
+
+		public int getCodAcces() {
+			return 32;
+		}
+	},
+
 	DK {
 		public String getDescription() {
 			return "Director key account";

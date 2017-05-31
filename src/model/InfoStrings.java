@@ -875,6 +875,9 @@ public class InfoStrings {
 
 			if (filiala.equals("BU12"))
 				codClient = "4119000026";
+			
+			if (filiala.equals("SB10"))
+				codClient = "4119000422";
 
 		}
 
@@ -1187,6 +1190,11 @@ public class InfoStrings {
 		// DIRECTOR KA
 		if (UserInfo.getInstance().getTipAcces().equals("35")) {
 			tipAcces = "DK";
+		}
+
+		// SD KA
+		if (UserInfo.getInstance().getTipAcces().equals("32")) {
+			tipAcces = "SK";
 		}
 
 		// CONSILIERI

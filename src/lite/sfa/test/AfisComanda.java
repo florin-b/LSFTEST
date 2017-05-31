@@ -256,7 +256,8 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 	}
 
 	boolean isSefDepart() {
-		return UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18");
+		return UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")
+				|| UserInfo.getInstance().getTipAcces().equals("32");
 	}
 
 	boolean isAgent() {
@@ -333,7 +334,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			selectedCodDepart = UserInfo.getInstance().getCodDepart();
 
 		// dka
-		if (UserInfo.getInstance().getTipAcces().equals("35")) {
+		if (UserInfo.getInstance().getTipAcces().equals("35") || UserInfo.getInstance().getTipAcces().equals("32")) {
 			selectedCodDepart = "10";
 		}
 

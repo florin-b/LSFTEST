@@ -43,8 +43,8 @@ public class AfisareDispozitiiLivrareActivity extends Activity implements DlDAOL
 	public static String selectedCmd = "", selectedCmdSap = "";
 	private ListView listViewArtCmdClp;
 
-	private TextView textAdrLivr, textPersContact, textTelefon, textOras, textJudet, textDataLivrare, textTipMarfa,
-			textMasa, textTipCamion, textTipIncarcare, textAprobatOC, textTipPlata, textObservatii, textTransport;
+	private TextView textAdrLivr, textPersContact, textTelefon, textOras, textJudet, textDataLivrare, textTipMarfa, textMasa, textTipCamion, textTipIncarcare,
+			textAprobatOC, textTipPlata, textObservatii, textTransport;
 
 	private LinearLayout layoutCmdCondHead;
 
@@ -238,6 +238,8 @@ public class AfisareDispozitiiLivrareActivity extends Activity implements DlDAOL
 			textAprobatOC.setText(dateLivrare.getAprobatOC());
 			textTipPlata.setText(dateLivrare.getTipPlata());
 			textObservatii.setText(dateLivrare.getObsComanda());
+
+			((TextView) findViewById(R.id.textNrCT)).setText(dateLivrare.getNrCT());
 
 			List<ArticolCLP> listArticole = dateComanda.getArticole();
 

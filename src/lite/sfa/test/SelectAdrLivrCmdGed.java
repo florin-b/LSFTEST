@@ -4,12 +4,12 @@
  */
 package lite.sfa.test;
 
-import java.sql.Date;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -27,16 +27,19 @@ import model.UserInfo;
 import utils.MapUtils;
 import utils.UtilsAddress;
 import utils.UtilsComenzi;
+import utils.UtilsDates;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -46,6 +49,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -57,10 +61,12 @@ import beans.Address;
 import beans.BeanAdresaLivrare;
 import beans.BeanAdreseJudet;
 import beans.GeocodeAddress;
+import beans.StatusIntervalLivrare;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import dialogs.MapAddressDialog;
+import dialogs.SelectDateDialog;
 import enums.EnumClienti;
 import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
@@ -84,9 +90,9 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	public SimpleAdapter adapterJudete, adapterJudeteLivrare, adapterAdreseLivrare;
 
-	private Spinner spinnerPlata, spinnerTransp, spinnerJudet, spinnerTermenPlata, spinnerDataLivrare, spinnerDocInsot, spinnerJudetLivrare;
+	private Spinner spinnerPlata, spinnerTransp, spinnerJudet, spinnerTermenPlata, spinnerDocInsot, spinnerJudetLivrare;
 	private static ArrayList<HashMap<String, String>> listJudete = null, listJudeteLivrare = null;
-	private ArrayAdapter<String> adapterDataLivrare, adapterTermenPlata;
+	private ArrayAdapter<String> adapterTermenPlata;
 	private LinearLayout layoutAdr1, layoutAdr2, layoutMail;
 
 	int posJudetSel = 0;
@@ -109,6 +115,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private Button btnPozitieAdresa;
 	private EditText textNrStr;
 	private Spinner spinnerIndoire, spinnerTonaj;
+	private TextView textDataLivrare;
+	private Button btnDataLivrare;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -236,12 +244,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			adapterTermenPlata.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinnerTermenPlata.setAdapter(adapterTermenPlata);
 
-			spinnerDataLivrare = (Spinner) findViewById(R.id.spinnerDataLivrare);
-			adapterDataLivrare = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-			adapterDataLivrare.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			spinnerDataLivrare.setAdapter(adapterDataLivrare);
-			fillSpinnerDataLivrare();
-
 			addAdresaLivrare();
 
 			adapterTermenPlata.add("C000");
@@ -310,11 +312,64 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 				setupListAdreseLayout();
 			}
 
+			textDataLivrare = (TextView) findViewById(R.id.textDataLivrare);
+
+			if (!dateLivrareInstance.getDataLivrare().isEmpty())
+				textDataLivrare.setText(dateLivrareInstance.getDataLivrare());
+			else {
+				textDataLivrare.setText(UtilsDates.getCurrentDate());
+				dateLivrareInstance.setDataLivrare(UtilsDates.getCurrentDate());
+			}
+
+			btnDataLivrare = (Button) findViewById(R.id.btnDataLivrare);
+			addListenerDataLivrare();
+
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT).show();
 		}
 
 	}
+
+	private void addListenerDataLivrare() {
+		btnDataLivrare.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				Locale.setDefault(new Locale("ro"));
+
+				int year = Calendar.getInstance().get(Calendar.YEAR);
+				int month = Calendar.getInstance().get(Calendar.MONTH);
+				int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+				SelectDateDialog datePickerDialog = new SelectDateDialog(SelectAdrLivrCmdGed.this, datePickerListener, year, month, day);
+				datePickerDialog.setTitle("Data livrare");
+
+				datePickerDialog.show();
+
+			}
+		});
+	}
+
+	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
+
+		public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
+
+			if (view.isShown()) {
+
+				SimpleDateFormat displayFormat = new SimpleDateFormat("dd.MM.yyyy");
+				Calendar calendar = new GregorianCalendar(selectedYear, selectedMonth, selectedDay);
+
+				StatusIntervalLivrare statusInterval = UtilsDates.getStatusIntervalLivrare(calendar.getTime());
+
+				if (statusInterval.isValid()) {
+					textDataLivrare.setText(displayFormat.format(calendar.getTime()));
+					DateLivrare.getInstance().setDataLivrare(displayFormat.format(calendar.getTime()));
+				} else
+					Toast.makeText(getApplicationContext(), statusInterval.getMessage(), Toast.LENGTH_LONG).show();
+			}
+
+		}
+	};
 
 	private void addListenerClientLaRaft() {
 
@@ -587,71 +642,16 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	}
 
-	private void fillSpinnerDataLivrare() {
-		adapterDataLivrare.add("Astazi");
-
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.UK);
-		Calendar c1 = Calendar.getInstance();
-		c1.add(Calendar.DAY_OF_MONTH, 1);
-		Date resultdate = new Date(c1.getTimeInMillis());
-		adapterDataLivrare.add(sdf.format(resultdate));
-
-		c1.add(Calendar.DAY_OF_MONTH, 1);
-		resultdate = new Date(c1.getTimeInMillis());
-		adapterDataLivrare.add(sdf.format(resultdate));
-
-		c1.add(Calendar.DAY_OF_MONTH, 1);
-		resultdate = new Date(c1.getTimeInMillis());
-		adapterDataLivrare.add(sdf.format(resultdate));
-
-		c1.add(Calendar.DAY_OF_MONTH, 1);
-		resultdate = new Date(c1.getTimeInMillis());
-		adapterDataLivrare.add(sdf.format(resultdate));
-
-		adapterDataLivrare.notifyDataSetChanged();
-		spinnerDataLivrare.setAdapter(adapterDataLivrare);
-
-		String strDataLivrare = String.valueOf(DateLivrare.getInstance().getDataLivrare());
-
-		if (strDataLivrare.length() > 1) {
-			Calendar cal1 = Calendar.getInstance();
-			Calendar cal2 = Calendar.getInstance();
-
-			cal1.set(cal1.get(Calendar.YEAR), cal1.get(Calendar.MONTH) + 1, cal1.get(Calendar.DAY_OF_MONTH));
-			cal2.set(Integer.parseInt(strDataLivrare.substring(0, 4)), Integer.parseInt(strDataLivrare.substring(4, 6)),
-					Integer.parseInt(strDataLivrare.substring(6, 8)));
-
-			int diff1 = (int) (cal2.getTimeInMillis() - cal1.getTimeInMillis());
-			int diffDays = diff1 / (24 * 60 * 60 * 1000);
-
-			if (diffDays <= 0)
-				spinnerDataLivrare.setSelection(0);
-
-			if (diffDays == 1)
-				spinnerDataLivrare.setSelection(1);
-
-			if (diffDays == 2)
-				spinnerDataLivrare.setSelection(2);
-
-			if (diffDays == 3)
-				spinnerDataLivrare.setSelection(3);
-
-			if (diffDays >= 4)
-				spinnerDataLivrare.setSelection(4);
-
-			DateLivrare.getInstance().setDataLivrare(spinnerDataLivrare.getSelectedItemPosition());
-
-		} else if (strDataLivrare.length() == 1) {
-			spinnerDataLivrare.setSelection(Integer.valueOf(DateLivrare.getInstance().getDataLivrare()));
-		}
-
-	}
-
 	private void performGetJudete() {
 		try {
 
+			String unitLog = UserInfo.getInstance().getUnitLog();
+
+			if (UtilsUser.isUserSite() && unitLog.equals("NN10"))
+				unitLog = "AG10";
+
 			HashMap<String, String> params = new HashMap<String, String>();
-			params.put("filiala", UserInfo.getInstance().getUnitLog());
+			params.put("filiala", unitLog);
 
 			AsyncTaskWSCall call = new AsyncTaskWSCall(this, METHOD_NAME, params);
 			call.getCallResults();
@@ -1104,7 +1104,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		dateLivrareInstance.setNrTel(telefon);
 
 		dateLivrareInstance.setTransport(spinnerTransp.getSelectedItem().toString().substring(0, 4));
-		dateLivrareInstance.setDataLivrare(spinnerDataLivrare.getSelectedItemPosition());
 
 		if (!isAdresaCorecta()) {
 			Toast.makeText(getApplicationContext(), "Completati adresa corect sau pozitionati adresa pe harta.", Toast.LENGTH_LONG).show();
@@ -1169,12 +1168,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			dateLivrareInstance.setPrelucrare(spinnerIndoire.getSelectedItem().toString());
 		} else
 			dateLivrareInstance.setPrelucrare("-1");
-
-		// beans.LatLng coordAdresa = new
-		// beans.LatLng(dateLivrareInstance.getCoordonateAdresa().latitude,dateLivrareInstance.getCoordonateAdresa().longitude);
-		// EnumZona zona = ZoneBucuresti.getZonaBucuresti(coordAdresa);
-		// Toast.makeText(getApplicationContext(), zona.toString(),
-		// Toast.LENGTH_LONG).show();
 
 		finish();
 

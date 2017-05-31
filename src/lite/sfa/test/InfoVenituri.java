@@ -10,8 +10,11 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import listeners.AsyncTaskListener;
+import listeners.OperatiiAgentListener;
 import model.HandleJSONData;
+import model.OperatiiAgent;
 import model.UserInfo;
+import utils.UtilsUser;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -30,29 +33,31 @@ import android.widget.TextView;
 import android.widget.Toast;
 import beans.BeanInfoVenituri;
 
-public class InfoVenituri extends Activity implements AsyncTaskListener {
+public class InfoVenituri extends Activity implements AsyncTaskListener, OperatiiAgentListener {
 
-	Spinner spinnerLuna;
-	Spinner spinnerAn, spinnerFiliale;
-	Button btnAfisResult;
-	String[] strArrayLuna = { "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie", "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie",
+	private Spinner spinnerLuna;
+	private Spinner spinnerAn, spinnerFiliale, spinnerAgenti;
+	private Button btnAfisResult;
+	private String[] strArrayLuna = { "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie", "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie",
 			"Decembrie" };
 
-	String[] strArrayAn = { "2013", "2014", "2015", "2016", "2017" };
+	private String[] strArrayAn = { "2013", "2014", "2015", "2016", "2017" };
 
-	String[] strArrayNumeFiliale = { "Andronache", "Bacau", "Baia-Mare", "Brasov", "Constanta", "Cluj", "Craiova", "Focsani", "Galati", "Glina", "Iasi",
-			"Militari", "Oradea", "Otopeni", "Piatra-Neamt", "Pitesti", "Ploiesti", "Timisoara", "Tg. Mures" };
+	private String[] strArrayNumeFiliale = { "Andronache", "Bacau", "Baia-Mare", "Brasov", "Constanta", "Cluj", "Craiova", "Focsani", "Galati", "Glina",
+			"Iasi", "Militari", "Oradea", "Otopeni", "Piatra-Neamt", "Pitesti", "Ploiesti", "Timisoara", "Tg. Mures" };
 
-	String[] strArrayCodFiliale = { "BU13", "BC10", "MM10", "BV10", "CT10", "CJ10", "DJ10", "VN10", "GL10", "BU10", "IS10", "BU11", "BH10", "BU12", "NT10",
-			"AG10", "PH10", "TM10", "MS10" };
+	private String[] strArrayCodFiliale = { "BU13", "BC10", "MM10", "BV10", "CT10", "CJ10", "DJ10", "VN10", "GL10", "BU10", "IS10", "BU11", "BH10", "BU12",
+			"NT10", "AG10", "PH10", "TM10", "MS10" };
 
-	LinearLayout layoutSelFiliala, layoutHeaderVenituri;
-	SimpleAdapter adapterFiliale, adapterVenituri;
-	String selectedFiliala = "";
+	private LinearLayout layoutSelFiliala, layoutHeaderVenituri;
+	private SimpleAdapter adapterFiliale, adapterVenituri;
+	private String selectedFiliala = "";
 
-	ListView listResultsVenituri;
-	ArrayList<HashMap<String, String>> arrayListVenituri = new ArrayList<HashMap<String, String>>();
+	private ListView listResultsVenituri;
+	private ArrayList<HashMap<String, String>> arrayListVenituri = new ArrayList<HashMap<String, String>>();
 	private TextView textVenit1, textVenit2, textVenitTotal, textMarja1, textMarja2, textMarjaTotal;
+
+	private OperatiiAgent agent;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -99,11 +104,18 @@ public class InfoVenituri extends Activity implements AsyncTaskListener {
 		listenerBtnAfisResult();
 
 		spinnerFiliale = (Spinner) findViewById(R.id.spinnerFiliale);
+		setSpinnerFilialaListener();
+		spinnerAgenti = (Spinner) findViewById(R.id.spinnerAgenti);
+
 		layoutSelFiliala = (LinearLayout) findViewById(R.id.layoutSelFiliala);
 
-		if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14")) {
+		if (UtilsUser.isDV()) {
 			layoutSelFiliala.setVisibility(View.VISIBLE);
 			populateListFiliale();
+
+			agent = OperatiiAgent.getInstance();
+			agent.setOperatiiAgentListener(this);
+
 		} else {
 			layoutSelFiliala.setVisibility(View.GONE);
 		}
@@ -158,7 +170,7 @@ public class InfoVenituri extends Activity implements AsyncTaskListener {
 	}
 
 	private void populateListFiliale() {
-		spinnerFiliale.setOnItemSelectedListener(new OnSelectFiliala());
+
 		ArrayList<HashMap<String, String>> listFiliale = new ArrayList<HashMap<String, String>>();
 		adapterFiliale = new SimpleAdapter(this, listFiliale, R.layout.rowlayoutagenti, new String[] { "numeFiliala", "codFiliala" }, new int[] {
 				R.id.textNumeAgent, R.id.textCodAgent });
@@ -185,19 +197,27 @@ public class InfoVenituri extends Activity implements AsyncTaskListener {
 
 	}
 
-	public class OnSelectFiliala implements OnItemSelectedListener {
-		@SuppressWarnings("unchecked")
-		public void onItemSelected(AdapterView<?> parent, View v, int pos, long id) {
+	private void setSpinnerFilialaListener() {
+		spinnerFiliale.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-			HashMap<String, String> artMap = (HashMap<String, String>) spinnerFiliale.getSelectedItem();
-			selectedFiliala = artMap.get("codFiliala");
-		}
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				@SuppressWarnings("unchecked")
+				HashMap<String, String> artMap = (HashMap<String, String>) spinnerFiliale.getSelectedItem();
+				selectedFiliala = artMap.get("codFiliala");
 
-		public void onNothingSelected(AdapterView<?> arg0) {
-			
+				if (!selectedFiliala.trim().isEmpty()){
+					agent.getListaAgenti(selectedFiliala, UserInfo.getInstance().getCodDepart(), InfoVenituri.this, false);
+					listResultsVenituri.setVisibility(View.INVISIBLE);
+				}
 
-		}
+			}
 
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+
+			}
+		});
 	}
 
 	public void listenerBtnAfisResult() {
@@ -224,18 +244,26 @@ public class InfoVenituri extends Activity implements AsyncTaskListener {
 
 			HashMap<String, String> params = new HashMap<String, String>();
 
-			String localStrFiliala = "";
+			String localStrFiliala;
+			String localCodAgent;
 
-			if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14")) {
+			if (UtilsUser.isDV()) {
 				localStrFiliala = selectedFiliala;
+
+				@SuppressWarnings("unchecked")
+				HashMap<String, String> artMap = (HashMap<String, String>) spinnerAgenti.getSelectedItem();
+				localCodAgent = artMap.get("codAgent");
+
 			} else {
 				localStrFiliala = UserInfo.getInstance().getUnitLog();
+				localCodAgent = UserInfo.getInstance().getCod();
 			}
 
 			params.put("codDepart", UserInfo.getInstance().getCodDepart());
 			params.put("filiala", localStrFiliala);
 			params.put("luna", String.format("%02d", spinnerLuna.getSelectedItemPosition() + 1));
 			params.put("an", String.valueOf(spinnerAn.getSelectedItem()));
+			params.put("codAgent", localCodAgent);
 
 			AsyncTaskWSCall call = new AsyncTaskWSCall(this, "getInfoVenituriData", params);
 			call.getCallResults();
@@ -322,6 +350,14 @@ public class InfoVenituri extends Activity implements AsyncTaskListener {
 
 	}
 
+	private void populateAgentiList(ArrayList<HashMap<String, String>> listAgenti) {
+
+		SimpleAdapter adapterAgenti = new SimpleAdapter(this, listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" }, new int[] {
+				R.id.textNumeAgent, R.id.textCodAgent });
+		spinnerAgenti.setAdapter(adapterAgenti);
+
+	}
+
 	private String getIntervalDesc(int intervalId) {
 		String retVal = "";
 
@@ -362,6 +398,12 @@ public class InfoVenituri extends Activity implements AsyncTaskListener {
 		if (methodName.equals("getInfoVenituriData")) {
 			populateResultList((String) result);
 		}
+
+	}
+
+	@Override
+	public void opAgentComplete(ArrayList<HashMap<String, String>> listAgenti) {
+		populateAgentiList(listAgenti);
 
 	}
 

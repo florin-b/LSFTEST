@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainScroll"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true" >
+
+    <LinearLayout
+        android:id="@+id/layoutClient"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/testButton"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:text="TestMe" >
+        </Button>
+
+        <LinearLayout
+            android:id="@+id/layoutSelectieClient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/headerLabelClient"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:background="#EEC591"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dip"
+                android:text="CLIENT"
+                android:textSize="17sp" />
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                layout="@layout/cauta_client_distrib_vocal" />
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                layout="@layout/afis_client_distrib_vocal" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="400dip" />
+
+        <LinearLayout
+            android:id="@+id/layoutSelectieArticole"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/labelArticole"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:background="#EEC591"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dip"
+                android:text="ARTICOLE"
+                android:textSize="17sp" />
+
+            <Button
+                android:id="@+id/cautaArticolButton"
+                style="@style/ok_button"
+                android:layout_width="wrap_content"
+                android:layout_height="40dip"
+                android:layout_gravity="left"
+                android:layout_margin="15dip"
+                android:background="@drawable/ok_button_style"
+                android:paddingLeft="50dip"
+                android:paddingRight="50dip"
+                android:text="@string/strCauta" />
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                layout="@layout/cauta_articol_distrib_vocal" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="500dip" />
+
+        <TextView
+            android:id="@+id/labelLivrare"
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:background="#EEC591"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dip"
+            android:text="LIVRARE"
+            android:textSize="17sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="500dip" />
+    </LinearLayout>
+
+</ScrollView>

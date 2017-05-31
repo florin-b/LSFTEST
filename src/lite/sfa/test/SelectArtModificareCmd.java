@@ -113,6 +113,7 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 	private ArticolDB articolDBSelected;
 	private TextView txtImpachetare;
 	private String istoricPret;
+	private double procReducereCmp = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -934,8 +935,19 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 							}
 						}
 
-						if (finalPrice < cmpArt) {
-							subCmp = "1";
+						// if (finalPrice < cmpArt) {
+						// subCmp = "1";
+						// }
+
+						if (ModificareComanda.isComandaDistrib) {
+							if ((finalPrice / valMultiplu) < cmpArt) {
+
+								Toast.makeText(getApplicationContext(), "Procentul de reducere este mai mare decat cel acceptat.", Toast.LENGTH_LONG).show();
+
+								subCmp = "1";
+								return;
+
+							}
 						}
 
 						double procRedFact = 0; // factura de reducere
@@ -978,7 +990,7 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 						unArticol.setTipAlert(tipAlert);
 						unArticol.setStatus(" ");
 						unArticol.setDepartAprob(articolDBSelected.getDepartAprob());
-						
+
 						if (procRedFin > 0)
 							unArticol.setIstoricPret(istoricPret);
 
@@ -1148,7 +1160,8 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 				cantUmb = tokenPret[14].toString();
 				Umb = tokenPret[15].toString();
 
-				cmpArt = nf2.parse(tokenPret[17]).doubleValue();
+				
+				cmpArt = Double.parseDouble(tokenPret[17]);
 
 				if (Double.parseDouble(cantUmb) > nf2.parse(textStoc.getText().toString()).doubleValue()) {
 					Toast.makeText(getApplicationContext(), "Stoc insuficient!", Toast.LENGTH_LONG).show();
@@ -1175,12 +1188,14 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 
 				initPrice = Double.parseDouble(tokenPret[1]);
 				listPrice = Double.parseDouble(tokenPret[8]);
-				
+
 				txtImpachetare.setText(tokenPret[19]);
-				
+
 				afisIstoricPret(tokenPret[20]);
-				
+
 				istoricPret = UtilsFormatting.getIstoricPret(tokenPret[20], EnumTipComanda.DISTRIBUTIE);
+
+				procReducereCmp = Double.parseDouble(tokenPret[21]);
 
 				procDiscClient = 0;
 				minimKAPrice = 0;
@@ -1338,56 +1353,54 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 		}
 
 	}
-	
-	
-	
+
 	private void afisIstoricPret(String infoIstoric) {
 		LinearLayout layoutIstoric1 = (LinearLayout) findViewById(R.id.layoutIstoricPret1);
 		LinearLayout layoutIstoric2 = (LinearLayout) findViewById(R.id.layoutIstoricPret2);
 		LinearLayout layoutIstoric3 = (LinearLayout) findViewById(R.id.layoutIstoricPret3);
-		
+
 		layoutIstoric1.setVisibility(View.GONE);
 		layoutIstoric2.setVisibility(View.GONE);
 		layoutIstoric3.setVisibility(View.GONE);
-		
+
 		DecimalFormat df = new DecimalFormat("#0.00");
-		
+
 		if (infoIstoric.contains(":")) {
 			String[] arrayIstoric = infoIstoric.split(":");
 
 			if (arrayIstoric.length > 0 && arrayIstoric[0].contains("@")) {
-				
+
 				layoutIstoric1.setVisibility(View.VISIBLE);
 
 				String[] arrayPret = arrayIstoric[0].split("@");
 
 				TextView textIstoric1 = (TextView) findViewById(R.id.txtIstoricPret1);
-				textIstoric1.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " / " + arrayPret[1] + " " + arrayPret[2] + " - "
-						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
+				textIstoric1.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " / " + arrayPret[1] + " "
+						+ arrayPret[2] + " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 
 			if (arrayIstoric.length > 1 && arrayIstoric[1].contains("@")) {
-				
+
 				layoutIstoric2.setVisibility(View.VISIBLE);
 
 				String[] arrayPret = arrayIstoric[1].split("@");
 
 				TextView textIstoric2 = (TextView) findViewById(R.id.txtIstoricPret2);
-				textIstoric2.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " / " + arrayPret[1] + " " + arrayPret[2] + " - "
-						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
+				textIstoric2.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " / " + arrayPret[1] + " "
+						+ arrayPret[2] + " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 
 			if (arrayIstoric.length > 2 && arrayIstoric[2].contains("@")) {
-				
+
 				layoutIstoric3.setVisibility(View.VISIBLE);
 
 				String[] arrayPret = arrayIstoric[2].split("@");
 
 				TextView textIstoric3 = (TextView) findViewById(R.id.txtIstoricPret3);
-				textIstoric3.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " / " + arrayPret[1] + " " + arrayPret[2] + " - "
-						+ UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
+				textIstoric3.setText(df.format(Double.valueOf(arrayPret[0])) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " / " + arrayPret[1] + " "
+						+ arrayPret[2] + " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 

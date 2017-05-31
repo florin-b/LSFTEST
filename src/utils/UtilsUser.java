@@ -44,6 +44,11 @@ public class UtilsUser {
 				|| UserInfo.getInstance().getTipAcces().equals("35");
 	}
 
+	public static boolean isDV() {
+		return UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14");
+
+	}
+
 	public static boolean isSDBUCURESTI() {
 		return UserInfo.getInstance().getTipAcces().equals("10") && UserInfo.getInstance().getUnitLog().substring(0, 2).equals("BU");
 	}
@@ -100,9 +105,7 @@ public class UtilsUser {
 				return true;
 			else
 				return false;
-		} else if (isKA()) {
-			return true;
-		} else if (isCV()) {
+		} else if (isKA() || isCV()) {
 			return true;
 		}
 

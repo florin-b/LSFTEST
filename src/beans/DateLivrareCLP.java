@@ -25,6 +25,7 @@ public class DateLivrareCLP {
 	private String procTransp;
 	private String acceptDV;
 	private String dataIncarcare;
+	private String nrCT;
 
 	public DateLivrareCLP() {
 
@@ -193,10 +194,10 @@ public class DateLivrareCLP {
 	}
 
 	public String getDataIncarcare() {
-		
+
 		if (dataIncarcare == null || dataIncarcare.length() == 0 || dataIncarcare.equals("00000000"))
 			return "";
-		
+
 		return UtilsFormatting.formatDateFromSap(dataIncarcare);
 	}
 
@@ -204,13 +205,12 @@ public class DateLivrareCLP {
 		this.dataIncarcare = dataIncarcare;
 	}
 
-	@Override
-	public String toString() {
-		return "DateLivrareCLP [persContact=" + persContact + ", telefon=" + telefon + ", adrLivrare=" + adrLivrare + ", oras=" + oras + ", judet=" + judet
-				+ ", data=" + data + ", tipMarfa=" + tipMarfa + ", masa=" + masa + ", tipCamion=" + tipCamion + ", tipIncarcare=" + tipIncarcare
-				+ ", tipPlata=" + tipPlata + ", mijlocTransport=" + mijlocTransport + ", aprobatOC=" + aprobatOC + ", deSters=" + deSters + ", statusAprov="
-				+ statusAprov + ", valComanda=" + valComanda + ", obsComanda=" + obsComanda + ", valTransp=" + valTransp + ", procTransp=" + procTransp
-				+ ", acceptDV=" + acceptDV + ", dataIncarcare=" + dataIncarcare + "]";
+	public String getNrCT() {
+		return nrCT;
+	}
+
+	public void setNrCT(String nrCT) {
+		this.nrCT = nrCT;
 	}
 
 }

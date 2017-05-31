@@ -29,6 +29,7 @@ public class PretArticolGed {
 	private String istoricPret;
 	private double valTrap;
 	private String errMsg;
+	private double procReducereCmp;
 
 	public String getPret() {
 		return pret;
@@ -244,6 +245,14 @@ public class PretArticolGed {
 
 	public void setErrMsg(String errMsg) {
 		this.errMsg = errMsg;
+	}
+
+	public double getProcReducereCmp() {
+		return procReducereCmp;
+	}
+
+	public void setProcReducereCmp(double procReducereCmp) {
+		this.procReducereCmp = procReducereCmp;
 	}
 
 }

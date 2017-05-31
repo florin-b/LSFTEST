@@ -6,6 +6,8 @@ public class UtilsCheck {
 
 		cnp = cnp.replaceAll("\\s+", "");
 
+		cnp = cnp.replaceAll("[^0-9]", "");
+
 		if (cnp.length() != 13) {
 			return false;
 		}
