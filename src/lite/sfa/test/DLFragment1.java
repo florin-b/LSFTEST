@@ -32,6 +32,7 @@ import utils.UtilsGeneral;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -174,6 +175,8 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener, Map
 			this.layoutClient = (LinearLayout) v.findViewById(R.id.layoutClient);
 			layoutClient.setVisibility(View.INVISIBLE);
 
+			initLocale();
+			
 			txtNumeClient = (EditText) v.findViewById(R.id.txtNumeClient);
 			txtNumeClient.setHint("Introduceti nume client");
 
@@ -1265,6 +1268,16 @@ public class DLFragment1 extends Fragment implements OperatiiAdresaListener, Map
 
 	}
 
+	
+	private void initLocale()
+	{
+		Locale locale = new Locale("en", "US");
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getActivity().getBaseContext().getResources().updateConfiguration(config, getActivity().getBaseContext().getResources().getDisplayMetrics());
+	}
+	
 	public void addListenerTextSelFurnizor() {
 		textSelFurnizor.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {

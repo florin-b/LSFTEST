@@ -232,6 +232,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			mProgress = (ProgressBar) findViewById(R.id.progress_bar_savecmd);
 			mProgress.setVisibility(View.INVISIBLE);
 
+			initLocale();
 			nf3 = NumberFormat.getInstance();
 			nf3.setMinimumFractionDigits(2);
 			nf3.setMaximumFractionDigits(2);
@@ -1441,6 +1442,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		filialaAlternativa = UserInfo.getInstance().getUnitLog();
 
 		ListaArticoleComanda.getInstance().clearArticoleComanda();
+		
+		initLocale();
 
 	}
 
@@ -1499,20 +1502,19 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		});
 	}
 
+	
+	private void initLocale()
+	{
+		Locale locale = new Locale("en", "US");
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+	}
+	
 	private void checkStaticVars() {
 
-		// resetare locale la idle
-		String locLang = getBaseContext().getResources().getConfiguration().locale.getLanguage();
 
-		if (!locLang.toLowerCase(Locale.getDefault()).equals("en")) {
-
-			String languageToLoad = "en";
-			Locale locale = new Locale(languageToLoad);
-			Locale.setDefault(locale);
-			Configuration config = new Configuration();
-			config.locale = locale;
-			getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-		}
 
 		// restart app la idle
 		if (UserInfo.getInstance().getCod().equals("")) {

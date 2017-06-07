@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import listeners.OperatiiArticolListener;
 import model.ArticolComandaGed;
@@ -184,7 +185,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		resultLayout = (LinearLayout) findViewById(R.id.resLayout);
 		resultLayout.setVisibility(View.INVISIBLE);
 
-		nf2 = NumberFormat.getInstance();
+		nf2 = NumberFormat.getInstance(new Locale("en_US"));
 
 		labelFactConv = (TextView) findViewById(R.id.labelFactConv);
 		labelFactConv.setVisibility(View.INVISIBLE);
@@ -297,7 +298,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			layoutPretGEDFTva.setVisibility(View.VISIBLE);
 		}
 
-		nForm2 = NumberFormat.getInstance();
+		nForm2 = NumberFormat.getInstance(new Locale("en_US"));
 		nForm2.setMinimumFractionDigits(2);
 		nForm2.setMaximumFractionDigits(2);
 
@@ -1056,11 +1057,11 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 					String localUnitMas = "";
 					String alteValori = "", subCmp = "0";
 
-					NumberFormat nf = NumberFormat.getInstance();
+					NumberFormat nf = NumberFormat.getInstance(new Locale("en_US"));
 					nf.setMinimumFractionDigits(2);
 					nf.setMaximumFractionDigits(2);
 
-					NumberFormat nfPret = NumberFormat.getInstance();
+					NumberFormat nfPret = NumberFormat.getInstance(new Locale("en_US"));
 					nfPret.setMinimumFractionDigits(3);
 					nfPret.setMaximumFractionDigits(3);
 
@@ -1424,7 +1425,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		double pretUnitar = (initPrice / globalCantArt) * valMultiplu;
 		double valoareFaraTva = pretUnitar / procentTVA;
 
-		NumberFormat nf = NumberFormat.getInstance();
+		NumberFormat nf = NumberFormat.getInstance(new Locale("en_US"));
 		nf.setMaximumFractionDigits(3);
 		nf.setMinimumFractionDigits(3);
 		textPretGEDFTva.setText(nf.format(valoareFaraTva));

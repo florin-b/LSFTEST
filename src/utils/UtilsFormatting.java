@@ -1,7 +1,6 @@
 package utils;
 
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -28,7 +27,7 @@ import enums.EnumTipComanda;
 
 public class UtilsFormatting {
 
-	private static NumberFormat nf2 = new DecimalFormat("#0.00");
+	private static NumberFormat nf2 = NumberFormat.getInstance(new Locale("en_US"));
 
 	public static String formatDate(String dateString) {
 
@@ -247,4 +246,8 @@ public class UtilsFormatting {
 
 		return formatted.toString();
 	}
+	
+	
+	
+	
 }

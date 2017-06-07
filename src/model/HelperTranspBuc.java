@@ -61,7 +61,7 @@ public class HelperTranspBuc {
 
 	}
 
-	private static String transportZonaATest(String depart) {
+	private static String transportZonaA(String depart) {
 		String codArticol = "";
 
 		if (depart.equals("01"))
@@ -95,7 +95,7 @@ public class HelperTranspBuc {
 	}
 
 	
-	private static String transportZonaA(String depart) {
+	private static String transportZonaAProd(String depart) {
 		String codArticol = "";
 
 		if (depart.equals("01"))
@@ -129,7 +129,7 @@ public class HelperTranspBuc {
 	}	
 	
 	
-	private static String transportZonaBTest(String depart) {
+	private static String transportZonaB(String depart) {
 		String codArticol = "";
 
 		if (depart.equals("01"))
@@ -163,7 +163,7 @@ public class HelperTranspBuc {
 	}
 	
 	
-	private static String transportZonaB(String depart) {
+	private static String transportZonaBProd(String depart) {
 		String codArticol = "";
 
 		if (depart.equals("01"))

@@ -107,8 +107,10 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 			operatiiComenzi = new DlDAO(getActivity());
 			operatiiComenzi.setDlDAOListener(this);
 
+			
+			initLocale();
 			nf2 = NumberFormat.getInstance();
-
+			
 			layoutArtHeader = (LinearLayout) v.findViewById(R.id.layoutHeaderArtDl);
 			layoutArtDet = (LinearLayout) v.findViewById(R.id.layoutDetArtDl);
 
@@ -888,11 +890,10 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 	boolean userIsSD() {
 		return UserInfo.getInstance().getTipAcces().equals("10");
 	}
-
+	
 	private void clearAllData() {
 
 		listArticole.clear();
-		// adapterArticole.notifyDataSetChanged();
 
 		listArtSelDl.clear();
 		adapterListArtDl.notifyDataSetChanged();
@@ -921,24 +922,22 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 		}
 
 		slidingDrawerSaveDl.close();
+		
+		initLocale();
 	}
 
+	
+	private void initLocale()
+	{
+		Locale locale = new Locale("en", "US");
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getActivity().getBaseContext().getResources().updateConfiguration(config, getActivity().getBaseContext().getResources().getDisplayMetrics());
+	}
+	
 	private void checkStaticVars() {
-		// pentru in idle mare variabilele statice se sterg si setarile locale
-		// se reseteaza
-
-		// resetare locale la idle
-		String locLang = getActivity().getResources().getConfiguration().locale.getLanguage();
-
-		if (!locLang.toLowerCase(Locale.getDefault()).equals("en")) {
-
-			String languageToLoad = "en";
-			Locale locale = new Locale(languageToLoad);
-			Locale.setDefault(locale);
-			Configuration config = new Configuration();
-			config.locale = locale;
-			getActivity().getResources().updateConfiguration(config, getActivity().getResources().getDisplayMetrics());
-		}
+		
 
 		// restart app la idle
 		if (UserInfo.getInstance().getCod().equals("")) {

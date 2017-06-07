@@ -30,6 +30,7 @@ import utils.UtilsFormatting;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import adapters.CautareArticoleAdapter;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -122,7 +123,8 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		opArticol = OperatiiArticolFactory.createObject("OperatiiArticolImpl", getActivity());
 		opArticol.setListener(this);
 
-		nf2 = NumberFormat.getInstance();
+		initLocale();
+		nf2 = NumberFormat.getInstance(new Locale("en_US"));
 
 		this.tglButton = (ToggleButton) v.findViewById(R.id.togglebuttonClp);
 		addListenerToggle();
@@ -1250,7 +1252,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		}
 	}
 
-	public static void clearAllData() {
+	public void clearAllData() {
 
 		listArtSelClp.clear();
 		adapterListArtClp.notifyDataSetChanged();
@@ -1278,6 +1280,8 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		slidingDrawerSaveClp.close();
 		textValoareGreutate.setText("");
 		textTotalGreutate.setText("");
+		
+		initLocale();
 	}
 
 	public void onTaskComplete(String methodName, Object result) {
@@ -1335,6 +1339,16 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 	}
 
+	private void initLocale()
+	{
+		Locale locale = new Locale("en", "US");
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getActivity().getBaseContext().getResources().updateConfiguration(config, getActivity().getBaseContext().getResources().getDisplayMetrics());
+	}
+	
+	
 	public void operationComplete(EnumArticoleDAO methodName, Object result) {
 
 		switch (methodName) {
