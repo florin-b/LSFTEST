@@ -781,7 +781,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		dialogModifPret.setCancelable(false);
 		dialogModifPret.show();
 
-		NumberFormat nf2 = NumberFormat.getInstance();
+		
+		NumberFormat nf2 = NumberFormat.getInstance(new Locale("en","US"));
 		nf2.setMinimumFractionDigits(2);
 		nf2.setMaximumFractionDigits(2);
 		nf2.setGroupingUsed(false);
@@ -1610,7 +1611,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			dlgTransp.setContentView(R.layout.valtranspdlgbox);
 			dlgTransp.setTitle("Confirmare comanda GED");
 
-			NumberFormat nf2 = NumberFormat.getInstance();
+			NumberFormat nf2 = NumberFormat.getInstance(new Locale("en", "US"));
 			nf2.setMinimumFractionDigits(2);
 			nf2.setMaximumFractionDigits(2);
 
@@ -1636,13 +1637,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 						performSaveCmdGED();
 					else {
 
-						// if (CreareComandaGed.tipComanda.equals("S") &&
-						// CreareComandaGed.rezervStoc) { // comanda
-						// simulata
-						// cu
-						// rezervare
-						// de
-						// stoc
+						
 						if (CreareComandaGed.tipComanda.equals("S")) {
 							performSaveCmdGED();
 						} else {

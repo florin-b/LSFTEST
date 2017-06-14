@@ -94,7 +94,6 @@ public class HelperTranspBuc {
 		return codArticol;
 	}
 
-	
 	private static String transportZonaAProd(String depart) {
 		String codArticol = "";
 
@@ -126,9 +125,8 @@ public class HelperTranspBuc {
 			codArticol = "30101759";
 
 		return codArticol;
-	}	
-	
-	
+	}
+
 	private static String transportZonaB(String depart) {
 		String codArticol = "";
 
@@ -161,8 +159,7 @@ public class HelperTranspBuc {
 
 		return codArticol;
 	}
-	
-	
+
 	private static String transportZonaBProd(String depart) {
 		String codArticol = "";
 
@@ -194,10 +191,7 @@ public class HelperTranspBuc {
 			codArticol = "30101760";
 
 		return codArticol;
-	}	
-	
-	
-	
+	}
 
 	public static void eliminaCostTransportZoneBuc(List<ArticolComanda> listArticole) {
 		ArticolComanda articolTransportA = generateArticolTransport(EnumZona.ZONA_A);
@@ -224,6 +218,9 @@ public class HelperTranspBuc {
 	}
 
 	public static boolean isCondTranspZonaBuc(DateLivrare dateLivrare, EnumZona zona) {
+
+		if (!dateLivrare.getTransport().equalsIgnoreCase("TRAP"))
+			return false;
 
 		if (zona == EnumZona.ZONA_A)
 			return true;

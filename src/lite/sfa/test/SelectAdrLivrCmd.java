@@ -1286,6 +1286,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 			dateLivrareInstance.setZonaBucuresti(zona);
 		}
+		else
+			dateLivrareInstance.setZonaBucuresti(EnumZona.NEDEFINIT);
 
 		finish();
 
