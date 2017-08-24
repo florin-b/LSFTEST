@@ -39,6 +39,17 @@ public enum EnumJudete {
 
 		return listValues;
 	}
+	
+	
+	public static String getRegionCodes() {
+		List<String> listValues = new ArrayList<String>();
+
+		for (EnumJudete enumJ : EnumJudete.values())
+			listValues.add(enumJ.cod);
+
+		return listValues.toString();
+	}
+	
 
 	public static String getCodJudet(String numeJudet) {
 		for (EnumJudete enumJ : EnumJudete.values()) {

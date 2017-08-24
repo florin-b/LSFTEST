@@ -211,8 +211,16 @@ public class HelperTranspBuc {
 		if (UtilsUser.isAgentOrSD())
 			codDepart = UserInfo.getInstance().getCodDepart();
 
-		if (UtilsUser.isUserKA())
-			codDepart = ListaArticoleComanda.getInstance().getListArticoleComanda().get(0).getDepart();
+		
+		
+		if (UtilsUser.isUserKA()) {
+
+			if (!ListaArticoleComanda.getInstance().getListArticoleComanda().isEmpty())
+				codDepart = ListaArticoleComanda.getInstance().getListArticoleComanda().get(0).getDepart();
+			else if (!ListaArticoleModificareComanda.getInstance().getListArticoleComanda().isEmpty())
+				codDepart = ListaArticoleModificareComanda.getInstance().getListArticoleComanda().get(0).getDepart();
+
+		}
 
 		return codDepart;
 	}
