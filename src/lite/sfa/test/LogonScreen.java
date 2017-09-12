@@ -101,8 +101,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		addListenerUserName();
 		addListenerPassword();
 
-		etUsername.setText("androag");
-		etPassword.setText("112");
+		etUsername.setText("ASTANCIU");
+		etPassword.setText("YQcR86");
 
 		// etUsername.setText("GILINCA");
 		// etPassword.setText("HV3G4M");
@@ -191,7 +191,7 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 
 		// etUsername.setText("androdv"); //KA Buc
 		// etPassword.setText("sfa");
-		
+
 		// etUsername.setText("DDIACONU2"); //ag hidr Buc
 		// etPassword.setText("bRB8ZX");
 
@@ -222,12 +222,24 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		// etUsername.setText("CMATEI2");
 		// etPassword.setText("YM64CR");
 
-		//etUsername.setText("GBADULESCU"); // SDKA
-		//etPassword.setText("9dsFx8");
+		// etUsername.setText("GBADULESCU"); // SDKA
+		// etPassword.setText("9dsFx8");
 
-		//etUsername.setText("SALEXANDRESCU"); // DV hidro
-		//etPassword.setText("6ge4Rh");
-		 
+		// etUsername.setText("SALEXANDRESCU"); // DV hidro
+		// etPassword.setText("6ge4Rh");
+
+		//etUsername.setText("APOINT"); // CVR Oradea
+		//etPassword.setText("bGT2kD");
+
+		// etUsername.setText("APOPOVICI2"); // SMR Oradea
+		// etPassword.setText("CZq9Tf");
+
+		//etUsername.setText("IPAINA"); // CVW
+		//etPassword.setText("cfLKx7");
+
+		//etUsername.setText("MMESTER1"); // SMW
+		//etPassword.setText("GpZDwh");
+
 		globalMyIP = getIPConnection();
 
 		checkBundleExtra();
@@ -431,10 +443,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 			if (token[0].equals("3")) {
 
 				if (token[5].equals("8") || token[5].equals("9") || token[5].equals("10") || token[5].equals("14") || token[5].equals("12")
-						|| token[5].equals("27") || token[5].equals("35") || token[5].equals("17") || token[5].equals("18") || token[5].equals("32")) // doar
-				// agentii,
-				// admin , sd , dv, dd, ka, dir ka, cons, sm
-				{
+						|| token[5].equals("27") || token[5].equals("35") || token[5].equals("17") || token[5].equals("18") || token[5].equals("32")
+						|| token[5].equals("41") || token[5].equals("43") || token[5].equals("44") || token[5].equals("45")) {
 
 					UserInfo uInfo = UserInfo.getInstance();
 
@@ -461,20 +471,20 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 					discMaxSD = 0.0;
 					discMaxDV = 0.0;
 
-					uInfo.setNume(token[3].toString());
-					uInfo.setFiliala(token[2].toString());
+					uInfo.setNume(token[3]);
+					uInfo.setFiliala(token[2]);
 					uInfo.setCod(tempAgCod);
-					uInfo.setNumeDepart(token[1].toString());
-					uInfo.setCodDepart(UtilsGeneral.getDepart(token[1].toString()));
-					uInfo.setUnitLog(UtilsGeneral.getFiliala(token[2].toString()));
-					uInfo.setInitUnitLog(UtilsGeneral.getFiliala(token[2].toString()));
+					uInfo.setNumeDepart(token[1]);
+					uInfo.setCodDepart(UtilsGeneral.getDepart(token[1]));
+					uInfo.setUnitLog(UtilsGeneral.getFiliala(token[2]));
+					uInfo.setInitUnitLog(UtilsGeneral.getFiliala(token[2]));
 					uInfo.setTipAcces(token[5].toString());
 
-					if (token[10].toLowerCase(Locale.getDefault()).equals("w")) {
+					if (token[10].equalsIgnoreCase("w") || token[10].equalsIgnoreCase("cvw") || token[10].equalsIgnoreCase("smw")) {
 						uInfo.setTipUser("WOOD");
 						uInfo.setTipUserSap("WOOD");
 					} else {
-						uInfo.setTipUser(InfoStrings.getTipUser(token[5].toString()));
+						uInfo.setTipUser(InfoStrings.getTipUser(token[5]));
 						uInfo.setTipUserSap(token[10]);
 					}
 

@@ -16,19 +16,23 @@ import beans.CostDescarcare;
 
 public class HelperCostDescarcare {
 
-	public static List<ArticolComanda> getArticoleDescarcare(List<ArticolDescarcare> costDescarcare) {
+	public static List<ArticolComanda> getArticoleDescarcare(CostDescarcare costDescarcare, double valoareCost) {
+
+		double procentReducere = valoareCost / costDescarcare.getValoareDescarcare();
 
 		List<ArticolComanda> listArticole = new ArrayList<ArticolComanda>();
 
-		for (ArticolDescarcare artDesc : costDescarcare) {
+		for (ArticolDescarcare artDesc : costDescarcare.getArticoleDescarcare()) {
 			ArticolComanda articolComanda = new ArticolComanda();
 
 			articolComanda.setCodArticol(artDesc.getCod());
 			articolComanda.setNumeArticol("PREST.SERV.DESCARCARE PALET DIV " + artDesc.getDepart());
-			articolComanda.setCantitate(1);
-			articolComanda.setCantUmb(1);
-			articolComanda.setPretUnit(Double.valueOf(artDesc.getValoare()));
-			articolComanda.setPret(Double.valueOf(artDesc.getValoare()));
+			articolComanda.setCantitate(artDesc.getCantitate());
+			articolComanda.setCantUmb(artDesc.getCantitate());
+			articolComanda.setPretUnit(artDesc.getValoare() * procentReducere);
+			articolComanda.setPret(artDesc.getValoare() * procentReducere * artDesc.getCantitate());
+			articolComanda.setPretUnitarClient(artDesc.getValoare() * procentReducere);
+			articolComanda.setPretUnitarGed(artDesc.getValoare() * procentReducere);
 			articolComanda.setProcent(0);
 			articolComanda.setUm("BUC");
 			articolComanda.setUmb("BUC");
@@ -78,6 +82,7 @@ public class HelperCostDescarcare {
 			articol.setCod(artCmd.getCodArticol());
 			articol.setCant(artCmd.getCantUmb());
 			articol.setUm(artCmd.getUmb());
+			articol.setDepoz(artCmd.getDepozit());
 			articoleCalcul.add(articol);
 		}
 
@@ -105,7 +110,9 @@ public class HelperCostDescarcare {
 
 				articol.setCod(object.getString("cod"));
 				articol.setDepart(object.getString("depart"));
-				articol.setValoare(object.getString("valoare"));
+				articol.setValoare(Double.valueOf(object.getString("valoare")));
+				articol.setCantitate(Double.valueOf(object.getString("cantitate")));
+				articol.setValoareMin(Double.valueOf(object.getString("valoareMin")));
 				listArticole.add(articol);
 
 			}

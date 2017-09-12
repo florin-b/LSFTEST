@@ -315,9 +315,21 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 	}
 
 	private void showDialogSendMail() {
-		OfertaMailDialog ofertaMail = new OfertaMailDialog(AfisComenziSimulate.this, dateLivrareCmdCurent.getMail());
-		ofertaMail.setOfertaMailListener(AfisComenziSimulate.this);
-		ofertaMail.show();
+		if (trimitereMailPermisa()) {
+			OfertaMailDialog ofertaMail = new OfertaMailDialog(AfisComenziSimulate.this, dateLivrareCmdCurent.getMail());
+			ofertaMail.setOfertaMailListener(AfisComenziSimulate.this);
+			ofertaMail.show();
+		} else
+			Toast.makeText(getApplicationContext(), "Pentru trimitere mail comanda trebuie aprobata.", Toast.LENGTH_LONG).show();
+	}
+
+	private boolean trimitereMailPermisa() {
+
+		if (comandaCurenta != null && comandaCurenta.isAprobata())
+			return true;
+
+		return false;
+
 	}
 
 	private void showDialogSelectClient() {
@@ -565,8 +577,6 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 			ComandaSimulataAdapter adapterComenzi1 = new ComandaSimulataAdapter(copyCollection(cmdList), this);
 			spinnerCmd.setAdapter(adapterComenzi1);
-
-			
 
 		} else {
 			creeazaCmdSimBtn.setVisibility(View.INVISIBLE);

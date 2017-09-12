@@ -39,7 +39,7 @@ public class VanzariAgenti {
 		}
 
 		if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
-				|| UserInfo.getInstance().getTipAcces().equals("27")) {
+				|| UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("41")) {
 			selectedDepart = "11";
 		}
 

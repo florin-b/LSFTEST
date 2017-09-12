@@ -170,7 +170,7 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 
 		selectedDepartamentAgent = UserInfo.getInstance().getCodDepart();
 
-		if (UtilsUser.isCV() || UtilsUser.isDVCV())
+		if (UtilsUser.isCV() || UtilsUser.isDVCV() || UtilsUser.isConsWood())
 			selectedDepartamentAgent = "";
 
 		if (UtilsUser.isKA())

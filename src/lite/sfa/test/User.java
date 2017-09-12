@@ -306,7 +306,7 @@ public class User extends Activity implements HelperSiteListener {
 
 		spinnerDepart.setOnItemSelectedListener(new onSelectedDepart());
 
-		String languageToLoad = "ro";
+		String languageToLoad = "en";
 		Locale locale = new Locale(languageToLoad);
 		Locale.setDefault(locale);
 		Configuration config = new Configuration();
@@ -407,6 +407,22 @@ public class User extends Activity implements HelperSiteListener {
 			retVal = "Sef de magazin";
 		}
 
+		else if (codAcc.equals("41")) {
+			retVal = "Consilier vanzari retail";
+		}
+		
+		else if (codAcc.equals("43")) {
+			retVal = "Consilier wood";
+		}
+		
+		else if (codAcc.equals("44")) {
+			retVal = "Sef magazin retail";
+		}
+		
+		else if (codAcc.equals("45")) {
+			retVal = "Sef magazin wood";
+		}
+		
 		return retVal;
 	}
 

@@ -186,7 +186,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 			txtNumeClient = (EditText) v.findViewById(R.id.txtNumeClient);
 			txtNumeClient.setHint("Introduceti nume client");
-			
+
 			initLocale();
 
 			this.cautaClientBtn = (Button) v.findViewById(R.id.clientBtn);
@@ -335,7 +335,8 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			txtObservatiiCLP = (EditText) v.findViewById(R.id.txtObservatiiCLP);
 
 			// consilieri, se face selectie departament
-			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")) {
+			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
+					|| UserInfo.getInstance().getTipAcces().equals("44")) {
 				layoutTipClient.setVisibility(View.VISIBLE);
 				spinnerDepartament = (Spinner) v.findViewById(R.id.spinnerDepartament);
 				loadDepartamentSpinner();
@@ -346,7 +347,8 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 			// pentru agenti fara selectie filiala
 			if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("27")
-					|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")) {
+					|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
+					|| UserInfo.getInstance().getTipAcces().equals("44")) {
 				radioClient.setVisibility(View.GONE);
 				radioFiliala.setVisibility(View.GONE);
 				spinnerAgentiCLP.setVisibility(View.INVISIBLE);
@@ -1052,7 +1054,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 	}
 
 	private void performGetAgenti() {
-		operatiiAgent.getListaAgenti(UserInfo.getInstance().getUnitLog(), UserInfo.getInstance().getCodDepart(), getActivity(), true);
+		operatiiAgent.getListaAgenti(UserInfo.getInstance().getUnitLog(), UserInfo.getInstance().getCodDepart(), getActivity(), true, null);
 
 	}
 
@@ -1144,15 +1146,14 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 	}
 
-	private void initLocale()
-	{
+	private void initLocale() {
 		Locale locale = new Locale("en", "US");
 		Locale.setDefault(locale);
 		Configuration config = new Configuration();
 		config.locale = locale;
 		getActivity().getBaseContext().getResources().updateConfiguration(config, getActivity().getBaseContext().getResources().getDisplayMetrics());
 	}
-	
+
 	public void opAgentComplete(ArrayList<HashMap<String, String>> listAgenti) {
 		populateAgentiList(listAgenti);
 

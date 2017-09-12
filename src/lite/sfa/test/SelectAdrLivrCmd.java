@@ -953,19 +953,30 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					break;
 				}
 
-			DateLivrare.getInstance().setTonaj(tokLivrare[19]);
-			spinnerTonaj.setSelection(spinnerTonaj.getAdapter().getCount() - 1);
-			for (int i = 0; i < spinnerTonaj.getCount(); i++)
-				if (spinnerTonaj.getItemAtPosition(i).toString().toUpperCase().contains(tokLivrare[19])) {
-					spinnerTonaj.setSelection(i);
-					break;
-				}
+			setSpinnerTonajValue(tokLivrare[19]);
 
 			DateLivrare.getInstance().setClientRaft(tokLivrare[20].equals("X") ? true : false);
 
 		} catch (Exception ex) {
 			Toast.makeText(getApplicationContext(), ex.toString(), Toast.LENGTH_SHORT).show();
 		}
+
+	}
+
+	private void setSpinnerTonajValue(String tonaj) {
+
+		if (tonaj == null || tonaj.equals("0"))
+			return;
+
+		DateLivrare.getInstance().setTonaj(tonaj);
+
+		spinnerTonaj.setSelection(spinnerTonaj.getAdapter().getCount() - 1);
+
+		for (int i = 0; i < spinnerTonaj.getCount(); i++)
+			if (spinnerTonaj.getItemAtPosition(i).toString().toUpperCase().contains(tonaj)) {
+				spinnerTonaj.setSelection(i);
+				break;
+			}
 
 	}
 
@@ -1285,8 +1296,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			EnumZona zona = ZoneBucuresti.getZonaBucuresti(coordAdresa);
 
 			dateLivrareInstance.setZonaBucuresti(zona);
-		}
-		else
+		} else
 			dateLivrareInstance.setZonaBucuresti(EnumZona.NEDEFINIT);
 
 		finish();
@@ -1363,6 +1373,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		String[] tokenCoords = adresaLivrare.getCoords().split(",");
 
 		DateLivrare.getInstance().setCoordonateAdresa(new LatLng(Double.valueOf(tokenCoords[0]), Double.valueOf(tokenCoords[1])));
+
+		setSpinnerTonajValue(adresaLivrare.getTonaj());
 
 	}
 

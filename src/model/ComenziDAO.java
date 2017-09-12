@@ -16,6 +16,7 @@ import org.json.JSONTokener;
 import utils.UtilsGeneral;
 import android.content.Context;
 import android.widget.Toast;
+import beans.ArticolCalculDesc;
 import beans.ArticolSimulat;
 import beans.BeanArticoleAfisare;
 import beans.BeanClientBorderou;
@@ -110,6 +111,12 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 
 	public void getPozitieMasina(HashMap<String, String> params) {
 		numeComanda = EnumComenziDAO.GET_POZITIE_MASINA;
+		performOperation(params);
+
+	}
+
+	public void getCostMacara(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.GET_COST_MACARA;
 		performOperation(params);
 
 	}
@@ -522,6 +529,31 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 		}
 
 		return listClienti;
+	}
+
+	public String serializeArtCalcMacara(List<ArticolCalculDesc> artCalcul) {
+
+		JSONArray jsonArrayArt = new JSONArray();
+
+		try {
+
+			for (ArticolCalculDesc art : artCalcul) {
+
+				JSONObject jsonObjArt = new JSONObject();
+				jsonObjArt.put("cod", art.getCod());
+				jsonObjArt.put("um", art.getUm());
+				jsonObjArt.put("cant", art.getCant());
+				jsonObjArt.put("depoz", art.getDepoz());
+
+				jsonArrayArt.put(jsonObjArt);
+
+			}
+
+		} catch (JSONException e) {
+
+		}
+
+		return jsonArrayArt.toString();
 	}
 
 	public List<BeanComandaCreata> getComenziDivizie(String divizie) {

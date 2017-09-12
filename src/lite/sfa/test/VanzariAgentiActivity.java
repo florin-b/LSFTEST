@@ -80,7 +80,7 @@ public class VanzariAgentiActivity extends Activity {
 		try {
 
 			if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("27")
-					|| UserInfo.getInstance().getTipAcces().equals("17")) // ag,
+					|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("41")) // ag,
 			// ka,
 			// cv
 			{
@@ -286,7 +286,7 @@ public class VanzariAgentiActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(String result) {
-			// TODO
+		
 
 			try {
 				if (dialog != null) {

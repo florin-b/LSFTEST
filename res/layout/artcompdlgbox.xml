@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="350dip"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:orientation="vertical" >
 
     <ListView
         android:id="@+id/listArtCmp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="250dip"
         android:layout_margin="10dip"
         android:choiceMode="singleChoice"
@@ -14,11 +15,10 @@
         android:drawSelectorOnTop="true" />
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dip"
-        android:gravity="right"
+        android:gravity="center"
         android:orientation="horizontal" >
 
         <Button
@@ -26,6 +26,7 @@
             style="@style/ok_button"
             android:layout_width="wrap_content"
             android:layout_height="40dip"
+            android:layout_gravity="left"
             android:background="@drawable/ok_button_style"
             android:paddingLeft="30dip"
             android:paddingRight="30dip"
@@ -41,6 +42,7 @@
             style="@style/ok_button"
             android:layout_width="wrap_content"
             android:layout_height="40dip"
+            android:layout_gravity="right"
             android:background="@drawable/cancel_button_style"
             android:paddingLeft="20dip"
             android:paddingRight="20dip"

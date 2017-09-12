@@ -182,7 +182,7 @@ public class AdresaGpsClientiActivity extends Fragment implements CustomSpinnerL
 			localDepart = "11";
 		}
 
-		agent.getListaAgenti(selectedFiliala, localDepart, getActivity(), true);
+		agent.getListaAgenti(selectedFiliala, localDepart, getActivity(), true, null);
 
 	}
 

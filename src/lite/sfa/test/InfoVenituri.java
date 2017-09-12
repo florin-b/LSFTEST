@@ -207,7 +207,7 @@ public class InfoVenituri extends Activity implements AsyncTaskListener, Operati
 				selectedFiliala = artMap.get("codFiliala");
 
 				if (!selectedFiliala.trim().isEmpty()){
-					agent.getListaAgenti(selectedFiliala, UserInfo.getInstance().getCodDepart(), InfoVenituri.this, false);
+					agent.getListaAgenti(selectedFiliala, UserInfo.getInstance().getCodDepart(), InfoVenituri.this, false, null);
 					listResultsVenituri.setVisibility(View.INVISIBLE);
 				}
 

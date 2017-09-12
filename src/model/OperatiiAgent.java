@@ -32,7 +32,7 @@ public class OperatiiAgent implements AsyncTaskListener {
 		return new OperatiiAgent();
 	}
 
-	public void getListaAgenti(String filiala, String departament, Context context, boolean optTotiAgentii) {
+	public void getListaAgenti(String filiala, String departament, Context context, boolean optTotiAgentii, String tipAgent) {
 
 		this.optTotiAgentii = optTotiAgentii;
 		this.context = context;
@@ -41,7 +41,10 @@ public class OperatiiAgent implements AsyncTaskListener {
 		params.put("filiala", filiala);
 		params.put("depart", departament);
 
-		AsyncTaskListener contextListener = (AsyncTaskListener) OperatiiAgent.this;
+		if (tipAgent != null)
+			params.put("tipAgent", tipAgent);
+
+		AsyncTaskListener contextListener = OperatiiAgent.this;
 		AsyncTaskWSCall call = new AsyncTaskWSCall(context, contextListener, "getListAgentiJSON", params);
 		call.getCallResultsFromFragment();
 	}

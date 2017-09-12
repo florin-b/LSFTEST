@@ -24,7 +24,8 @@ public class UtilsUser {
 	}
 
 	public static boolean isCV() {
-		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM");
+		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM")
+				|| UserInfo.getInstance().getTipUser().equals("CVR") || UserInfo.getInstance().getTipUser().equals("SMR");
 	}
 
 	public static boolean isDVCV() {
@@ -54,7 +55,7 @@ public class UtilsUser {
 	}
 
 	public static boolean isUserGed() {
-		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM");
+		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance().getTipUser().equals("SMR");
 	}
 
 	public static boolean isAgentOrSD() {

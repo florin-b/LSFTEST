@@ -350,18 +350,22 @@
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan" >
         </activity>
-        
         <activity
             android:name=".TestVoice"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan" >
         </activity>
-        
         <activity
             android:name=".SpeechRecognizerSampleActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".Delegatii"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="adjustPan" >
         </activity>
 

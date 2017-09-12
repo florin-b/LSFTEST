@@ -4,6 +4,8 @@
  */
 package lite.sfa.test;
 
+import helpers.HelperCostDescarcare;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import java.util.TimerTask;
 import listeners.ArticolModificareListener;
 import listeners.AsyncTaskListener;
 import listeners.ComenziDAOListener;
+import listeners.CostMacaraListener;
 import model.ArticolComanda;
 import model.Comanda;
 import model.ComenziDAO;
@@ -63,16 +66,19 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import beans.ArticolCalculDesc;
 import beans.BeanArticoleAfisare;
 import beans.BeanComandaCreata;
 import beans.BeanConditii;
 import beans.BeanConditiiArticole;
 import beans.BeanConditiiHeader;
+import beans.CostDescarcare;
 import beans.DateLivrareAfisare;
 import dialogs.AprobariDialog;
+import dialogs.CostMacaraDialog;
 import enums.EnumComenziDAO;
 
-public class ModificareComanda extends Activity implements AsyncTaskListener, ComenziDAOListener, ArticolModificareListener, Observer {
+public class ModificareComanda extends Activity implements AsyncTaskListener, ComenziDAOListener, ArticolModificareListener, Observer, CostMacaraListener {
 
 	Button quitBtn, stocBtn, clientBtn, articoleBtn, livrareBtn, salveazaComandaBtn, stergeComandaBtn, btnCommentariiCond, aprobareBtn;
 	String filiala = "", nume = "", cod = "", globalSubCmp = "0";
@@ -132,6 +138,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 	private LinearLayout layoutDetaliiCmd;
 
+	private Comanda comandaFinala;
+
 	String serializedResult;
 	private String comandaJson;
 	private ComenziDAO operatiiComenzi;
@@ -141,6 +149,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	private ArticolModificareAdapter adapterArticole;
 	private String codTipReducere = "-1";
 	private LinearLayout layoutBV90;
+
+	private CostDescarcare costDescarcare;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -330,8 +340,9 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	}
 
 	boolean isUserCV() {
-		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM")
-				|| UserInfo.getInstance().getTipUserSap().equals("KA3");
+		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("CVR")
+				|| UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance().getTipUserSap().equals("KA3")
+				|| UserInfo.getInstance().getTipUser().equals("SMR") || UserInfo.getInstance().getTipUser().equals("WOOD");
 	}
 
 	@Override
@@ -398,7 +409,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		if (listArticoleComanda != null) {
 			for (ArticolComanda articol : listArticoleComanda) {
 
-				localTotalComanda += articol.getPretUnit() * articol.getCantitate();
+				localTotalComanda += articol.getPretUnit() * articol.getCantUmb();
+
 			}
 		}
 
@@ -415,7 +427,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			if (articol.getTipArt().equalsIgnoreCase("B"))
 				totalArtB += articol.getPret();
 
-			localTotalComanda += articol.getPretUnit() * articol.getCantitate();
+			localTotalComanda += articol.getPretUnit() * articol.getCantUmb();
+
 		}
 
 		if (localTotalComanda == 0) {
@@ -538,27 +551,27 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 						if (dateLivrareInstance.isValIncModif())
 							isValIncModif = "X";
 
-						Comanda comanda = new Comanda();
-						comanda.setCodClient(selectedClientCode);
-						comanda.setComandaBlocata(comandaBlocata);
-						comanda.setNrCmdSap(selectedCmdSAP);
-						comanda.setConditieID(conditieID);
+						comandaFinala = new Comanda();
+						comandaFinala.setCodClient(selectedClientCode);
+						comandaFinala.setComandaBlocata(comandaBlocata);
+						comandaFinala.setNrCmdSap(selectedCmdSAP);
+						comandaFinala.setConditieID(conditieID);
 
-						comanda.setAlerteKA(alerteKA);
-						comanda.setFactRedSeparat(localRedSeparat);
-						comanda.setFilialaAlternativa(ModificareComanda.filialaAlternativaM);
-						comanda.setUserSite(localUserSite);
-						comanda.setUserSiteMail(dateLivrareInstance.getMail());
-						comanda.setIsValIncModif(isValIncModif);
-						comanda.setCodJ(codJ);
-						comanda.setAdresaLivrareGed(adrLivrareGED);
-						comanda.setNumeClient(dateLivrareInstance.getNumeClient());
-						comanda.setCnpClient(dateLivrareInstance.getCnpClient());
-						comanda.setNecesarAprobariCV(comandaSelectata.getAprobariNecesare());
+						comandaFinala.setAlerteKA(alerteKA);
+						comandaFinala.setFactRedSeparat(localRedSeparat);
+						comandaFinala.setFilialaAlternativa(ModificareComanda.filialaAlternativaM);
+						comandaFinala.setUserSite(localUserSite);
+						comandaFinala.setUserSiteMail(dateLivrareInstance.getMail());
+						comandaFinala.setIsValIncModif(isValIncModif);
+						comandaFinala.setCodJ(codJ);
+						comandaFinala.setAdresaLivrareGed(adrLivrareGED);
+						comandaFinala.setNumeClient(dateLivrareInstance.getNumeClient());
+						comandaFinala.setCnpClient(dateLivrareInstance.getCnpClient());
+						comandaFinala.setNecesarAprobariCV(comandaSelectata.getAprobariNecesare());
 
-						comandaJson = serializeComanda(comanda);
+						comandaJson = serializeComanda(comandaFinala);
 
-						performSaveCmd();
+						verificaPretMacara();
 
 					}
 				});
@@ -569,6 +582,66 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			}
 
 		}
+	}
+
+	private void verificaPretMacara() {
+
+		HelperCostDescarcare.eliminaCostDescarcare(listArticoleComanda);
+
+		if (DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP")) {
+
+			List<ArticolCalculDesc> artCalcul = HelperCostDescarcare.getDateCalculDescarcare(listArticoleComanda);
+
+			String listArtSer = operatiiComenzi.serializeArtCalcMacara(artCalcul);
+
+			HashMap<String, String> params = new HashMap<String, String>();
+
+			params.put("unitLog", DateLivrare.getInstance().getUnitLog());
+			params.put("codAgent", DateLivrare.getInstance().getCodAgent());
+			params.put("codClient", comandaFinala.getCodClient());
+			params.put("listArt", listArtSer);
+
+			operatiiComenzi.getCostMacara(params);
+		} else
+			performSaveCmd();
+
+	}
+
+	private void afiseazaPretMacaraDialog(String result) {
+
+		costDescarcare = HelperCostDescarcare.deserializeCostMacara(result);
+
+		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
+
+			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare, isComandaGed());
+			macaraDialog.setCostMacaraListener(this);
+			macaraDialog.show();
+
+		} else {
+			if (!costDescarcare.getSePermite())
+				DateLivrare.getInstance().setMasinaMacara(false);
+
+			performSaveCmd();
+
+		}
+
+	}
+
+	private void trateazaPretMacara(boolean acceptaPret, double valoarePret) {
+
+		if (acceptaPret) {
+			DateLivrare.getInstance().setMasinaMacara(true);
+
+			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare, valoarePret);
+
+			listArticoleComanda.addAll(articoleDescarcare);
+
+		} else {
+			DateLivrare.getInstance().setMasinaMacara(false);
+		}
+
+		performSaveCmd();
+
 	}
 
 	private boolean isReducere() {
@@ -586,7 +659,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 			HashMap<String, String> params = new HashMap<String, String>();
 
-			String tipUser = "AV";
+			String tipUser = "";
 			if (UserInfo.getInstance().getTipAcces().equals("27"))
 				tipUser = "KA";
 			else if (isComandaGed())
@@ -700,7 +773,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 				hasTaxaVerde = true;
 			}
 
-			totalComanda += articolComanda.getPretUnit() * articolComanda.getCantitate();
+			totalComanda += articolComanda.getPretUnit() * articolComanda.getCantUmb();
 
 		}
 
@@ -1542,6 +1615,9 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		case SALVEAZA_COMANDA_DISTRIB:
 			saveCmdStatus((String) result);
 			break;
+		case GET_COST_MACARA:
+			afiseazaPretMacaraDialog((String) result);
+			break;
 		default:
 			break;
 		}
@@ -1567,6 +1643,12 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			adapterArticole.setListArticole(listArticoleComanda);
 			adapterArticole.notifyDataSetChanged();
 		}
+
+	}
+
+	@Override
+	public void acceptaCostMacara(boolean acceptaCost, double valoareCost) {
+		trateazaPretMacara(acceptaCost, valoareCost);
 
 	}
 }

@@ -4,6 +4,8 @@
  */
 package lite.sfa.test;
 
+import helpers.HelperCostDescarcare;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import java.util.TimerTask;
 import listeners.ArtComplDialogListener;
 import listeners.AsyncTaskListener;
 import listeners.ComenziDAOListener;
+import listeners.CostMacaraListener;
 import listeners.PaletAlertListener;
 import listeners.PretTransportDialogListener;
 import listeners.ValoareNegociataDialogListener;
@@ -66,7 +69,10 @@ import android.widget.SlidingDrawer.OnDrawerCloseListener;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import beans.ArticolCalculDesc;
+import beans.CostDescarcare;
 import dialogs.ArtComplDialog;
+import dialogs.CostMacaraDialog;
 import dialogs.PaletAlertDialog;
 import dialogs.PretTransportDialog;
 import dialogs.ValoareNegociataDialog;
@@ -74,7 +80,7 @@ import enums.EnumComenziDAO;
 import enums.EnumDaNuOpt;
 
 public class CreareComanda extends Activity implements AsyncTaskListener, ValoareNegociataDialogListener, ComenziDAOListener, PretTransportDialogListener,
-		ArtComplDialogListener, Observer, PaletAlertListener {
+		ArtComplDialogListener, Observer, PaletAlertListener, CostMacaraListener {
 
 	Button stocBtn, clientBtn, articoleBtn, livrareBtn, saveCmdBtn, slideButtonCmd;
 	String filiala = "", nume = "", cod = "";
@@ -137,6 +143,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 	private List<ArticolComanda> listArticole = null;
 	private String comandaJson;
 	private Comanda comandaFinala = new Comanda();
+	private ComenziDAO comandaDAO;
+	private CostDescarcare costDescarcare;
 
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -150,6 +158,9 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			checkStaticVars();
 
 			ListaArticoleComanda.getInstance().addObserver(this);
+
+			comandaDAO = ComenziDAO.getInstance(this);
+			comandaDAO.setComenziDAOListener(this);
 
 			listArtCmd = (ListView) findViewById(R.id.listArtCmd);
 
@@ -724,7 +735,6 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 	}
 
-
 	private boolean isCondPF10_000() {
 		return CreareComanda.tipClientVar.equals("PF") && DateLivrare.getInstance().getTipPlata().equals("E") && totalComanda > 10000;
 	}
@@ -785,7 +795,6 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 								+ UserInfo.getInstance().getUserSite() + "#" + userSiteMail + "#" + isValIncModif + "#" + codJ + "#" + adrLivrareGED + "@"
 								+ articoleFinaleStr;
 
-						// Comanda comanda = new Comanda();
 						comandaFinala.setCodClient(codClientVar);
 						comandaFinala.setComandaBlocata(comandaBlocata);
 						comandaFinala.setNrCmdSap(cmdSAP);
@@ -801,7 +810,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 						comandaJson = serializeComanda(comandaFinala);
 						articoleFinaleStr = serializedResult;
 
-						trateazaConditiiSuplimentare();
+						verificaPretMacara();
 
 					}
 				});
@@ -820,6 +829,71 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			displayAlertPalet();
 		else
 			displayArtComplDialog();
+
+	}
+
+	private void afiseazaPretMacaraDialog(String result) {
+
+		costDescarcare = HelperCostDescarcare.deserializeCostMacara(result);
+
+		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
+
+			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare, false);
+			macaraDialog.setCostMacaraListener(this);
+			macaraDialog.show();
+
+		} else {
+			if (!costDescarcare.getSePermite())
+				DateLivrare.getInstance().setMasinaMacara(false);
+
+			trateazaConditiiSuplimentare();
+
+		}
+
+	}
+
+	private void trateazaPretMacara(boolean acceptaPret, double valoarePret) {
+
+		if (acceptaPret) {
+
+			DateLivrare.getInstance().setMasinaMacara(true);
+
+			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare, valoarePret);
+
+			ListaArticoleComanda.getInstance().getListArticoleComanda().addAll(articoleDescarcare);
+
+			prepareArtForDelivery();
+
+			articoleFinaleStr = serializedResult;
+		} else {
+			DateLivrare.getInstance().setMasinaMacara(false);
+		}
+
+		trateazaConditiiSuplimentare();
+
+	}
+
+	private void verificaPretMacara() {
+
+		HelperCostDescarcare.eliminaCostDescarcare(ListaArticoleComanda.getInstance().getListArticoleComanda());
+
+		if (DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP")) {
+
+			List<ArticolCalculDesc> artCalcul = HelperCostDescarcare.getDateCalculDescarcare(ListaArticoleComanda.getInstance().getListArticoleComanda());
+
+			String listArtSer = comandaDAO.serializeArtCalcMacara(artCalcul);
+
+			HashMap<String, String> params = new HashMap<String, String>();
+
+			params.put("unitLog", DateLivrare.getInstance().getUnitLog());
+			params.put("codAgent", DateLivrare.getInstance().getCodAgent());
+			params.put("codClient", comandaFinala.getCodClient());
+			params.put("listArt", listArtSer);
+
+			comandaDAO.getCostMacara(params);
+		} else
+			trateazaConditiiSuplimentare();
+
 	}
 
 	private boolean isReducere() {
@@ -844,9 +918,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			params.put("JSONComanda", comandaJson);
 			params.put("JSONDateLivrare", serializeDateLivrare());
 
-			ComenziDAO comanda = ComenziDAO.getInstance(this);
-			comanda.setComenziDAOListener(this);
-			comanda.salveazaComandaDistrib(params);
+			comandaDAO.salveazaComandaDistrib(params);
 
 		} catch (Exception e) {
 			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
@@ -1442,7 +1514,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		filialaAlternativa = UserInfo.getInstance().getUnitLog();
 
 		ListaArticoleComanda.getInstance().clearArticoleComanda();
-		
+
 		initLocale();
 
 	}
@@ -1469,9 +1541,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			HashMap<String, String> params = new HashMap<String, String>();
 			params.put("comanda", nrCmdGED);
 
-			ComenziDAO comanda = ComenziDAO.getInstance(this);
-			comanda.setComenziDAOListener(this);
-			comanda.salveazaComandaGed(params);
+			comandaDAO.salveazaComandaGed(params);
 
 		} catch (Exception e) {
 			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
@@ -1502,19 +1572,15 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		});
 	}
 
-	
-	private void initLocale()
-	{
+	private void initLocale() {
 		Locale locale = new Locale("en", "US");
 		Locale.setDefault(locale);
 		Configuration config = new Configuration();
 		config.locale = locale;
 		getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 	}
-	
+
 	private void checkStaticVars() {
-
-
 
 		// restart app la idle
 		if (UserInfo.getInstance().getCod().equals("")) {
@@ -1555,6 +1621,9 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			break;
 		case SALVEAZA_COMANDA_GED:
 			displayCmdGEDStatus((String) result);
+			break;
+		case GET_COST_MACARA:
+			afiseazaPretMacaraDialog((String) result);
 			break;
 		default:
 			break;
@@ -1627,8 +1696,10 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 	}
 
+	@Override
+	public void acceptaCostMacara(boolean acceptaCost, double valoareCost) {
+		trateazaPretMacara(acceptaCost, valoareCost);
 
-
-
+	}
 
 }

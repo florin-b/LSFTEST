@@ -206,7 +206,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 
 		selectedDepartamentAgent = UserInfo.getInstance().getCodDepart();
 
-		if (UtilsUser.isCV() || UtilsUser.isDVCV())
+		if (UtilsUser.isCV() || UtilsUser.isDVCV() || UtilsUser.isConsWood())
 			selectedDepartamentAgent = "";
 
 		if (UtilsUser.isKA())

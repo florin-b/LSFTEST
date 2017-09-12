@@ -875,7 +875,7 @@ public class InfoStrings {
 
 			if (filiala.equals("BU12"))
 				codClient = "4119000026";
-			
+
 			if (filiala.equals("SB10"))
 				codClient = "4119000422";
 
@@ -1205,6 +1205,16 @@ public class InfoStrings {
 		// SEFI DE MAGAZIN
 		if (UserInfo.getInstance().getTipAcces().equals("18")) {
 			tipAcces = "SM";
+		}
+
+		// Consilier Vanzari Retail
+		if (UserInfo.getInstance().getTipAcces().equals("41")) {
+			tipAcces = "CVR";
+		}
+
+		// Sef magazin Retail
+		if (UserInfo.getInstance().getTipAcces().equals("44")) {
+			tipAcces = "SMR";
 		}
 
 		return tipAcces;

@@ -4,7 +4,9 @@ public class ArticolDescarcare {
 
 	private String cod;
 	private String depart;
-	private String valoare;
+	private double valoare;
+	private double cantitate;
+	private double valoareMin;
 
 	public String getCod() {
 		return cod;
@@ -22,12 +24,28 @@ public class ArticolDescarcare {
 		this.depart = depart;
 	}
 
-	public String getValoare() {
+	public double getValoare() {
 		return valoare;
 	}
 
-	public void setValoare(String valoare) {
+	public void setValoare(double valoare) {
 		this.valoare = valoare;
+	}
+
+	public double getCantitate() {
+		return cantitate;
+	}
+
+	public void setCantitate(double cantitate) {
+		this.cantitate = cantitate;
+	}
+
+	public double getValoareMin() {
+		return valoareMin;
+	}
+
+	public void setValoareMin(double valoareMin) {
+		this.valoareMin = valoareMin;
 	}
 
 }

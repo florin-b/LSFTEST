@@ -44,7 +44,7 @@
 
     <string name="strPret">Pre\u021B</string>
     <string name="strSalveaza">Salveaz\u0103</string>
-    <string name="strSalveazaComanda">Salveaz\u0103 comanda</string>
+    <string name="strSalveazaComanda">Salveaz\u0103 </string>
     <string name="strRevenire">Revenire</string>
 
     <color name="detColor4">#1560BD</color>

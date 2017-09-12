@@ -39,7 +39,7 @@ public class SelectAgentDialog extends Dialog implements OperatiiAgentListener {
 
 		opAgent = OperatiiAgent.getInstance();
 		opAgent.setOperatiiAgentListener(this);
-		opAgent.getListaAgenti(UserInfo.getInstance().getUnitLog(), getUserDepart(), context, false);
+		opAgent.getListaAgenti(UserInfo.getInstance().getUnitLog(), getUserDepart(), context, false, null);
 
 	}
 

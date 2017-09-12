@@ -257,12 +257,13 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 	boolean isSefDepart() {
 		return UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")
-				|| UserInfo.getInstance().getTipAcces().equals("32");
+				|| UserInfo.getInstance().getTipAcces().equals("32") || UserInfo.getInstance().getTipAcces().equals("44");
 	}
 
 	boolean isAgent() {
 		return UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("27")
-				|| UserInfo.getInstance().getTipAcces().equals("17");
+				|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("41")
+				|| UserInfo.getInstance().getTipAcces().equals("43") || UserInfo.getInstance().getTipAcces().equals("45");
 	}
 
 	@Override
@@ -330,6 +331,8 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 	private void performGetAgenti() {
 
+		String tipAgent = null;
+
 		if (!isDirectorDistrib())
 			selectedCodDepart = UserInfo.getInstance().getCodDepart();
 
@@ -343,7 +346,13 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			selectedCodDepart = "11";
 		}
 
-		agent.getListaAgenti(selectedFiliala, selectedCodDepart, this, true);
+		// smr
+		if (UserInfo.getInstance().getTipAcces().equals("44")) {
+			selectedCodDepart = "11";
+			tipAgent = "CVR";
+		}
+
+		agent.getListaAgenti(selectedFiliala, selectedCodDepart, this, true, tipAgent);
 
 	}
 
@@ -396,7 +405,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			break;
 		}
 
-		agent.getListaAgenti(selectedFiliala, selectedCodDepart, AfisComanda.this, true);
+		agent.getListaAgenti(selectedFiliala, selectedCodDepart, AfisComanda.this, true, null);
 
 	}
 
@@ -494,6 +503,21 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			if (UserInfo.getInstance().getTipAcces().equals("17") || (selectedTipUser != null && selectedTipUser.getCodTip().equals("CV"))) // consilier
 			{
 				tipUser = "CV";
+				paramDepart = "11";
+			}
+
+			if (UserInfo.getInstance().getTipAcces().equals("41")) // consilier
+																	// retail
+			{
+				tipUser = "CV";
+				paramDepart = "11";
+			}
+
+			if (UserInfo.getInstance().getTipAcces().equals("44")) // sef
+																	// magazin
+																	// retail
+			{
+				tipUser = "SMR";
 				paramDepart = "11";
 			}
 

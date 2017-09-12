@@ -4,6 +4,8 @@
  */
 package lite.sfa.test;
 
+import helpers.HelperCostDescarcare;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -21,12 +23,15 @@ import java.util.TreeSet;
 
 import listeners.ArtComplDialogListener;
 import listeners.AsyncTaskListener;
+import listeners.ComenziDAOListener;
+import listeners.CostMacaraListener;
 import listeners.OperatiiArticolListener;
 import listeners.PaletAlertListener;
 import listeners.ValoareNegociataDialogListener;
 import model.AlgoritmComandaGed;
 import model.ArticolComanda;
 import model.Comanda;
+import model.ComenziDAO;
 import model.DateLivrare;
 import model.InfoStrings;
 import model.ListaArticoleComandaGed;
@@ -73,16 +78,20 @@ import android.widget.SlidingDrawer.OnDrawerCloseListener;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import beans.ArticolCalculDesc;
 import beans.BeanParametruPretGed;
+import beans.CostDescarcare;
 import beans.PretArticolGed;
 import dialogs.ArtComplDialog;
+import dialogs.CostMacaraDialog;
 import dialogs.PaletAlertDialog;
 import dialogs.ValoareNegociataDialog;
 import enums.EnumArticoleDAO;
+import enums.EnumComenziDAO;
 import enums.EnumDaNuOpt;
 
 public class CreareComandaGed extends Activity implements AsyncTaskListener, ArtComplDialogListener, Observer, OperatiiArticolListener,
-		ValoareNegociataDialogListener, PaletAlertListener {
+		ValoareNegociataDialogListener, PaletAlertListener, ComenziDAOListener, CostMacaraListener {
 
 	Button stocBtn, clientBtn, articoleBtn, livrareBtn, saveCmdBtn, slideButtonCmd, valTranspBtn, debugBtn;
 	String filiala = "", nume = "", cod = "";
@@ -148,7 +157,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	Dialog dialog, dlgTransp;
 
 	private LinearLayout layoutHeader;
-	private NumberFormat nf3;
+
 	private String selectedPretClient = "", selectedCodArticol = "", selectedCantClient = "", selectedDepozit = "", selectedUm = "";
 
 	private double existingStoc = 0;
@@ -169,6 +178,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	private ListView listViewArticoleTransp;
 
 	private OperatiiArticol opArticol;
+	private ComenziDAO comandaDAO;
+	private CostDescarcare costDescarcare;
 
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -182,6 +193,10 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			checkStaticVars();
 
 			ListaArticoleComandaGed.getInstance().addObserver(this);
+
+			comandaDAO = ComenziDAO.getInstance(this);
+			comandaDAO.setComenziDAOListener(this);
+
 			algoritm = new AlgoritmComandaGed();
 
 			opArticol = OperatiiArticolFactory.createObject("OperatiiArticolImpl", this);
@@ -272,11 +287,6 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			mProgress.setVisibility(View.INVISIBLE);
 
 			initLocale();
-			
-			nf3 = NumberFormat.getInstance();
-			nf3.setMinimumFractionDigits(2);
-			nf3.setMaximumFractionDigits(2);
-			nf3.setGroupingUsed(false);
 
 		} catch (Exception ex) {
 			Toast.makeText(getApplicationContext(), ex.toString(), Toast.LENGTH_SHORT).show();
@@ -620,6 +630,11 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	private double getValoareTransportSap() {
 
+		NumberFormat nf3 = NumberFormat.getInstance(new Locale("en", "US"));
+		nf3.setMinimumFractionDigits(2);
+		nf3.setMaximumFractionDigits(2);
+		nf3.setGroupingUsed(false);
+
 		double totalTransp = UtilsComenziGed.getValoareTransportSap(listArticole);
 
 		if (valTransport <= valTransportSAP || valTransport < totalTransp) {
@@ -721,9 +736,9 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		nf.setMinimumFractionDigits(2);
 		nf.setMaximumFractionDigits(2);
 
-		textComisionGed.setVisibility(View.VISIBLE);
-		labelComisionClient.setVisibility(View.VISIBLE);
-		textComisionClient.setVisibility(View.VISIBLE);
+		textComisionGed.setVisibility(View.INVISIBLE);
+		labelComisionClient.setVisibility(View.INVISIBLE);
+		textComisionClient.setVisibility(View.INVISIBLE);
 		labelComisionClient.setText("Comision: ");
 
 		textComisionGed.setText("Comision: " + nf.format(algoritm.getMarjaBrutaGed() * algoritm.getCoefComision()));
@@ -781,8 +796,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		dialogModifPret.setCancelable(false);
 		dialogModifPret.show();
 
-		
-		NumberFormat nf2 = NumberFormat.getInstance(new Locale("en","US"));
+		NumberFormat nf2 = NumberFormat.getInstance(new Locale("en", "US"));
 		nf2.setMinimumFractionDigits(2);
 		nf2.setMaximumFractionDigits(2);
 		nf2.setGroupingUsed(false);
@@ -1115,10 +1129,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 						comandaFinala.setValoareIncasare(valIncasare);
 
-						if (comandaHasPalet())
-							displayAlertPalet();
-						else
-							displayArtComplDialog();
+						verificaPretMacara();
 
 					}
 				});
@@ -1131,9 +1142,84 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		}
 	}
 
+	private void trateazaConditiiSuplimentare() {
+
+		if (comandaHasPalet())
+			displayAlertPalet();
+		else
+			displayArtComplDialog();
+
+	}
+
+	private void verificaPretMacara() {
+
+		HelperCostDescarcare.eliminaCostDescarcare(ListaArticoleComandaGed.getInstance().getListArticoleComanda());
+
+		if (DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP")) {
+
+			List<ArticolCalculDesc> artCalcul = HelperCostDescarcare.getDateCalculDescarcare(ListaArticoleComandaGed.getInstance().getListArticoleComanda());
+
+			String listArtSer = comandaDAO.serializeArtCalcMacara(artCalcul);
+
+			HashMap<String, String> params = new HashMap<String, String>();
+
+			params.put("unitLog", DateLivrare.getInstance().getUnitLog());
+			params.put("codAgent", DateLivrare.getInstance().getCodAgent());
+			params.put("codClient", comandaFinala.getCodClient());
+			params.put("listArt", listArtSer);
+
+			comandaDAO.getCostMacara(params);
+		} else
+			trateazaConditiiSuplimentare();
+
+	}
+
+	private void trateazaPretMacara(boolean acceptaPret, double valoarePret) {
+
+		if (acceptaPret) {
+
+			DateLivrare.getInstance().setMasinaMacara(true);
+
+			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare, valoarePret);
+
+			ListaArticoleComandaGed.getInstance().getListArticoleComanda().addAll(articoleDescarcare);
+
+			recalculTotal();
+
+			serializeArticole(prepareArtForDelivery());
+
+		} else {
+			DateLivrare.getInstance().setMasinaMacara(false);
+		}
+
+		trateazaConditiiSuplimentare();
+
+	}
+
+	private void afiseazaPretMacaraDialog(String result) {
+
+		costDescarcare = HelperCostDescarcare.deserializeCostMacara(result);
+
+		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
+
+			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare, true);
+			macaraDialog.setCostMacaraListener(this);
+			macaraDialog.show();
+
+		} else {
+			if (!costDescarcare.getSePermite())
+				DateLivrare.getInstance().setMasinaMacara(false);
+
+			trateazaConditiiSuplimentare();
+
+		}
+
+	}
+
 	private boolean isConditiiUserCmdRez() {
 		return UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("9")
-				|| UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18");
+				|| UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")
+				|| UserInfo.getInstance().getTipAcces().equals("41") || UserInfo.getInstance().getTipAcces().equals("44");
 	}
 
 	private void displayAlertPalet() {
@@ -1159,7 +1245,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	}
 
-	public String serializeDateLivrareGed() {
+	private String serializeDateLivrareGed() {
 
 		JSONObject jsonAdresa = new JSONObject();
 
@@ -1236,13 +1322,20 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		ArticolComanda articol = null;
 
+		String filialaSite = "", depozitSite = " ";
+
+		if (UtilsUser.isUserSite() && !listArticole.isEmpty()) {
+			filialaSite = listArticole.get(0).getFilialaSite();
+			depozitSite = listArticole.get(0).getDepozit();
+		}
+
 		// adaugare material transport
 		if (DateLivrare.getInstance().getTransport().equals("TRAP") || DateLivrare.getInstance().getTransport().equals("TERT")) {
 
 			articol = new ArticolComanda();
 			articol.setCodArticol("000000000030101050");
 			articol.setCantitate(1.0);
-			articol.setDepozit(" ");
+			articol.setDepozit(depozitSite);
 			articol.setPretUnit(valTransport);
 			articol.setProcent(0);
 			articol.setUm("BUC");
@@ -1256,7 +1349,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			articol.setCantUmb(1);
 			articol.setUmb("BUC");
 			articol.setPonderare(2);
-			articol.setFilialaSite("");
+			articol.setFilialaSite(filialaSite);
 			tempListArticole.add(articol);
 
 		}
@@ -1295,7 +1388,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				obj.put("ponderare", listArticole.get(i).getPonderare());
 				obj.put("filialaSite", listArticole.get(i).getFilialaSite());
 				obj.put("istoricPret", listArticole.get(i).getIstoricPret());
-				
+
 				myArray.put(obj);
 
 				if (listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1) {
@@ -1600,7 +1693,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		filialaAlternativa = UserInfo.getInstance().getUnitLog();
 		ListaArticoleComandaGed.getInstance().clearArticoleComanda();
-		
+
 		initLocale();
 
 	}
@@ -1637,7 +1730,6 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 						performSaveCmdGED();
 					else {
 
-						
 						if (CreareComandaGed.tipComanda.equals("S")) {
 							performSaveCmdGED();
 						} else {
@@ -1706,6 +1798,11 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		dialogModifValTransp.setTitle("Modificare valoare transport");
 		dialogModifValTransp.setCancelable(false);
 		dialogModifValTransp.show();
+
+		final NumberFormat nf3 = NumberFormat.getInstance(new Locale("en", "US"));
+		nf3.setMinimumFractionDigits(2);
+		nf3.setMaximumFractionDigits(2);
+		nf3.setGroupingUsed(false);
 
 		final EditText textValTransp = (EditText) dialogModifValTransp.findViewById(R.id.txtValTransp);
 
@@ -1801,6 +1898,9 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		for (int i = 0; i < listArticole.size(); i++) {
 
 			articol = listArticole.get(i);
+
+			if (!articol.getAlteValori().contains("!"))
+				continue;
 
 			varAlteValoriArray = articol.getAlteValori().split("!");
 			double factorConvUM = Double.parseDouble(varAlteValoriArray[7]);
@@ -1898,20 +1998,15 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	}
 
-	
-	private void initLocale()
-	{
+	private void initLocale() {
 		Locale locale = new Locale("en", "US");
 		Locale.setDefault(locale);
 		Configuration config = new Configuration();
 		config.locale = locale;
 		getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-	}	
-	
-	
-	private void checkStaticVars() {
+	}
 
-		
+	private void checkStaticVars() {
 
 		// restart app la idle
 		if (UserInfo.getInstance().getCod().equals("")) {
@@ -2087,6 +2182,25 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		default:
 			break;
 		}
+
+	}
+
+	@Override
+	public void operationComenziComplete(EnumComenziDAO methodName, Object result) {
+		switch (methodName) {
+		case GET_COST_MACARA:
+			afiseazaPretMacaraDialog((String) result);
+			break;
+		default:
+			break;
+
+		}
+
+	}
+
+	@Override
+	public void acceptaCostMacara(boolean acceptaCost, double valoareCost) {
+		trateazaPretMacara(acceptaCost, valoareCost);
 
 	}
 

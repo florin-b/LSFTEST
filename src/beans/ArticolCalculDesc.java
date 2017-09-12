@@ -5,6 +5,7 @@ public class ArticolCalculDesc {
 	private String cod;
 	private double cant;
 	private String um;
+	private String depoz;
 
 	public String getCod() {
 		return cod;
@@ -28,6 +29,14 @@ public class ArticolCalculDesc {
 
 	public void setUm(String um) {
 		this.um = um;
+	}
+
+	public String getDepoz() {
+		return depoz;
+	}
+
+	public void setDepoz(String depoz) {
+		this.depoz = depoz;
 	}
 
 }

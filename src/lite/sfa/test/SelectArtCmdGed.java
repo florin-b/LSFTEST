@@ -110,8 +110,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	private double pretMediuDistrib = 0, adaosMediuDistrib = 0;
 	private double valoareUmrez = 1, valoareUmren = 1;
 
-	NumberFormat nf2;
-
 	private static ArrayList<HashMap<String, String>> listUmVanz = null;
 	public SimpleAdapter adapterUmVanz;
 	private double varProc = 0, valMultiplu = 0, pretVanzare = 0;
@@ -143,7 +141,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	private TextView textPretGEDFTva, textTransport;
 	private double procentTVA, procentTransport, valoareTransport;
 	private PretArticolGed selectedArticol;
-	private NumberFormat nForm2;
+
 	private ArticolDB articolDBSelected;
 	private TextView txtImpachetare;
 
@@ -184,8 +182,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		resultLayout = (LinearLayout) findViewById(R.id.resLayout);
 		resultLayout.setVisibility(View.INVISIBLE);
-
-		nf2 = NumberFormat.getInstance(new Locale("en_US"));
 
 		labelFactConv = (TextView) findViewById(R.id.labelFactConv);
 		labelFactConv.setVisibility(View.INVISIBLE);
@@ -298,10 +294,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			layoutPretGEDFTva.setVisibility(View.VISIBLE);
 		}
 
-		nForm2 = NumberFormat.getInstance(new Locale("en_US"));
-		nForm2.setMinimumFractionDigits(2);
-		nForm2.setMaximumFractionDigits(2);
-
 	}
 
 	private void setDefaultDepoz(EnumDepoz depoz, ArrayList<String> listDepozite) {
@@ -377,7 +369,9 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	}
 
 	boolean isCV() {
-		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM");
+		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM")
+				|| UserInfo.getInstance().getTipUser().equals("CVR") || UserInfo.getInstance().getTipUser().equals("SMR")
+				|| UserInfo.getInstance().getTipUser().equals("WOOD");
 	}
 
 	boolean isWood() {
@@ -650,12 +644,17 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		tglProc.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
+				NumberFormat nf2 = NumberFormat.getInstance(new Locale("en", "US"));
+				nf2.setMinimumFractionDigits(3);
+				nf2.setMaximumFractionDigits(3);
+
+				NumberFormat nForm2 = NumberFormat.getInstance(new Locale("en", "US"));
+				nForm2.setMinimumFractionDigits(2);
+				nForm2.setMaximumFractionDigits(2);
+
 				if (globalCantArt > 0) {
 
 					if (tglProc.isChecked()) {
-
-						nf2.setMinimumFractionDigits(3);
-						nf2.setMaximumFractionDigits(3);
 
 						varProc = -1;
 
@@ -676,9 +675,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						textTransport.setText(nForm2.format(initPrice * (procentTransport / 100) + valoareTransport));
 
 					} else {
-
-						nf2.setMinimumFractionDigits(3);
-						nf2.setMaximumFractionDigits(3);
 
 						varProc = 0;
 						textProcRed.setText("");
@@ -721,8 +717,14 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 				try {
 
+					NumberFormat nf2 = NumberFormat.getInstance(new Locale("en", "US"));
+
 					nf2.setMinimumFractionDigits(3);
 					nf2.setMaximumFractionDigits(3);
+
+					NumberFormat nForm2 = NumberFormat.getInstance(new Locale("en", "US"));
+					nForm2.setMinimumFractionDigits(2);
+					nForm2.setMaximumFractionDigits(2);
 
 					// verif. cantitate
 
@@ -1057,11 +1059,11 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 					String localUnitMas = "";
 					String alteValori = "", subCmp = "0";
 
-					NumberFormat nf = NumberFormat.getInstance(new Locale("en_US"));
+					NumberFormat nf = NumberFormat.getInstance(new Locale("en", "US"));
 					nf.setMinimumFractionDigits(2);
 					nf.setMaximumFractionDigits(2);
 
-					NumberFormat nfPret = NumberFormat.getInstance(new Locale("en_US"));
+					NumberFormat nfPret = NumberFormat.getInstance(new Locale("en", "US"));
 					nfPret.setMinimumFractionDigits(3);
 					nfPret.setMaximumFractionDigits(3);
 
@@ -1298,6 +1300,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		if (!pretResponse.equals("-1")) {
 
+			NumberFormat nf2 = NumberFormat.getInstance(new Locale("en", "US"));
+
 			nf2.setMinimumFractionDigits(3);
 			nf2.setMaximumFractionDigits(3);
 
@@ -1354,6 +1358,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		selectedArticol = pretArticol;
 
+		NumberFormat nf2 = NumberFormat.getInstance(new Locale("en", "US"));
 		nf2.setMinimumFractionDigits(3);
 		nf2.setMaximumFractionDigits(3);
 		nf2.setGroupingUsed(false);
@@ -1376,6 +1381,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		adaosMediuDistrib = Double.valueOf(pretArticol.getAdaosMediu());
 
 		initPrice = Double.valueOf(pretArticol.getPret());
+
 		listPrice = Double.valueOf(pretArticol.getPretLista());
 
 		afisIstoricPret(pretArticol.getIstoricPret());
@@ -1425,10 +1431,14 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		double pretUnitar = (initPrice / globalCantArt) * valMultiplu;
 		double valoareFaraTva = pretUnitar / procentTVA;
 
-		NumberFormat nf = NumberFormat.getInstance(new Locale("en_US"));
+		NumberFormat nf = NumberFormat.getInstance(new Locale("en", "US"));
 		nf.setMaximumFractionDigits(3);
 		nf.setMinimumFractionDigits(3);
 		textPretGEDFTva.setText(nf.format(valoareFaraTva));
+
+		NumberFormat nForm2 = NumberFormat.getInstance(new Locale("en", "US"));
+		nForm2.setMinimumFractionDigits(2);
+		nForm2.setMaximumFractionDigits(2);
 
 		procentTransport = pretArticol.getProcTransport();
 		valoareTransport = pretArticol.getValTrap();
@@ -1594,7 +1604,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	}
 
 	private boolean userCannotModifyPrice() {
-		return UserInfo.getInstance().getTipUserSap().equals("CONS-GED");
+		return UserInfo.getInstance().getTipUserSap().equals("CONS-GED") || UserInfo.getInstance().getTipUserSap().equals("CVR");
 	}
 
 	private double getProcentTVA(PretArticolGed pretArticol) {

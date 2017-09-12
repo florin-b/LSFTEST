@@ -68,6 +68,7 @@ import com.google.android.gms.maps.model.LatLng;
 import dialogs.MapAddressDialog;
 import dialogs.SelectDateDialog;
 import enums.EnumClienti;
+import enums.EnumJudete;
 import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
 
@@ -643,11 +644,15 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	}
 
 	private void performGetJudete() {
-		try {
 
+		if (UtilsUser.isUserSite()) {
+
+			fillJudeteClient(EnumJudete.getRegionCodes());
+			
+		} else {
 			String unitLog = UserInfo.getInstance().getUnitLog();
 
-			if (UtilsUser.isUserSite() && unitLog.equals("NN10"))
+			if (unitLog.equals("NN10"))
 				unitLog = "AG10";
 
 			HashMap<String, String> params = new HashMap<String, String>();
@@ -655,10 +660,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			AsyncTaskWSCall call = new AsyncTaskWSCall(this, METHOD_NAME, params);
 			call.getCallResults();
-
-		} catch (Exception e) {
-			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
 		}
+
 	}
 
 	private void fillJudeteClient(String arrayJudete) {

@@ -188,7 +188,7 @@ public class OptiuniObiectKaDialog extends Dialog implements OperatiiAgentListen
 	}
 
 	private void getListaAgenti(String filiala) {
-		operatiiAgent.getListaAgenti(filiala, getDepartUser(), getContext(), true);
+		operatiiAgent.getListaAgenti(filiala, getDepartUser(), getContext(), true, null);
 	}
 
 	private String getDepartUser() {
