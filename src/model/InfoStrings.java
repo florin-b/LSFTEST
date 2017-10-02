@@ -532,29 +532,32 @@ public class InfoStrings {
 			if (filiala.equals("AG10"))
 				codClient = "4119000320";
 
-			if (filiala.equals("BH10"))
+			else if (filiala.equals("BH10"))
 				codClient = "4119000321";
 
-			if (filiala.equals("BV10"))
+			else if (filiala.equals("BV10"))
 				codClient = "4119000322";
 
-			if (filiala.equals("CJ10"))
+			else if (filiala.equals("CJ10"))
 				codClient = "4119000323";
 
-			if (filiala.equals("CT10"))
+			else if (filiala.equals("CT10"))
 				codClient = "4119000324";
 
-			if (filiala.equals("DJ10"))
+			else if (filiala.equals("DJ10"))
 				codClient = "4119000325";
 
-			if (filiala.equals("GL10"))
+			else if (filiala.equals("GL10"))
 				codClient = "4119000326";
 
-			if (filiala.equals("IS10"))
+			else if (filiala.equals("IS10"))
 				codClient = "4119000327";
 
-			if (filiala.equals("MM10"))
+			else if (filiala.equals("MM10"))
 				codClient = "4119000412";
+
+			else if (filiala.equals("BU10"))
+				codClient = "4119000425";
 
 		}
 
@@ -566,22 +569,23 @@ public class InfoStrings {
 		String codClient = "00";
 
 		if (tipClient.equals("PF")) {
+
 			if (filiala.equals("AG10"))
 				codClient = "4119000286";
 
-			if (filiala.equals("BH10"))
+			else if (filiala.equals("BH10"))
 				codClient = "4119000290";
 
-			if (filiala.equals("CJ10"))
+			else if (filiala.equals("CJ10"))
 				codClient = "4119000295";
 
-			if (filiala.equals("CT10"))
+			else if (filiala.equals("CT10"))
 				codClient = "4119000296";
 
-			if (filiala.equals("DJ10"))
+			else if (filiala.equals("DJ10"))
 				codClient = "4119000297";
 
-			if (filiala.equals("GL10"))
+			else if (filiala.equals("GL10"))
 				codClient = "4119000298";
 
 		}
@@ -596,67 +600,67 @@ public class InfoStrings {
 		if (filiala.equals("AG10"))
 			codClient = "4119000386";
 
-		if (filiala.equals("BC10"))
+		else if (filiala.equals("BC10"))
 			codClient = "4119000388";
 
-		if (filiala.equals("BH10"))
+		else if (filiala.equals("BH10"))
 			codClient = "4119000390";
 
-		if (filiala.equals("BV10"))
+		else if (filiala.equals("BV10"))
 			codClient = "4119000393";
 
-		if (filiala.equals("BZ10"))
+		else if (filiala.equals("BZ10"))
 			codClient = "4119000394";
 
-		if (filiala.equals("CJ10"))
+		else if (filiala.equals("CJ10"))
 			codClient = "4119000395";
 
-		if (filiala.equals("CT10"))
+		else if (filiala.equals("CT10"))
 			codClient = "4119000396";
 
-		if (filiala.equals("DJ10"))
+		else if (filiala.equals("DJ10"))
 			codClient = "4119000397";
 
-		if (filiala.equals("GL10"))
+		else if (filiala.equals("GL10"))
 			codClient = "4119000398";
 
-		if (filiala.equals("HD10"))
+		else if (filiala.equals("HD10"))
 			codClient = "4119000399";
 
-		if (filiala.equals("IS10"))
+		else if (filiala.equals("IS10"))
 			codClient = "4119000400";
 
-		if (filiala.equals("MM10"))
+		else if (filiala.equals("MM10"))
 			codClient = "4119000401";
 
-		if (filiala.equals("MS10"))
+		else if (filiala.equals("MS10"))
 			codClient = "4119000402";
 
-		if (filiala.equals("NT10"))
+		else if (filiala.equals("NT10"))
 			codClient = "4119000403";
 
-		if (filiala.equals("PH10"))
+		else if (filiala.equals("PH10"))
 			codClient = "4119000404";
 
-		if (filiala.equals("SB10"))
+		else if (filiala.equals("SB10"))
 			codClient = "4119000405";
 
-		if (filiala.equals("TM10"))
+		else if (filiala.equals("TM10"))
 			codClient = "4119000406";
 
-		if (filiala.equals("VN10"))
+		else if (filiala.equals("VN10"))
 			codClient = "4119000407";
 
-		if (filiala.equals("BU13")) // Andronache
+		else if (filiala.equals("BU13")) // Andronache
 			codClient = "4119000387";
 
-		if (filiala.equals("BU10")) // Glina
+		else if (filiala.equals("BU10")) // Glina
 			codClient = "4119000389";
 
-		if (filiala.equals("BU11")) // Militari
+		else if (filiala.equals("BU11")) // Militari
 			codClient = "4119000391";
 
-		if (filiala.equals("BU12")) // Otopeni
+		else if (filiala.equals("BU12")) // Otopeni
 			codClient = "4119000392";
 
 		return codClient;
@@ -670,67 +674,67 @@ public class InfoStrings {
 		if (filiala.equals("AG10"))
 			codClient = "4119000365";
 
-		if (filiala.equals("BC10"))
+		else if (filiala.equals("BC10"))
 			codClient = "4119000363";
 
-		if (filiala.equals("BH10"))
+		else if (filiala.equals("BH10"))
 			codClient = "4119000366";
 
-		if (filiala.equals("BV10"))
+		else if (filiala.equals("BV10"))
 			codClient = "4119000372";
 
-		if (filiala.equals("BZ10"))
+		else if (filiala.equals("BZ10"))
 			codClient = "4119000374";
 
-		if (filiala.equals("CJ10"))
+		else if (filiala.equals("CJ10"))
 			codClient = "4119000375";
 
-		if (filiala.equals("CT10"))
+		else if (filiala.equals("CT10"))
 			codClient = "4119000376";
 
-		if (filiala.equals("DJ10"))
+		else if (filiala.equals("DJ10"))
 			codClient = "4119000367";
 
-		if (filiala.equals("GL10"))
+		else if (filiala.equals("GL10"))
 			codClient = "4119000373";
 
-		if (filiala.equals("HD10"))
+		else if (filiala.equals("HD10"))
 			codClient = "4119000377";
 
-		if (filiala.equals("IS10"))
+		else if (filiala.equals("IS10"))
 			codClient = "4119000380";
 
-		if (filiala.equals("MM10"))
+		else if (filiala.equals("MM10"))
 			codClient = "4119000382";
 
-		if (filiala.equals("MS10"))
+		else if (filiala.equals("MS10"))
 			codClient = "4119000383";
 
-		if (filiala.equals("NT10"))
+		else if (filiala.equals("NT10"))
 			codClient = "4119000384";
 
-		if (filiala.equals("PH10"))
+		else if (filiala.equals("PH10"))
 			codClient = "4119000385";
 
-		if (filiala.equals("SB10"))
+		else if (filiala.equals("SB10"))
 			codClient = "4119000378";
 
-		if (filiala.equals("TM10"))
+		else if (filiala.equals("TM10"))
 			codClient = "4119000381";
 
-		if (filiala.equals("VN10"))
+		else if (filiala.equals("VN10"))
 			codClient = "4119000379";
 
-		if (filiala.equals("BU13")) // Andronache
+		else if (filiala.equals("BU13")) // Andronache
 			codClient = "4119000362";
 
-		if (filiala.equals("BU10")) // Glina
+		else if (filiala.equals("BU10")) // Glina
 			codClient = "4119000364";
 
-		if (filiala.equals("BU11")) // Militari
+		else if (filiala.equals("BU11")) // Militari
 			codClient = "4119000370";
 
-		if (filiala.equals("BU12")) // Otopeni
+		else if (filiala.equals("BU12")) // Otopeni
 			codClient = "4119000371";
 
 		return codClient;
@@ -741,35 +745,39 @@ public class InfoStrings {
 		String codClient = "00";
 
 		if (tipClient.equals("PF")) {
+
 			if (filiala.equals("AG10"))
 				codClient = "4119000225";
 
-			if (filiala.equals("BH10"))
+			else if (filiala.equals("BH10"))
 				codClient = "4119000210";
 
-			if (filiala.equals("BV10"))
+			else if (filiala.equals("BV10"))
 				codClient = "4119000201";
 
-			if (filiala.equals("CJ10"))
+			else if (filiala.equals("CJ10"))
 				codClient = "4119000179";
 
-			if (filiala.equals("CT10"))
+			else if (filiala.equals("CT10"))
 				codClient = "4119000216";
 
-			if (filiala.equals("DJ10"))
+			else if (filiala.equals("DJ10"))
 				codClient = "4119000247";
 
-			if (filiala.equals("GL10"))
+			else if (filiala.equals("GL10"))
 				codClient = "4119000175";
 
-			if (filiala.equals("IS10"))
+			else if (filiala.equals("IS10"))
 				codClient = "4119000195";
 
-			if (filiala.equals("TM10"))
+			else if (filiala.equals("TM10"))
 				codClient = "4119000251";
 
-			if (filiala.equals("MM10"))
+			else if (filiala.equals("MM10"))
 				codClient = "4119000357";
+
+			if (filiala.equals("BU10"))
+				codClient = "4119000426";
 
 		}
 
@@ -777,32 +785,35 @@ public class InfoStrings {
 			if (filiala.equals("AG10"))
 				codClient = "4119000226";
 
-			if (filiala.equals("BH10"))
+			else if (filiala.equals("BH10"))
 				codClient = "4119000211";
 
-			if (filiala.equals("BV10"))
+			else if (filiala.equals("BV10"))
 				codClient = "4119000202";
 
-			if (filiala.equals("CJ10"))
+			else if (filiala.equals("CJ10"))
 				codClient = "4119000180";
 
-			if (filiala.equals("CT10"))
+			else if (filiala.equals("CT10"))
 				codClient = "4119000217";
 
-			if (filiala.equals("DJ10"))
+			else if (filiala.equals("DJ10"))
 				codClient = "4119000248";
 
-			if (filiala.equals("GL10"))
+			else if (filiala.equals("GL10"))
 				codClient = "4119000176";
 
-			if (filiala.equals("IS10"))
+			else if (filiala.equals("IS10"))
 				codClient = "4119000196";
 
-			if (filiala.equals("TM10"))
+			else if (filiala.equals("TM10"))
 				codClient = "4119000252";
 
-			if (filiala.equals("MM10"))
+			else if (filiala.equals("MM10"))
 				codClient = "4119000358";
+
+			else if (filiala.equals("BU10"))
+				codClient = "4119000427";
 
 		}
 
@@ -813,136 +824,138 @@ public class InfoStrings {
 		String codClient = "00";
 
 		if (tipClient.equals("PF")) {
+
 			if (filiala.equals("AG10"))
 				codClient = "4119000023";
 
-			if (filiala.equals("BC10"))
+			else if (filiala.equals("BC10"))
 				codClient = "4119000024";
 
-			if (filiala.equals("BH10"))
+			else if (filiala.equals("BH10"))
 				codClient = "4119000025";
 
-			if (filiala.equals("BV10"))
+			else if (filiala.equals("BV10"))
 				codClient = "4119000030";
 
-			if (filiala.equals("BZ10"))
+			else if (filiala.equals("BZ10"))
 				codClient = "4119000255";
 
-			if (filiala.equals("CJ10"))
+			else if (filiala.equals("CJ10"))
 				codClient = "4119000031";
 
-			if (filiala.equals("CT10"))
+			else if (filiala.equals("CT10"))
 				codClient = "4119000080";
 
-			if (filiala.equals("DJ10"))
+			else if (filiala.equals("DJ10"))
 				codClient = "4119000032";
 
-			if (filiala.equals("GL10"))
+			else if (filiala.equals("GL10"))
 				codClient = "4119000033";
 
-			if (filiala.equals("HD10"))
+			else if (filiala.equals("HD10"))
 				codClient = "4119000260";
 
-			if (filiala.equals("IS10"))
+			else if (filiala.equals("IS10"))
 				codClient = "4119000034";
 
-			if (filiala.equals("MM10"))
+			else if (filiala.equals("MM10"))
 				codClient = "4119000035";
 
-			if (filiala.equals("MS10"))
+			else if (filiala.equals("MS10"))
 				codClient = "4119000036";
 
-			if (filiala.equals("NT10"))
+			else if (filiala.equals("NT10"))
 				codClient = "4119000037";
 
-			if (filiala.equals("PH10"))
+			else if (filiala.equals("PH10"))
 				codClient = "4119000038";
 
-			if (filiala.equals("TM10"))
+			else if (filiala.equals("TM10"))
 				codClient = "4119000039";
 
-			if (filiala.equals("VN10"))
+			else if (filiala.equals("VN10"))
 				codClient = "4119000040";
 
-			if (filiala.equals("BU13"))
+			else if (filiala.equals("BU13"))
 				codClient = "4119000029";
 
-			if (filiala.equals("BU10"))
+			else if (filiala.equals("BU10"))
 				codClient = "4119000028";
 
-			if (filiala.equals("BU11"))
+			else if (filiala.equals("BU11"))
 				codClient = "4119000027";
 
-			if (filiala.equals("BU12"))
+			else if (filiala.equals("BU12"))
 				codClient = "4119000026";
 
-			if (filiala.equals("SB10"))
+			else if (filiala.equals("SB10"))
 				codClient = "4119000422";
 
 		}
 
 		if (tipClient.equals("PJ")) {
+
 			if (filiala.equals("AG10"))
 				codClient = "4119000059";
 
-			if (filiala.equals("BC10"))
+			else if (filiala.equals("BC10"))
 				codClient = "4119000060";
 
-			if (filiala.equals("BH10"))
+			else if (filiala.equals("BH10"))
 				codClient = "4119000061";
 
-			if (filiala.equals("BV10"))
+			else if (filiala.equals("BV10"))
 				codClient = "4119000066";
 
-			if (filiala.equals("BZ10"))
+			else if (filiala.equals("BZ10"))
 				codClient = "4119000256";
 
-			if (filiala.equals("CJ10"))
+			else if (filiala.equals("CJ10"))
 				codClient = "4119000067";
 
-			if (filiala.equals("CT10"))
+			else if (filiala.equals("CT10"))
 				codClient = "4119000082";
 
-			if (filiala.equals("DJ10"))
+			else if (filiala.equals("DJ10"))
 				codClient = "4119000068";
 
-			if (filiala.equals("GL10"))
+			else if (filiala.equals("GL10"))
 				codClient = "4119000069";
 
-			if (filiala.equals("HD10"))
+			else if (filiala.equals("HD10"))
 				codClient = "4119000261";
 
-			if (filiala.equals("IS10"))
+			else if (filiala.equals("IS10"))
 				codClient = "4119000070";
 
-			if (filiala.equals("MM10"))
+			else if (filiala.equals("MM10"))
 				codClient = "4119000071";
 
-			if (filiala.equals("MS10"))
+			else if (filiala.equals("MS10"))
 				codClient = "4119000072";
 
-			if (filiala.equals("NT10"))
+			else if (filiala.equals("NT10"))
 				codClient = "4119000073";
 
-			if (filiala.equals("PH10"))
+			else if (filiala.equals("PH10"))
 				codClient = "4119000074";
 
-			if (filiala.equals("TM10"))
+			else if (filiala.equals("TM10"))
 				codClient = "4119000075";
 
-			if (filiala.equals("VN10"))
+			else if (filiala.equals("VN10"))
 				codClient = "4119000076";
 
-			if (filiala.equals("BU13"))
+			else if (filiala.equals("BU13"))
 				codClient = "4119000065";
 
-			if (filiala.equals("BU10"))
+			else if (filiala.equals("BU10"))
 				codClient = "4119000064";
 
-			if (filiala.equals("BU11"))
+			else if (filiala.equals("BU11"))
 				codClient = "4119000063";
 
-			if (filiala.equals("BU12"))
+			else if (filiala.equals("BU12"))
 				codClient = "4119000062";
 
 		}
@@ -956,64 +969,64 @@ public class InfoStrings {
 		if (filiala.equals("AG10"))
 			codClient = "4119000265";
 
-		if (filiala.equals("BC10"))
+		else if (filiala.equals("BC10"))
 			codClient = "4119000267";
 
-		if (filiala.equals("BH10"))
+		else if (filiala.equals("BH10"))
 			codClient = "4119000269";
 
-		if (filiala.equals("BV10"))
+		else if (filiala.equals("BV10"))
 			codClient = "4119000272";
 
-		if (filiala.equals("BZ10"))
+		else if (filiala.equals("BZ10"))
 			codClient = "4119000273";
 
-		if (filiala.equals("CJ10"))
+		else if (filiala.equals("CJ10"))
 			codClient = "4119000274";
 
-		if (filiala.equals("CT10"))
+		else if (filiala.equals("CT10"))
 			codClient = "4119000275";
 
-		if (filiala.equals("DJ10"))
+		else if (filiala.equals("DJ10"))
 			codClient = "4119000276";
 
-		if (filiala.equals("GL10"))
+		else if (filiala.equals("GL10"))
 			codClient = "4119000277";
 
-		if (filiala.equals("HD10"))
+		else if (filiala.equals("HD10"))
 			codClient = "4119000278";
 
-		if (filiala.equals("IS10"))
+		else if (filiala.equals("IS10"))
 			codClient = "4119000279";
 
-		if (filiala.equals("MM10"))
+		else if (filiala.equals("MM10"))
 			codClient = "4119000280";
 
-		if (filiala.equals("MS10"))
+		else if (filiala.equals("MS10"))
 			codClient = "4119000281";
 
-		if (filiala.equals("NT10"))
+		else if (filiala.equals("NT10"))
 			codClient = "4119000282";
 
-		if (filiala.equals("PH10"))
+		else if (filiala.equals("PH10"))
 			codClient = "4119000283";
 
-		if (filiala.equals("TM10"))
+		else if (filiala.equals("TM10"))
 			codClient = "4119000284";
 
-		if (filiala.equals("VN10"))
+		else if (filiala.equals("VN10"))
 			codClient = "4119000285";
 
-		if (filiala.equals("BU13")) // Andronache
+		else if (filiala.equals("BU13")) // Andronache
 			codClient = "4119000266";
 
-		if (filiala.equals("BU10")) // Glina
+		else if (filiala.equals("BU10")) // Glina
 			codClient = "4119000268";
 
-		if (filiala.equals("BU11")) // Militari
+		else if (filiala.equals("BU11")) // Militari
 			codClient = "4119000270";
 
-		if (filiala.equals("BU12")) // Otopeni
+		else if (filiala.equals("BU12")) // Otopeni
 			codClient = "4119000271";
 
 		return codClient;
@@ -1024,43 +1037,45 @@ public class InfoStrings {
 		String codClient = "00";
 
 		if (tipClient.equals("PF")) {
+
 			if (filiala.equals("AG10"))
 				codClient = "4119000307";
 
-			if (filiala.equals("BH10"))
+			else if (filiala.equals("BH10"))
 				codClient = "4119000240";
 
-			if (filiala.equals("CJ10"))
+			else if (filiala.equals("CJ10"))
 				codClient = "4119000235";
 
-			if (filiala.equals("CT10"))
+			else if (filiala.equals("CT10"))
 				codClient = "4119000173";
 
-			if (filiala.equals("DJ10"))
+			else if (filiala.equals("DJ10"))
 				codClient = "4119000192";
 
-			if (filiala.equals("GL10"))
+			else if (filiala.equals("GL10"))
 				codClient = "4119000155";
 
 		}
 
 		if (tipClient.equals("PJ")) {
+
 			if (filiala.equals("AG10"))
 				codClient = "4119000308";
 
-			if (filiala.equals("BH10"))
+			else if (filiala.equals("BH10"))
 				codClient = "4119000241";
 
-			if (filiala.equals("CJ10"))
+			else if (filiala.equals("CJ10"))
 				codClient = "4119000236";
 
-			if (filiala.equals("CT10"))
+			else if (filiala.equals("CT10"))
 				codClient = "4119000172";
 
-			if (filiala.equals("DJ10"))
+			else if (filiala.equals("DJ10"))
 				codClient = "4119000193";
 
-			if (filiala.equals("GL10"))
+			else if (filiala.equals("GL10"))
 				codClient = "4119000156";
 
 		}
@@ -1074,20 +1089,23 @@ public class InfoStrings {
 		if (filiala.equals("AG10"))
 			codClient = "4119000330";
 
-		if (filiala.equals("BH10"))
+		else if (filiala.equals("BH10"))
 			codClient = "4119000337";
 
-		if (filiala.equals("CJ10"))
+		else if (filiala.equals("CJ10"))
 			codClient = "4119000342";
 
-		if (filiala.equals("CT10"))
+		else if (filiala.equals("CT10"))
 			codClient = "4119000343";
 
-		if (filiala.equals("DJ10"))
+		else if (filiala.equals("DJ10"))
 			codClient = "4119000344";
 
-		if (filiala.equals("GL10"))
+		else if (filiala.equals("GL10"))
 			codClient = "4119000345";
+
+		else if (filiala.equals("BU10"))
+			codClient = "4119000428";
 
 		return codClient;
 
