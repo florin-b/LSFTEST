@@ -101,8 +101,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		addListenerUserName();
 		addListenerPassword();
 
-		//etUsername.setText("ASTANCIU");
-		//etPassword.setText("YQcR86");
+		 etUsername.setText("androag");
+		 etPassword.setText("112");
 
 		// etUsername.setText("GILINCA");
 		// etPassword.setText("HV3G4M");
@@ -112,8 +112,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		// etPassword.setText("Cdw6BU");
 
 		// CAG GL
-		// etUsername.setText("FROTARU");
-		// etPassword.setText("89mLcn");
+		 etUsername.setText("FROTARU");
+		 etPassword.setText("89mLcn");
 
 		// DV CAG
 		// etUsername.setText("NIONITA");
@@ -228,17 +228,20 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		// etUsername.setText("SALEXANDRESCU"); // DV hidro
 		// etPassword.setText("6ge4Rh");
 
-		//etUsername.setText("APOINT"); // CVR Oradea
-		//etPassword.setText("bGT2kD");
+		// etUsername.setText("APOINT"); // CVR Oradea
+		// etPassword.setText("bGT2kD");
 
 		// etUsername.setText("APOPOVICI2"); // SMR Oradea
 		// etPassword.setText("CZq9Tf");
 
-		//etUsername.setText("IPAINA"); // CVW
-		//etPassword.setText("cfLKx7");
+		// etUsername.setText("IPAINA"); // CVW
+		// etPassword.setText("cfLKx7");
 
-		//etUsername.setText("MMESTER1"); // SMW
-		//etPassword.setText("GpZDwh");
+		// etUsername.setText("MMESTER1"); // SMW
+		// etPassword.setText("GpZDwh");
+
+		//etUsername.setText("DCULEA"); // av 02 Buc
+		//etPassword.setText("Vx2GmD");
 
 		globalMyIP = getIPConnection();
 

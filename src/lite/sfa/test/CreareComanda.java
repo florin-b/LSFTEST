@@ -117,7 +117,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 	public static boolean isTotalNegociat = false;
 	public static double valNegociat = 0;
 	public static String depozitUnic = "";
-	public static String filialaAlternativa = UserInfo.getInstance().getUnitLog();
+	public static String filialaAlternativa;
 
 	String serializedResult;
 
@@ -161,6 +161,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 			comandaDAO = ComenziDAO.getInstance(this);
 			comandaDAO.setComenziDAOListener(this);
+			
+			filialaAlternativa = UserInfo.getInstance().getUnitLog();
 
 			listArtCmd = (ListView) findViewById(R.id.listArtCmd);
 

@@ -60,6 +60,7 @@ import android.widget.Toast;
 import beans.Address;
 import beans.BeanAdresaLivrare;
 import beans.BeanAdreseJudet;
+import beans.BeanClient;
 import beans.GeocodeAddress;
 import beans.StatusIntervalLivrare;
 
@@ -118,6 +119,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private Spinner spinnerIndoire, spinnerTonaj;
 	private TextView textDataLivrare;
 	private Button btnDataLivrare;
+	private Spinner spinnerMeseriasi;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -203,14 +205,22 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 				adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransportOnline);
 
 			} else {
-				adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, UtilsComenzi.tipPlataGed());
+
+				boolean isRestrictieMetPlata = !DateLivrare.getInstance().isFacturaCmd();
+
+				if (!DateLivrare.getInstance().getTipPersClient().equalsIgnoreCase("PF"))
+					isRestrictieMetPlata = false;
+
+				adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, UtilsComenzi.tipPlataGed(isRestrictieMetPlata));
 				adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransport);
 
 			}
 
 			adapterSpinnerPlata.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinnerPlata.setAdapter(adapterSpinnerPlata);
-			spinnerPlata.setSelection(2); // Plata in numerar
+
+			UtilsComenzi.setDefaultPlataMethod(spinnerPlata);
+
 			addListenerTipPlata();
 
 			checkMacara = (CheckBox) findViewById(R.id.checkMacara);
@@ -307,9 +317,11 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			layoutHeaderAdrese.setVisibility(View.GONE);
 			layoutListAdrese.setVisibility(View.GONE);
 
+			operatiiClient = new OperatiiClient(this);
+			operatiiClient.setOperatiiClientListener(SelectAdrLivrCmdGed.this);
+
 			if (UserInfo.getInstance().getTipUserSap().equals("KA3") && DateLivrare.getInstance().getTipPersClient().equals("D")) {
-				operatiiClient = new OperatiiClient(this);
-				operatiiClient.setOperatiiClientListener(SelectAdrLivrCmdGed.this);
+
 				setupListAdreseLayout();
 			}
 
@@ -324,6 +336,12 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			btnDataLivrare = (Button) findViewById(R.id.btnDataLivrare);
 			addListenerDataLivrare();
+
+			HashMap<String, String> params = new HashMap<String, String>();
+			params.put("codFiliala", UserInfo.getInstance().getUnitLog());
+
+			spinnerMeseriasi = (Spinner) findViewById(R.id.spinnerMeseriasi);
+			//operatiiClient.getMeseriasi(params);
 
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT).show();
@@ -648,7 +666,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		if (UtilsUser.isUserSite()) {
 
 			fillJudeteClient(EnumJudete.getRegionCodes());
-			
+
 		} else {
 			String unitLog = UserInfo.getInstance().getUnitLog();
 
@@ -1172,6 +1190,10 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		} else
 			dateLivrareInstance.setPrelucrare("-1");
 
+		//dateLivrareInstance.setCodMeserias(((BeanClient) spinnerMeseriasi.getSelectedItem()).getCodClient());
+		
+		dateLivrareInstance.setCodMeserias("0");
+
 		finish();
 
 	}
@@ -1366,8 +1388,41 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	}
 
+	private void fillSpinnerMeseriasi(String result) {
+		List<BeanClient> listMeseriasi = operatiiClient.deserializeListClienti(result);
+
+		BeanClient client = new BeanClient();
+		client.setNumeClient("Selectati un meserias");
+		client.setCodClient("0");
+		listMeseriasi.add(0, client);
+
+		ArrayAdapter<BeanClient> spinnerArrayAdapter = new ArrayAdapter<BeanClient>(this, android.R.layout.simple_spinner_item, listMeseriasi);
+
+		spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerMeseriasi.setAdapter(spinnerArrayAdapter);
+
+		if (!DateLivrare.getInstance().getCodMeserias().isEmpty()) {
+
+			for (int i = 0; i < spinnerMeseriasi.getAdapter().getCount(); i++)
+				if (((BeanClient) spinnerMeseriasi.getAdapter().getItem(i)).getCodClient().equals(DateLivrare.getInstance().getCodMeserias()))
+					spinnerMeseriasi.setSelection(i);
+		}
+
+	}
+
 	public void operationComplete(EnumClienti methodName, Object result) {
-		fillAdreseLivrareClient((String) result);
+
+		switch (methodName) {
+		case GET_ADRESE_LIVRARE:
+			fillAdreseLivrareClient((String) result);
+			break;
+		case GET_MESERIASI:
+			fillSpinnerMeseriasi((String) result);
+			break;
+		default:
+			break;
+
+		}
 
 	}
 

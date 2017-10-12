@@ -203,11 +203,14 @@ public class UtilsGeneral {
 		if (codTransport.equals("TCLI")) {
 			tipTransport = "Transport client";
 		}
-		if (codTransport.equals("TRAP")) {
+		else if (codTransport.equals("TRAP")) {
 			tipTransport = "Transport Arabesque";
 		}
-		if (codTransport.equals("TERT")) {
+		else if (codTransport.equals("TERT")) {
 			tipTransport = "Transport terti";
+		}
+		else if (codTransport.equals("TERR")) {
+			tipTransport = "Curier rapid";
 		}
 
 		return tipTransport;
@@ -220,7 +223,7 @@ public class UtilsGeneral {
 		if (codCantarire.equals("0"))
 			tipCantarire = "Nu";
 
-		if (codCantarire.equals("1"))
+		else if (codCantarire.equals("1"))
 			tipCantarire = "Da";
 
 		return tipCantarire;
@@ -246,13 +249,13 @@ public class UtilsGeneral {
 		if (codReducere == null)
 			return tipReducere;
 
-		if (codReducere.equals("X")) {
+		else if (codReducere.equals("X")) {
 			tipReducere = "2 facturi";
 		}
-		if (codReducere.equals(" ")) {
+		else if (codReducere.equals(" ")) {
 			tipReducere = "1 factura (red. in pret)";
 		}
-		if (codReducere.equals("R")) {
+		else if (codReducere.equals("R")) {
 			tipReducere = "1 factura (red. separat)";
 		}
 
@@ -266,16 +269,16 @@ public class UtilsGeneral {
 		if (codStatus.equals("9")) {
 			statusArt = "Stoc insuficient";
 		}
-		if (codStatus.equals("19")) {
+		else if (codStatus.equals("19")) {
 			statusArt = "Articol fara pret";
 		}
-		if (codStatus.equals("16")) {
+		else if (codStatus.equals("16")) {
 			statusArt = "Articol modificat";
 		}
-		if (codStatus.equals("17")) {
+		else if (codStatus.equals("17")) {
 			statusArt = "Articol adaugat";
 		}
-		if (codStatus.equals("18")) {
+		else if (codStatus.equals("18")) {
 			statusArt = "Articol sters";
 		}
 

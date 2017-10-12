@@ -1,6 +1,7 @@
 package utils;
 
 import model.InfoStrings;
+import android.widget.Spinner;
 
 public class UtilsComenzi {
 
@@ -52,10 +53,25 @@ public class UtilsComenzi {
 			return false;
 	}
 
-	public static String[] tipPlataGed() {
-		return new String[] { "B - Bilet la ordin", "C - Cec", "E - Plata in numerar", "O - Ordin de plata", "BRD - Card BRD", "ING - Card ING",
-				"UNI - Card Unicredit", "CBTR - Card Transilvania", "CGRB - Card Garanti Bonus", "CRFZ - Card Raiffeisen", "CCTL - Card Cetelem",
-				"CAVJ - Card Avantaj", "E1 - Numerar sofer" };
+	public static String[] tipPlataGed(boolean isRestrictie) {
+		if (isRestrictie)
+			return new String[] { "E - Plata in numerar", "BRD - Card BRD", "ING - Card ING", "UNI - Card Unicredit", "CBTR - Card Transilvania",
+					"CGRB - Card Garanti Bonus", "CRFZ - Card Raiffeisen", "CCTL - Card Cetelem", "CAVJ - Card Avantaj", "E1 - Numerar sofer" };
+		else
+			return new String[] { "B - Bilet la ordin", "C - Cec", "E - Plata in numerar", "O - Ordin de plata", "BRD - Card BRD", "ING - Card ING",
+					"UNI - Card Unicredit", "CBTR - Card Transilvania", "CGRB - Card Garanti Bonus", "CRFZ - Card Raiffeisen", "CCTL - Card Cetelem",
+					"CAVJ - Card Avantaj", "E1 - Numerar sofer" };
+
+	}
+
+	public static void setDefaultPlataMethod(Spinner spinnerPlata) {
+
+		for (int ii = 0; ii < spinnerPlata.getAdapter().getCount(); ii++) {
+			if (spinnerPlata.getAdapter().getItem(ii).toString().toUpperCase().contains("PLATA IN NUMERAR")) {
+				spinnerPlata.setSelection(ii);
+				break;
+			}
+		}
 
 	}
 

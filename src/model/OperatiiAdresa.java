@@ -16,5 +16,6 @@ public interface OperatiiAdresa {
 	public void isAdresaValida(HashMap<String, String> params, EnumLocalitate tipLocalitate);
 	public void getDateLivrare(HashMap<String, String> params);
 	public void getAdreseLivrareClient(HashMap<String, String> params);
+	public void getLocalitatiLivrareRapida();
 
 }

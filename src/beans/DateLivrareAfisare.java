@@ -43,6 +43,7 @@ public class DateLivrareAfisare {
 	private LatLng coordonateAdresa;
 	private String tonaj;
 	private boolean isClientRaft;
+	private String codMeserias="";
 
 	public DateLivrareAfisare() {
 
@@ -370,5 +371,15 @@ public class DateLivrareAfisare {
 	public void setDataLivrare(String dataLivrare) {
 		this.dataLivrare = dataLivrare;
 	}
+
+	public String getCodMeserias() {
+		return codMeserias;
+	}
+
+	public void setCodMeserias(String codMeserias) {
+		this.codMeserias = codMeserias;
+	}
+	
+	
 
 }

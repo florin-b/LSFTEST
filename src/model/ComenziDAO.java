@@ -280,6 +280,8 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 				dateLivrare.setTonaj(jsonLivrare.getString("tonaj"));
 				dateLivrare.setClientRaft(jsonLivrare.getString("clientRaft").equals("X") ? true : false);
 
+				dateLivrare.setCodMeserias(jsonLivrare.getString("meserias"));
+
 				JSONArray jsonArticole = jsonObject.getJSONArray("articoleComanda");
 				String tipAlert, subCmp;
 				for (int i = 0; i < jsonArticole.length(); i++) {
@@ -338,6 +340,7 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 					articol.setCoefCorectie(Double.valueOf(articolObject.getString("coefCorectie")));
 					articol.setDepartAprob(articolObject.getString("departAprob"));
 					articol.setIstoricPret(articolObject.getString("istoricPret").trim());
+					articol.setVechime(articolObject.getString("vechime"));
 
 					listArticole.add(articol);
 

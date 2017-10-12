@@ -80,6 +80,8 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 
 	private String istoricPret;
 
+	private String vechime;
+
 	public int getNrCrt() {
 		return nrCrt;
 	}
@@ -565,6 +567,14 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 
 	public void setIstoricPret(String istoricPret) {
 		this.istoricPret = istoricPret;
+	}
+
+	public String getVechime() {
+		return vechime;
+	}
+
+	public void setVechime(String vechime) {
+		this.vechime = vechime;
 	}
 
 	@Override

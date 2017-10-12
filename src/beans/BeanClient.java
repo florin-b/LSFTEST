@@ -36,7 +36,9 @@ public class BeanClient {
 
 	@Override
 	public String toString() {
-		return "BeanClient [numeClient=" + numeClient + ", codClient=" + codClient + ", tipClient=" + tipClient + "]";
+		return numeClient;
 	}
+	
+
 
 }

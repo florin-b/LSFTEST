@@ -496,7 +496,6 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 
 		textProcRed.addTextChangedListener(new TextWatcher() {
 			public void afterTextChanged(Editable s) {
-				// TODO
 
 				try {
 
@@ -650,7 +649,7 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 	@SuppressWarnings("unchecked")
 	private void actionGetPret() {
 		String depSel = "";
-		String uLog = UserInfo.getInstance().getUnitLog();
+		String uLog = ModificareComanda.unitLogComanda;
 		String tipUser = "";
 
 		String localCanalDistrib = ModificareComanda.isComandaDistrib ? "10" : "20";
@@ -665,7 +664,7 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 
 		if (!ModificareComanda.isComandaDistrib || globalDepozSel.equals("MAV1")) {
 			depSel = "11";
-			uLog = UserInfo.getInstance().getUnitLog().substring(0, 2) + "2" + UserInfo.getInstance().getUnitLog().substring(3, 4);
+			uLog = ModificareComanda.unitLogComanda.substring(0, 2) + "2" + ModificareComanda.unitLogComanda.substring(3, 4);
 		}
 		if (UserInfo.getInstance().getTipAcces().equals("9")) {
 			tipUser = "AV";
@@ -935,10 +934,6 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 							}
 						}
 
-						// if (finalPrice < cmpArt) {
-						// subCmp = "1";
-						// }
-
 						if (ModificareComanda.isComandaDistrib) {
 							if ((finalPrice / valMultiplu) < cmpArt) {
 
@@ -1160,7 +1155,6 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 				cantUmb = tokenPret[14].toString();
 				Umb = tokenPret[15].toString();
 
-				
 				cmpArt = Double.parseDouble(tokenPret[17]);
 
 				if (Double.parseDouble(cantUmb) > nf2.parse(textStoc.getText().toString()).doubleValue()) {
@@ -1256,7 +1250,6 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 
 				discMaxAV = Double.valueOf(tokenPret[10]);
 				discMaxSD = Double.valueOf(tokenPret[11]);
-				// discMaxDV = Double.valueOf(tokenPret[12]);
 
 				infoArticol = tokenPret[9].replace(',', '.');
 
@@ -1321,9 +1314,6 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 								artPromoText = "Din cantitatea comandata " + tokenPret[5] + " " + tokenPret[7] + " sunt gratis.";
 
 							}
-
-							// artPromoText = getArtName(tokenPret[4]) + " " +
-							// tokenPret[5];
 
 							textPromo.setText("Articol cu promotie");
 

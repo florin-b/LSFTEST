@@ -29,6 +29,7 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 	private NumberFormat nf3;
 	private NumberFormat nf2;
 	private NumberFormat nf4;
+	
 
 	public ArticolAprobareAdapter(Context context, List<ArticolComanda> listArticole) {
 		this.context = context;
@@ -42,9 +43,9 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 
 	public static class ViewHolder {
 		TextView textNrCrt, textNumeArt, textCodArt, textCantArt, textUmArt, textPretArt, textMonedaArt, textDepozit, textStatusArt, textProcRed, textAddCond,
-				textCmp, textProcCmp, textDisClient, textProcAprob, textMultipAprob, textInfoArticol, textPretSpecial, textIstoricPret;
+				textCmp, textProcCmp, textDisClient, textProcAprob, textMultipAprob, textInfoArticol, textPretSpecial, textIstoricPret, textVechimeStoc;
 
-		LinearLayout layoutIstoricPret;
+		LinearLayout layoutIstoricPret, layoutVechimeStoc;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -78,7 +79,9 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 			viewHolder.textInfoArticol = (TextView) convertView.findViewById(R.id.textInfoArticol);
 			viewHolder.textPretSpecial = (TextView) convertView.findViewById(R.id.textPretSpecial);
 			viewHolder.textIstoricPret = (TextView) convertView.findViewById(R.id.textIstoricPret);
+			viewHolder.textVechimeStoc = (TextView) convertView.findViewById(R.id.textVechimeStoc);
 			viewHolder.layoutIstoricPret = (LinearLayout) convertView.findViewById(R.id.layoutIstoricPret);
+			viewHolder.layoutVechimeStoc = (LinearLayout) convertView.findViewById(R.id.layoutVechimeStoc);
 
 			convertView.setTag(viewHolder);
 
@@ -141,6 +144,14 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 			viewHolder.textIstoricPret.setText(articol.getIstoricPret());
 		} else
 			viewHolder.layoutIstoricPret.setVisibility(View.GONE);
+		
+		
+		if (articol.getVechime() != null && !articol.getVechime().equals("0")) {
+			viewHolder.layoutVechimeStoc.setVisibility(View.VISIBLE);
+			viewHolder.textVechimeStoc.setText(articol.getVechime());
+		} else
+			viewHolder.layoutVechimeStoc.setVisibility(View.GONE);
+		
 
 		if (isPretSpecial(articol.getInfoArticol()))
 			viewHolder.textPretSpecial.setText("(*)");

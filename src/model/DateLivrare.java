@@ -64,6 +64,7 @@ public class DateLivrare {
 	private boolean isClientRaft;
 	private boolean isFacturaCmd;
 	private EnumZona zonaBucuresti;
+	private String codMeserias = "";
 
 	private DateLivrareAfisare dateLivrareAfisare;
 
@@ -113,6 +114,7 @@ public class DateLivrare {
 		this.coordonateAdresa = dateLivrareAfisare.getCoordonateAdresa();
 		this.tonaj = dateLivrareAfisare.getTonaj();
 		this.isClientRaft = dateLivrareAfisare.isClientRaft();
+		this.codMeserias = dateLivrareAfisare.getCodMeserias();
 
 	}
 
@@ -473,6 +475,14 @@ public class DateLivrare {
 		this.zonaBucuresti = zonaBucuresti;
 	}
 
+	public String getCodMeserias() {
+		return codMeserias;
+	}
+
+	public void setCodMeserias(String codMeserias) {
+		this.codMeserias = codMeserias;
+	}
+
 	public void resetAll() {
 		codJudet = "";
 		numeJudet = "";
@@ -511,6 +521,7 @@ public class DateLivrare {
 		isFacturaCmd = false;
 		dataLivrare = "";
 		zonaBucuresti = null;
+		codMeserias = "";
 
 	}
 

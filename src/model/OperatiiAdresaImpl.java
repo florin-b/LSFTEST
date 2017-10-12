@@ -65,11 +65,18 @@ public class OperatiiAdresaImpl implements OperatiiAdresa, AsyncTaskListener {
 		performOperation();
 
 	}
-	
+
 	@Override
 	public void getAdreseLivrareClient(HashMap<String, String> params) {
 		numeComanda = EnumOperatiiAdresa.GET_ADRESE_LIVR_CLIENT;
 		this.params = params;
+		performOperation();
+
+	}
+
+	@Override
+	public void getLocalitatiLivrareRapida() {
+		numeComanda = EnumOperatiiAdresa.GET_LOCALITATI_LIVRARE_RAPIDA;
 		performOperation();
 
 	}
@@ -136,6 +143,7 @@ public class OperatiiAdresaImpl implements OperatiiAdresa, AsyncTaskListener {
 	}
 
 	public void onTaskComplete(String methodName, Object result) {
+
 		if (listener != null) {
 			listener.operatiiAdresaComplete(numeComanda, result, tipLocalitate);
 		}

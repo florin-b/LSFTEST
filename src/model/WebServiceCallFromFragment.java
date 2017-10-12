@@ -13,12 +13,11 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import connectors.ConnectionStrings;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
+import connectors.ConnectionStrings;
 
 public class WebServiceCallFromFragment extends AsyncTask<Void, Void, String> {
 	String errMessage = "";
@@ -28,8 +27,7 @@ public class WebServiceCallFromFragment extends AsyncTask<Void, Void, String> {
 	private String methodName;
 	private Map<String, String> params;
 
-	public WebServiceCallFromFragment(Context context, AsyncTaskListener contextListener, String methodName,
-			Map<String, String> params) {
+	public WebServiceCallFromFragment(Context context, AsyncTaskListener contextListener, String methodName, Map<String, String> params) {
 		super();
 		this.mContext = context;
 		this.listener = contextListener;
@@ -51,9 +49,10 @@ public class WebServiceCallFromFragment extends AsyncTask<Void, Void, String> {
 		try {
 			SoapObject request = new SoapObject(ConnectionStrings.getInstance().getNamespace(), methodName);
 
-			for (Entry<String, String> entry : params.entrySet()) {
-				request.addProperty(entry.getKey(), entry.getValue());
-			}
+			if (params != null)
+				for (Entry<String, String> entry : params.entrySet()) {
+					request.addProperty(entry.getKey(), entry.getValue());
+				}
 
 			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 			envelope.dotNet = true;
@@ -61,14 +60,12 @@ public class WebServiceCallFromFragment extends AsyncTask<Void, Void, String> {
 			HttpTransportSE androidHttpTransport = new HttpTransportSE(ConnectionStrings.getInstance().getUrl(), 60000);
 
 			List<HeaderProperty> headerList = new ArrayList<HeaderProperty>();
-			headerList.add(new HeaderProperty("Authorization", "Basic "
-					+ org.kobjects.base64.Base64.encode("bflorin:bflorin".getBytes())));
-			androidHttpTransport
-					.call(ConnectionStrings.getInstance().getNamespace() + methodName, envelope, headerList);
+			headerList.add(new HeaderProperty("Authorization", "Basic " + org.kobjects.base64.Base64.encode("bflorin:bflorin".getBytes())));
+			androidHttpTransport.call(ConnectionStrings.getInstance().getNamespace() + methodName, envelope, headerList);
 			Object result = envelope.getResponse();
 			response = result.toString();
 		} catch (Exception e) {
-			errMessage = e.getMessage();
+			Toast.makeText(mContext, e.toString(), Toast.LENGTH_LONG).show();
 		}
 		return response;
 	}

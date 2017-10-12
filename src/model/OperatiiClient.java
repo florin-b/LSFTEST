@@ -70,6 +70,12 @@ public class OperatiiClient implements AsyncTaskListener {
 		call.getCallResultsFromFragment();
 	}
 
+	public void getMeseriasi(HashMap<String, String> params) {
+		numeComanda = EnumClienti.GET_MESERIASI;
+		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
+		call.getCallResultsFromFragment();
+	}
+
 	public ArrayList<BeanClient> deserializeListClienti(String serializedListClienti) {
 		BeanClient client = null;
 		ArrayList<BeanClient> listClienti = new ArrayList<BeanClient>();

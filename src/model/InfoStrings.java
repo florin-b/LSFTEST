@@ -1191,47 +1191,47 @@ public class InfoStrings {
 		}
 
 		// SEFI DE DEPARTAMENT
-		if (UserInfo.getInstance().getTipAcces().equals("10")) {
+		else if (UserInfo.getInstance().getTipAcces().equals("10")) {
 			tipAcces = "SD";
 		}
 
 		// DIRECTORI DE VANZARI, DEPARTAMENT
-		if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14")) {
+		else if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14")) {
 			tipAcces = "DV";
 		}
 
 		// KEY ACCOUNTI
-		if (UserInfo.getInstance().getTipAcces().equals("27")) {
+		else if (UserInfo.getInstance().getTipAcces().equals("27")) {
 			tipAcces = "KA";
 		}
 
 		// DIRECTOR KA
-		if (UserInfo.getInstance().getTipAcces().equals("35")) {
+		else if (UserInfo.getInstance().getTipAcces().equals("35")) {
 			tipAcces = "DK";
 		}
 
 		// SD KA
-		if (UserInfo.getInstance().getTipAcces().equals("32")) {
+		else if (UserInfo.getInstance().getTipAcces().equals("32")) {
 			tipAcces = "SK";
 		}
 
 		// CONSILIERI
-		if (UserInfo.getInstance().getTipAcces().equals("17")) {
+		else if (UserInfo.getInstance().getTipAcces().equals("17")) {
 			tipAcces = "CV";
 		}
 
 		// SEFI DE MAGAZIN
-		if (UserInfo.getInstance().getTipAcces().equals("18")) {
+		else if (UserInfo.getInstance().getTipAcces().equals("18")) {
 			tipAcces = "SM";
 		}
 
 		// Consilier Vanzari Retail
-		if (UserInfo.getInstance().getTipAcces().equals("41")) {
+		else if (UserInfo.getInstance().getTipAcces().equals("41")) {
 			tipAcces = "CVR";
 		}
 
 		// Sef magazin Retail
-		if (UserInfo.getInstance().getTipAcces().equals("44")) {
+		else if (UserInfo.getInstance().getTipAcces().equals("44")) {
 			tipAcces = "SMR";
 		}
 
@@ -1245,16 +1245,16 @@ public class InfoStrings {
 		if (codPlata.equals("B"))
 			strPlata = "Bilet la ordin";
 
-		if (codPlata.equals("C"))
+		else if (codPlata.equals("C"))
 			strPlata = "Cec";
 
-		if (codPlata.equals("E"))
+		else if (codPlata.equals("E"))
 			strPlata = "Plata in numerar";
 
-		if (codPlata.equals("O"))
+		else if (codPlata.equals("O"))
 			strPlata = "Ordin de plata";
 
-		if (codPlata.equals("E1"))
+		else if (codPlata.equals("E1"))
 			strPlata = "Numerar la sofer";
 
 		return strPlata;
@@ -1268,13 +1268,13 @@ public class InfoStrings {
 		if (codTrasnport.equals("TRAP"))
 			strTransport = "Arabesque";
 
-		if (codTrasnport.equals("TCLI"))
+		else if (codTrasnport.equals("TCLI"))
 			strTransport = "Client";
 
-		if (codTrasnport.equals("TFRN"))
+		else if (codTrasnport.equals("TFRN"))
 			strTransport = "Furnizor";
 
-		if (codTrasnport.equals("TERT"))
+		else if (codTrasnport.equals("TERT"))
 			strTransport = "Curier";
 
 		return strTransport;

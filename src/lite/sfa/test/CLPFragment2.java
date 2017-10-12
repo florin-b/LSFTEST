@@ -474,11 +474,9 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 		String localDep = UserInfo.getInstance().getCodDepart();
 
-		if (isCV()) {
-			localDep = CLPFragment1.departamentConsilier;
-		} else if (UtilsUser.isAgentOrSD()) {
+		if (UtilsUser.isAgentOrSD()) {
 			localDep = UserInfo.getInstance().getCodDepart();
-		} else if (UtilsUser.isKA()) {
+		} else if (UtilsUser.isKA() || isCV()) {
 			localDep = "00";
 		}
 
@@ -1080,7 +1078,8 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 			String localCodClient = CreareClp.codClient;
 
-			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance().getTipAcces().equals("44")) {
+			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
+					|| UserInfo.getInstance().getTipAcces().equals("44")) {
 				if (CLPFragment1.radioClientPF.isChecked()) {
 					localCodClient = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PF");
 				}
@@ -1214,7 +1213,8 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 			String localDep = UserInfo.getInstance().getCodDepart();
 
 			// consilieri
-			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance().getTipAcces().equals("44")) {
+			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
+					|| UserInfo.getInstance().getTipAcces().equals("44")) {
 				localDep = CLPFragment1.departamentConsilier;
 			}
 

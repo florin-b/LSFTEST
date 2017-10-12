@@ -82,7 +82,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 	Button quitBtn, stocBtn, clientBtn, articoleBtn, livrareBtn, salveazaComandaBtn, stergeComandaBtn, btnCommentariiCond, aprobareBtn;
 	String filiala = "", nume = "", cod = "", globalSubCmp = "0";
-	public static String unitLog = "";
+	public static String unitLogComanda = "";
 	public static String numeDepart = "";
 	public static String codDepart = "";
 
@@ -951,6 +951,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("tonaj", DateLivrare.getInstance().getTonaj());
 			obj.put("prelucrare", DateLivrare.getInstance().getPrelucrare());
 			obj.put("clientRaft", DateLivrare.getInstance().isClientRaft());
+			obj.put("meserias", DateLivrare.getInstance().getCodMeserias());
 
 			if (isComandaGed())
 				obj.put("factRed", "NU");
@@ -1542,6 +1543,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		textTotalCmd.setText("0.00");
 
 		comandaSelectata = comanda;
+		
+		unitLogComanda = comandaSelectata.getFiliala();
 
 		selectedCmd = comanda.getId();
 
