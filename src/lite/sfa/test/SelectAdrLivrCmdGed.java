@@ -339,9 +339,10 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			HashMap<String, String> params = new HashMap<String, String>();
 			params.put("codFiliala", UserInfo.getInstance().getUnitLog());
+			params.put("codDepart", UserInfo.getInstance().getCodDepart());
 
 			spinnerMeseriasi = (Spinner) findViewById(R.id.spinnerMeseriasi);
-			//operatiiClient.getMeseriasi(params);
+			operatiiClient.getMeseriasi(params);
 
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT).show();
@@ -1190,9 +1191,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		} else
 			dateLivrareInstance.setPrelucrare("-1");
 
-		//dateLivrareInstance.setCodMeserias(((BeanClient) spinnerMeseriasi.getSelectedItem()).getCodClient());
-		
-		dateLivrareInstance.setCodMeserias("0");
+		dateLivrareInstance.setCodMeserias(((BeanClient) spinnerMeseriasi.getSelectedItem()).getCodClient());
 
 		finish();
 
@@ -1390,6 +1389,12 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	private void fillSpinnerMeseriasi(String result) {
 		List<BeanClient> listMeseriasi = operatiiClient.deserializeListClienti(result);
+
+		if (listMeseriasi.isEmpty()) {
+			((LinearLayout) findViewById(R.id.layoutMeseriasi)).setVisibility(View.GONE);
+			return;
+		} else
+			((LinearLayout) findViewById(R.id.layoutMeseriasi)).setVisibility(View.VISIBLE);
 
 		BeanClient client = new BeanClient();
 		client.setNumeClient("Selectati un meserias");

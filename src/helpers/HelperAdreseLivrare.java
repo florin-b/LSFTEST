@@ -56,4 +56,33 @@ public class HelperAdreseLivrare {
 		HelperAdreseLivrare.localitatiAcceptate = localitatiAcceptate;
 	}
 
+	public static int getTonajSpinnerPos(String tonaj) {
+		if (tonaj == null || tonaj.equals("0"))
+			return 0;
+
+		if (tonaj.equals("3.5"))
+			return 1;
+		else if (tonaj.equals("10"))
+			return 2;
+		else if (tonaj.equals("20"))
+			return 3;
+
+		return 0;
+	}
+
+	public static String getTonajSpinnerValue(int selectedPos) {
+
+		switch (selectedPos) {
+		case 1:
+			return "3.5";
+		case 2:
+			return "10";
+		case 3:
+		default:
+			return "20";
+
+		}
+
+	}
+
 }

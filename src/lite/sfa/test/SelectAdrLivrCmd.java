@@ -741,7 +741,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					layoutAdr1.setVisibility(View.VISIBLE);
 					layoutAdr2.setVisibility(View.VISIBLE);
 					layoutHarta.setVisibility(View.VISIBLE);
-					
 
 				}
 
@@ -988,12 +987,12 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		DateLivrare.getInstance().setTonaj(tonaj);
 
-		for (int i = 0; i < spinnerTonaj.getCount(); i++)
-			if (spinnerTonaj.getItemAtPosition(i).toString().toUpperCase().contains(tonaj)) {
-				spinnerTonaj.setSelection(i);
-				spinnerTonaj.setEnabled(false);
-				break;
-			}
+		int pos = HelperAdreseLivrare.getTonajSpinnerPos(tonaj);
+
+		if (pos > 0) {
+			spinnerTonaj.setSelection(pos);
+			spinnerTonaj.setEnabled(false);
+		}
 
 	}
 
@@ -1303,8 +1302,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		dateLivrareInstance.setTipDocInsotitor(String.valueOf(spinnerDocInsot.getSelectedItemPosition() + 1));
 
 		if (isConditiiTonaj(spinnerTransp, spinnerTonaj)) {
-			String[] tonaj = spinnerTonaj.getSelectedItem().toString().split(" ");
-			dateLivrareInstance.setTonaj(tonaj[0]);
+			dateLivrareInstance.setTonaj(HelperAdreseLivrare.getTonajSpinnerValue(spinnerTonaj.getSelectedItemPosition()));
 		} else
 			dateLivrareInstance.setTonaj("-1");
 
@@ -1347,8 +1345,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	private boolean isConditiiTonaj(Spinner spinnerTransp, Spinner spinnerTonaj) {
-		return spinnerTransp.getSelectedItem().toString().toLowerCase().contains("arabesque")
-				&& spinnerTonaj.getSelectedItem().toString().split(" ")[1].equals("T");
+		return spinnerTransp.getSelectedItem().toString().toLowerCase().contains("arabesque") && spinnerTonaj.getSelectedItemPosition() > 0;
 
 	}
 
