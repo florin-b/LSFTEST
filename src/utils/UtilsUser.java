@@ -55,7 +55,8 @@ public class UtilsUser {
 	}
 
 	public static boolean isUserGed() {
-		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance().getTipUser().equals("SMR");
+		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM")
+				|| UserInfo.getInstance().getTipUser().equals("SMR");
 	}
 
 	public static boolean isAgentOrSD() {
@@ -69,6 +70,23 @@ public class UtilsUser {
 
 	public static boolean isConsWood() {
 		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("WOOD");
+	}
+
+	public static boolean isSMNou() {
+		return UserInfo.getInstance().getTipUserSap().equals("SMR") || UserInfo.getInstance().getTipUserSap().equals("SMG")
+				|| UserInfo.getInstance().getTipUserSap().equals("SMW")
+				|| (UserInfo.getInstance().getTipAcces().equals("18") && UserInfo.getInstance().getTipUserSap().equals("WOOD"));
+	}
+
+	public static String getTipSMNou() {
+		String tipUser;
+
+		if (UserInfo.getInstance().getTipAcces().equals("18") && UserInfo.getInstance().getTipUserSap().equals("WOOD"))
+			tipUser = "SMW";
+		else
+			tipUser = UserInfo.getInstance().getTipUserSap();
+
+		return tipUser;
 	}
 
 	public static boolean isDV_WOOD() {

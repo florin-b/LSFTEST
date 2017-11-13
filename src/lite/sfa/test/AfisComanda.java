@@ -27,6 +27,7 @@ import model.OperatiiAgent;
 import model.OperatiiFiliala;
 import model.UserInfo;
 import utils.UtilsGeneral;
+import utils.UtilsUser;
 import adapters.ArticolAfisAdapter;
 import adapters.ComandaAfisAdapter;
 import android.app.ActionBar;
@@ -346,10 +347,10 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			selectedCodDepart = "11";
 		}
 
-		// smr
-		if (UserInfo.getInstance().getTipAcces().equals("44")) {
+		// smr, smw, smg
+		if (UtilsUser.isSMNou()) {
 			selectedCodDepart = "11";
-			tipAgent = "CVR";
+			tipAgent = UtilsUser.getTipSMNou();
 		}
 
 		agent.getListaAgenti(selectedFiliala, selectedCodDepart, this, true, tipAgent);

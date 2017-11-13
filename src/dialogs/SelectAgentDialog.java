@@ -10,6 +10,7 @@ import lite.sfa.test.R;
 import model.Agent;
 import model.OperatiiAgent;
 import model.UserInfo;
+import utils.UtilsUser;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
@@ -39,7 +40,7 @@ public class SelectAgentDialog extends Dialog implements OperatiiAgentListener {
 
 		opAgent = OperatiiAgent.getInstance();
 		opAgent.setOperatiiAgentListener(this);
-		opAgent.getListaAgenti(UserInfo.getInstance().getUnitLog(), getUserDepart(), context, false, null);
+		opAgent.getListaAgenti(UserInfo.getInstance().getUnitLog(), getUserDepart(), context, false, getTipAgent());
 
 	}
 
@@ -48,10 +49,19 @@ public class SelectAgentDialog extends Dialog implements OperatiiAgentListener {
 	}
 
 	private String getUserDepart() {
-		if (UserInfo.getInstance().getTipUserSap().equals("SM"))
+		if (UserInfo.getInstance().getTipUserSap().equals("SM") || UtilsUser.isSMNou())
 			return "11";
 		else
 			return UserInfo.getInstance().getCodDepart();
+	}
+
+	private String getTipAgent() {
+		String tipAgent = null;
+
+		if (UtilsUser.isSMNou())
+			tipAgent = UtilsUser.getTipSMNou();
+
+		return tipAgent;
 	}
 
 	private void setUpLayout() {

@@ -14,6 +14,7 @@ import model.ComenziDAO;
 import model.UserInfo;
 import utils.MapUtils;
 import utils.UtilsGeneral;
+import utils.UtilsUser;
 import adapters.ClientBorderouAdapter;
 import adapters.ComandaDeschisaAdapter;
 import android.app.ActionBar;
@@ -96,7 +97,7 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 	}
 
 	private boolean isSDorSM() {
-		return UserInfo.getInstance().getTipUserSap().equals("SD") || UserInfo.getInstance().getTipUserSap().equals("SM");
+		return UserInfo.getInstance().getTipUserSap().equals("SD") || UserInfo.getInstance().getTipUserSap().equals("SM") || UtilsUser.isSMNou();
 	}
 
 	private void displayComenziDeschise(List<BeanComandaDeschisa> listComenzi) {
