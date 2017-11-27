@@ -323,8 +323,7 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 		numeClientText.setText(numeClient);
 		codClientText.setText(codClient);
 
-		adresaText.setText(detaliiClient.getOras() + " " + detaliiClient.getStrada() + " "
-				+ detaliiClient.getNrStrada());
+		adresaText.setText(detaliiClient.getOras() + " " + detaliiClient.getStrada() + " " + detaliiClient.getNrStrada());
 
 		CreareComanda.limitaCredit = Double.parseDouble(detaliiClient.getLimitaCredit());
 		CreareComanda.restCredit = Double.parseDouble(detaliiClient.getRestCredit());
@@ -357,12 +356,13 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 
 			dateLivrareInstance.setPersContact(detaliiClient.getPersContact());
 			dateLivrareInstance.setNrTel(detaliiClient.getTelefon());
+			dateLivrareInstance.setClientFurnizor(detaliiClient.isFurnizor());
+
 			codClientVar = codClient;
 			numeClientVar = numeClient;
 
-			dateLivrareInstance.setDateLivrare(InfoStrings.numeJudet(dateLivrareInstance.getCodJudet()) + " "
-					+ dateLivrareInstance.getOras() + " " + dateLivrareInstance.getStrada() + "#"
-					+ dateLivrareInstance.getPersContact() + "#" + dateLivrareInstance.getNrTel() + "#NU#E#TRAP#NU");
+			dateLivrareInstance.setDateLivrare(InfoStrings.numeJudet(dateLivrareInstance.getCodJudet()) + " " + dateLivrareInstance.getOras() + " "
+					+ dateLivrareInstance.getStrada() + "#" + dateLivrareInstance.getPersContact() + "#" + dateLivrareInstance.getNrTel() + "#NU#E#TRAP#NU");
 
 			clientBlocatText.setVisibility(View.INVISIBLE);
 			clientBlocatText.setText("");
@@ -384,15 +384,13 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 			Locale.setDefault(locale);
 			Configuration config = new Configuration();
 			config.locale = locale;
-			getBaseContext().getResources().updateConfiguration(config,
-					getBaseContext().getResources().getDisplayMetrics());
+			getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 		}
 
 		// restart app la idle
 		if (UserInfo.getInstance().getCod().equals("")) {
 
-			Intent i = getBaseContext().getPackageManager()
-					.getLaunchIntentForPackage(getBaseContext().getPackageName());
+			Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
 			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(i);
 		}

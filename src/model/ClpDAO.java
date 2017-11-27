@@ -175,6 +175,7 @@ public class ClpDAO implements IClpDAO, AsyncTaskListener {
 			jsonAntet.put("tipIncarcare", antentComanda.getTipIncarcare());
 			jsonAntet.put("tonaj", antentComanda.getTonaj());
 			jsonAntet.put("observatiiCLP", antentComanda.getObservatiiCLP());
+			jsonAntet.put("prelucrare", antentComanda.getPrelucrare());
 
 			JSONArray jsonArray = new JSONArray();
 			JSONObject jsonObject = null;

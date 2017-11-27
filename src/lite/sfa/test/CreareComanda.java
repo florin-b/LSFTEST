@@ -5,6 +5,8 @@
 package lite.sfa.test;
 
 import helpers.HelperCostDescarcare;
+import helpers.HelperCreareComanda;
+import helpers.HelperDialog;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -161,7 +163,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 			comandaDAO = ComenziDAO.getInstance(this);
 			comandaDAO.setComenziDAOListener(this);
-			
+
 			filialaAlternativa = UserInfo.getInstance().getUnitLog();
 
 			listArtCmd = (ListView) findViewById(R.id.listArtCmd);
@@ -812,7 +814,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 						comandaJson = serializeComanda(comandaFinala);
 						articoleFinaleStr = serializedResult;
 
-						verificaPretMacara();
+						valideazaFinal();
 
 					}
 				});
@@ -823,6 +825,19 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			}
 
 		}
+	}
+
+	private void valideazaFinal() {
+
+		if (HelperCreareComanda.isComandaAmbalaje(ListaArticoleComanda.getInstance().getListArticoleComanda())) {
+			HelperDialog.showInfoDialog(CreareComanda.this, "Atentie!", "Comanda nu poate sa contina doar ambalaje.");
+
+		} else if (HelperCreareComanda.isConditiiIndoire(ListaArticoleComanda.getInstance().getListArticoleComanda())) {
+			HelperDialog.showInfoDialog(CreareComanda.this, "Atentie!", "Selectati tipul de prelucrare (indoire sau debitare).");
+		} else {
+			verificaPretMacara();
+		}
+
 	}
 
 	private void trateazaConditiiSuplimentare() {

@@ -1269,6 +1269,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			return;
 		}
 
+		if (isAdresaText()) {
+			valideazaTonajAdresaNoua();
+
+		}
+
 		String cantar = "NU";
 		dateLivrareInstance.setCantar("NU");
 
@@ -1324,11 +1329,27 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	private boolean isAdresaCorecta() {
-		if (DateLivrare.getInstance().getTransport().equals("TRAP") && !hasCoordinates() && isAdresaText())
+		if (DateLivrare.getInstance().getTransport().equals("TRAP") && isAdresaText())
 			return isAdresaGoogleOk();
 		else
 			return true;
 
+	}
+
+	private void valideazaTonajAdresaNoua() {
+		String tonajAdresaNoua = HelperAdreseLivrare.getTonajAdresaNoua(adreseList, DateLivrare.getInstance().getCoordonateAdresa());
+
+		String tonajExistent = HelperAdreseLivrare.getTonajSpinnerValue(spinnerTonaj.getSelectedItemPosition());
+
+		if (!tonajAdresaNoua.equals("0"))
+			setSpinnerTonajValue(tonajAdresaNoua);
+		else {
+			setSpinnerTonajValue(tonajExistent);
+			spinnerTonaj.setEnabled(true);
+		}
+
+		if (!tonajAdresaNoua.equals("0") && !tonajAdresaNoua.equals(tonajExistent))
+			Toast.makeText(getApplicationContext(), "Pentru aceasta zona tonajul a fost preluat din sistem.", Toast.LENGTH_LONG).show();
 	}
 
 	private boolean isAdresaText() {
@@ -1532,6 +1553,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	public void addressSelected(LatLng coord, android.location.Address address) {
 		DateLivrare.getInstance().setCoordonateAdresa(coord);
 		setAdresaLivrare(MapUtils.getAddress(address));
+		valideazaTonajAdresaNoua();
 
 	}
 

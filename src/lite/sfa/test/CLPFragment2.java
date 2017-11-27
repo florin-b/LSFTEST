@@ -1097,6 +1097,11 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 				strTonaj = tonaj[0];
 			}
 
+			String prelucrare04 = "-1";
+			if (CLPFragment1.spinnerIndoire.getVisibility() == View.VISIBLE && CLPFragment1.spinnerIndoire.getSelectedItemPosition() > 0) {
+				prelucrare04 = CLPFragment1.spinnerIndoire.getSelectedItem().toString();
+			}
+
 			AntetComandaCLP antetComandaCLP = new AntetComandaCLP();
 
 			antetComandaCLP.setCodClient(localCodClient);
@@ -1119,6 +1124,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 			antetComandaCLP.setTipCamion(CLPFragment1.spinnerTipCamion.getSelectedItem().toString().toUpperCase(Locale.getDefault()));
 			antetComandaCLP.setTipIncarcare(CLPFragment1.spinnerTipIncarcare.getSelectedItem().toString().toUpperCase(Locale.getDefault()));
 			antetComandaCLP.setTonaj(strTonaj);
+			antetComandaCLP.setPrelucrare(prelucrare04);
 
 			comandaCLP.setAntetComandaCLP(antetComandaCLP);
 

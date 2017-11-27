@@ -13,6 +13,8 @@ public class ArticolDB {
 	private String departAprob;
 	private boolean umPalet;
 	private String stoc;
+	private String categorie;
+	private double lungime;
 
 	public ArticolDB() {
 
@@ -108,10 +110,27 @@ public class ArticolDB {
 		this.stoc = stoc;
 	}
 
+	public String getCategorie() {
+		return categorie;
+	}
+
+	public void setCategorie(String categorie) {
+		this.categorie = categorie;
+	}
+
+	public double getLungime() {
+		return lungime;
+	}
+
+	public void setLungime(double lungime) {
+		this.lungime = lungime;
+	}
+
 	@Override
 	public String toString() {
 		return "ArticolDB [cod=" + cod + ", nume=" + nume + ", umVanz=" + umVanz + ", depart=" + depart + ", tipAB=" + tipAB + ", sintetic=" + sintetic
-				+ ", umVanz10=" + umVanz10 + ", nivel1=" + nivel1 + ", departAprob=" + departAprob + ", umPalet=" + umPalet + ", stoc=" + stoc + "]";
+				+ ", umVanz10=" + umVanz10 + ", nivel1=" + nivel1 + ", departAprob=" + departAprob + ", umPalet=" + umPalet + ", stoc=" + stoc + ", categorie="
+				+ categorie + ", lungime=" + lungime + "]";
 	}
 
 }

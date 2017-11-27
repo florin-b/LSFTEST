@@ -26,6 +26,7 @@ import model.UserInfo;
 import utils.MapUtils;
 import utils.ScreenUtils;
 import utils.UtilsGeneral;
+import utils.UtilsUser;
 import android.app.DatePickerDialog;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -167,6 +168,8 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 	private OperatiiClient operatiiClient;
 	private OperatiiAgent operatiiAgent;
 	private View v;
+	public static Spinner spinnerIndoire;
+	public static LinearLayout layoutPrelucrare04;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -238,8 +241,22 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 					R.id.textNumeJudet, R.id.textCodJudet });
 
 			spinnerFilialaCLP.setOnItemSelectedListener(new filialaSelectedListener());
-
 			fillFiliale();
+			
+			spinnerIndoire = (Spinner) v.findViewById(R.id.spinnerIndoire);
+			setupSpinnerIndoire();
+			
+			layoutPrelucrare04 = (LinearLayout) v.findViewById(R.id.layoutIndoire);
+			layoutPrelucrare04.setVisibility(View.INVISIBLE);
+
+			if (UtilsUser.isAgentOrSD() && UserInfo.getInstance().getCodDepart().equals("04"))
+				layoutPrelucrare04.setVisibility(View.VISIBLE);
+
+			if (UtilsUser.isKA())
+				layoutPrelucrare04.setVisibility(View.VISIBLE);
+			
+
+			
 
 			txtOras = (AutoCompleteTextView) v.findViewById(R.id.txtOrasCLP);
 			addTxtOrasListener();
@@ -364,6 +381,16 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 		}
 
 		return v;
+
+	}
+	
+	private void setupSpinnerIndoire() {
+
+		String[] indoireValues = { "Tip prelucrare fier-beton 6 m", "TAIERE", "INDOIRE" };
+
+		ArrayAdapter<String> adapterIndoire = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, indoireValues);
+		adapterIndoire.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerIndoire.setAdapter(adapterIndoire);
 
 	}
 

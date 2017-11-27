@@ -646,6 +646,38 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutIndoire"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|left"
+                    android:layout_marginLeft="3dip"
+                    android:gravity="left|center"
+                    android:text="Prelucrare"
+                    android:textColor="@color/detColor4"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerIndoire"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left|bottom"
+                    android:layout_weight="0.1"
+                    android:background="@drawable/dropdown_style_1"
+                    android:gravity="left" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="45dip"
+                    android:layout_weight="0.15" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/layoutSelAgentiClp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

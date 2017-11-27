@@ -82,6 +82,9 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 
 	private String vechime;
 
+	private String categorie;
+	private double lungime;
+
 	public int getNrCrt() {
 		return nrCrt;
 	}
@@ -575,6 +578,22 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 
 	public void setVechime(String vechime) {
 		this.vechime = vechime;
+	}
+
+	public String getCategorie() {
+		return categorie;
+	}
+
+	public void setCategorie(String categorie) {
+		this.categorie = categorie;
+	}
+
+	public double getLungime() {
+		return lungime;
+	}
+
+	public void setLungime(double lungime) {
+		this.lungime = lungime;
 	}
 
 	@Override

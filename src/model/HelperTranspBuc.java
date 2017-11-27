@@ -61,7 +61,7 @@ public class HelperTranspBuc {
 
 	}
 
-	private static String transportZonaA(String depart) {
+	public static String transportZonaA(String depart) {
 		String codArticol = "";
 
 		if (depart.equals("01"))
@@ -127,7 +127,7 @@ public class HelperTranspBuc {
 		return codArticol;
 	}
 
-	private static String transportZonaB(String depart) {
+	public static String transportZonaB(String depart) {
 		String codArticol = "";
 
 		if (depart.equals("01"))
@@ -206,7 +206,7 @@ public class HelperTranspBuc {
 
 	}
 
-	private static String getDepartArtTransp() {
+	public static String getDepartArtTransp() {
 		String codDepart = "";
 		if (UtilsUser.isAgentOrSD())
 			codDepart = UserInfo.getInstance().getCodDepart();

@@ -150,7 +150,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 					articol.setCod(articolObject.getString("cod"));
 					articol.setNume(articolObject.getString("nume"));
 					articol.setSintetic(articolObject.getString("sintetic"));
-					articol.setNivel1(articolObject.getString("nivel1"));
+					articol.setNivel1(articolObject.getString("nivel1")); 
 					articol.setUmVanz(articolObject.getString("umVanz"));
 					articol.setUmVanz10(articolObject.getString("umVanz10"));
 					articol.setTipAB(articolObject.getString("tipAB"));
@@ -158,6 +158,8 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 					articol.setDepartAprob(articolObject.getString("departAprob"));
 					articol.setUmPalet(articolObject.getString("umPalet").equals("1") ? true : false);
 					articol.setStoc(articolObject.getString("stoc"));
+					articol.setCategorie(articolObject.getString("categorie"));
+					articol.setLungime(Double.valueOf(articolObject.getString("lungime")));
 					listArticole.add(articol);
 
 				}

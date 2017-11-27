@@ -22,6 +22,7 @@ public class AntetComandaCLP {
 	private String tipCamion;
 	private String tipIncarcare;
 	private String tonaj;
+	private String prelucrare;
 
 	public String getCodClient() {
 		return codClient;
@@ -181,6 +182,14 @@ public class AntetComandaCLP {
 
 	public void setTonaj(String tonaj) {
 		this.tonaj = tonaj;
+	}
+
+	public String getPrelucrare() {
+		return prelucrare;
+	}
+
+	public void setPrelucrare(String prelucrare) {
+		this.prelucrare = prelucrare;
 	}
 
 	@Override

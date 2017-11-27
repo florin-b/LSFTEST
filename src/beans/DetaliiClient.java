@@ -16,6 +16,7 @@ public class DetaliiClient {
 	private String cursValutar;
 	private String termenPlata;
 	private String tipClient;
+	private boolean isFurnizor;
 
 	public DetaliiClient() {
 
@@ -131,6 +132,14 @@ public class DetaliiClient {
 
 	public void setTipClient(String tipClient) {
 		this.tipClient = tipClient;
+	}
+
+	public boolean isFurnizor() {
+		return isFurnizor;
+	}
+
+	public void setFurnizor(boolean isFurnizor) {
+		this.isFurnizor = isFurnizor;
 	}
 
 	@Override

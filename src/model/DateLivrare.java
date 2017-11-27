@@ -65,6 +65,7 @@ public class DateLivrare {
 	private boolean isFacturaCmd;
 	private EnumZona zonaBucuresti;
 	private String codMeserias = "";
+	private boolean isClientFurnizor;
 
 	private DateLivrareAfisare dateLivrareAfisare;
 
@@ -483,6 +484,14 @@ public class DateLivrare {
 		this.codMeserias = codMeserias;
 	}
 
+	public boolean isClientFurnizor() {
+		return isClientFurnizor;
+	}
+
+	public void setClientFurnizor(boolean isClientFurnizor) {
+		this.isClientFurnizor = isClientFurnizor;
+	}
+
 	public void resetAll() {
 		codJudet = "";
 		numeJudet = "";
@@ -522,6 +531,7 @@ public class DateLivrare {
 		dataLivrare = "";
 		zonaBucuresti = null;
 		codMeserias = "";
+		isClientFurnizor = false;
 
 	}
 
