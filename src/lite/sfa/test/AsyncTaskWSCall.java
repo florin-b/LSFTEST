@@ -55,6 +55,19 @@ public class AsyncTaskWSCall {
 		new WebServiceCall(context, methodName, params).execute();
 	}
 
+	public Object getCallResultsSyncActivity() {
+
+		Object retVal = null;
+		try {
+			retVal = new WebServiceCall(context, methodName, params).execute().get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		return retVal;
+	}
+
 	public Object getCallResultsSync() {
 
 		Object retVal = null;

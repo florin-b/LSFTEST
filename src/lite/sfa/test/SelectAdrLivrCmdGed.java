@@ -337,8 +337,17 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			btnDataLivrare = (Button) findViewById(R.id.btnDataLivrare);
 			addListenerDataLivrare();
 
+			String tipUser;
+
+			if (UtilsUser.isAgentOrSD())
+				tipUser = "AV";
+			else
+				tipUser = "CV";
+
 			HashMap<String, String> params = new HashMap<String, String>();
 			params.put("codFiliala", UserInfo.getInstance().getUnitLog());
+			params.put("tipUser", tipUser);
+			params.put("codUser", UserInfo.getInstance().getCod());
 			params.put("codDepart", UserInfo.getInstance().getCodDepart());
 
 			spinnerMeseriasi = (Spinner) findViewById(R.id.spinnerMeseriasi);
@@ -678,7 +687,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			params.put("filiala", unitLog);
 
 			AsyncTaskWSCall call = new AsyncTaskWSCall(this, METHOD_NAME, params);
-			call.getCallResults();
+			call.getCallResultsSyncActivity();
+
 		}
 
 	}
@@ -1191,7 +1201,10 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		} else
 			dateLivrareInstance.setPrelucrare("-1");
 
-		dateLivrareInstance.setCodMeserias(((BeanClient) spinnerMeseriasi.getSelectedItem()).getCodClient());
+		if (spinnerMeseriasi.getSelectedItem() != null)
+			dateLivrareInstance.setCodMeserias(((BeanClient) spinnerMeseriasi.getSelectedItem()).getCodClient());
+		else
+			dateLivrareInstance.setCodMeserias("0");
 
 		finish();
 

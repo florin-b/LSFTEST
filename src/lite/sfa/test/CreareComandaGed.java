@@ -5,6 +5,8 @@
 package lite.sfa.test;
 
 import helpers.HelperCostDescarcare;
+import helpers.HelperCreareComanda;
+import helpers.HelperDialog;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -1129,7 +1131,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 						comandaFinala.setValoareIncasare(valIncasare);
 
-						verificaPretMacara();
+						valideazaFinal();
 
 					}
 				});
@@ -1142,12 +1144,13 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		}
 	}
 
-	private void trateazaConditiiSuplimentare() {
+	private void valideazaFinal() {
 
-		if (comandaHasPalet())
-			displayAlertPalet();
-		else
-			displayArtComplDialog();
+		if (HelperCreareComanda.isConditiiAlertaIndoire(ListaArticoleComandaGed.getInstance().getListArticoleComanda())) {
+			HelperDialog.showInfoDialog(CreareComandaGed.this, "Atentie!", "Selectati tipul de prelucrare (indoire sau debitare).");
+		} else {
+			verificaPretMacara();
+		}
 
 	}
 
@@ -1171,6 +1174,15 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			comandaDAO.getCostMacara(params);
 		} else
 			trateazaConditiiSuplimentare();
+
+	}
+
+	private void trateazaConditiiSuplimentare() {
+
+		if (comandaHasPalet())
+			displayAlertPalet();
+		else
+			displayArtComplDialog();
 
 	}
 
