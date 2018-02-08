@@ -42,6 +42,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
@@ -58,6 +59,7 @@ import beans.BeanArticoleAfisare;
 import beans.BeanComandaCreata;
 import beans.DateLivrareAfisare;
 import beans.ValoriComanda;
+import dialogs.CustomInfoDialog;
 import dialogs.SelectClientDialog;
 import dialogs.SelectDivizieDialog;
 import dialogs.SelectIntervalDialog;
@@ -107,6 +109,9 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 	OperatiiAgent agent;
 	String selectedDivizie = "00";
 	ComenziDAO comenzi;
+
+	private Button btnStareComanda;
+	private BeanComandaCreata comandaCurenta;
 
 	LinearLayout layoutMarja, layoutDetaliiCmd;
 	private LinearLayout layoutCmdBV90;
@@ -226,6 +231,9 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 		slidingDrawerCmdAfis = (SlidingDrawer) findViewById(R.id.slidingDrawerCmdAfis);
 		addDrowerEvents();
 
+		btnStareComanda = (Button) findViewById(R.id.stareComandaBtn);
+		setListenerBtnStareComanda();
+
 		if (isDirector()) {
 			setUpDirectorLayoutOptions();
 		}
@@ -311,6 +319,21 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 		}
 
+	}
+
+	private void setListenerBtnStareComanda() {
+		btnStareComanda.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				HashMap<String, String> params = new HashMap<String, String>();
+				params.put("nrComanda", comandaCurenta.getCmdSap());
+
+				comenzi.getStareComanda(params);
+
+			}
+		});
 	}
 
 	private boolean isKA() {
@@ -649,6 +672,8 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 			spinnerCmd.setVisibility(View.VISIBLE);
 
+			btnStareComanda.setVisibility(View.VISIBLE);
+
 			layoutTotalCmd.setVisibility(View.VISIBLE);
 
 			NumberFormat nf2 = NumberFormat.getInstance();
@@ -673,6 +698,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 	void noComenziLayout() {
 
 		spinnerCmd.setVisibility(View.INVISIBLE);
+		btnStareComanda.setVisibility(View.INVISIBLE);
 		selectedCmd = "-1";
 
 		listViewArticole.setAdapter(null);
@@ -751,8 +777,8 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 				textValoareMarja.setText("");
 
 				if (!selectedCmd.equals("-1")) {
-					BeanComandaCreata objCmd = (BeanComandaCreata) arg0.getAdapter().getItem(arg2);
-					selectedCmd = objCmd.getId();
+					comandaCurenta = (BeanComandaCreata) arg0.getAdapter().getItem(arg2);
+					selectedCmd = comandaCurenta.getId();
 					performArtCmd();
 				}
 
@@ -807,6 +833,12 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 	}
 
+	private void showStareComanda(String stareComanda) {
+		CustomInfoDialog infoDialog = new CustomInfoDialog(this, "Stare comanda");
+		infoDialog.setInfoText(stareComanda);
+		infoDialog.show();
+	}
+
 	public void opAgentComplete(ArrayList<HashMap<String, String>> listAgenti) {
 		populateAgentiList(listAgenti);
 
@@ -842,6 +874,9 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			break;
 		case GET_ARTICOLE_COMANDA_JSON:
 			populateArtCmdList(comenzi.deserializeArticoleComanda((String) result));
+			break;
+		case GET_STARE_COMANDA:
+			showStareComanda((String) result);
 			break;
 		default:
 			break;

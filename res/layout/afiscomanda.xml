@@ -5,7 +5,6 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -52,8 +51,19 @@
             android:layout_weight="0.03" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/stareComandaBtn"
+        style="@style/ok_button"
+        android:layout_width="wrap_content"
+        android:layout_height="40dip"
+        android:layout_margin="10dip"
+        android:visibility="invisible"
+        android:background="@drawable/ok_button_style"
+        android:paddingLeft="40dip"
+        android:paddingRight="40dip"
+        android:text="Stare comanda" />
+
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal" >
@@ -69,7 +79,6 @@
             android:dividerHeight="7.0sp" />
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/layoutDetaliiCmd"
             android:layout_width="0dip"
             android:layout_height="match_parent"
@@ -82,7 +91,6 @@
             android:orientation="vertical" >
 
             <ScrollView
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/myScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -91,15 +99,12 @@
                 android:scrollbars="none" >
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|left"
                     android:orientation="vertical" >
 
                     <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools"
                         style="@style/dateLivrareDlLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
@@ -120,8 +125,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools"
                         style="@style/dateLivrareDlLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
@@ -142,8 +145,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools"
                         style="@style/dateLivrareDlLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
@@ -164,8 +165,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools"
                         style="@style/dateLivrareDlLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
@@ -186,8 +185,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools"
                         style="@style/dateLivrareDlLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
@@ -208,8 +205,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools"
                         style="@style/dateLivrareDlLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
@@ -230,8 +225,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools"
                         style="@style/dateLivrareDlLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
@@ -252,8 +245,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools"
                         style="@style/dateLivrareDlLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
@@ -294,8 +285,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools"
                         style="@style/dateLivrareDlLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
@@ -316,8 +305,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools"
                         style="@style/dateLivrareDlLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
@@ -338,8 +325,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools"
                         android:id="@+id/layoutMarja"
                         style="@style/dateLivrareDlLayout"
                         android:layout_width="match_parent"

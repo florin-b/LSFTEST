@@ -44,6 +44,7 @@ public class DateLivrareAfisare {
 	private String tonaj;
 	private boolean isClientRaft;
 	private String codMeserias="";
+	private boolean isFactPaletSeparat = true;
 
 	public DateLivrareAfisare() {
 
@@ -378,6 +379,14 @@ public class DateLivrareAfisare {
 
 	public void setCodMeserias(String codMeserias) {
 		this.codMeserias = codMeserias;
+	}
+
+	public boolean isFactPaletSeparat() {
+		return isFactPaletSeparat;
+	}
+
+	public void setFactPaletSeparat(boolean isFactPaletSeparat) {
+		this.isFactPaletSeparat = isFactPaletSeparat;
 	}
 	
 	

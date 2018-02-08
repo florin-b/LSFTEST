@@ -14,8 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import beans.BeanClientiFacturati;
-//import android.R;
-//import lite.sfa.test.R;
+
 
 public class ClientiFacturatiAdapter extends BaseAdapter {
 

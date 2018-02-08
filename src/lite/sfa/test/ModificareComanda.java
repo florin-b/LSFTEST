@@ -952,12 +952,15 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("prelucrare", DateLivrare.getInstance().getPrelucrare());
 			obj.put("clientRaft", DateLivrare.getInstance().isClientRaft());
 			obj.put("meserias", DateLivrare.getInstance().getCodMeserias());
+			
 
 			if (isComandaGed())
 				obj.put("factRed", "NU");
 			else
 				obj.put("factRed", codTipReducere.equals("-1") ? DateLivrare.getInstance().getFactRed() : codTipReducere);
 			obj.put("macara", DateLivrare.getInstance().isMasinaMacara() ? "X" : " ");
+			
+			obj.put("factPaletiSeparat", DateLivrare.getInstance().isFactPaletSeparat());
 
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();

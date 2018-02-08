@@ -66,6 +66,7 @@ public class DateLivrare {
 	private EnumZona zonaBucuresti;
 	private String codMeserias = "";
 	private boolean isClientFurnizor;
+	private boolean isFactPaletSeparat = true;
 
 	private DateLivrareAfisare dateLivrareAfisare;
 
@@ -116,6 +117,7 @@ public class DateLivrare {
 		this.tonaj = dateLivrareAfisare.getTonaj();
 		this.isClientRaft = dateLivrareAfisare.isClientRaft();
 		this.codMeserias = dateLivrareAfisare.getCodMeserias();
+		this.isFactPaletSeparat = dateLivrareAfisare.isFactPaletSeparat();
 
 	}
 
@@ -492,6 +494,14 @@ public class DateLivrare {
 		this.isClientFurnizor = isClientFurnizor;
 	}
 
+	public boolean isFactPaletSeparat() {
+		return isFactPaletSeparat;
+	}
+
+	public void setFactPaletSeparat(boolean isFactPaletSeparat) {
+		this.isFactPaletSeparat = isFactPaletSeparat;
+	}
+
 	public void resetAll() {
 		codJudet = "";
 		numeJudet = "";
@@ -532,6 +542,7 @@ public class DateLivrare {
 		zonaBucuresti = null;
 		codMeserias = "";
 		isClientFurnizor = false;
+		isFactPaletSeparat = true;
 
 	}
 

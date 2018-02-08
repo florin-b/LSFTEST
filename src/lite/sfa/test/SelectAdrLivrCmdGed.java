@@ -120,6 +120,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private TextView textDataLivrare;
 	private Button btnDataLivrare;
 	private Spinner spinnerMeseriasi;
+	private CheckBox checkFactPaleti;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -226,6 +227,9 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			checkMacara = (CheckBox) findViewById(R.id.checkMacara);
 			setMacaraVisible();
 			setListenerCheckMacara();
+			
+			checkFactPaleti = (CheckBox) findViewById(R.id.chkFactPaleti);
+			checkFactPaleti.setChecked(DateLivrare.getInstance().isFactPaletSeparat());
 
 			spinnerIndoire = (Spinner) findViewById(R.id.spinnerIndoire);
 			setupSpinnerIndoire();
@@ -1205,6 +1209,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			dateLivrareInstance.setCodMeserias(((BeanClient) spinnerMeseriasi.getSelectedItem()).getCodClient());
 		else
 			dateLivrareInstance.setCodMeserias("0");
+		
+		dateLivrareInstance.setFactPaletSeparat(checkFactPaleti.isChecked());
 
 		finish();
 

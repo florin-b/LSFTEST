@@ -21,19 +21,16 @@
     <color name="customColor2">#8b8989</color>
     <color name="spinnerOptions3">#00A86B</color>
     <color name="warningColor2">#006B3C</color>
-    
     <color name="listArticol">#9E5510</color>
     <color name="listCodArticol">#C4B014</color>
-    
-   
+    <color name="factNeinc">#00688B</color>
 
     <string name="strCauta">Caut\u0103</string>
     <string name="strDistrib">Client distribu\u0163ie</string>
     <string name="strCmdAngaj">Cmd angaj</string>
-	<string name="strAdrNou">Adres\u0103 de livrare nou\u0103:</string>
+    <string name="strAdrNou">Adres\u0103 de livrare nou\u0103:</string>
 
     <color name="editTextColor1">#01796F</color>
-    
     <color name="labelColor">#556B2F</color>
 
     <string name="strSelecteaza">Selecteaz\u0103</string>
@@ -78,15 +75,13 @@
     <color name="foreColorObiective1">#36648B</color>
     <color name="foreColorText1">#CD6600</color>
     <color name="artRowColor1">#5C87AB</color>
+
     <string name="salveaza">Salveaz\u0103</string>
     <string name="nr_inreg_reg_comertului">Nr. inreg. reg. comertului</string>
     <string name="afiseaza">Afi\u015Feaz\u0103</string>
-    
+
     <color name="rounded_shape_bkg">#F0F0F0</color>
     <color name="color_light_green">#008100</color>
     <color name="color_light_blue">#3C838B</color>
-    
-    
-    
 
 </resources>

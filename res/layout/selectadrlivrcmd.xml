@@ -567,6 +567,31 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:gravity="left|bottom"
+                    android:paddingLeft="5dip"
+                    android:text="Facturare paleti"
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
+
+                <CheckBox
+                    android:id="@+id/chkFactPaleti"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:checked="true"
+                    android:text="Facturare paleti separat" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/layoutClientRaft"
                 android:layout_width="match_parent"
                 android:layout_height="60dip"

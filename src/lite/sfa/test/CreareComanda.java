@@ -1276,6 +1276,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			obj.put("tonaj", DateLivrare.getInstance().getTonaj());
 			obj.put("prelucrare", DateLivrare.getInstance().getPrelucrare());
 			obj.put("clientRaft", DateLivrare.getInstance().isClientRaft());
+			obj.put("factPaletiSeparat", DateLivrare.getInstance().isFactPaletSeparat());
 
 		} catch (JSONException ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();

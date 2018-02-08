@@ -41,7 +41,7 @@ public class InfoVenituri extends Activity implements AsyncTaskListener, Operati
 	private String[] strArrayLuna = { "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie", "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie",
 			"Decembrie" };
 
-	private String[] strArrayAn = { "2013", "2014", "2015", "2016", "2017" };
+	private String[] strArrayAn = { "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020" };
 
 	private String[] strArrayNumeFiliale = { "Andronache", "Bacau", "Baia-Mare", "Brasov", "Constanta", "Cluj", "Craiova", "Focsani", "Galati", "Glina",
 			"Iasi", "Militari", "Oradea", "Otopeni", "Piatra-Neamt", "Pitesti", "Ploiesti", "Timisoara", "Tg. Mures" };
@@ -206,7 +206,7 @@ public class InfoVenituri extends Activity implements AsyncTaskListener, Operati
 				HashMap<String, String> artMap = (HashMap<String, String>) spinnerFiliale.getSelectedItem();
 				selectedFiliala = artMap.get("codFiliala");
 
-				if (!selectedFiliala.trim().isEmpty()){
+				if (!selectedFiliala.trim().isEmpty()) {
 					agent.getListaAgenti(selectedFiliala, UserInfo.getInstance().getCodDepart(), InfoVenituri.this, false, null);
 					listResultsVenituri.setVisibility(View.INVISIBLE);
 				}

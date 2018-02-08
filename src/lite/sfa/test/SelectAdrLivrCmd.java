@@ -132,6 +132,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private static final int LIST_ADRESE = 2;
 	private TextView textDataLivrare;
 	private Button btnDataLivrare;
+	private CheckBox checkFactPaleti;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -359,6 +360,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		checkMacara = (CheckBox) findViewById(R.id.checkMacara);
 		setMacaraVisible();
 		setListenerCheckMacara();
+		
+		
+		checkFactPaleti = (CheckBox) findViewById(R.id.chkFactPaleti);
+		checkFactPaleti.setChecked(DateLivrare.getInstance().isFactPaletSeparat());
 
 		spinnerTonaj = (Spinner) findViewById(R.id.spinnerTonaj);
 		setupSpinnerTonaj();
@@ -1323,6 +1328,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			dateLivrareInstance.setZonaBucuresti(zona);
 		} else
 			dateLivrareInstance.setZonaBucuresti(EnumZona.NEDEFINIT);
+
+		dateLivrareInstance.setFactPaletSeparat(checkFactPaleti.isChecked());
 
 		finish();
 

@@ -1,7 +1,7 @@
 package enums;
 
 public enum EnumNeincasate {
-	GET_ART_DOC_NEINCASAT("getArtDocNeincasat");
+	GET_ART_DOC_NEINCASAT("getArtDocNeincasat"), GET_FACTURI_NEINCASATE("getFacturiNeincasate"), SALVEAZA_PLATA("salveazaPlataNeincasata");
 
 	private String numeComanda;
 
