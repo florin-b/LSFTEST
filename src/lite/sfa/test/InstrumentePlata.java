@@ -1,5 +1,6 @@
 package lite.sfa.test;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -207,7 +208,7 @@ public class InstrumentePlata extends Activity implements OperatiiClientListener
 
 				if (isChecked) {
 					((LinearLayout) findViewById(R.id.layoutEmitere)).setVisibility(View.VISIBLE);
-				} else{
+				} else {
 					((LinearLayout) findViewById(R.id.layoutEmitere)).setVisibility(View.GONE);
 					txtEmitere.setText("");
 				}
@@ -326,6 +327,9 @@ public class InstrumentePlata extends Activity implements OperatiiClientListener
 			Toast.makeText(getApplicationContext(), "Completati suma de plata", Toast.LENGTH_LONG).show();
 			return;
 		}
+
+		InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(txtSuma.getWindowToken(), 0);
 
 		HashMap<String, String> params = new HashMap<String, String>();
 
@@ -473,15 +477,16 @@ public class InstrumentePlata extends Activity implements OperatiiClientListener
 		}
 
 		boolean platit = false;
-		double sumaPlataInit = Double.parseDouble(txtSuma.getText().toString().trim());
-		double sumaAcoperitFacturi = 0;
+
+		BigDecimal sumaPlataInit = BigDecimal.valueOf(Double.parseDouble(txtSuma.getText().toString().trim()));
+		BigDecimal sumaAcoperitFacturi = BigDecimal.valueOf(0.0);
 
 		for (FacturaNeincasataLite factura : listFacturi) {
 			if (factura.getPlatit() > 0) {
 				platit = true;
+				sumaAcoperitFacturi = sumaAcoperitFacturi.add(BigDecimal.valueOf(factura.getPlatit()));
 
 			}
-			sumaAcoperitFacturi += factura.getPlatit();
 
 		}
 
@@ -490,8 +495,8 @@ public class InstrumentePlata extends Activity implements OperatiiClientListener
 			return false;
 		}
 
-		if (sumaPlataInit > sumaAcoperitFacturi) {
-			double restSuma = sumaPlataInit - sumaAcoperitFacturi;
+		if (sumaPlataInit.compareTo(sumaAcoperitFacturi) > 0) {
+			BigDecimal restSuma = sumaPlataInit.subtract(sumaAcoperitFacturi);
 			Toast.makeText(getApplicationContext(), "Au ramas " + numberFormat.format(restSuma) + " RON nepunctati. ", Toast.LENGTH_LONG).show();
 			return false;
 		}
