@@ -1274,7 +1274,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			return;
 		}
 
-		if (isAdresaText()) {
+		if (DateLivrare.getInstance().getTransport().equals("TRAP") && isAdresaText()) {
 			valideazaTonajAdresaNoua();
 
 		}
