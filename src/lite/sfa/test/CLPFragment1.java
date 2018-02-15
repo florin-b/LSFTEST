@@ -242,10 +242,10 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 			spinnerFilialaCLP.setOnItemSelectedListener(new filialaSelectedListener());
 			fillFiliale();
-			
+
 			spinnerIndoire = (Spinner) v.findViewById(R.id.spinnerIndoire);
 			setupSpinnerIndoire();
-			
+
 			layoutPrelucrare04 = (LinearLayout) v.findViewById(R.id.layoutIndoire);
 			layoutPrelucrare04.setVisibility(View.INVISIBLE);
 
@@ -254,9 +254,6 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 			if (UtilsUser.isKA())
 				layoutPrelucrare04.setVisibility(View.VISIBLE);
-			
-
-			
 
 			txtOras = (AutoCompleteTextView) v.findViewById(R.id.txtOrasCLP);
 			addTxtOrasListener();
@@ -383,7 +380,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 		return v;
 
 	}
-	
+
 	private void setupSpinnerIndoire() {
 
 		String[] indoireValues = { "Tip prelucrare fier-beton 6 m", "TAIERE", "INDOIRE" };
@@ -670,7 +667,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 	public void fillJudete() {
 
 		HashMap<String, String> temp;
-		int i = 0;
+		int i;
 
 		temp = new HashMap<String, String>();
 		temp.put("numeJudet", "Selectati judetul");
@@ -700,10 +697,13 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 		listFiliale.add(temp);
 
 		for (i = 0; i < numeFiliala.length; i++) {
-			temp = new HashMap<String, String>();
-			temp.put("numeJudet", numeFiliala[i]);
-			temp.put("codJudet", codFiliala[i]);
-			listFiliale.add(temp);
+
+			if (!codFiliala[i].equals(UserInfo.getInstance().getUnitLog())) {
+				temp = new HashMap<String, String>();
+				temp.put("numeJudet", numeFiliala[i]);
+				temp.put("codJudet", codFiliala[i]);
+				listFiliale.add(temp);
+			}
 
 		}
 
