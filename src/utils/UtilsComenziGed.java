@@ -3,6 +3,7 @@ package utils;
 import java.util.ArrayList;
 
 import model.ArticolComanda;
+import model.UserInfo;
 
 public class UtilsComenziGed {
 
@@ -17,12 +18,13 @@ public class UtilsComenziGed {
 			totalTransp += art.getValTransport();
 		}
 
-		totalTransp += getValoareAdaugataTransport(listArticole);
+		if (userCannotModifyPrice())
+			totalTransp += getValoareAdaugataTransport(listArticole);
 
 		return totalTransp;
 	}
 
-	public static double getValoareAdaugataTransport(ArrayList<ArticolComanda> listArticole) {
+	private static double getValoareAdaugataTransport(ArrayList<ArticolComanda> listArticole) {
 		double valTranspAdaugat = 0;
 
 		if (!UtilsUser.isAgentOrSDorKA()) {
@@ -141,6 +143,10 @@ public class UtilsComenziGed {
 
 		}
 
+	}
+
+	private static boolean userCannotModifyPrice() {
+		return UserInfo.getInstance().getTipUserSap().equals("CONS-GED") || UserInfo.getInstance().getTipUserSap().equals("CVR");
 	}
 
 }
