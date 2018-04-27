@@ -5,10 +5,12 @@
 package model;
 
 import beans.DateLivrareAfisare;
+import beans.FurnizorComanda;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import enums.EnumZona;
+import enums.TipCmdDistrib;
 
 public class DateLivrare {
 
@@ -66,7 +68,10 @@ public class DateLivrare {
 	private EnumZona zonaBucuresti;
 	private String codMeserias = "";
 	private boolean isClientFurnizor;
-	private boolean isFactPaletSeparat = true;
+	private boolean isFactPaletSeparat = false;
+	private FurnizorComanda furnizorComanda;
+	private TipCmdDistrib tipComandaDistrib = TipCmdDistrib.COMANDA_VANZARE;
+	private boolean isCamionDescoperit;
 
 	private DateLivrareAfisare dateLivrareAfisare;
 
@@ -118,6 +123,8 @@ public class DateLivrare {
 		this.isClientRaft = dateLivrareAfisare.isClientRaft();
 		this.codMeserias = dateLivrareAfisare.getCodMeserias();
 		this.isFactPaletSeparat = dateLivrareAfisare.isFactPaletSeparat();
+		this.furnizorComanda = dateLivrareAfisare.getFurnizorComanda();
+		this.isCamionDescoperit = dateLivrareAfisare.isCamionDescoperit();
 
 	}
 
@@ -502,6 +509,30 @@ public class DateLivrare {
 		this.isFactPaletSeparat = isFactPaletSeparat;
 	}
 
+	public FurnizorComanda getFurnizorComanda() {
+		return furnizorComanda;
+	}
+
+	public void setFurnizorComanda(FurnizorComanda furnizorComanda) {
+		this.furnizorComanda = furnizorComanda;
+	}
+
+	public TipCmdDistrib getTipComandaDistrib() {
+		return tipComandaDistrib;
+	}
+
+	public void setTipComandaDistrib(TipCmdDistrib tipComandaDistrib) {
+		this.tipComandaDistrib = tipComandaDistrib;
+	}
+
+	public boolean isCamionDescoperit() {
+		return isCamionDescoperit;
+	}
+
+	public void setCamionDescoperit(boolean isCamionDescoperit) {
+		this.isCamionDescoperit = isCamionDescoperit;
+	}
+
 	public void resetAll() {
 		codJudet = "";
 		numeJudet = "";
@@ -542,7 +573,10 @@ public class DateLivrare {
 		zonaBucuresti = null;
 		codMeserias = "";
 		isClientFurnizor = false;
-		isFactPaletSeparat = true;
+		isFactPaletSeparat = false;
+		furnizorComanda = null;
+		tipComandaDistrib = TipCmdDistrib.COMANDA_VANZARE;
+		isCamionDescoperit = false;
 
 	}
 

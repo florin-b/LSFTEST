@@ -6,6 +6,7 @@ package lite.sfa.test;
 
 import helpers.HelperCostDescarcare;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -18,11 +19,13 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeSet;
 
 import listeners.ArticolModificareListener;
 import listeners.AsyncTaskListener;
 import listeners.ComenziDAOListener;
 import listeners.CostMacaraListener;
+import model.AlgoritmComandaGed;
 import model.ArticolComanda;
 import model.Comanda;
 import model.ComenziDAO;
@@ -37,14 +40,17 @@ import model.UserInfo;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import utils.UtilsComenziGed;
 import utils.UtilsFormatting;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import adapters.ArticolModificareAdapter;
+import adapters.ArticolePretTransport;
 import adapters.ComandaModificareAdapter;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -59,6 +65,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -151,6 +158,11 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	private LinearLayout layoutBV90;
 
 	private CostDescarcare costDescarcare;
+	private Button valTranspBtn;
+	private TextView textAlertaMarja;
+
+	private double valTransport = 0;
+	private double valTransportSAP = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -232,7 +244,88 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		mProgress = (ProgressBar) findViewById(R.id.progress_bar_savecmd);
 		mProgress.setVisibility(View.INVISIBLE);
 
+		valTranspBtn = (Button) findViewById(R.id.valTransp);
+		addListenerValTranspBtn();
+		textAlertaMarja = (TextView) findViewById(R.id.textAlertaMarja);
 		loadListComenzi();
+
+	}
+
+	public void addListenerValTranspBtn() {
+		valTranspBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				showModifValTranspDialogBox();
+
+			}
+		});
+
+	}
+
+	public void showModifValTranspDialogBox() {
+		final Dialog dialogModifValTransp = new Dialog(ModificareComanda.this);
+		dialogModifValTransp.setContentView(R.layout.modifvaltranspdialogbox);
+		dialogModifValTransp.setTitle("Modificare valoare transport");
+		dialogModifValTransp.setCancelable(false);
+		dialogModifValTransp.show();
+
+		final NumberFormat nf3 = NumberFormat.getInstance(new Locale("en", "US"));
+		nf3.setMinimumFractionDigits(2);
+		nf3.setMaximumFractionDigits(2);
+		nf3.setGroupingUsed(false);
+
+		final EditText textValTransp = (EditText) dialogModifValTransp.findViewById(R.id.txtValTransp);
+
+		TextView txtTranspSAP = (TextView) dialogModifValTransp.findViewById(R.id.txtTranspSAP);
+		txtTranspSAP.setText("SAP: " + nf3.format(valTransportSAP));
+
+		ListView listViewArticoleTransp = (ListView) dialogModifValTransp.findViewById(R.id.listArticoleTransp);
+
+		ArticolePretTransport adapterArticoleTransport = new ArticolePretTransport(ModificareComanda.this, listArticoleComanda);
+		listViewArticoleTransp.setAdapter(adapterArticoleTransport);
+
+		textValTransp.setText(nf3.format(valTransport));
+		textValTransp.setSelection(textValTransp.getText().length(), textValTransp.getText().length());
+
+		Button btnOkTransp = (Button) dialogModifValTransp.findViewById(R.id.btnOkTransp);
+		btnOkTransp.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+
+				if (textValTransp.getText().toString().trim().length() > 0) {
+					if (Double.parseDouble(textValTransp.getText().toString().trim()) >= 0) {
+
+						valTransport = Double.parseDouble(textValTransp.getText().toString().trim());
+
+						if (valTransport < valTransportSAP) {
+							Toast.makeText(getApplicationContext(), "Valoarea transportului nu poate fi mai mica decat cea din SAP!", Toast.LENGTH_SHORT)
+									.show();
+							valTransport = valTransportSAP;
+							textValTransp.setText(nf3.format(valTransport));
+						} else {
+							valTranspBtn.setText("Transp: " + textValTransp.getText().toString().trim());
+							calculProcente(listArticoleComanda);
+							dialogModifValTransp.dismiss();
+						}
+
+						UtilsComenziGed.setValoareArticolTransport(listArticoleComanda, valTransport);
+						adapterArticole.notifyDataSetChanged();
+
+						DateLivrare.getInstance().setValTransport(valTransport);
+
+					}
+
+				}
+
+			}
+		});
+
+		Button btnCancelTransp = (Button) dialogModifValTransp.findViewById(R.id.btnCancelTransp);
+		btnCancelTransp.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				dialogModifValTransp.dismiss();
+
+			}
+		});
 
 	}
 
@@ -258,7 +351,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 	private void CreateMenu(Menu menu) {
 
-		if (!isUserCV()) {
+		if (!isUserCVExc()) {
 			MenuItem mnu2 = menu.add(0, 0, 0, "Articole");
 			mnu2.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 		}
@@ -339,9 +432,14 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		return false;
 	}
 
-	boolean isUserCV() {
+	private boolean isUserCV() {
 		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("CVR")
 				|| UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance().getTipUserSap().equals("KA3")
+				|| UserInfo.getInstance().getTipUser().equals("SMR") || UserInfo.getInstance().getTipUser().equals("WOOD");
+	}
+
+	private boolean isUserCVExc() {
+		return UserInfo.getInstance().getTipUser().equals("CVR") || UserInfo.getInstance().getTipUserSap().equals("KA3")
 				|| UserInfo.getInstance().getTipUser().equals("SMR") || UserInfo.getInstance().getTipUser().equals("WOOD");
 	}
 
@@ -569,8 +667,6 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 						comandaFinala.setCnpClient(dateLivrareInstance.getCnpClient());
 						comandaFinala.setNecesarAprobariCV(comandaSelectata.getAprobariNecesare());
 
-						comandaJson = serializeComanda(comandaFinala);
-
 						verificaPretMacara();
 
 					}
@@ -632,7 +728,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		if (acceptaPret) {
 			DateLivrare.getInstance().setMasinaMacara(true);
 
-			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare, valoarePret);
+			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare, valoarePret, UserInfo.getInstance()
+					.getUnitLog());
 
 			listArticoleComanda.addAll(articoleDescarcare);
 
@@ -670,7 +767,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			params.put("comanda", " ");
 			params.put("tipUser", tipUser);
 			params.put("JSONArt", serializeArticole());
-			params.put("JSONComanda", comandaJson);
+			params.put("JSONComanda", serializeComanda(comandaFinala));
 			params.put("JSONDateLivrare", serializeDateLivrare());
 			params.put("alertSD", String.valueOf(alertSD));
 			params.put("alertDV", String.valueOf(alertDV));
@@ -836,8 +933,12 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 	private String serializeArticole() {
 		JSONArray myArray = new JSONArray();
-
+		TreeSet<String> aprobariCV = new TreeSet<String>();
 		JSONObject obj = null;
+
+		if (!ModificareComanda.isComandaDistrib && !UtilsUser.isAgentOrSDorKA() && valTransport > 0) {
+			UtilsComenziGed.setValoareArticolTransport(listArticoleComanda, valTransport);
+		}
 
 		try {
 			for (int i = 0; i < listArticoleComanda.size(); i++) {
@@ -867,6 +968,18 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 				obj.put("observatii", listArticoleComanda.get(i).getTipAlert());
 				obj.put("departAprob", listArticoleComanda.get(i).getDepartAprob());
 				obj.put("istoricPret", listArticoleComanda.get(i).getIstoricPret());
+				obj.put("valTransport", listArticoleComanda.get(i).getValTransport());
+
+				if (!UtilsUser.isAgentOrSDorKA()) {
+					if (listArticoleComanda.get(i).getNumeArticol() != null && listArticoleComanda.get(i).getPonderare() == 1) {
+						alertDV = true;
+						if (!comandaFinala.getComandaBlocata().equals("21"))
+							comandaFinala.setComandaBlocata("1");
+
+						aprobariCV.add(listArticoleComanda.get(i).getDepartSintetic());
+					}
+				}
+
 				myArray.put(obj);
 			}
 		} catch (Exception ex) {
@@ -874,6 +987,11 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		}
 
 		serializedResult = myArray.toString();
+
+		if (!UtilsUser.isAgentOrSDorKA()) {
+			String strAprobariCV = new String(aprobariCV.toString());
+			comandaFinala.setNecesarAprobariCV(strAprobariCV.substring(1, strAprobariCV.length() - 1));
+		}
 
 		return serializedResult;
 
@@ -952,15 +1070,17 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("prelucrare", DateLivrare.getInstance().getPrelucrare());
 			obj.put("clientRaft", DateLivrare.getInstance().isClientRaft());
 			obj.put("meserias", DateLivrare.getInstance().getCodMeserias());
-			
 
 			if (isComandaGed())
 				obj.put("factRed", "NU");
 			else
 				obj.put("factRed", codTipReducere.equals("-1") ? DateLivrare.getInstance().getFactRed() : codTipReducere);
 			obj.put("macara", DateLivrare.getInstance().isMasinaMacara() ? "X" : " ");
-			
+
 			obj.put("factPaletiSeparat", DateLivrare.getInstance().isFactPaletSeparat());
+			obj.put("furnizorMarfa", DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa());
+			obj.put("furnizorProduse", DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorProduse());
+			obj.put("isCamionDescoperit", DateLivrare.getInstance().isCamionDescoperit());
 
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
@@ -1286,6 +1406,9 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 		adapterArticole.notifyDataSetChanged();
 
+		calculValTransport(listArticoleComanda);
+		calculProcente(listArticoleComanda);
+
 	}
 
 	private void getPretTransport() {
@@ -1546,7 +1669,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		textTotalCmd.setText("0.00");
 
 		comandaSelectata = comanda;
-		
+
 		unitLogComanda = comandaSelectata.getFiliala();
 
 		selectedCmd = comanda.getId();
@@ -1634,6 +1757,103 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		calculPondereB();
 	}
 
+	private void calculValTransport(ArrayList<ArticolComanda> listArticole) {
+
+		if (UtilsUser.isAgentOrSDorKA() || UtilsUser.isConsWood()) {
+			return;
+		}
+
+		NumberFormat nf3 = NumberFormat.getInstance(new Locale("en", "US"));
+		nf3.setMinimumFractionDigits(2);
+		nf3.setMaximumFractionDigits(2);
+		nf3.setGroupingUsed(false);
+
+		valTransportSAP = Double.valueOf(nf3.format(UtilsComenziGed.getValoareTransportSap(listArticole)));
+		valTransport = Double.valueOf(nf3.format(UtilsComenziGed.getValoareTransportComanda(listArticole)));
+
+		if (valTransport < valTransportSAP)
+			valTransport = valTransportSAP;
+
+		UtilsComenziGed.setValoareArticolTransport(listArticole, valTransport);
+		adapterArticole.notifyDataSetChanged();
+
+		if (DateLivrare.getInstance().getTransport().equals("TRAP") || DateLivrare.getInstance().getTransport().equals("TERT")) {
+			valTranspBtn.setVisibility(View.VISIBLE);
+			valTranspBtn.setText("Transp: " + nf3.format(valTransport));
+		} else {
+			valTranspBtn.setVisibility(View.INVISIBLE);
+			valTransport = 0;
+		}
+
+	}
+
+	public boolean esteModificatPretulGed(ArrayList<ArticolComanda> listArticole) {
+		boolean esteModificat = false;
+
+		ArticolComanda articol = null;
+
+		for (int i = 0; i < listArticole.size(); i++) {
+
+			articol = listArticole.get(i);
+
+			if (articol.getProcent() > 0) {
+				esteModificat = true;
+				break;
+			}
+
+		}
+
+		if (!esteModificat) {
+			AlgoritmComandaGed algoritm = new AlgoritmComandaGed();
+			algoritm.inlaturaToateAlertelePret(listArticoleComanda);
+		}
+
+		return esteModificat;
+	}
+
+	public static double round(double value, int places) {
+
+		BigDecimal bd = new BigDecimal(value);
+		bd = bd.setScale(places, BigDecimal.ROUND_HALF_UP);
+		return bd.doubleValue();
+	}
+
+	private void calculProcente(ArrayList<ArticolComanda> listArticole) {
+		if (UtilsUser.isAgentOrSDorKA() || UtilsUser.isConsWood()) {
+			valTranspBtn.setVisibility(View.GONE);
+			return;
+		}
+
+		textAlertaMarja.setVisibility(View.GONE);
+
+		NumberFormat nf = NumberFormat.getInstance();
+		nf.setMinimumFractionDigits(2);
+		nf.setMaximumFractionDigits(2);
+
+		AlgoritmComandaGed algoritm = new AlgoritmComandaGed();
+		algoritm.calculProcenteComanda(listArticole, esteModificatPretulGed(listArticole));
+
+		double formulaTotalAdaosClientCorectat = algoritm.getTotalAdaosClientCorectat();
+		double valTransportAlgoritm = valTransport - valTransportSAP;
+
+		if (DateLivrare.getInstance().getTransport().equals("TRAP") || DateLivrare.getInstance().getTransport().equals("TERT")) {
+			formulaTotalAdaosClientCorectat = algoritm.getTotalAdaosClientCorectat() + valTransportAlgoritm;
+		}
+
+		if (formulaTotalAdaosClientCorectat < algoritm.getTotalAdaosMinimReper()) {
+
+			double deficitComanda = (algoritm.getTotalAdaosMinimReper() - formulaTotalAdaosClientCorectat);
+
+			textAlertaMarja.setText("Cresteti val. cmd. cu minim " + nf.format(deficitComanda) + " RON");
+			textAlertaMarja.setVisibility(View.VISIBLE);
+			algoritm.redistribuireMarja(listArticole, valTransportAlgoritm);
+
+		} else {
+			algoritm.schimbaAlertaArticol(listArticole);
+			textAlertaMarja.setText("");
+		}
+	}
+
 	public void update(Observable observable, Object data) {
 		if (observable instanceof ListaArticoleModificareComanda) {
 			listArticoleComanda = ListaArticoleModificareComanda.getInstance().getListArticoleComanda();
@@ -1648,6 +1868,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			conditiiComandaArticole = ListaArticoleComandaGed.getInstance().getConditiiArticole();
 			adapterArticole.setListArticole(listArticoleComanda);
 			adapterArticole.notifyDataSetChanged();
+			calculValTransport(listArticoleComanda);
+			calculProcente(listArticoleComanda);
 		}
 
 	}
@@ -1655,6 +1877,13 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	@Override
 	public void acceptaCostMacara(boolean acceptaCost, double valoareCost) {
 		trateazaPretMacara(acceptaCost, valoareCost);
+
+	}
+
+	@Override
+	public void articolSters() {
+		calculValTransport(listArticoleComanda);
+		calculProcente(listArticoleComanda);
 
 	}
 }

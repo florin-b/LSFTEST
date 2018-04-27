@@ -77,14 +77,13 @@
             android:typeface="monospace" />
 
         <TextView
-            android:id="@id/android:empty"
+            android:id="@+id/textMoneda"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_marginLeft="15dp"
             android:layout_weight="0.05"
             android:gravity="left"
-            android:text="RON"
             android:textColor="@color/rowColor1"
             android:textSize="16sp"
             android:typeface="sans" />
@@ -141,14 +140,13 @@
             android:typeface="monospace" />
 
         <TextView
-            android:id="@id/android:empty"
+            android:id="@+id/textMonedaTva"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_marginLeft="15dp"
             android:layout_weight="0.05"
             android:gravity="left"
-            android:text="RON"
             android:textColor="@color/rowColor1"
             android:textSize="16sp"
             android:textStyle="bold"

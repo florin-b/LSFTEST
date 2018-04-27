@@ -292,6 +292,7 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 			params.put("depart", getExceptiiDepartament());
 			params.put("departAg", UserInfo.getInstance().getCodDepart());
 			params.put("unitLog", UserInfo.getInstance().getUnitLog());
+			params.put("codUser", UserInfo.getInstance().getCod());
 
 			opClient.getListClienti(params);
 

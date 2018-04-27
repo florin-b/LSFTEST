@@ -279,6 +279,10 @@ public class ArticolModificareAdapter extends BaseAdapter implements OperatiiArt
 		viewHolder.stergeArticolBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				listArticole.remove(position);
+				if (listener != null) {
+					listener.articolSters();
+				}
+				
 				notifyDataSetChanged();
 			}
 		});

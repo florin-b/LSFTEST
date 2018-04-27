@@ -621,11 +621,28 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 		return true;
 	}
 
+	
+
 	@Override
 	public String toString() {
 		return "ArticolComanda [nrCrt=" + nrCrt + ", numeArticol=" + numeArticol + ", codArticol=" + codArticol + ", depozit=" + depozit + ", cantitate="
-				+ cantitate + ", um=" + um + ", pret=" + pret + "]";
+				+ cantitate + ", um=" + um + ", pret=" + pret + ", moneda=" + moneda + ", procent=" + procent + ", observatii=" + observatii + ", conditie="
+				+ conditie + ", promotie=" + promotie + ", procentFact=" + procentFact + ", pretUnit=" + pretUnit + ", discClient=" + discClient
+				+ ", tipAlert=" + tipAlert + ", procAprob=" + procAprob + ", multiplu=" + multiplu + ", infoArticol=" + infoArticol + ", cantUmb=" + cantUmb
+				+ ", Umb=" + Umb + ", alteValori=" + alteValori + ", depart=" + depart + ", tipArt=" + tipArt + ", taxaVerde=" + taxaVerde
+				+ ", pretUnitarPonderat=" + pretUnitarPonderat + ", pretUnitarClient=" + pretUnitarClient + ", unitLogAlt=" + unitLogAlt + ", status=" + status
+				+ ", cmp=" + cmp + ", addCond=" + addCond + ", pretUnitarGed=" + pretUnitarGed + ", marjaClient=" + marjaClient + ", marjaCorectata="
+				+ marjaCorectata + ", reducerePonderata=" + reducerePonderata + ", marjaGed=" + marjaGed + ", tipAlertPret=" + tipAlertPret
+				+ ", adaosMinimArticol=" + adaosMinimArticol + ", adaosClientCorectat=" + adaosClientCorectat + ", adaosMinimAcceptat=" + adaosMinimAcceptat
+				+ ", ponderare=" + ponderare + ", discountAg=" + discountAg + ", discountSd=" + discountSd + ", discountDv=" + discountDv + ", permitSubCmp="
+				+ permitSubCmp + ", coefCorectie=" + coefCorectie + ", pretMediu=" + pretMediu + ", adaosMediu=" + adaosMediu + ", unitMasPretMediu="
+				+ unitMasPretMediu + ", departSintetic=" + departSintetic + ", hasConditii=" + hasConditii + ", isRespins=" + isRespins + ", deficit="
+				+ deficit + ", valTransport=" + valTransport + ", procTransport=" + procTransport + ", departAprob=" + departAprob + ", umPalet=" + umPalet
+				+ ", filialaSite=" + filialaSite + ", istoricPret=" + istoricPret + ", vechime=" + vechime + ", categorie=" + categorie + ", lungime="
+				+ lungime + "]";
 	}
+
+
 
 	public static Comparator<ArticolComanda> DepartComparator = new Comparator<ArticolComanda>() {
 

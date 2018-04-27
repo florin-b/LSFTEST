@@ -27,6 +27,7 @@ import listeners.ComenziDAOListener;
 import listeners.CostMacaraListener;
 import listeners.PaletAlertListener;
 import listeners.PretTransportDialogListener;
+import listeners.TipCmdDistribListener;
 import listeners.ValoareNegociataDialogListener;
 import model.ArticolComanda;
 import model.Comanda;
@@ -77,12 +78,14 @@ import dialogs.ArtComplDialog;
 import dialogs.CostMacaraDialog;
 import dialogs.PaletAlertDialog;
 import dialogs.PretTransportDialog;
+import dialogs.TipComandaDistributieDialog;
 import dialogs.ValoareNegociataDialog;
 import enums.EnumComenziDAO;
 import enums.EnumDaNuOpt;
+import enums.TipCmdDistrib;
 
 public class CreareComanda extends Activity implements AsyncTaskListener, ValoareNegociataDialogListener, ComenziDAOListener, PretTransportDialogListener,
-		ArtComplDialogListener, Observer, PaletAlertListener, CostMacaraListener {
+		ArtComplDialogListener, Observer, PaletAlertListener, CostMacaraListener, TipCmdDistribListener {
 
 	Button stocBtn, clientBtn, articoleBtn, livrareBtn, saveCmdBtn, slideButtonCmd;
 	String filiala = "", nume = "", cod = "";
@@ -147,6 +150,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 	private Comanda comandaFinala = new Comanda();
 	private ComenziDAO comandaDAO;
 	private CostDescarcare costDescarcare;
+	private TipCmdDistrib tipComandaDistributie = TipCmdDistrib.COMANDA_VANZARE;
+	private TextView textFurnizor;
 
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -252,28 +257,47 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			nf3.setMinimumFractionDigits(2);
 			nf3.setMaximumFractionDigits(2);
 
+			textFurnizor = (TextView) findViewById(R.id.textFurnizor);
+
 		} catch (Exception ex) {
 			Toast.makeText(getApplicationContext(), ex.toString(), Toast.LENGTH_SHORT).show();
 		}
 
 	}
 
+	private void showTipComandaDialog() {
+		TipComandaDistributieDialog tipCmdDialog = new TipComandaDistributieDialog(this);
+		tipCmdDialog.setTipCmdDistribListener(this);
+		tipCmdDialog.showDialog();
+	}
+
 	private void CreateMenu(Menu menu) {
-		MenuItem mnu1 = menu.add(0, 0, 0, "Client");
 
-		mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		MenuItem mnu0 = menu.add(0, 0, 0, "Tip");
 
-		MenuItem mnu2 = menu.add(0, 1, 1, "Articole");
+		mnu0.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+		if (tipComandaDistributie == TipCmdDistrib.DISPOZITIE_LIVRARE) {
+			MenuItem mnu1 = menu.add(0, 1, 1, "Furnizor");
+
+			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		}
+
+		MenuItem mnu2 = menu.add(0, 2, 2, "Client");
 
 		mnu2.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
-		MenuItem mnu3 = menu.add(0, 2, 2, "Livrare");
+		MenuItem mnu3 = menu.add(0, 3, 3, "Articole");
 
 		mnu3.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
-		MenuItem mnu4 = menu.add(0, 3, 3, "Valoare negociata");
+		MenuItem mnu4 = menu.add(0, 4, 4, "Livrare");
 
-		mnu4.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		mnu4.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+		MenuItem mnu5 = menu.add(0, 5, 5, "Valoare negociata");
+
+		mnu5.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
 	}
 
@@ -294,24 +318,56 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		case 0:
 			if (nrArticole == 0) {
 
+				showTipComandaDialog();
+			} else {
+				Toast.makeText(getApplicationContext(), "Stergeti mai intai toate articolele!", Toast.LENGTH_SHORT).show();
+			}
+			return true;
+
+		case 1:
+			if (nrArticole == 0) {
+
+				Intent nextScreen = new Intent(getApplicationContext(), SelectFurnizorCmd.class);
+				startActivity(nextScreen);
+			} else {
+				Toast.makeText(getApplicationContext(), "Stergeti mai intai toate articolele!", Toast.LENGTH_SHORT).show();
+			}
+			return true;
+
+		case 2:
+			if (nrArticole == 0) {
+
 				Intent nextScreen = new Intent(getApplicationContext(), SelectClientCmd.class);
 				startActivity(nextScreen);
 			} else {
 				Toast.makeText(getApplicationContext(), "Stergeti mai intai toate articolele!", Toast.LENGTH_SHORT).show();
 			}
 			return true;
-		case 1:
+		case 3:
+			if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_VANZARE) {
+				if (codClientVar.length() > 0) {
+					Intent nextScreen = new Intent(getApplicationContext(), SelectArtCmd.class);
+					startActivity(nextScreen);
 
-			if (codClientVar.length() > 0) {
+				} else {
+					Toast.makeText(getApplicationContext(), "Selectati mai intai clientul!", Toast.LENGTH_SHORT).show();
+				}
+			} else if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.DISPOZITIE_LIVRARE) {
+				if (codClientVar.length() == 0) {
+					Toast.makeText(getApplicationContext(), "Selectati clientul.", Toast.LENGTH_SHORT).show();
+					return false;
+				}
+				if (DateLivrare.getInstance().getFurnizorComanda() == null) {
+					Toast.makeText(getApplicationContext(), "Selectati furnizorul.", Toast.LENGTH_SHORT).show();
+					return false;
+				}
+
 				Intent nextScreen = new Intent(getApplicationContext(), SelectArtCmd.class);
 				startActivity(nextScreen);
-
-			} else {
-				Toast.makeText(getApplicationContext(), "Selectati mai intai clientul!", Toast.LENGTH_SHORT).show();
 			}
 
 			return true;
-		case 2:
+		case 4:
 
 			if (codClientVar.length() > 0 && nrArticole > 0) {
 				Intent nextScreen = new Intent(getApplicationContext(), SelectAdrLivrCmd.class);
@@ -322,7 +378,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 			return true;
 
-		case 3:
+		case 5:
 
 			if (CreareComanda.canalDistrib.equals("10")) {
 				if (nrArticole == 0) {
@@ -420,6 +476,16 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 		super.onResume();
 		checkStaticVars();
+
+		if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.DISPOZITIE_LIVRARE) {
+			if (DateLivrare.getInstance().getFurnizorComanda() != null) {
+
+				String strFurnizor = "Furnizor: " + DateLivrare.getInstance().getFurnizorComanda().getNumeFurnizorMarfa();
+				strFurnizor += " / " + DateLivrare.getInstance().getFurnizorComanda().getNumeFurnizorProduse();
+				textFurnizor.setText(strFurnizor);
+				textFurnizor.setVisibility(View.VISIBLE);
+			}
+		}
 
 		if (numeClientVar.length() > 0) {
 			int maxLen = numeClientVar.length();
@@ -875,7 +941,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 			DateLivrare.getInstance().setMasinaMacara(true);
 
-			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare, valoarePret);
+			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare, valoarePret, UserInfo.getInstance()
+					.getUnitLog());
 
 			ListaArticoleComanda.getInstance().getListArticoleComanda().addAll(articoleDescarcare);
 
@@ -1192,6 +1259,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 				obj.put("observatii", listArticole.get(i).getObservatii());
 				obj.put("departAprob", listArticole.get(i).getDepartAprob());
 				obj.put("istoricPret", listArticole.get(i).getIstoricPret());
+				obj.put("valTransport", "0");
+				obj.put("procTransport", "0");
 				myArray.put(obj);
 			}
 		} catch (Exception ex) {
@@ -1277,6 +1346,16 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			obj.put("prelucrare", DateLivrare.getInstance().getPrelucrare());
 			obj.put("clientRaft", DateLivrare.getInstance().isClientRaft());
 			obj.put("factPaletiSeparat", DateLivrare.getInstance().isFactPaletSeparat());
+
+			String codFurnizorMarfa = DateLivrare.getInstance().getFurnizorComanda() == null ? " " : DateLivrare.getInstance().getFurnizorComanda()
+					.getCodFurnizorMarfa();
+			obj.put("furnizorMarfa", codFurnizorMarfa);
+
+			String codFurnizorProduse = DateLivrare.getInstance().getFurnizorComanda() == null ? " " : DateLivrare.getInstance().getFurnizorComanda()
+					.getCodFurnizorProduse();
+			obj.put("furnizorProduse", codFurnizorProduse);
+
+			obj.put("isCamionDescoperit", DateLivrare.getInstance().isCamionDescoperit());
 
 		} catch (JSONException ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
@@ -1469,6 +1548,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		arrayListArticole.clear();
 
 		textClient.setText("");
+		textFurnizor.setText("");
 		textTotalCmd.setText("");
 		textTipPlata.setText("");
 		textAdrLivr.setText("");
@@ -1479,6 +1559,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		textLimCrd.setText("");
 		textRestCrd.setText("");
 		textClient.setVisibility(View.GONE);
+		textFurnizor.setVisibility(View.GONE);
 		textTotalCmd.setVisibility(View.GONE);
 		textTipPlata.setVisibility(View.GONE);
 		textAdrLivr.setVisibility(View.GONE);
@@ -1717,6 +1798,25 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 	@Override
 	public void acceptaCostMacara(boolean acceptaCost, double valoareCost) {
 		trateazaPretMacara(acceptaCost, valoareCost);
+
+	}
+
+	@Override
+	public void tipComandaSelected(TipCmdDistrib tipSelected) {
+
+		tipComandaDistributie = tipSelected;
+		DateLivrare.getInstance().setTipComandaDistrib(tipSelected);
+
+		ActionBar actionBar = getActionBar();
+		if (tipSelected == TipCmdDistrib.DISPOZITIE_LIVRARE) {
+			actionBar.setTitle("Dispozitie livrare");
+		}
+
+		else if (tipSelected == TipCmdDistrib.COMANDA_VANZARE) {
+			actionBar.setTitle("Comanda distributie");
+		}
+
+		invalidateOptionsMenu();
 
 	}
 

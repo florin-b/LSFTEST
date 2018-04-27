@@ -116,6 +116,14 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 	}
 
 	@Override
+	public void getArticoleStatistic(HashMap<String, String> params) {
+		numeComanda = EnumArticoleDAO.GET_ARTICOLE_STATISTIC;
+		this.params = params;
+		performOperation();
+
+	}
+
+	@Override
 	public Object getDepartBV90(String codArticol) {
 		numeComanda = EnumArticoleDAO.GET_DEP_BV90;
 
@@ -150,7 +158,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 					articol.setCod(articolObject.getString("cod"));
 					articol.setNume(articolObject.getString("nume"));
 					articol.setSintetic(articolObject.getString("sintetic"));
-					articol.setNivel1(articolObject.getString("nivel1")); 
+					articol.setNivel1(articolObject.getString("nivel1"));
 					articol.setUmVanz(articolObject.getString("umVanz"));
 					articol.setUmVanz10(articolObject.getString("umVanz10"));
 					articol.setTipAB(articolObject.getString("tipAB"));

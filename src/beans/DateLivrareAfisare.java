@@ -44,8 +44,10 @@ public class DateLivrareAfisare {
 	private String tonaj;
 	private boolean isClientRaft;
 	private String codMeserias="";
-	private boolean isFactPaletSeparat = true;
-
+	private boolean isFactPaletSeparat = false;
+	private FurnizorComanda furnizorComanda;
+	private boolean isCamionDescoperit;
+	
 	public DateLivrareAfisare() {
 
 	}
@@ -387,6 +389,22 @@ public class DateLivrareAfisare {
 
 	public void setFactPaletSeparat(boolean isFactPaletSeparat) {
 		this.isFactPaletSeparat = isFactPaletSeparat;
+	}
+
+	public FurnizorComanda getFurnizorComanda() {
+		return furnizorComanda;
+	}
+
+	public void setFurnizorComanda(FurnizorComanda furnizorComanda) {
+		this.furnizorComanda = furnizorComanda;
+	}
+
+	public boolean isCamionDescoperit() {
+		return isCamionDescoperit;
+	}
+
+	public void setCamionDescoperit(boolean isCamionDescoperit) {
+		this.isCamionDescoperit = isCamionDescoperit;
 	}
 	
 	

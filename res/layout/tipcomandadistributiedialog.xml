@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <RadioGroup
+        android:id="@+id/radioTipCmd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dip"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/radioCV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:layout_margin="3dip"
+            android:text="Comanda de vanzare"
+            android:textColor="@color/detColor1"
+            android:textSize="17sp"
+            android:typeface="sans" >
+        </RadioButton>
+
+        <RadioButton
+            android:id="@+id/radioDL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:layout_margin="3dip"
+            android:text="Dispozitie de livrare"
+            android:textColor="@color/detColor1"
+            android:textSize="17sp"
+            android:typeface="sans" >
+        </RadioButton>
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dip"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginBottom="5dip"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnOkTipCmd"
+            style="@style/ok_button"
+            android:layout_width="fill_parent"
+            android:layout_height="40dip"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/ok_button_style"
+            android:text="Ok" />
+    </LinearLayout>
+
+</LinearLayout>

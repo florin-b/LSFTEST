@@ -18,6 +18,17 @@
             android:layout_height="45dip"
             android:layout_weight="0.005" />
 
+        <TextView
+            android:id="@+id/textAfisStatistic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dip"
+            android:text="Produse cumparate frecvent"
+            android:textColor="@color/detColor1"
+            android:textSize="21sp"
+            android:typeface="sans"
+            android:visibility="gone" />
+
         <ToggleButton
             android:id="@+id/tglTipArt"
             style="@style/button_text_1"

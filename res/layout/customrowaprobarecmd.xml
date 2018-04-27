@@ -151,7 +151,6 @@
             android:layout_marginLeft="8dip"
             android:layout_weight="0.05"
             android:gravity="left"
-            android:text="RON"
             android:textColor="#008B00"
             android:textSize="15sp"
             android:typeface="sans" />

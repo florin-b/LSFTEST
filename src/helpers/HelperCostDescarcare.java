@@ -16,7 +16,7 @@ import beans.CostDescarcare;
 
 public class HelperCostDescarcare {
 
-	public static List<ArticolComanda> getArticoleDescarcare(CostDescarcare costDescarcare, double valoareCost) {
+	public static List<ArticolComanda> getArticoleDescarcare(CostDescarcare costDescarcare, double valoareCost, String filiala) {
 
 		double procentReducere = valoareCost / costDescarcare.getValoareDescarcare();
 
@@ -46,10 +46,11 @@ public class HelperCostDescarcare {
 			articolComanda.setDepartAprob("");
 			articolComanda.setIstoricPret("");
 			articolComanda.setAlteValori("");
-			articolComanda.setDepozit(artDesc.getDepart() + "V1");
 			articolComanda.setTipArt("");
 			articolComanda.setDepart(artDesc.getDepart());
 			articolComanda.setDepartSintetic(artDesc.getDepart());
+			articolComanda.setDepozit(artDesc.getDepart() + "V1");
+			articolComanda.setFilialaSite(filiala);
 
 			listArticole.add(articolComanda);
 		}

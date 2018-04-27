@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import utils.UtilsComenziGed;
 import beans.BeanDeficitDivizie;
 
 public class AlgoritmComandaGed {
@@ -42,6 +43,9 @@ public class AlgoritmComandaGed {
 					pretUnitarClient = articol.getPretUnitarClient();
 
 					if (pretUnitarClient == 0)
+						continue;
+
+					if (UtilsComenziGed.isArticolTransport(articol) || articol.isRespins())
 						continue;
 
 					pretUnitarGed = getPretGed(articol);
@@ -82,8 +86,12 @@ public class AlgoritmComandaGed {
 
 					if (pretMediuDistrib == 0) // se ia in calcul pretul ged
 					{
-						pretMediuDistrib = round(pretUnitarGed / Constants.TVA, 3); // fara
-																					// tva
+						// pretMediuDistrib = round(pretUnitarGed /
+						// Constants.TVA, 3); // fara
+						// tva
+
+						// modif 13.04.2018
+						pretMediuDistrib = pretUnitarGed;
 
 						adaosMediuDistrib = 0;
 					}

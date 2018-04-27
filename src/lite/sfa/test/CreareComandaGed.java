@@ -1192,7 +1192,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 			DateLivrare.getInstance().setMasinaMacara(true);
 
-			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare, valoarePret);
+			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare, valoarePret, UserInfo.getInstance()
+					.getUnitLog());
 
 			ListaArticoleComandaGed.getInstance().getListArticoleComanda().addAll(articoleDescarcare);
 
@@ -1348,6 +1349,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			articol.setCodArticol("000000000030101050");
 			articol.setCantitate(1.0);
 			articol.setDepozit(depozitSite);
+			articol.setDepart(" ");
 			articol.setPretUnit(valTransport);
 			articol.setProcent(0);
 			articol.setUm("BUC");
@@ -1400,6 +1402,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				obj.put("ponderare", listArticole.get(i).getPonderare());
 				obj.put("filialaSite", listArticole.get(i).getFilialaSite());
 				obj.put("istoricPret", listArticole.get(i).getIstoricPret());
+				obj.put("valTransport", listArticole.get(i).getValTransport());
+				obj.put("procTransport", listArticole.get(i).getProcTransport());
 
 				myArray.put(obj);
 
@@ -1525,6 +1529,9 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			obj.put("clientRaft", DateLivrare.getInstance().isClientRaft());
 			obj.put("meserias", DateLivrare.getInstance().getCodMeserias());
 			obj.put("factPaletiSeparat", DateLivrare.getInstance().isFactPaletSeparat());
+			obj.put("furnizorMarfa", " ");
+			obj.put("furnizorProduse", " ");
+			obj.put("isCamionDescoperit", DateLivrare.getInstance().isCamionDescoperit());
 
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
@@ -1979,6 +1986,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		paramPret.setTipUser(tipUser);
 		paramPret.setMetodaPlata(DateLivrare.getInstance().getTipPlata());
 		paramPret.setTermenPlata(DateLivrare.getInstance().getTermenPlata());
+		paramPret.setFilialaAlternativa(uLog);
 
 		params.put("parametruPret", opArticol.serializeParamPretGed(paramPret));
 		opArticol.getPretGedJson(params);

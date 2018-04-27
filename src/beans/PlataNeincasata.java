@@ -11,6 +11,7 @@ public class PlataNeincasata {
 	private String dataScadenta;
 	private String codAgent;
 	private List<IncasareDocument> listaDocumente;
+	private String girant;
 
 	public String getTipDocument() {
 		return tipDocument;
@@ -76,7 +77,12 @@ public class PlataNeincasata {
 		this.listaDocumente = listaDocumente;
 	}
 
+	public String getGirant() {
+		return girant;
+	}
 
-	
+	public void setGirant(String girant) {
+		this.girant = girant;
+	}
 
 }

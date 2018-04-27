@@ -9,6 +9,12 @@ public class BeanFurnizorProduse {
 
 	}
 
+	public BeanFurnizorProduse(String numeFurnizorProduse, String codFurnizorProduse) {
+		super();
+		this.numeFurnizorProduse = numeFurnizorProduse;
+		this.codFurnizorProduse = codFurnizorProduse;
+	}
+
 	public String getNumeFurnizorProduse() {
 		return numeFurnizorProduse;
 	}

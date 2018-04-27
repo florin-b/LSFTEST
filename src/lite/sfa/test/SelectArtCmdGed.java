@@ -1040,6 +1040,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		params.put("tipCautare", tipCautare);
 		params.put("filiala", UserInfo.getInstance().getUnitLog());
 		params.put("departament", selectedDepartamentAgent);
+		params.put("codUser", UserInfo.getInstance().getCod());
 
 		opArticol.getArticoleDistributie(params);
 

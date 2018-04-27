@@ -88,6 +88,7 @@ public class OperatiiDocumente implements AsyncTaskListener {
 			jsonPlata.put("dataEmitere", plataNeincasata.getDataEmitere());
 			jsonPlata.put("dataScadenta", plataNeincasata.getDataScadenta());
 			jsonPlata.put("codAgent", plataNeincasata.getCodAgent());
+			jsonPlata.put("girant", plataNeincasata.getGirant());
 			
 
 			JSONArray jsonArrayDocs = new JSONArray();

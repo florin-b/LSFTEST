@@ -8,7 +8,6 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
@@ -17,15 +16,22 @@
         android:orientation="horizontal" >
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_weight="0.6"
             android:orientation="vertical" >
 
+            <TextView
+                android:id="@+id/textFurnizor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_light_blue"
+                android:textSize="17sp"
+                android:typeface="sans"
+                android:visibility="gone" />
+
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -46,7 +52,6 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -89,7 +94,6 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="37dip"
                 android:layout_gravity="left"
@@ -130,7 +134,6 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -184,7 +187,6 @@
         </LinearLayout>
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_gravity="left"
@@ -193,7 +195,6 @@
             android:orientation="horizontal" >
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
@@ -211,7 +212,6 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
@@ -220,7 +220,6 @@
                 android:orientation="vertical" >
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right" >
@@ -252,7 +251,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/layoutTaxaVerde"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -289,7 +287,6 @@
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -401,7 +398,6 @@
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_gravity="left"

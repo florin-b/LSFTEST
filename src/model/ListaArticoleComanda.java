@@ -1,5 +1,7 @@
 package model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ public class ListaArticoleComanda extends Observable {
 	private int articolIndex = -1;
 	private static ListaArticoleComanda instance = new ListaArticoleComanda();
 	private List<ArticolComanda> listArticoleComanda = new ArrayList<ArticolComanda>();
+
+	
 
 	private ListaArticoleComanda() {
 
@@ -102,6 +106,124 @@ public class ListaArticoleComanda extends Observable {
 
 	public void clearArticoleComanda() {
 		listArticoleComanda.clear();
+	}
+
+	public void calculProcReducere_nou() {
+		
+		BigDecimal valCmdInit = new BigDecimal(0.0);
+		BigDecimal valCmdFinal = new BigDecimal(0.0);
+		BigDecimal discountCmd = new BigDecimal(0.0);
+		BigDecimal marjaComanda = new BigDecimal(0.0);
+
+		BigDecimal valCmdNegociat = new BigDecimal(CreareComanda.valNegociat);
+
+		for (ArticolComanda articol : listArticoleComanda) {
+			double valInitArt = Double.valueOf(articol.getAlteValori().split("!")[0]);
+			valCmdInit = valCmdInit.add(BigDecimal.valueOf(valInitArt));
+
+		}
+		
+		if (valCmdInit.compareTo(valCmdNegociat) < 0)
+			return;
+			
+		
+		discountCmd = valCmdInit.subtract(valCmdNegociat).abs();
+
+		for (ArticolComanda articol : listArticoleComanda) {
+
+			double brutInitArt = Double.valueOf(articol.getAlteValori().split("!")[2]);
+
+			BigDecimal valInitArt = BigDecimal.valueOf(brutInitArt).divide(BigDecimal.valueOf(articol.getCantitate()),RoundingMode.HALF_UP)
+					.multiply(BigDecimal.valueOf(articol.getMultiplu()));
+
+			BigDecimal cantitate = BigDecimal.valueOf(articol.getCantitate());
+			BigDecimal multiplu = BigDecimal.valueOf(articol.getMultiplu());
+
+			BigDecimal cantitateCalc = cantitate.divide(multiplu,RoundingMode.HALF_UP);
+
+			BigDecimal valoareInitArt = valInitArt.multiply(cantitateCalc);
+
+			BigDecimal cmpArt = BigDecimal.valueOf(articol.getCmp()).multiply(cantitateCalc);
+
+			BigDecimal marjaTotalArticol = valoareInitArt.subtract(cmpArt);
+			marjaComanda = marjaComanda.add(marjaTotalArticol);
+
+		}
+
+		for (ArticolComanda articol : listArticoleComanda) {
+
+			double brutInitArt = Double.valueOf(articol.getAlteValori().split("!")[2]);
+
+			BigDecimal pretUnitarInit = BigDecimal.valueOf(brutInitArt).divide(BigDecimal.valueOf(articol.getCantitate()),RoundingMode.HALF_UP)
+					.multiply(BigDecimal.valueOf(articol.getMultiplu()));
+
+			BigDecimal cantitate = BigDecimal.valueOf(articol.getCantitate());
+			BigDecimal multiplu = BigDecimal.valueOf(articol.getMultiplu());
+
+			BigDecimal cantitateCalc = cantitate.divide(multiplu,RoundingMode.HALF_UP);
+
+			BigDecimal valoarePozInit = pretUnitarInit.multiply(cantitateCalc);
+
+			BigDecimal cmpArt = BigDecimal.valueOf(articol.getCmp()).multiply(cantitateCalc);
+
+			BigDecimal marjaArticol = valoarePozInit.subtract(cmpArt);
+
+			BigDecimal pondereMarjaArticol = marjaArticol.divide(marjaComanda,RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100.00));
+
+			BigDecimal participareArticol = pondereMarjaArticol.multiply(discountCmd).divide(BigDecimal.valueOf(100),RoundingMode.HALF_UP);
+
+			BigDecimal pretUnitarNou = pretUnitarInit.subtract(participareArticol.divide(cantitateCalc,RoundingMode.HALF_UP));
+
+			BigDecimal valoarePozNou = pretUnitarNou.multiply(cantitateCalc);
+
+			articol.setPretUnit(pretUnitarNou.doubleValue());
+			articol.setPret(valoarePozNou.doubleValue());
+
+			String[] preturiArt = articol.getAlteValori().split("!");
+
+			BigDecimal procRedFact = BigDecimal.valueOf(0.0);
+
+			if (Double.parseDouble(preturiArt[1]) != 0) {
+
+				BigDecimal numaratorProcFact = new BigDecimal(preturiArt[2]).divide(BigDecimal.valueOf(articol.getCantitate()),RoundingMode.HALF_UP)
+						.multiply(BigDecimal.valueOf(articol.getMultiplu())).subtract(pretUnitarNou);
+
+				BigDecimal numitorProcFact = new BigDecimal(preturiArt[1]).divide(BigDecimal.valueOf(articol.getCantitate()),RoundingMode.HALF_UP).multiply(
+						BigDecimal.valueOf(articol.getMultiplu()));
+
+				procRedFact = numaratorProcFact.divide(numitorProcFact, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+
+			}
+
+			articol.setProcentFact(procRedFact.doubleValue());
+
+			BigDecimal procentAprob = new BigDecimal(0.0);
+
+			BigDecimal numitorProcentAprob = new BigDecimal(preturiArt[1]).divide(BigDecimal.valueOf(articol.getCantitate()),RoundingMode.HALF_UP).multiply(
+					BigDecimal.valueOf(articol.getMultiplu()));
+
+			procentAprob = BigDecimal.valueOf(1).subtract(pretUnitarNou.divide(numitorProcentAprob,RoundingMode.HALF_UP)).multiply(BigDecimal.valueOf(100));
+			articol.setProcAprob(procentAprob.doubleValue());
+
+			
+			BigDecimal procentReducere = BigDecimal.valueOf(1).subtract(pretUnitarNou.divide(pretUnitarInit, RoundingMode.HALF_UP)).multiply(BigDecimal.valueOf(100));
+			articol.setProcent(procentReducere.doubleValue());
+			
+			
+			String localTipAlert = "";
+
+			if (procentAprob.doubleValue() > Double.parseDouble(preturiArt[3])) {
+				localTipAlert = "SD";
+			}
+
+			if (procentAprob.doubleValue() > Double.parseDouble(preturiArt[4])) {
+				localTipAlert = "DV";
+			}
+
+			articol.setObservatii(localTipAlert);
+
+		}
+
 	}
 
 	// calcul procent reducere pentru comenzi cu valoare totala negociata
