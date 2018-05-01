@@ -17,6 +17,7 @@ public class DetaliiClient {
 	private String termenPlata;
 	private String tipClient;
 	private boolean isFurnizor;
+	private String divizii;
 
 	public DetaliiClient() {
 
@@ -142,11 +143,12 @@ public class DetaliiClient {
 		this.isFurnizor = isFurnizor;
 	}
 
-	@Override
-	public String toString() {
-		return "DetaliiClient [regiune=" + regiune + ", oras=" + oras + ", strada=" + strada + ", nrStrada=" + nrStrada + ", limitaCredit=" + limitaCredit
-				+ ", restCredit=" + restCredit + ", stare=" + stare + ", persContact=" + persContact + ", telefon=" + telefon + ", filiala=" + filiala
-				+ ", motivBlocare=" + motivBlocare + ", cursValutar=" + cursValutar + ", termenPlata=" + termenPlata + ", tipClient=" + tipClient + "]";
+	public String getDivizii() {
+		return divizii;
+	}
+
+	public void setDivizii(String divizii) {
+		this.divizii = divizii;
 	}
 
 }

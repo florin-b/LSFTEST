@@ -3,6 +3,7 @@ package utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.DateLivrare;
 import model.UserInfo;
 import enums.EnumDepartExtra;
 
@@ -98,13 +99,31 @@ public class DepartamentAgent {
 				String[] depExtra = UserInfo.getInstance().getDepartExtra().split(";");
 
 				for (int i = 0; i < depExtra.length; i++) {
-					depart.add(EnumDepartExtra.getNumeDepart(depExtra[i]));
+
+					if (isConditiiAdaugaDepart(depExtra[i]))
+						depart.add(EnumDepartExtra.getNumeDepart(depExtra[i]));
 				}
 			}
 			depart.add(EnumDepartExtra.getNumeDepart("11"));
 		}
 
 		return depart;
+	}
+
+	private static boolean isConditiiAdaugaDepart(String departExtra) {
+		boolean isConditii = false;
+
+		if (departExtra.equals("01") || departExtra.equals("02"))
+			isConditii = true;
+		else {
+			String diviziiClient = DateLivrare.getInstance().getDiviziiClient();
+
+			if (diviziiClient!= null && diviziiClient.contains(departExtra))
+				isConditii = true;
+
+		}
+
+		return isConditii;
 	}
 
 }

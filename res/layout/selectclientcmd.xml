@@ -6,7 +6,6 @@
     android:orientation="horizontal" >
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="0dip"
         android:layout_height="match_parent"
         android:layout_marginBottom="5dp"
@@ -42,7 +41,6 @@
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="0dip"
         android:layout_height="match_parent"
         android:layout_marginBottom="5dp"
@@ -97,7 +95,6 @@
         </LinearLayout>
 
         <ScrollView
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="65dip"
@@ -115,8 +112,6 @@
                 android:orientation="vertical" >
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
                     style="@style/dateLivrareDlLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
@@ -137,8 +132,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
                     style="@style/dateLivrareDlLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
@@ -159,8 +152,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
                     style="@style/dateLivrareDlLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
@@ -181,8 +172,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
                     style="@style/dateLivrareDlLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
@@ -203,8 +192,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
                     style="@style/dateLivrareDlLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
@@ -225,8 +212,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
                     style="@style/dateLivrareDlLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
@@ -247,8 +232,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
                     style="@style/dateLivrareDlLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
@@ -269,12 +252,9 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
                     style="@style/dateLivrareDlLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp" >
+                    android:layout_height="wrap_content" >
 
                     <TextView
                         style="@style/dateLivrareDlLabel"
@@ -285,6 +265,27 @@
 
                     <TextView
                         android:id="@+id/filClient"
+                        style="@style/dateLivrareDlValori"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.4" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/dateLivrareDlLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp" >
+
+                    <TextView
+                        style="@style/dateLivrareDlLabel"
+                        android:layout_width="0dip"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.15"
+                        android:text="Divizii" />
+
+                    <TextView
+                        android:id="@+id/diviziiClient"
                         style="@style/dateLivrareDlValori"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"

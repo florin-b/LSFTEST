@@ -222,6 +222,7 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 			HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 			params.put("codClient", codClient);
 			params.put("depart", getExceptiiDepartament());
+			params.put("codUser", UserInfo.getInstance().getCod());
 
 			opClient.getDetaliiClient(params);
 
@@ -339,6 +340,8 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 		CreareComanda.termenPlata = detaliiClient.getTermenPlata();
 		CreareComanda.cursValutar = Double.parseDouble(detaliiClient.getCursValutar());
 
+		((TextView) findViewById(R.id.diviziiClient)).setText(detaliiClient.getDivizii());
+
 		if (detaliiClient.getStare().equals("X")) {
 			clientBlocatText.setVisibility(View.VISIBLE);
 			clientBlocatText.setText("Blocat : " + detaliiClient.getMotivBlocare());
@@ -358,6 +361,7 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 			dateLivrareInstance.setPersContact(detaliiClient.getPersContact());
 			dateLivrareInstance.setNrTel(detaliiClient.getTelefon());
 			dateLivrareInstance.setClientFurnizor(detaliiClient.isFurnizor());
+			dateLivrareInstance.setDiviziiClient(detaliiClient.getDivizii());
 
 			codClientVar = codClient;
 			numeClientVar = numeClient;
