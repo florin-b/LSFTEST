@@ -555,12 +555,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 						return;
 					}
 
-					if (radioClPF.isChecked() && checkFacturaPF.isChecked() && !checkCNP(false) && !UtilsUser.isUserSite()) {
-						Toast.makeText(getApplicationContext(), "Pentru emiterea facturii cnp-ul este obligatoriu.", Toast.LENGTH_SHORT).show();
-						return;
-					}
-
-					if (radioClPF.isChecked() && UtilsUser.isUserSite() && hasCnp() && !checkCNP(false)) {
+					if (radioClPF.isChecked() && hasCnp() && !checkCNP(false)) {
 						Toast.makeText(getApplicationContext(), "CNP invalid", Toast.LENGTH_SHORT).show();
 						return;
 					}
