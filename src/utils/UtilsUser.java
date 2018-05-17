@@ -139,7 +139,7 @@ public class UtilsUser {
 
 	public static boolean isUserExceptieCONSGED() {
 
-		String filialeExceptie = "AG, BH, CJ, CT, DJ, GL";
+		String filialeExceptie = "AG, BH, CJ, CT, DJ, GL, BU";
 
 		if (UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && filialeExceptie.contains(UserInfo.getInstance().getUnitLog().substring(0, 2)))
 			return true;

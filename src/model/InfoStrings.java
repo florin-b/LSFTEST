@@ -588,6 +588,9 @@ public class InfoStrings {
 			else if (filiala.equals("GL10"))
 				codClient = "4119000298";
 
+			else if (filiala.equals("BU10") && UserInfo.getInstance().getInitDivizie().equals("15"))
+				codClient = "4119000435";
+
 		}
 
 		return codClient;
@@ -879,8 +882,12 @@ public class InfoStrings {
 			else if (filiala.equals("BU13"))
 				codClient = "4119000029";
 
-			else if (filiala.equals("BU10"))
-				codClient = "4119000028";
+			else if ((filiala.equals("BU10"))) {
+				if (!UserInfo.getInstance().getInitDivizie().equals("15"))
+					codClient = "4119000028";
+				else if (UserInfo.getInstance().getInitDivizie().equals("15"))
+					codClient = "4119000436";
+			}
 
 			else if (filiala.equals("BU11"))
 				codClient = "4119000027";
@@ -949,8 +956,12 @@ public class InfoStrings {
 			else if (filiala.equals("BU13"))
 				codClient = "4119000065";
 
-			else if (filiala.equals("BU10"))
-				codClient = "4119000064";
+			else if (filiala.equals("BU10")) {
+				if (!UserInfo.getInstance().getInitDivizie().equals("15"))
+					codClient = "4119000064";
+				else if (UserInfo.getInstance().getInitDivizie().equals("15"))
+					codClient = "4119000437";
+			}
 
 			else if (filiala.equals("BU11"))
 				codClient = "4119000063";
@@ -1021,7 +1032,12 @@ public class InfoStrings {
 			codClient = "4119000266";
 
 		else if (filiala.equals("BU10")) // Glina
-			codClient = "4119000268";
+		{
+			if (!UserInfo.getInstance().getInitDivizie().equals("15"))
+				codClient = "4119000268";
+			else if (UserInfo.getInstance().getInitDivizie().equals("15"))
+				codClient = "4119000440";
+		}
 
 		else if (filiala.equals("BU11")) // Militari
 			codClient = "4119000270";

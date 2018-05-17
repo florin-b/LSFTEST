@@ -361,11 +361,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		checkMacara = (CheckBox) findViewById(R.id.checkMacara);
 		setMacaraVisible();
 		setListenerCheckMacara();
-		
-		
+
 		checkFactPaleti = (CheckBox) findViewById(R.id.chkFactPaleti);
 		checkFactPaleti.setChecked(DateLivrare.getInstance().isFactPaletSeparat());
-		
+
 		chkCamionDescoperit = (CheckBox) findViewById(R.id.chkCamionDescoperit);
 		chkCamionDescoperit.setChecked(DateLivrare.getInstance().isCamionDescoperit());
 
@@ -1273,6 +1272,13 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			return;
 		}
 
+		/*
+		if (!isAdresaPozitionata()) {
+			Toast.makeText(getApplicationContext(), "Pozitionati adresa pe harta.", Toast.LENGTH_LONG).show();
+			return;
+		}
+		*/
+
 		if (!isAdresaCorecta()) {
 			Toast.makeText(getApplicationContext(), "Completati adresa corect sau pozitionati adresa pe harta.", Toast.LENGTH_LONG).show();
 			return;
@@ -1280,7 +1286,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		if (DateLivrare.getInstance().getTransport().equals("TRAP") && isAdresaText()) {
 			valideazaTonajAdresaNoua();
-
 		}
 
 		String cantar = "NU";
@@ -1334,7 +1339,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			dateLivrareInstance.setZonaBucuresti(EnumZona.NEDEFINIT);
 
 		dateLivrareInstance.setFactPaletSeparat(checkFactPaleti.isChecked());
-		dateLivrareInstance.setCamionDescoperit(chkCamionDescoperit.isChecked());		
+		dateLivrareInstance.setCamionDescoperit(chkCamionDescoperit.isChecked());
 
 		finish();
 
@@ -1346,6 +1351,16 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		else
 			return true;
 
+	}
+
+	private boolean isAdresaPozitionata() {
+		if (DateLivrare.getInstance().getTransport().equals("TRAP") && isAdresaText()) {
+
+			if (DateLivrare.getInstance().getCoordonateAdresa() == null)
+				return false;
+
+		}
+		return true;
 	}
 
 	private void valideazaTonajAdresaNoua() {
@@ -1383,8 +1398,12 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	private boolean isAdresaGoogleOk() {
-
+		LatLng coordInit = DateLivrare.getInstance().getCoordonateAdresa();
 		GeocodeAddress geoAddress = MapUtils.geocodeAddress(getAddressFromForm(), getApplicationContext());
+
+		if (MapUtils.distanceXtoY(coordInit.latitude, coordInit.longitude, geoAddress.getCoordinates().latitude, geoAddress.getCoordinates().longitude, "K") > 1)
+			return false;
+
 		DateLivrare.getInstance().setCoordonateAdresa(geoAddress.getCoordinates());
 
 		return geoAddress.isAdresaValida();
@@ -1435,6 +1454,19 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		textLocalitate.getText().clear();
 		textStrada.getText().clear();
 		textNrStr.getText().clear();
+
+		int nrJudete = spinnerJudet.getAdapter().getCount();
+
+		for (int j = 0; j < nrJudete; j++) {
+			HashMap<String, String> artMapLivr = (HashMap<String, String>) this.adapterJudete.getItem(j);
+			String numeJudet = artMapLivr.get("numeJudet").toString();
+
+			if (address.getSector().equals(numeJudet)) {
+				spinnerJudet.setSelection(j);
+				break;
+			}
+
+		}
 
 		if (address.getCity() != null && !address.getCity().isEmpty())
 			textLocalitate.setText(address.getCity());

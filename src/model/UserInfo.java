@@ -32,6 +32,7 @@ public class UserInfo {
 	private boolean userWood = false;
 	private boolean filHome = false;
 	private String ftpIP = "";
+	private String initDivizie = "";
 
 	private static UserInfo instance = new UserInfo();
 
@@ -228,13 +229,23 @@ public class UserInfo {
 		this.ftpIP = ftpIP;
 	}
 
+	public String getInitDivizie() {
+		return initDivizie;
+	}
+
+	public void setInitDivizie(String initDivizie) {
+		this.initDivizie = initDivizie;
+	}
+
 	@Override
 	public String toString() {
 		return "UserInfo [nume=" + nume + ", filiala=" + filiala + ", cod=" + cod + ", numeDepart=" + numeDepart + ", codDepart=" + codDepart + ", unitLog="
 				+ unitLog + ", initUnitLog=" + initUnitLog + ", tipAcces=" + tipAcces + ", parentScreen=" + parentScreen + ", filialeDV=" + filialeDV
 				+ ", altaFiliala=" + altaFiliala + ", tipUser=" + tipUser + ", departExtra=" + departExtra + ", tipUserSap=" + tipUserSap + ", extraFiliale="
 				+ extraFiliale + ", comisionCV=" + comisionCV + ", coefCorectie=" + coefCorectie + ", userSite=" + userSite + ", userWood=" + userWood
-				+ ", filHome=" + filHome + "]";
+				+ ", filHome=" + filHome + ", ftpIP=" + ftpIP + ", initDivizie=" + initDivizie + "]";
 	}
+
+	
 
 }

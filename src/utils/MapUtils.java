@@ -112,11 +112,14 @@ public class MapUtils {
 
 		String tempString = "";
 
-		if (googleAddress.getSubAdminArea() != null)
-			tempString = UtilsFormatting.flattenToAscii(googleAddress.getSubAdminArea()).toUpperCase();
+
+		if (googleAddress.getAdminArea() != null)
+			tempString = UtilsFormatting.flattenToAscii(googleAddress.getAdminArea()).toUpperCase();
 		else
 			tempString = "";
 
+		tempString = tempString.replace("JUDETUL", "").trim();
+		tempString = tempString.replace("MUNICIPIUL", "").trim();
 		address.setSector(tempString);
 
 		if (googleAddress.getLocality() != null) {
@@ -145,5 +148,4 @@ public class MapUtils {
 		return address;
 
 	}
-
 }
