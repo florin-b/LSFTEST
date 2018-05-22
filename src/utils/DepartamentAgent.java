@@ -118,7 +118,7 @@ public class DepartamentAgent {
 		else {
 			String diviziiClient = DateLivrare.getInstance().getDiviziiClient();
 
-			if (diviziiClient!= null && diviziiClient.contains(departExtra))
+			if (diviziiClient!= null && diviziiClient.contains(departExtra.substring(0, 2)))
 				isConditii = true;
 
 		}

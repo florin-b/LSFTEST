@@ -48,7 +48,7 @@ public class UtilsGeneral {
 
 		if (UserInfo.getInstance().getCodDepart().equals("02"))
 			listDepozite.add("92V1");
-		
+
 		if (UserInfo.getInstance().getCodDepart().equals("05"))
 			listDepozite.add("95V1");
 
@@ -202,14 +202,11 @@ public class UtilsGeneral {
 
 		if (codTransport.equals("TCLI")) {
 			tipTransport = "Transport client";
-		}
-		else if (codTransport.equals("TRAP")) {
+		} else if (codTransport.equals("TRAP")) {
 			tipTransport = "Transport Arabesque";
-		}
-		else if (codTransport.equals("TERT")) {
+		} else if (codTransport.equals("TERT")) {
 			tipTransport = "Transport terti";
-		}
-		else if (codTransport.equals("TERR")) {
+		} else if (codTransport.equals("TERR")) {
 			tipTransport = "Curier rapid";
 		}
 
@@ -251,11 +248,9 @@ public class UtilsGeneral {
 
 		else if (codReducere.equals("X")) {
 			tipReducere = "2 facturi";
-		}
-		else if (codReducere.equals(" ")) {
+		} else if (codReducere.equals(" ")) {
 			tipReducere = "1 factura (red. in pret)";
-		}
-		else if (codReducere.equals("R")) {
+		} else if (codReducere.equals("R")) {
 			tipReducere = "1 factura (red. separat)";
 		}
 
@@ -268,17 +263,13 @@ public class UtilsGeneral {
 
 		if (codStatus.equals("9")) {
 			statusArt = "Stoc insuficient";
-		}
-		else if (codStatus.equals("19")) {
+		} else if (codStatus.equals("19")) {
 			statusArt = "Articol fara pret";
-		}
-		else if (codStatus.equals("16")) {
+		} else if (codStatus.equals("16")) {
 			statusArt = "Articol modificat";
-		}
-		else if (codStatus.equals("17")) {
+		} else if (codStatus.equals("17")) {
 			statusArt = "Articol adaugat";
-		}
-		else if (codStatus.equals("18")) {
+		} else if (codStatus.equals("18")) {
 			statusArt = "Articol sters";
 		}
 
@@ -527,38 +518,27 @@ public class UtilsGeneral {
 
 		if (numeDepart.equals("CHIM"))
 			dpt = "07";
-
-		if (numeDepart.equals("DIVE"))
+		else if (numeDepart.equals("DIVE"))
 			dpt = "10";
-
-		if (numeDepart.equals("ELEC"))
+		else if (numeDepart.equals("ELEC"))
 			dpt = "05";
-
-		if (numeDepart.equals("FERO"))
+		else if (numeDepart.equals("FERO"))
 			dpt = "02";
-
-		if (numeDepart.equals("GIPS"))
+		else if (numeDepart.equals("GIPS"))
 			dpt = "06";
-
-		if (numeDepart.equals("INST"))
+		else if (numeDepart.equals("INST"))
 			dpt = "08";
-
-		if (numeDepart.equals("LEMN"))
+		else if (numeDepart.equals("LEMN"))
 			dpt = "01";
-
-		if (numeDepart.equals("MATE"))
-			dpt = "04";
-
-		if (numeDepart.equals("PARC"))
+		else if (numeDepart.equals("MATE"))
+			dpt = UserInfo.getInstance().getInitDivizie();
+		else if (numeDepart.equals("PARC"))
 			dpt = "03";
-
-		if (numeDepart.equals("CHIM"))
+		else if (numeDepart.equals("CHIM"))
 			dpt = "07";
-
-		if (numeDepart.equals("HIDR"))
+		else if (numeDepart.equals("HIDR"))
 			dpt = "09";
-
-		if (numeDepart.equals("LEFA"))
+		else if (numeDepart.equals("LEFA"))
 			dpt = "02";
 
 		return dpt;

@@ -235,6 +235,16 @@ public class User extends Activity implements HelperSiteListener {
 		listDepart.add(temp);
 
 		temp = new HashMap<String, String>();
+		temp.put("rowText", "040");
+		temp.put("rowDesc", "Feroase");
+		listDepart.add(temp);
+
+		temp = new HashMap<String, String>();
+		temp.put("rowText", "041");
+		temp.put("rowDesc", "Prafoase");
+		listDepart.add(temp);
+		
+		temp = new HashMap<String, String>();
 		temp.put("rowText", "04");
 		temp.put("rowDesc", "Materiale grele");
 		listDepart.add(temp);
@@ -280,28 +290,36 @@ public class User extends Activity implements HelperSiteListener {
 			spinnerDepart.setSelection(2);
 		}
 
-		if (UserInfo.getInstance().getCodDepart().equals("04")) {
+		if (UserInfo.getInstance().getCodDepart().equals("040")) {
 			spinnerDepart.setSelection(3);
 		}
 
-		if (UserInfo.getInstance().getCodDepart().equals("05")) {
+		if (UserInfo.getInstance().getCodDepart().equals("041")) {
 			spinnerDepart.setSelection(4);
-		}
-
-		if (UserInfo.getInstance().getCodDepart().equals("06")) {
+		}		
+		
+		if (UserInfo.getInstance().getCodDepart().equals("04")) {
 			spinnerDepart.setSelection(5);
 		}
-
-		if (UserInfo.getInstance().getCodDepart().equals("07")) {
+		
+		if (UserInfo.getInstance().getCodDepart().equals("05")) {
 			spinnerDepart.setSelection(6);
 		}
 
-		if (UserInfo.getInstance().getCodDepart().equals("08")) {
+		if (UserInfo.getInstance().getCodDepart().equals("06")) {
 			spinnerDepart.setSelection(7);
 		}
 
-		if (UserInfo.getInstance().getCodDepart().equals("09")) {
+		if (UserInfo.getInstance().getCodDepart().equals("07")) {
 			spinnerDepart.setSelection(8);
+		}
+
+		if (UserInfo.getInstance().getCodDepart().equals("08")) {
+			spinnerDepart.setSelection(9);
+		}
+
+		if (UserInfo.getInstance().getCodDepart().equals("09")) {
+			spinnerDepart.setSelection(10);
 		}
 
 		spinnerDepart.setOnItemSelectedListener(new onSelectedDepart());
@@ -410,19 +428,19 @@ public class User extends Activity implements HelperSiteListener {
 		else if (codAcc.equals("41")) {
 			retVal = "Consilier vanzari retail";
 		}
-		
+
 		else if (codAcc.equals("43")) {
 			retVal = "Consilier wood";
 		}
-		
+
 		else if (codAcc.equals("44")) {
 			retVal = "Sef magazin retail";
 		}
-		
+
 		else if (codAcc.equals("45")) {
 			retVal = "Sef magazin wood";
 		}
-		
+
 		return retVal;
 	}
 

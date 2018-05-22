@@ -1398,11 +1398,14 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	private boolean isAdresaGoogleOk() {
-		LatLng coordInit = DateLivrare.getInstance().getCoordonateAdresa();
+		//LatLng coordInit = DateLivrare.getInstance().getCoordonateAdresa();
+		
 		GeocodeAddress geoAddress = MapUtils.geocodeAddress(getAddressFromForm(), getApplicationContext());
 
+		/*
 		if (MapUtils.distanceXtoY(coordInit.latitude, coordInit.longitude, geoAddress.getCoordinates().latitude, geoAddress.getCoordinates().longitude, "K") > 1)
 			return false;
+			*/
 
 		DateLivrare.getInstance().setCoordonateAdresa(geoAddress.getCoordinates());
 
