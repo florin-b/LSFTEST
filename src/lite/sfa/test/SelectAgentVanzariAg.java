@@ -55,8 +55,8 @@ public class SelectAgentVanzariAg extends Fragment implements CustomSpinnerListe
 
 			spinnerFiliale = (Spinner) v.findViewById(R.id.spinnerFilialaVanzAg);
 
-			adapterAgenti = new SimpleAdapter(getActivity(), listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" },
-					new int[] { R.id.textNumeAgent, R.id.textCodAgent });
+			adapterAgenti = new SimpleAdapter(getActivity(), listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" }, new int[] {
+					R.id.textNumeAgent, R.id.textCodAgent });
 			spinnerAgenti = (Spinner) v.findViewById(R.id.spinnerAgentiVanzAg);
 
 			textAgentiVanzAg = (TextView) v.findViewById(R.id.textAgentiVanzAg);
@@ -71,7 +71,8 @@ public class SelectAgentVanzariAg extends Fragment implements CustomSpinnerListe
 				spinnerAgenti.setVisibility(View.GONE);
 				spinnerFiliale.setVisibility(View.GONE);
 			} else {
-				if (UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")) // sd,
+				if (UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")
+						|| UserInfo.getInstance().getTipAcces().equals("32") || UserInfo.getInstance().getTipAcces().equals("39")) // sd,
 				// sm
 				{
 					spinnerAgenti.setVisibility(View.VISIBLE);
@@ -99,8 +100,8 @@ public class SelectAgentVanzariAg extends Fragment implements CustomSpinnerListe
 		spinnerFiliale.setOnItemSelectedListener(spinnerListener);
 
 		listFiliale = new ArrayList<HashMap<String, String>>();
-		adapterFiliale = new SimpleAdapter(getActivity(), listFiliale, R.layout.rowlayoutagenti, new String[] { "numeFiliala", "codFiliala" },
-				new int[] { R.id.textNumeAgent, R.id.textCodAgent });
+		adapterFiliale = new SimpleAdapter(getActivity(), listFiliale, R.layout.rowlayoutagenti, new String[] { "numeFiliala", "codFiliala" }, new int[] {
+				R.id.textNumeAgent, R.id.textCodAgent });
 
 		HashMap<String, String> temp;
 		temp = new HashMap<String, String>();
@@ -135,11 +136,11 @@ public class SelectAgentVanzariAg extends Fragment implements CustomSpinnerListe
 			HashMap<String, String> params = new HashMap<String, String>();
 			String localDepart = UserInfo.getInstance().getCodDepart();
 
-			if (UserInfo.getInstance().getTipAcces().equals("35")) {
+			if (UserInfo.getInstance().getTipAcces().equals("35") || UserInfo.getInstance().getTipAcces().equals("32")) {
 				localDepart = "10";
 			}
 
-			if (UserInfo.getInstance().getTipAcces().equals("18")) {
+			if (UserInfo.getInstance().getTipAcces().equals("18")||UserInfo.getInstance().getTipAcces().equals("39")) {
 				localDepart = "11";
 			}
 

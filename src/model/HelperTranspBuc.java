@@ -52,7 +52,7 @@ public class HelperTranspBuc {
 		articolComanda.setDepartAprob("");
 		articolComanda.setIstoricPret("");
 		articolComanda.setAlteValori("");
-		articolComanda.setDepozit(codDepart + "V1");
+		articolComanda.setDepozit(codDepart.substring(0,2) + "V1");
 		articolComanda.setTipArt("");
 		articolComanda.setDepart(codDepart);
 		articolComanda.setDepartSintetic(codDepart);
@@ -73,8 +73,11 @@ public class HelperTranspBuc {
 		if (depart.equals("03"))
 			codArticol = "30101754";
 
-		if (depart.equals("04"))
-			codArticol = "30101756";
+		if (depart.equals("040"))
+			codArticol = "30101920";		
+		
+		if (depart.equals("041"))
+			codArticol = "30101749";
 
 		if (depart.equals("05"))
 			codArticol = "30101758";
@@ -139,8 +142,11 @@ public class HelperTranspBuc {
 		if (depart.equals("03"))
 			codArticol = "30101755";
 
-		if (depart.equals("04"))
+		if (depart.equals("040"))
 			codArticol = "30101757";
+		
+		if (depart.equals("041"))
+			codArticol = "30101921";		
 
 		if (depart.equals("05"))
 			codArticol = "30101759";
@@ -172,8 +178,11 @@ public class HelperTranspBuc {
 		if (depart.equals("03"))
 			codArticol = "30101748";
 
-		if (depart.equals("04"))
+		if (depart.equals("041"))
 			codArticol = "30101750";
+		
+		if (depart.equals("040"))
+			codArticol = "30101920";
 
 		if (depart.equals("05"))
 			codArticol = "30101752";

@@ -26,6 +26,19 @@ public class HelperCreareComanda {
 
 	}
 
+	public static boolean isComandaGEDAmbalaje(List<ArticolComanda> listArticole) {
+
+		for (ArticolComanda articol : listArticole) {
+
+			if (articol.getCategorie() == null || articol.getCategorie().trim().isEmpty())
+				return false;
+
+		}
+
+		return true;
+
+	}
+
 	public static boolean isConditiiAlertaIndoire(List<ArticolComanda> listArticole) {
 		boolean isArt04Lung = false;
 

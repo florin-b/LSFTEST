@@ -60,7 +60,8 @@ public class UtilsUser {
 	}
 
 	public static boolean isAgentOrSD() {
-		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("AV") || UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD");
+		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("AV") || UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD")
+				|| UserInfo.getInstance().getTipUserSap().toUpperCase().equals("ASDL");
 
 	}
 
@@ -82,6 +83,10 @@ public class UtilsUser {
 		return UserInfo.getInstance().getTipUserSap().equals("SMR") || UserInfo.getInstance().getTipUserSap().equals("SMG")
 				|| UserInfo.getInstance().getTipUserSap().equals("SMW")
 				|| (UserInfo.getInstance().getTipAcces().equals("18") && UserInfo.getInstance().getTipUserSap().equals("WOOD"));
+	}
+
+	public static boolean isSuperAv() {
+		return !UserInfo.getInstance().getCodSuperUser().isEmpty();
 	}
 
 	public static String getTipSMNou() {

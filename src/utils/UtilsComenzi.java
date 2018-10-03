@@ -1,7 +1,9 @@
 package utils;
 
+import model.DateLivrare;
 import model.InfoStrings;
 import android.widget.Spinner;
+import enums.TipCmdDistrib;
 
 public class UtilsComenzi {
 
@@ -73,6 +75,10 @@ public class UtilsComenzi {
 			}
 		}
 
+	}
+
+	public static boolean isLivrareCustodie() {
+		return DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.LIVRARE_CUSTODIE;
 	}
 
 }

@@ -435,7 +435,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	private boolean isUserCV() {
 		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("CVR")
 				|| UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance().getTipUserSap().equals("KA3")
-				|| UserInfo.getInstance().getTipUser().equals("SMR") || UserInfo.getInstance().getTipUser().equals("WOOD");
+				|| UserInfo.getInstance().getTipUser().equals("SMR") || UserInfo.getInstance().getTipUser().equals("WOOD")
+				|| UserInfo.getInstance().getTipUser().equals("SC");
 	}
 
 	private boolean isUserCVExc() {
@@ -1081,6 +1082,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("furnizorMarfa", DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa());
 			obj.put("furnizorProduse", DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorProduse());
 			obj.put("isCamionDescoperit", DateLivrare.getInstance().isCamionDescoperit());
+			obj.put("programLivrare", DateLivrare.getInstance().getProgramLivrare());
 
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
@@ -1328,6 +1330,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		params.put("tipCmd", "1");
 		params.put("depart", UserInfo.getInstance().getCodDepart());
 		params.put("tipUser", UserInfo.getInstance().getTipUser());
+		params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 
 		displayCmdDetails(false);
 		operatiiComenzi.getListComenzi(params);

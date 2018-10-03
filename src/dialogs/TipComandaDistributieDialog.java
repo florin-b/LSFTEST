@@ -34,6 +34,7 @@ public class TipComandaDistributieDialog extends Dialog {
 
 		final RadioButton radioCV = (RadioButton) findViewById(R.id.radioCV);
 		final RadioButton radioDL = (RadioButton) findViewById(R.id.radioDL);
+		final RadioButton radioCC = (RadioButton) findViewById(R.id.radioCC);
 
 		Button btnOkTipCmd = (Button) findViewById(R.id.btnOkTipCmd);
 		btnOkTipCmd.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +45,8 @@ public class TipComandaDistributieDialog extends Dialog {
 					tipComanda = TipCmdDistrib.COMANDA_VANZARE;
 				else if (radioDL.isChecked())
 					tipComanda = TipCmdDistrib.DISPOZITIE_LIVRARE;
+				else if (radioCC.isChecked())
+					tipComanda = TipCmdDistrib.LIVRARE_CUSTODIE;				
 
 				if (listener != null)
 					listener.tipComandaSelected(tipComanda);

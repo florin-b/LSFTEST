@@ -34,12 +34,12 @@ public class VanzariAgenti {
 
 		String selectedDepart = UserInfo.getInstance().getCodDepart();
 
-		if (UserInfo.getInstance().getTipAcces().equals("35")) {
+		if (UserInfo.getInstance().getTipAcces().equals("35") || UserInfo.getInstance().getTipAcces().equals("32")) {
 			selectedDepart = "10";
 		}
 
 		if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
-				|| UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("41")) {
+				|| UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("41") || UserInfo.getInstance().getTipAcces().equals("39")) {
 			selectedDepart = "11";
 		}
 

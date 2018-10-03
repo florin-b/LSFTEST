@@ -18,6 +18,9 @@ public class ConnectionStrings {
 		//ARBSQ
 		myUrl = "http://10.1.0.58/AndroidWebServices/TESTService.asmx";
 		
+		//IIS Test
+		//myUrl = "http://10.1.0.57/AndroidWebServices/TESTService.asmx";
+		
 		//DR
 		//myUrl = "http://172.17.18.24/AndroidWebServices/TESTService.asmx";
 		

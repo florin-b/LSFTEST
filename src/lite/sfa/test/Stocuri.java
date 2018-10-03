@@ -179,7 +179,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 
 	private void addSpinnerDepartamente() {
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item,
-				DepartamentAgent.getDepartamenteAgent());
+				DepartamentAgent.getDepartamenteAgentNerestr());
 
 		LayoutInflater mInflater = LayoutInflater.from(this);
 		View mCustomView = mInflater.inflate(R.layout.spinner_layout, null);

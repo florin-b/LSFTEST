@@ -27,6 +27,7 @@ import utils.MapUtils;
 import utils.ScreenUtils;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
+import adapters.CautareClientiAdapter;
 import android.app.DatePickerDialog;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -170,6 +171,11 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 	private View v;
 	public static Spinner spinnerIndoire;
 	public static LinearLayout layoutPrelucrare04;
+
+	private TextView textDiviziiClient;
+	public static String diviziiClient;
+	private TextView labelAgentClient;
+	private Spinner spinnerAgenti;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -348,9 +354,16 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 			txtObservatiiCLP = (EditText) v.findViewById(R.id.txtObservatiiCLP);
 
+			textDiviziiClient = (TextView) v.findViewById(R.id.textDiviziiClient);
+
+			labelAgentClient = (TextView) v.findViewById(R.id.labelAgentClient);
+
+			spinnerAgenti = (Spinner) v.findViewById(R.id.spinnerAgenti);
+			setSpinnerAgentiListener();
+
 			// consilieri, se face selectie departament
 			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
-					|| UserInfo.getInstance().getTipAcces().equals("44")) {
+					|| UserInfo.getInstance().getTipAcces().equals("44") || UserInfo.getInstance().getTipAcces().equals("39")) {
 				layoutTipClient.setVisibility(View.VISIBLE);
 				spinnerDepartament = (Spinner) v.findViewById(R.id.spinnerDepartament);
 				loadDepartamentSpinner();
@@ -362,7 +375,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			// pentru agenti fara selectie filiala
 			if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("27")
 					|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
-					|| UserInfo.getInstance().getTipAcces().equals("44")) {
+					|| UserInfo.getInstance().getTipAcces().equals("44") || UserInfo.getInstance().getTipAcces().equals("39")) {
 				radioClient.setVisibility(View.GONE);
 				radioFiliala.setVisibility(View.GONE);
 				spinnerAgentiCLP.setVisibility(View.INVISIBLE);
@@ -477,19 +490,71 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 	public class MyOnItemSelectedListener implements OnItemClickListener {
 
-		@SuppressWarnings("unchecked")
 		public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
 
-			HashMap<String, String> artMap = (HashMap<String, String>) adapterClienti.getItem(pos);
+			BeanClient client = (BeanClient) parent.getAdapter().getItem(pos);
+			numeClient = client.getNumeClient();
+			codClient = client.getCodClient();
 
-			numeClient = artMap.get("numeClient");
-			codClient = artMap.get("codClient");
+			CreareClp.codClient = client.getCodClient();
 
-			CreareClp.codClient = codClient;
+			if (UtilsUser.isSuperAv()) {
+				UserInfo.getInstance().setCod(client.getAgenti());
+
+				labelAgentClient.setVisibility(View.VISIBLE);
+				spinnerAgenti.setVisibility(View.VISIBLE);
+
+				String[] tokAgenti = client.getAgenti().split("@");
+
+				ArrayList<HashMap<String, String>> listAgenti = new ArrayList<HashMap<String, String>>();
+
+				HashMap<String, String> agent = new HashMap<String, String>();
+				agent.put("numeAgent", "Selectati un agent");
+				agent.put("codAgent", "");
+
+				listAgenti.add(agent);
+
+				for (int i = 0; i < tokAgenti.length; i++) {
+					agent = new HashMap<String, String>();
+
+					agent.put("numeAgent", tokAgenti[i].split("#")[1]);
+					agent.put("codAgent", tokAgenti[i].split("#")[0]);
+					listAgenti.add(agent);
+				}
+
+				SimpleAdapter adapterAgenti = new SimpleAdapter(CLPFragment1.this.getActivity(), listAgenti, R.layout.rowlayoutagenti, new String[] {
+						"numeAgent", "codAgent" }, new int[] { R.id.textNumeAgent, R.id.textCodAgent });
+
+				spinnerAgenti.setAdapter(adapterAgenti);
+
+				if (tokAgenti.length == 1)
+					spinnerAgenti.setSelection(1);
+
+			}
 
 			performClientDetails();
 
 		}
+
+	}
+
+	private void setSpinnerAgentiListener() {
+
+		spinnerAgenti.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				@SuppressWarnings("unchecked")
+				HashMap<String, String> artMap = (HashMap<String, String>) arg0.getSelectedItem();
+				UserInfo.getInstance().setCod(artMap.get("codAgent"));
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+
+			}
+		});
 
 	}
 
@@ -540,6 +605,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 		params.put("codClient", codClient);
 		params.put("depart", departSel);
+		params.put("codUser", UserInfo.getInstance().getCod());
 
 		operatiiClient.getDetaliiClient(params);
 
@@ -566,6 +632,9 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			textLimitaCredit.setText(nf2.format(Double.valueOf(detaliiClient.getLimitaCredit())));
 			textRestCredit.setText(nf2.format(Double.valueOf(detaliiClient.getRestCredit())));
 
+			textDiviziiClient.setText(detaliiClient.getDivizii());
+			diviziiClient = detaliiClient.getDivizii();
+
 			if (detaliiClient.getStare().equals("X")) {
 				textRestCredit.setText("Client blocat - " + detaliiClient.getMotivBlocare());
 				saveClntBtn.setVisibility(View.INVISIBLE);
@@ -590,6 +659,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 		params.put("depart", departSel);
 		params.put("departAg", UserInfo.getInstance().getCodDepart());
 		params.put("unitLog", UserInfo.getInstance().getUnitLog());
+		params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 
 		operatiiClient.getListClienti(params);
 
@@ -611,16 +681,9 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 		HandleJSONData objClientList = new HandleJSONData(getActivity(), clientResponse);
 		ArrayList<BeanClient> clientArray = objClientList.decodeJSONClientList();
 
-		if (clientArray.size() > 0) {
-			HashMap<String, String> temp;
+		if (!clientArray.isEmpty()) {
 
-			for (int i = 0; i < clientArray.size(); i++) {
-				temp = new HashMap<String, String>();
-				temp.put("numeClient", clientArray.get(i).getNumeClient());
-				temp.put("codClient", clientArray.get(i).getCodClient());
-				listClienti.add(temp);
-			}
-
+			CautareClientiAdapter adapterClienti = new CautareClientiAdapter(getActivity(), clientArray);
 			listViewClienti.setVisibility(View.VISIBLE);
 			listViewClienti.setAdapter(adapterClienti);
 
@@ -638,6 +701,11 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 				if (codClient.length() == 0) {
 					Toast.makeText(getActivity(), "Selectati un client!", Toast.LENGTH_SHORT).show();
 				} else {
+
+					if (UtilsUser.isSuperAv() && spinnerAgenti.getSelectedItemPosition() == 0) {
+						Toast.makeText(getActivity(), "Selectati un agent.", Toast.LENGTH_SHORT).show();
+						return;
+					}
 
 					textSelClient.setText(numeClient);
 					CreareClp.codClient = codClient;

@@ -284,7 +284,7 @@ public class InfoVenituri extends Activity implements AsyncTaskListener, Operati
 			nf2.setMinimumFractionDigits(3);
 			nf2.setMaximumFractionDigits(3);
 
-			if (UserInfo.getInstance().getCodDepart().equals("04")) {
+			if (UserInfo.getInstance().getCodDepart().startsWith("04")) {
 				textVenit1.setText("Venit Net 040");
 				textMarja1.setText("Marja Neta 040");
 
@@ -314,7 +314,7 @@ public class InfoVenituri extends Activity implements AsyncTaskListener, Operati
 			for (int i = 0; i < infoVenituriArray.size(); i++) {
 				temp = new HashMap<String, String>(5, 0.75f);
 
-				if (UserInfo.getInstance().getCodDepart().equals("04")) {
+				if (UserInfo.getInstance().getCodDepart().startsWith("04")) {
 					temp.put("tipInterval", getIntervalDesc(Integer.valueOf(infoVenituriArray.get(i).getId())));
 					temp.put("textVenitNetP", nf2.format(Double.parseDouble(infoVenituriArray.get(i).getVenitNetP040())));
 					temp.put("MP", nf2.format(Double.parseDouble(infoVenituriArray.get(i).getmP040())));

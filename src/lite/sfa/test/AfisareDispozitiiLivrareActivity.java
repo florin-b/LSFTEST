@@ -4,36 +4,48 @@
  */
 package lite.sfa.test;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import listeners.DlDAOListener;
 import model.DlDAO;
 import model.HandleJSONData;
 import model.UserInfo;
-import adapters.ArticoleCLPAdapter;
-import adapters.ComenziDLAdapter;
+import utils.UtilsDates;
+import adapters.ArticoleDLExpAdapter;
+import adapters.DLExpirateAdapter;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import beans.ArticolCLP;
-import beans.BeanDocumentCLP;
-import beans.ComandaCLP;
-import beans.DateLivrareCLP;
+import beans.DLExpirat;
+import beans.StatusIntervalLivrare;
+import dialogs.SelectDateDialog;
 import enums.EnumDlDAO;
 
 public class AfisareDispozitiiLivrareActivity extends Activity implements DlDAOListener {
@@ -51,6 +63,9 @@ public class AfisareDispozitiiLivrareActivity extends Activity implements DlDAOL
 	private static int restrictiiAfisare = 0, intervalAfisare = 0;
 
 	DlDAO operatiiComenzi;
+	private RadioGroup radioStari;
+	private Button btnDataLivrare;
+	private Button btnSalveaza;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +80,7 @@ public class AfisareDispozitiiLivrareActivity extends Activity implements DlDAOL
 		operatiiComenzi.setDlDAOListener(this);
 
 		ActionBar actionBar = getActionBar();
-		actionBar.setTitle("Afisare DL");
+		actionBar.setTitle("Modificare DL");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		spinnerCmdClp = (Spinner) findViewById(R.id.spinnerCmdClp);
@@ -98,6 +113,15 @@ public class AfisareDispozitiiLivrareActivity extends Activity implements DlDAOL
 		textObservatii = (TextView) findViewById(R.id.textObservatii);
 		textTransport = (TextView) findViewById(R.id.textTransport);
 
+		radioStari = (RadioGroup) findViewById(R.id.radioStari);
+		setRadioStariListener();
+
+		btnDataLivrare = (Button) findViewById(R.id.btnDataLivrare);
+		setListenerDataLivrare();
+
+		btnSalveaza = (Button) findViewById(R.id.btnSalveaza);
+		setListenerBtnSalveaza();
+
 		performGetComenziClp();
 
 	}
@@ -105,16 +129,7 @@ public class AfisareDispozitiiLivrareActivity extends Activity implements DlDAOL
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		CreateMenu(menu);
 		return true;
-	}
-
-	private void CreateMenu(Menu menu) {
-
-		MenuItem mnu1 = menu.add(0, 0, 0, "Interval");
-
-		mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-
 	}
 
 	@Override
@@ -179,21 +194,19 @@ public class AfisareDispozitiiLivrareActivity extends Activity implements DlDAOL
 
 		params.put("filiala", UserInfo.getInstance().getUnitLog());
 		params.put("depart", UserInfo.getInstance().getCodDepart());
-		params.put("tipClp", String.valueOf(restrictiiAfisare));
-		params.put("interval", String.valueOf(intervalAfisare));
 		params.put("tipUser", localTipUser);
 		params.put("codUser", UserInfo.getInstance().getCod());
 
-		operatiiComenzi.getListComenzi(params);
+		operatiiComenzi.getDLExpirate(params);
 
 	}
 
 	void populateCmdList(String cmdList) {
 
 		HandleJSONData objDocList = new HandleJSONData(this, cmdList);
-		ArrayList<BeanDocumentCLP> listDocumente = objDocList.decodeJSONDocumentCLP();
+		ArrayList<DLExpirat> listDocumente = objDocList.decodeDLExpirat();
 
-		ComenziDLAdapter adapterComenziClp = new ComenziDLAdapter(this, listDocumente);
+		DLExpirateAdapter adapterComenziClp = new DLExpirateAdapter(this, listDocumente);
 		spinnerCmdClp.setAdapter(adapterComenziClp);
 
 		if (listDocumente.size() > 0) {
@@ -212,43 +225,118 @@ public class AfisareDispozitiiLivrareActivity extends Activity implements DlDAOL
 
 	private void performArtCmd() {
 		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("nrCmd", selectedCmd);
-		operatiiComenzi.getArticoleComandaJSON(params);
+		params.put("idComanda", selectedCmd);
+		operatiiComenzi.getArticoleDLExpirat(params);
 
 	}
 
-	private void populateArtCmdList(ComandaCLP dateComanda) {
+	private void populateArtCmdList(List<ArticolCLP> listArticole) {
 
-		if (dateComanda.getArticole().size() > 0) {
-			listViewArtCmdClp.setVisibility(View.VISIBLE);
+		ArticoleDLExpAdapter adapterArticole = new ArticoleDLExpAdapter(this, listArticole);
+		listViewArtCmdClp.setAdapter(adapterArticole);
 
-			DateLivrareCLP dateLivrare = dateComanda.getDateLivrare();
+	}
 
-			textAdrLivr.setText(dateLivrare.getAdrLivrare());
-			textPersContact.setText(dateLivrare.getPersContact());
-			textTelefon.setText(dateLivrare.getTelefon());
-			textOras.setText(dateLivrare.getOras());
-			textJudet.setText(dateLivrare.getJudet());
-			textDataLivrare.setText(dateLivrare.getData());
-			textTipMarfa.setText(dateLivrare.getTipMarfa());
-			textMasa.setText(dateLivrare.getMasa());
-			textTipCamion.setText(dateLivrare.getTipCamion());
-			textTipIncarcare.setText(dateLivrare.getTipIncarcare());
-			textTransport.setText(dateLivrare.getMijlocTransport());
-			textAprobatOC.setText(dateLivrare.getAprobatOC());
-			textTipPlata.setText(dateLivrare.getTipPlata());
-			textObservatii.setText(dateLivrare.getObsComanda());
+	private void setRadioStariListener() {
+		radioStari.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
-			((TextView) findViewById(R.id.textNrCT)).setText(dateLivrare.getNrCT());
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				if (checkedId == R.id.modifData) {
+					btnDataLivrare.setVisibility(View.VISIBLE);
+					btnSalveaza.setVisibility(View.INVISIBLE);
+				} else if (checkedId == R.id.modifLivrat) {
+					btnDataLivrare.setVisibility(View.INVISIBLE);
+					btnSalveaza.setVisibility(View.VISIBLE);
+				}
+			}
+		});
+	}
 
-			List<ArticolCLP> listArticole = dateComanda.getArticole();
+	private void setListenerDataLivrare() {
+		btnDataLivrare.setOnClickListener(new OnClickListener() {
 
-			ArticoleCLPAdapter adapterArticole = new ArticoleCLPAdapter(this, listArticole);
-			listViewArtCmdClp.setAdapter(adapterArticole);
+			@Override
+			public void onClick(View v) {
+				Locale.setDefault(new Locale("ro"));
+
+				int year = Calendar.getInstance().get(Calendar.YEAR);
+				int month = Calendar.getInstance().get(Calendar.MONTH);
+				int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+				SelectDateDialog datePickerDialog = new SelectDateDialog(AfisareDispozitiiLivrareActivity.this, datePickerListener, year, month, day);
+				datePickerDialog.setTitle("Data livrare");
+
+				datePickerDialog.show();
+
+			}
+		});
+	}
+
+	private void setListenerBtnSalveaza() {
+
+		btnSalveaza.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				// private RadioButton radioModifData, radioModifLivrat;
+
+				if (((RadioButton) findViewById(R.id.modifData)).isChecked())
+					setDLDataLivrare();
+				else if (((RadioButton) findViewById(R.id.modifLivrat)).isChecked())
+					setDLFinalizata();
+			}
+		});
+
+	}
+
+	private void setDLFinalizata() {
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("idComanda", selectedCmd);
+		params.put("codAgent", UserInfo.getInstance().getCod());
+		operatiiComenzi.setDLFinalizata(params);
+	}
+
+	private void setDLDataLivrare() {
+
+		String[] dataLivrare = textDataLivrare.getText().toString().split("\\.");
+
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("idComanda", selectedCmd);
+		params.put("dataLivrare", dataLivrare[2] + dataLivrare[1] + dataLivrare[0]);
+		operatiiComenzi.setDLDataLivrare(params);
+	}
+
+	private void dlFinalizata(String result) {
+		if (result.equals("0")) {
+			Toast.makeText(getApplicationContext(), "Operatie reusita", Toast.LENGTH_LONG).show();
+			performGetComenziClp();
+
+		} else {
+			Toast.makeText(getApplicationContext(), "Operatie esuata", Toast.LENGTH_LONG).show();
+		}
+	}
+
+	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
+
+		public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
+
+			if (view.isShown()) {
+
+				SimpleDateFormat displayFormat = new SimpleDateFormat("dd.MM.yyyy");
+				Calendar calendar = new GregorianCalendar(selectedYear, selectedMonth, selectedDay);
+
+				StatusIntervalLivrare statusInterval = UtilsDates.getStatusIntervalLivrare(calendar.getTime());
+
+				if (statusInterval.isValid()) {
+					textDataLivrare.setText(displayFormat.format(calendar.getTime()));
+					btnSalveaza.setVisibility(View.VISIBLE);
+				} else
+					Toast.makeText(getApplicationContext(), statusInterval.getMessage(), Toast.LENGTH_LONG).show();
+			}
 
 		}
-
-	}
+	};
 
 	private void clearAllData() {
 
@@ -276,7 +364,8 @@ public class AfisareDispozitiiLivrareActivity extends Activity implements DlDAOL
 		spinnerCmdClp.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				BeanDocumentCLP documentClp = ((BeanDocumentCLP) parent.getAdapter().getItem(position));
+				DLExpirat documentClp = ((DLExpirat) parent.getAdapter().getItem(position));
+				textDataLivrare.setText(documentClp.getDataLivrare());
 				selectedCmd = documentClp.getNrDocument();
 				selectedCmdSap = documentClp.getNrDocumentSap();
 
@@ -292,11 +381,15 @@ public class AfisareDispozitiiLivrareActivity extends Activity implements DlDAOL
 
 	public void operationDlComplete(EnumDlDAO methodName, Object result) {
 		switch (methodName) {
-		case GET_LIST_COMENZI:
+		case GET_DL_EXPIRATE:
 			populateCmdList((String) result);
 			break;
-		case GET_ARTICOLE_COMANDA_JSON:
-			populateArtCmdList(operatiiComenzi.decodeArticoleComanda((String) result));
+		case GET_ARTICOLE_DL_EXPIRAT:
+			populateArtCmdList(operatiiComenzi.decodeArticoleDLExpirat((String) result));
+			break;
+		case SET_DL_FINALIZATA:
+		case SET_DL_DATALIVRARE:
+			dlFinalizata((String) result);
 			break;
 		default:
 			break;

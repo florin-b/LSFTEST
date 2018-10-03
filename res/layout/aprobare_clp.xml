@@ -25,6 +25,18 @@
             android:background="@drawable/spinner_style_2"
             android:scrollbarStyle="outsideInset" />
 
+        <Button
+            android:id="@+id/stareClpBtn"
+            style="@style/ok_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dip"
+            android:layout_margin="10dip"
+            android:background="@drawable/ok_button_style"
+            android:paddingLeft="40dip"
+            android:paddingRight="40dip"
+            android:text="Stare comanda"
+            android:visibility="invisible" />
+
         <ListView
             android:id="@+id/listArtCmdClp"
             android:layout_width="match_parent"
@@ -403,7 +415,7 @@
                     android:layout_height="wrap_content" >
 
                     <TextView
-                       style="@style/dateLivrareDlLabel"
+                        style="@style/dateLivrareDlLabel"
                         android:layout_width="0dip"
                         android:layout_height="match_parent"
                         android:layout_weight="0.2"
@@ -423,7 +435,7 @@
                     android:layout_height="wrap_content" >
 
                     <TextView
-                       style="@style/dateLivrareDlLabel"
+                        style="@style/dateLivrareDlLabel"
                         android:layout_width="0dip"
                         android:layout_height="match_parent"
                         android:layout_weight="0.2"

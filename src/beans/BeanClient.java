@@ -5,6 +5,7 @@ public class BeanClient {
 	private String numeClient;
 	private String codClient;
 	private String tipClient;
+	private String agenti;
 
 	public BeanClient() {
 
@@ -38,7 +39,15 @@ public class BeanClient {
 	public String toString() {
 		return numeClient;
 	}
-	
+
+	public String getAgenti() {
+		return agenti;
+	}
+
+	public void setAgenti(String agenti) {
+		this.agenti = agenti;
+	}
+
 
 
 }

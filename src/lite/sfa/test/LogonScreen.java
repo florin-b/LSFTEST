@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import listeners.AsyncTaskListener;
+import model.Constants;
 import model.InfoStrings;
 import model.UserInfo;
 import utils.UtilsGeneral;
@@ -101,8 +102,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		addListenerUserName();
 		addListenerPassword();
 
-		// etUsername.setText("androag");
-		// etPassword.setText("112");
+		etUsername.setText("androag");
+		etPassword.setText("112");
 
 		// etUsername.setText("GILINCA");
 		// etPassword.setText("HV3G4M");
@@ -240,11 +241,24 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		// etUsername.setText("MMESTER1"); // SMW
 		// etPassword.setText("GpZDwh");
 
-		etUsername.setText("DCUCU"); // ag 04 gl
-		etPassword.setText("tLGQ1C");
+		// etUsername.setText("SLAZAR1"); //
+		// etPassword.setText("thqT2Q");
 
-		// etUsername.setText("AMIHAI3"); // ag 09 gl
-		// etPassword.setText("Yv9ywh");
+		// etUsername.setText("CRADU3"); //
+		// etPassword.setText("WMn6fj");
+
+		// etUsername.setText("IBAT"); //superav 07
+		// etPassword.setText("2PX4cw");
+
+		//etUsername.setText("FROTARU");	//comenzi custodie
+		//etPassword.setText("89mLcn");
+		
+		//etUsername.setText("IPUSCAS"); //SDCVA
+		//etPassword.setText("4LMvYg");
+		
+		//etUsername.setText("androsd"); //ASDL
+		//etPassword.setText("112");
+		
 
 		globalMyIP = getIPConnection();
 
@@ -450,7 +464,7 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 
 				if (token[5].equals("8") || token[5].equals("9") || token[5].equals("10") || token[5].equals("14") || token[5].equals("12")
 						|| token[5].equals("27") || token[5].equals("35") || token[5].equals("17") || token[5].equals("18") || token[5].equals("32")
-						|| token[5].equals("41") || token[5].equals("43") || token[5].equals("44") || token[5].equals("45")) {
+						|| token[5].equals("41") || token[5].equals("43") || token[5].equals("44") || token[5].equals("45") || token[5].equals("39")) {
 
 					UserInfo uInfo = UserInfo.getInstance();
 
@@ -514,6 +528,9 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 					uInfo.setFtpIP(token[13]);
 					uInfo.setInitDivizie(token[14]);
 					uInfo.setCodDepart(UtilsGeneral.getDepart(token[1]));
+
+					if (uInfo.getTipUserSap().equals(Constants.tipSuperAv))
+						uInfo.setCodSuperUser(uInfo.getCod());
 
 					startMainMenuActivity();
 

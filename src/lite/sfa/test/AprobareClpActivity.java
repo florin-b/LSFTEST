@@ -310,11 +310,14 @@ public class AprobareClpActivity extends Activity implements ClpDAOListener {
 			if (UserInfo.getInstance().getTipAcces().equals("9"))
 				localTipUser = "AV";
 
-			if (UserInfo.getInstance().getTipAcces().equals("10"))
+			else if (UserInfo.getInstance().getTipAcces().equals("10"))
 				localTipUser = "SD";
 
-			if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14"))
+			else if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14"))
 				localTipUser = "DV";
+			
+			else if (UserInfo.getInstance().getTipAcces().equals("18"))
+				localTipUser = "SM";
 
 			params.put("nrCmd", selectedCmd);
 			params.put("nrCmdSAP", selectedCmdSap);
@@ -346,12 +349,12 @@ public class AprobareClpActivity extends Activity implements ClpDAOListener {
 
 			if (UserInfo.getInstance().getTipAcces().equals("9"))
 				localTipUser = "AV";
-
-			if (UserInfo.getInstance().getTipAcces().equals("10"))
+			else if (UserInfo.getInstance().getTipAcces().equals("10"))
 				localTipUser = "SD";
-
-			if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14"))
+			else if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14"))
 				localTipUser = "DV";
+			else if (UserInfo.getInstance().getTipAcces().equals("18"))
+				localTipUser = "SM";
 
 			params.put("filiala", UserInfo.getInstance().getUnitLog());
 			params.put("depart", UserInfo.getInstance().getCodDepart());

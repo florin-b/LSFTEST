@@ -344,7 +344,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			}
 			return true;
 		case 3:
-			if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_VANZARE) {
+			if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_VANZARE
+					|| DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.LIVRARE_CUSTODIE) {
 				if (codClientVar.length() > 0) {
 					Intent nextScreen = new Intent(getApplicationContext(), SelectArtCmd.class);
 					startActivity(nextScreen);
@@ -746,6 +747,11 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 							slidingDrawerCmd.animateClose();
 						}
 
+						if (isLivrareCustodie()) {
+							trateazaLivrareCustodie();
+							return true;
+						}
+
 						if (DateLivrare.getInstance().getTermenPlata().trim().equals("")) {
 							Toast.makeText(getApplicationContext(), "Verificati datele de livrare!", Toast.LENGTH_SHORT).show();
 							return true;
@@ -809,12 +815,60 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		return CreareComanda.tipClientVar.equals("PF") && DateLivrare.getInstance().getTipPlata().equals("E") && totalComanda > 10000;
 	}
 
+	private boolean isLivrareCustodie() {
+		return DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.LIVRARE_CUSTODIE;
+	}
+
+	private void trateazaLivrareCustodie() {
+		mProgress.setVisibility(View.VISIBLE);
+		mProgress.setProgress(0);
+		progressVal = 0;
+		myTimer = new Timer();
+		myTimer.schedule(new UpdateProgress(), 40, 15);
+	}
+
+	private void salveazaLivrareCustodie() {
+
+		comandaFinala.setCodClient(codClientVar);
+		comandaFinala.setComandaBlocata(comandaBlocata);
+		comandaFinala.setFilialaAlternativa(CreareComanda.filialaAlternativa);
+		comandaFinala.setUserSite(UserInfo.getInstance().getUserSite());
+
+		comandaJson = serializeComanda(comandaFinala);
+		prepareArtForDelivery();
+		articoleFinaleStr = serializedResult;
+
+		performSaveLivrareCustodie();
+
+	}
+
+	private void performSaveLivrareCustodie() {
+		try {
+
+			HashMap<String, String> params = new HashMap<String, String>();
+
+			params.put("JSONArt", articoleFinaleStr);
+			params.put("JSONComanda", comandaJson);
+			params.put("JSONDateLivrare", serializeDateLivrare());
+
+			comandaDAO.salveazaLivrareCustodie(params);
+
+		} catch (Exception e) {
+			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+		}
+	}
+
 	class UpdateProgress extends TimerTask {
 		public void run() {
 			progressVal++;
 			if (mProgress.getProgress() == 50) {
 				logonHandler.post(new Runnable() {
 					public void run() {
+
+						if (isLivrareCustodie()) {
+							salveazaLivrareCustodie();
+							return;
+						}
 
 						DateLivrare dateLivrareInstance = DateLivrare.getInstance();
 
@@ -1356,6 +1410,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			obj.put("furnizorProduse", codFurnizorProduse);
 
 			obj.put("isCamionDescoperit", DateLivrare.getInstance().isCamionDescoperit());
+			obj.put("codSuperAgent", UserInfo.getInstance().getCodSuperUser());
+			obj.put("programLivrare", DateLivrare.getInstance().getProgramLivrare());
 
 		} catch (JSONException ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
@@ -1505,6 +1561,21 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		} else {
 			Toast.makeText(getApplicationContext(), "Comanda NU a fost salvata!", Toast.LENGTH_LONG).show();
 			slidingDrawerCmd.animateClose();
+		}
+	}
+
+	private void saveLivrareStatus(String saveResponse) {
+		if (saveResponse.equals("-1")) {
+			Toast.makeText(getApplicationContext(), "Comanda NU a fost salvata!", Toast.LENGTH_LONG).show();
+		} else {
+			if (saveResponse.contains("#")) {
+				String[] tokResponse = saveResponse.split("#");
+				Toast.makeText(getApplicationContext(), tokResponse[1], Toast.LENGTH_LONG).show();
+
+				if (tokResponse[0].equals("0"))
+					clearAllData();
+			}
+
 		}
 	}
 
@@ -1718,6 +1789,9 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		case SALVEAZA_COMANDA_DISTRIB:
 			saveCmdStatus((String) result);
 			break;
+		case SALVEAZA_LIVRARE_CUSTODIE:
+			saveLivrareStatus((String) result);
+			break;
 		case SALVEAZA_COMANDA_GED:
 			displayCmdGEDStatus((String) result);
 			break;
@@ -1767,6 +1841,10 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			setHeaderVisibility(true);
 			displayArticoleComanda();
 
+			if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.LIVRARE_CUSTODIE) {
+				return;
+			}
+
 			totalComanda = ListaArticoleComanda.getInstance().getTotalComanda();
 
 			textTotalCmd.setText(String.format("%.02f", totalComanda));
@@ -1814,6 +1892,10 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 		else if (tipSelected == TipCmdDistrib.COMANDA_VANZARE) {
 			actionBar.setTitle("Comanda distributie");
+		}
+
+		else if (tipSelected == TipCmdDistrib.LIVRARE_CUSTODIE) {
+			actionBar.setTitle("Livrare din custodie");
 		}
 
 		invalidateOptionsMenu();

@@ -84,4 +84,10 @@
     <color name="color_light_green">#008100</color>
     <color name="color_light_blue">#3C838B</color>
 
+    <string-array name="programLivrareItems">
+        <item >Selectati perioada de livrare</item>
+        <item >08.00 &#45; 14.00</item>
+        <item >14.00 &#45; 18.00</item>
+    </string-array>
+
 </resources>

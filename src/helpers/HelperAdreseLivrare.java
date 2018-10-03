@@ -17,6 +17,7 @@ public class HelperAdreseLivrare {
 
 	private static final String livrareRapida = "TERR - Curier rapid";
 	private static final double DIST_MIN_ADR_KM = 0.5;
+	private static final double DIST_MIN_ADR_NOUA_KM = 0.5;
 
 	private static String localitatiAcceptate;
 
@@ -106,6 +107,26 @@ public class HelperAdreseLivrare {
 		}
 
 		return tonajAdresa;
+	}
+
+	public static int verificaDistantaAdresaNoua(List<BeanAdresaLivrare> listAdrese, LatLng coordAdresa) {
+
+		int selectedPos = -1;
+
+		int pos = 0;
+		for (BeanAdresaLivrare adresa : listAdrese) {
+			String coords[] = adresa.getCoords().split(",");
+
+			double distAdresa = distanceXtoY(coordAdresa.latitude, coordAdresa.longitude, Double.valueOf(coords[0]), Double.valueOf(coords[1]), "K");
+			if (distAdresa < DIST_MIN_ADR_NOUA_KM) {
+				selectedPos = pos;
+				break;
+			}
+
+			pos++;
+		}
+
+		return selectedPos;
 	}
 
 	public static double distanceXtoY(double lat1, double lon1, double lat2, double lon2, String unit) {

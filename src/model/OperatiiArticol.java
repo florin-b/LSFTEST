@@ -56,6 +56,8 @@ public interface OperatiiArticol {
 	
 	public void getArticoleStatistic(HashMap<String, String> params);
 	
+	public void getStocCustodie(HashMap<String, String> params);
+	
 	
 	
 

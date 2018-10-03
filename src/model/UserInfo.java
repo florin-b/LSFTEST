@@ -33,6 +33,7 @@ public class UserInfo {
 	private boolean filHome = false;
 	private String ftpIP = "";
 	private String initDivizie = "";
+	private String codSuperUser = "";
 
 	private static UserInfo instance = new UserInfo();
 
@@ -237,6 +238,14 @@ public class UserInfo {
 		this.initDivizie = initDivizie;
 	}
 
+	public String getCodSuperUser() {
+		return codSuperUser;
+	}
+
+	public void setCodSuperUser(String codSuperUser) {
+		this.codSuperUser = codSuperUser;
+	}
+
 	@Override
 	public String toString() {
 		return "UserInfo [nume=" + nume + ", filiala=" + filiala + ", cod=" + cod + ", numeDepart=" + numeDepart + ", codDepart=" + codDepart + ", unitLog="
@@ -245,7 +254,5 @@ public class UserInfo {
 				+ extraFiliale + ", comisionCV=" + comisionCV + ", coefCorectie=" + coefCorectie + ", userSite=" + userSite + ", userWood=" + userWood
 				+ ", filHome=" + filHome + ", ftpIP=" + ftpIP + ", initDivizie=" + initDivizie + "]";
 	}
-
-	
 
 }

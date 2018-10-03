@@ -101,6 +101,7 @@ public class OperatiiClient implements AsyncTaskListener {
 					client.setCodClient(object.getString("codClient"));
 					client.setNumeClient(object.getString("numeClient"));
 					client.setTipClient(object.getString("tipClient"));
+					client.setAgenti(object.getString("agenti"));
 					listClienti.add(client);
 
 				}

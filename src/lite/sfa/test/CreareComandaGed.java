@@ -1146,7 +1146,10 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	private void valideazaFinal() {
 
-		if (HelperCreareComanda.isConditiiAlertaIndoire(ListaArticoleComandaGed.getInstance().getListArticoleComanda())) {
+		if (HelperCreareComanda.isComandaGEDAmbalaje(ListaArticoleComandaGed.getInstance().getListArticoleComanda())) {
+			HelperDialog.showInfoDialog(CreareComandaGed.this, "Atentie!", "Comanda nu poate sa contina doar ambalaje.");
+
+		} else if (HelperCreareComanda.isConditiiAlertaIndoire(ListaArticoleComandaGed.getInstance().getListArticoleComanda())) {
 			HelperDialog.showInfoDialog(CreareComandaGed.this, "Atentie!", "Selectati tipul de prelucrare (indoire sau debitare).");
 		} else {
 			verificaPretMacara();
@@ -1408,14 +1411,17 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				myArray.put(obj);
 
 				if (listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1) {
-					alertDV = true;
-					if (!comandaFinala.getComandaBlocata().equals("21"))
-						comandaFinala.setComandaBlocata("1");
 
-					if (UtilsUser.isAgentOrSD() && !UserInfo.getInstance().isFilHome())
-						aprobariCV.add(UserInfo.getInstance().getCodDepart());
-					else
-						aprobariCV.add(listArticole.get(i).getDepart());
+					if (listArticole.get(i).getProcent() > 0){
+						alertDV = true;
+						if (!comandaFinala.getComandaBlocata().equals("21"))
+							comandaFinala.setComandaBlocata("1");
+
+						if (UtilsUser.isAgentOrSD() && !UserInfo.getInstance().isFilHome())
+							aprobariCV.add(UserInfo.getInstance().getCodDepart().substring(0, 2));
+						else
+							aprobariCV.add(listArticole.get(i).getDepart().substring(0, 2));
+					}
 				}
 
 				if (UtilsUser.isAgentOrSD() || UtilsUser.isConsWood()) {
@@ -1432,10 +1438,10 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			}
 
 			if (DateLivrare.getInstance().isAdrLivrNoua() && UtilsUser.isAgentOrSD()) {
-				alertSD = true;
+			//	alertSD = true;
 
-				if (!comandaFinala.getComandaBlocata().equals("21"))
-					comandaFinala.setComandaBlocata("1");
+			//	if (!comandaFinala.getComandaBlocata().equals("21"))
+			//		comandaFinala.setComandaBlocata("1");
 			}
 
 		} catch (Exception ex) {
@@ -1532,6 +1538,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			obj.put("furnizorMarfa", " ");
 			obj.put("furnizorProduse", " ");
 			obj.put("isCamionDescoperit", DateLivrare.getInstance().isCamionDescoperit());
+			obj.put("programLivrare", DateLivrare.getInstance().getProgramLivrare());
 
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();

@@ -9,6 +9,7 @@ import listeners.DlDAOListener;
 import lite.sfa.test.AsyncTaskWSCall;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -55,6 +56,30 @@ public class DlDAO implements IDlDAO, AsyncTaskListener {
 
 	}
 
+	public void getDLExpirate(HashMap<String, String> params) {
+		numeComanda = EnumDlDAO.GET_DL_EXPIRATE;
+		performOperation(params);
+
+	}
+
+	public void getArticoleDLExpirat(HashMap<String, String> params) {
+		numeComanda = EnumDlDAO.GET_ARTICOLE_DL_EXPIRAT;
+		performOperation(params);
+
+	}
+	
+	public void setDLFinalizata(HashMap<String, String> params) {
+		numeComanda = EnumDlDAO.SET_DL_FINALIZATA;
+		performOperation(params);
+
+	}
+	
+	public void setDLDataLivrare(HashMap<String, String> params) {
+		numeComanda = EnumDlDAO.SET_DL_DATALIVRARE;
+		performOperation(params);
+
+	}
+
 	private void performOperation(HashMap<String, String> params) {
 		AsyncTaskListener contextListener = (AsyncTaskListener) DlDAO.this;
 		AsyncTaskWSCall call = new AsyncTaskWSCall(context, contextListener, numeComanda.getComanda(), params);
@@ -92,7 +117,6 @@ public class DlDAO implements IDlDAO, AsyncTaskListener {
 				dateLivrare.setValComanda(jsonLivrare.getString("valComanda"));
 				dateLivrare.setObsComanda(jsonLivrare.getString("obsComanda"));
 				dateLivrare.setNrCT(jsonLivrare.getString("nrCT"));
-				
 
 				ArticolCLP articol;
 				JSONArray jsonArticole = json.getJSONArray("articole");
@@ -126,6 +150,40 @@ public class DlDAO implements IDlDAO, AsyncTaskListener {
 		}
 
 		return comanda;
+
+	}
+
+	public List<ArticolCLP> decodeArticoleDLExpirat(String JSONString) {
+
+		List<ArticolCLP> listArticole = new ArrayList<ArticolCLP>();
+
+		try {
+
+			Object json = new JSONTokener(JSONString).nextValue();
+
+			if (json instanceof JSONArray) {
+				JSONArray jsonObject = new JSONArray(JSONString);
+
+				for (int i = 0; i < jsonObject.length(); i++) {
+					JSONObject articolObject = jsonObject.getJSONObject(i);
+
+					ArticolCLP articol = new ArticolCLP();
+					articol.setCod(articolObject.getString("cod"));
+					articol.setNume(articolObject.getString("nume"));
+					articol.setCantitate(articolObject.getString("cantitate"));
+					articol.setUmBaza(articolObject.getString("umBaza"));
+					articol.setDepozit(articolObject.getString("depozit"));
+
+					listArticole.add(articol);
+
+				}
+			}
+
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		return listArticole;
 
 	}
 

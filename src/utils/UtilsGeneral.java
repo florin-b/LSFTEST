@@ -21,10 +21,10 @@ import enums.EnumTipAlert;
 public class UtilsGeneral {
 
 	public static String[] numeFiliale = { "Andronache", "Bacau", "Baia-Mare", "Brasov", "Buzau", "Constanta", "Cluj", "Craiova", "Focsani", "Galati", "Glina",
-			"Hunedoara", "Iasi", "Militari", "Oradea", "Otopeni", "Piatra-Neamt", "Pitesti", "Ploiesti", "Timisoara", "Tg. Mures" };
+			"Hunedoara", "Iasi", "Militari", "Oradea", "Otopeni", "Piatra-Neamt", "Pitesti", "Ploiesti", "Sibiu", "Timisoara", "Tg. Mures" };
 
 	public static String[] codFiliale = { "BU13", "BC10", "MM10", "BV10", "BZ10", "CT10", "CJ10", "DJ10", "VN10", "GL10", "BU10", "HD10", "IS10", "BU11",
-			"BH10", "BU12", "NT10", "AG10", "PH10", "TM10", "MS10" };
+			"BH10", "BU12", "NT10", "AG10", "PH10", "SB10", "TM10", "MS10" };
 
 	public static String[] numeDivizii = { "Lemnoase", "Feronerie", "Parchet", "Materiale grele", "Electrice", "Gips", "Chimice", "Instalatii", "Hidroizolatii" };
 
@@ -46,11 +46,15 @@ public class UtilsGeneral {
 	public static String[] getDepoziteDistributie() {
 		List<String> listDepozite = new ArrayList<String>(Arrays.asList(depoziteDISTRIB));
 
-		if (UserInfo.getInstance().getCodDepart().equals("02"))
+		if (UserInfo.getInstance().getCodDepart().equals("02") || UserInfo.getInstance().getDepartExtra().contains("02"))
 			listDepozite.add("92V1");
 
 		if (UserInfo.getInstance().getCodDepart().equals("05"))
 			listDepozite.add("95V1");
+
+		listDepozite.add("97V1");
+
+		listDepozite.add("DSCM");
 
 		return listDepozite.toArray(new String[listDepozite.size()]);
 	}
@@ -63,6 +67,7 @@ public class UtilsGeneral {
 		listDepozite.add("MAV2");
 		listDepozite.add("92V1");
 		listDepozite.add("95V1");
+		listDepozite.add("DSCM");
 
 		return listDepozite.toArray(new String[listDepozite.size()]);
 
@@ -208,6 +213,8 @@ public class UtilsGeneral {
 			tipTransport = "Transport terti";
 		} else if (codTransport.equals("TERR")) {
 			tipTransport = "Curier rapid";
+		}else if (codTransport.equals("TFRN")) {
+			tipTransport = "Transport furnizor";
 		}
 
 		return tipTransport;
@@ -540,7 +547,8 @@ public class UtilsGeneral {
 			dpt = "09";
 		else if (numeDepart.equals("LEFA"))
 			dpt = "02";
-
+		else if (numeDepart.equals("DZ"))
+			dpt = "99";
 		return dpt;
 
 	}

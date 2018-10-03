@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Locale;
 
 import listeners.ClpDAOListener;
+import listeners.ComenziDAOListener;
 import model.ClpDAO;
+import model.ComenziDAO;
 import model.HandleJSONData;
 import model.UserInfo;
 import adapters.ArticoleCLPAdapter;
@@ -27,6 +29,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
@@ -39,9 +42,11 @@ import beans.ArticolCLP;
 import beans.BeanDocumentCLP;
 import beans.ComandaCLP;
 import beans.DateLivrareCLP;
+import dialogs.CustomInfoDialog;
 import enums.EnumClpDAO;
+import enums.EnumComenziDAO;
 
-public class AfisareClpActivity extends Activity implements ClpDAOListener {
+public class AfisareClpActivity extends Activity implements ClpDAOListener, ComenziDAOListener {
 
 	private Spinner spinnerCmdClp;
 
@@ -63,6 +68,8 @@ public class AfisareClpActivity extends Activity implements ClpDAOListener {
 	private Button delClpBtn;
 
 	ClpDAO operatiiClp;
+	private Button btnStareComanda;
+	private ComenziDAO comenzi;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -112,6 +119,13 @@ public class AfisareClpActivity extends Activity implements ClpDAOListener {
 		textTipPlata = (TextView) findViewById(R.id.textTipPlata);
 		textTipTransport = (TextView) findViewById(R.id.textTransport);
 		textAprobatOC = (TextView) findViewById(R.id.textAprobatOC);
+
+		comenzi = ComenziDAO.getInstance(this);
+		comenzi.setComenziDAOListener(this);
+
+		btnStareComanda = (Button) findViewById(R.id.stareClpBtn);
+		btnStareComanda.setVisibility(View.INVISIBLE);
+		setListenerBtnStareComanda();
 
 		delClpBtn = (Button) findViewById(R.id.delClpBtn);
 		delClpBtn.setVisibility(View.INVISIBLE);
@@ -253,6 +267,9 @@ public class AfisareClpActivity extends Activity implements ClpDAOListener {
 		if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14")) {
 			localTipUser = "DV";
 		}
+		
+		if (UserInfo.getInstance().getTipAcces().equals("18"))
+			localTipUser = "SM";
 
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("filiala", UserInfo.getInstance().getUnitLog());
@@ -261,6 +278,7 @@ public class AfisareClpActivity extends Activity implements ClpDAOListener {
 		params.put("interval", String.valueOf(intervalAfisare));
 		params.put("tipUser", localTipUser);
 		params.put("codUser", UserInfo.getInstance().getCod());
+		params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 
 		operatiiClp.getListComenzi(params);
 
@@ -282,6 +300,7 @@ public class AfisareClpActivity extends Activity implements ClpDAOListener {
 
 			spinnerCmdClp.setVisibility(View.VISIBLE);
 			layoutCmdCondHead.setVisibility(View.VISIBLE);
+			btnStareComanda.setVisibility(View.VISIBLE);
 		} else {
 			listComenziClp.clear();
 			spinnerCmdClp.setAdapter(adapterComenziClp);
@@ -292,6 +311,7 @@ public class AfisareClpActivity extends Activity implements ClpDAOListener {
 
 			layoutCmdCondHead.setVisibility(View.INVISIBLE);
 			Toast.makeText(getApplicationContext(), "Nu exista comenzi!", Toast.LENGTH_SHORT).show();
+			btnStareComanda.setVisibility(View.INVISIBLE);
 
 			delClpBtn.setVisibility(View.INVISIBLE);
 		}
@@ -372,6 +392,27 @@ public class AfisareClpActivity extends Activity implements ClpDAOListener {
 		AlertDialog alert = builder.create();
 		alert.show();
 
+	}
+
+	private void setListenerBtnStareComanda() {
+		btnStareComanda.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				HashMap<String, String> params = new HashMap<String, String>();
+				params.put("nrComanda", selectedCmdSap);
+
+				comenzi.getStareComanda(params);
+
+			}
+		});
+	}
+
+	private void showStareComanda(String stareComanda) {
+		CustomInfoDialog infoDialog = new CustomInfoDialog(this, "Stare comanda");
+		infoDialog.setInfoText(stareComanda);
+		infoDialog.show();
 	}
 
 	public void opereazaComandaClp() {
@@ -469,6 +510,19 @@ public class AfisareClpActivity extends Activity implements ClpDAOListener {
 		case OPERATIE_COMANDA:
 			Toast.makeText(getApplicationContext(), (String) result, Toast.LENGTH_SHORT).show();
 			refreshClpList();
+		default:
+			break;
+
+		}
+
+	}
+
+	@Override
+	public void operationComenziComplete(EnumComenziDAO methodName, Object result) {
+		switch (methodName) {
+		case GET_STARE_COMANDA:
+			showStareComanda((String) result);
+			break;
 		default:
 			break;
 

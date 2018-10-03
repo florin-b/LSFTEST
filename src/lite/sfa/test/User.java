@@ -139,7 +139,8 @@ public class User extends Activity implements HelperSiteListener {
 		}
 
 		if ((UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("32")
-				|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18"))
+				|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance()
+				.getTipAcces().equals("39"))
 				&& !UserInfo.getInstance().getUserSite().equals("X"))// KA,
 		// cons
 		// sau
@@ -196,14 +197,9 @@ public class User extends Activity implements HelperSiteListener {
 
 			spinnerDepart.setEnabled(true);
 
-			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")) // cons
-			// sau
-			// sm
-			// -
-			// nu
-			// se
-			// afiseaza
-			// depart
+			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
+					|| UserInfo.getInstance().getTipAcces().equals("39")) // CVA,SM
+
 			{
 				spinnerDepart.setVisibility(View.INVISIBLE);
 			}
@@ -243,7 +239,7 @@ public class User extends Activity implements HelperSiteListener {
 		temp.put("rowText", "041");
 		temp.put("rowDesc", "Prafoase");
 		listDepart.add(temp);
-		
+
 		temp = new HashMap<String, String>();
 		temp.put("rowText", "04");
 		temp.put("rowDesc", "Materiale grele");
@@ -296,12 +292,12 @@ public class User extends Activity implements HelperSiteListener {
 
 		if (UserInfo.getInstance().getCodDepart().equals("041")) {
 			spinnerDepart.setSelection(4);
-		}		
-		
+		}
+
 		if (UserInfo.getInstance().getCodDepart().equals("04")) {
 			spinnerDepart.setSelection(5);
 		}
-		
+
 		if (UserInfo.getInstance().getCodDepart().equals("05")) {
 			spinnerDepart.setSelection(6);
 		}
@@ -397,7 +393,7 @@ public class User extends Activity implements HelperSiteListener {
 			retVal = "Administrator";
 		} else if (codAcc.equals("9")) {
 			retVal = "Agent";
-		} else if (codAcc.equals("10") || codAcc.equals("32")) {
+		} else if (codAcc.equals("10") || codAcc.equals("32") || codAcc.equals("39")) {
 			retVal = "Sef departament";
 		}
 

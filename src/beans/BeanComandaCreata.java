@@ -36,7 +36,6 @@ public class BeanComandaCreata {
 	private double avans;
 	private boolean clientRaft;
 	
-
 	public BeanComandaCreata() {
 
 	}
@@ -305,7 +304,6 @@ public class BeanComandaCreata {
 		this.clientRaft = clientRaft;
 	}
 
-	
 
 	@Override
 	public String toString() {

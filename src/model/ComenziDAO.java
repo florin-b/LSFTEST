@@ -121,9 +121,43 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 		performOperation(params);
 
 	}
-	
+
 	public void getStareComanda(HashMap<String, String> params) {
 		numeComanda = EnumComenziDAO.GET_STARE_COMANDA;
+		performOperation(params);
+
+	}
+
+	public void salveazaLivrareCustodie(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.SALVEAZA_LIVRARE_CUSTODIE;
+		performOperation(params);
+
+	}
+
+	public void getLivrariCustodie(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.GET_LIVRARI_CUSTODIE;
+		performOperation(params);
+	}
+
+	public void getArticoleCustodie(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.GET_ARTICOLE_CUSTODIE;
+		performOperation(params);
+	}
+
+	public void setCustodieDataLivrare(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.SET_CUSTODIE_DATA_LIVRARE;
+		performOperation(params);
+
+	}
+
+	public void setCustodieAdresaLivrare(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.SET_CUSTODIE_ADRESA_LIVRARE;
+		performOperation(params);
+
+	}
+
+	public void stergeLivrareCustodie(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.STERGE_LIVRARE_CUSTODIE;
 		performOperation(params);
 
 	}
@@ -288,16 +322,17 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 				dateLivrare.setClientRaft(jsonLivrare.getString("clientRaft").equals("X") ? true : false);
 
 				dateLivrare.setCodMeserias(jsonLivrare.getString("meserias"));
-				
+
 				dateLivrare.setFactPaletSeparat(Boolean.valueOf(jsonLivrare.getString("factPaletiSeparat")));
-				
+
 				FurnizorComanda furnizor = new FurnizorComanda();
 				furnizor.setCodFurnizorMarfa(jsonLivrare.getString("furnizorMarfa"));
 				furnizor.setCodFurnizorProduse(jsonLivrare.getString("furnizorProduse"));
 				dateLivrare.setFurnizorComanda(furnizor);
-				
+
 				dateLivrare.setCamionDescoperit(Boolean.valueOf(jsonLivrare.getString("isCamionDescoperit")));
 				dateLivrare.setDiviziiClient(jsonLivrare.getString("diviziiClient"));
+				dateLivrare.setProgramLivrare(jsonLivrare.getString("programLivrare"));
 
 				JSONArray jsonArticole = jsonObject.getJSONArray("articoleComanda");
 				String tipAlert, subCmp;
@@ -418,7 +453,7 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 		return articoleComanda;
 	}
 
-	private ArrayList<BeanComandaCreata> deserializeListComenzi(String serializedListComenzi) {
+	public ArrayList<BeanComandaCreata> deserializeListComenzi(String serializedListComenzi) {
 
 		BeanComandaCreata comanda = null;
 		ArrayList<BeanComandaCreata> listComenzi = new ArrayList<BeanComandaCreata>();

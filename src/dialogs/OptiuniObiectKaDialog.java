@@ -105,7 +105,7 @@ public class OptiuniObiectKaDialog extends Dialog implements OperatiiAgentListen
 
 		String depart = UserInfo.getInstance().getCodDepart();
 
-		if (UserInfo.getInstance().getTipUser().equals("DK"))
+		if (UserInfo.getInstance().getTipUser().equals("DK") || UserInfo.getInstance().getTipAcces().equals("32"))
 			depart = "00";
 
 		HashMap<String, String> params = new HashMap<String, String>();
@@ -151,7 +151,14 @@ public class OptiuniObiectKaDialog extends Dialog implements OperatiiAgentListen
 
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-				if (position > 0) {
+				if (spinnerFiliale.getCount() == 1)
+				{
+					selectedFiliala = ((EnumFilialeKA) spinnerFiliale.getSelectedItem()).getCod();
+					getListaAgenti(((EnumFilialeKA) spinnerFiliale.getSelectedItem()).getCod());
+				}
+				
+				
+				else if (spinnerFiliale.getCount() > 1 && position > 0) {
 					selectedFiliala = ((EnumFilialeKA) spinnerFiliale.getSelectedItem()).getCod();
 					layoutInterval.setVisibility(View.VISIBLE);
 
@@ -197,7 +204,7 @@ public class OptiuniObiectKaDialog extends Dialog implements OperatiiAgentListen
 		if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.DV.getTipAcces()))
 			codDepart = UserInfo.getInstance().getCodDepart();
 
-		if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.DK.getTipAcces()))
+		if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.DK.getTipAcces()) || UserInfo.getInstance().getTipAcces().equals("32"))
 			codDepart = "10";
 
 		return codDepart;

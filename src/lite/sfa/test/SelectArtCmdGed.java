@@ -313,7 +313,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 	private void addSpinnerDepartamente() {
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item,
-				DepartamentAgent.getDepartamenteAgent());
+				DepartamentAgent.getDepartamenteAgentNerestr());
 
 		LayoutInflater mInflater = LayoutInflater.from(this);
 		View mCustomView = mInflater.inflate(R.layout.spinner_layout, null);
@@ -371,7 +371,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	boolean isCV() {
 		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM")
 				|| UserInfo.getInstance().getTipUser().equals("CVR") || UserInfo.getInstance().getTipUser().equals("SMR")
-				|| UserInfo.getInstance().getTipUser().equals("WOOD");
+				|| UserInfo.getInstance().getTipUser().equals("WOOD") || UserInfo.getInstance().getTipUser().equals("SC");
 	}
 
 	boolean isWood() {
@@ -1229,6 +1229,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						articol.setUmPalet(articolDBSelected.isUmPalet());
 						articol.setFilialaSite(CreareComandaGed.filialaAlternativa);
 						articol.setLungime(articolDBSelected.getLungime());
+						articol.setCategorie(articolDBSelected.getCategorie());
 
 						if (procRedFin > 0)
 							articol.setIstoricPret(selectedArticol.getIstoricPret());

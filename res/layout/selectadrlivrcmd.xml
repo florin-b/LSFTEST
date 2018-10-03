@@ -290,6 +290,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutTipReducere"
                 android:layout_width="match_parent"
                 android:layout_height="60dip"
                 android:orientation="horizontal" >
@@ -317,6 +318,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutDocInsot"
                 android:layout_width="match_parent"
                 android:layout_height="60dip"
                 android:orientation="horizontal" >
@@ -343,6 +345,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutPlata"
                 android:layout_width="match_parent"
                 android:layout_height="60dip"
                 android:orientation="horizontal" >
@@ -383,6 +386,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutResponsabil"
                 android:layout_width="match_parent"
                 android:layout_height="60dip"
                 android:orientation="horizontal" >
@@ -547,10 +551,19 @@
                     android:layout_gravity="bottom|left"
                     android:gravity="left|bottom"
                     android:paddingLeft="5dip"
-                    android:text="Obs. livrare"
+                    android:text="Obs. sofer"
                     android:textColor="@color/labelColor"
                     android:textSize="17sp"
                     android:typeface="serif" />
+
+                <CheckBox
+                    android:id="@+id/chkObsSofer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginRight="15dip"
+                    android:checked="false"
+                    android:text="Nu" />
 
                 <EditText
                     android:id="@+id/txtObservatii"
@@ -563,10 +576,12 @@
                     android:inputType="textNoSuggestions"
                     android:maxLength="100"
                     android:singleLine="true"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:visibility="invisible" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutFactPaleti"
                 android:layout_width="match_parent"
                 android:layout_height="60dip"
                 android:orientation="horizontal" >

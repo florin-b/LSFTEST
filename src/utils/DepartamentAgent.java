@@ -118,7 +118,7 @@ public class DepartamentAgent {
 		else {
 			String diviziiClient = DateLivrare.getInstance().getDiviziiClient();
 
-			if (diviziiClient!= null && diviziiClient.contains(departExtra.substring(0, 2)))
+			if (diviziiClient != null && diviziiClient.contains(departExtra.substring(0, 2)))
 				isConditii = true;
 
 		}
@@ -126,4 +126,50 @@ public class DepartamentAgent {
 		return isConditii;
 	}
 
+	public static List<String> getDepartamenteAgentNerestr() {
+
+		ArrayList<String> depart = new ArrayList<String>();
+
+		if (isKA()) {
+
+			for (EnumDepartExtra depKA : EnumDepartExtra.values()) {
+				if (depKA.getCod().equals("00") || depKA.getCod().equals("11"))
+					depart.add(depKA.getNume());
+			}
+		}
+
+		if (isAG()) {
+			depart.add(EnumDepartExtra.getNumeDepart(UserInfo.getInstance().getCodDepart()));
+
+			if (UserInfo.getInstance().getDepartExtra().length() > 0) {
+				String[] depExtra = UserInfo.getInstance().getDepartExtra().split(";");
+
+				for (int i = 0; i < depExtra.length; i++) {
+					depart.add(EnumDepartExtra.getNumeDepart(depExtra[i]));
+				}
+			}
+			depart.add(EnumDepartExtra.getNumeDepart("11"));
+		}
+
+		return depart;
+	}
+
+	public static List<String> getDepartamenteAgentCLP(String diviziiClient) {
+
+		ArrayList<String> depart = new ArrayList<String>();
+
+		depart.add(EnumDepartExtra.getNumeDepart(UserInfo.getInstance().getCodDepart()));
+
+		if (UserInfo.getInstance().getDepartExtra().length() > 0) {
+			String[] depExtra = UserInfo.getInstance().getDepartExtra().split(";");
+
+			for (int i = 0; i < depExtra.length; i++) {
+				if (diviziiClient!= null && diviziiClient.contains(depExtra[i].substring(0, 2)))
+					depart.add(EnumDepartExtra.getNumeDepart(depExtra[i]));
+			}
+		}
+		depart.add(EnumDepartExtra.getNumeDepart("11"));
+
+		return depart;
+	}
 }

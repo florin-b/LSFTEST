@@ -90,7 +90,8 @@ public class VanzariAgentiActivity extends Activity {
 
 			if (UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("12")
 					|| UserInfo.getInstance().getTipAcces().equals("18")
-					|| UserInfo.getInstance().getTipAcces().equals("35")) // sd,sm
+					|| UserInfo.getInstance().getTipAcces().equals("35") 
+					|| UserInfo.getInstance().getTipAcces().equals("32")) // sd,sm
 			{
 				vanzariInstance.selectedAgent = "0";
 				vanzariInstance.selectedFiliala = UserInfo.getInstance().getUnitLog();

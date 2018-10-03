@@ -10,7 +10,6 @@
     android:rotation="180" >
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dip"
@@ -77,7 +76,6 @@
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dip"
@@ -93,7 +91,6 @@
             android:drawSelectorOnTop="false" />
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/layoutClient"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -186,6 +183,47 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:typeface="monospace" />
+
+            <TextView
+                android:id="@+id/labelDiviziiClient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="5dip"
+                android:text="Divizii"
+                android:textColor="@color/detColor1"
+                android:textSize="16sp"
+                android:typeface="sans" />
+
+            <TextView
+                android:id="@+id/textDiviziiClient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="5dip"
+                android:textColor="@color/detColor1"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:typeface="monospace" />
+
+            <TextView
+                android:id="@+id/labelAgentClient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="5dip"
+                android:text="Agent"
+                android:textColor="@color/detColor1"
+                android:textSize="16sp"
+                android:typeface="sans"
+                android:visibility="invisible" />
+
+            <Spinner
+                android:id="@+id/spinnerAgenti"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                 />
 
             <Button
                 android:id="@+id/saveClntBtn"

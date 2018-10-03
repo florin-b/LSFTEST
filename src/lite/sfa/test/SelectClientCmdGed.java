@@ -152,6 +152,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		txtNumeClientDistrib = (EditText) findViewById(R.id.txtNumeClientDistrib);
 
 		txtCNPClient = (EditText) findViewById(R.id.txtCNPClient);
+		txtCNPClient.setVisibility(View.INVISIBLE);
 		txtCodJ = (EditText) findViewById(R.id.txtCodJ);
 
 		layoutLabelJ = (LinearLayout) findViewById(R.id.layoutLabelJ);
@@ -160,7 +161,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		layoutTextJ.setVisibility(View.GONE);
 
 		labelIDClient = (TextView) findViewById(R.id.labelIdClient);
-		labelIDClient.setText("CNP");
+		labelIDClient.setText("");
 
 		verificaID = (Button) findViewById(R.id.verificaId);
 		setListenerVerificaID();
@@ -399,6 +400,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					verificaID.setVisibility(View.GONE);
 					verificaTva.setVisibility(View.GONE);
 					labelIDClient.setText("CUI");
+					txtCNPClient.setVisibility(View.VISIBLE);
 					clearDateLivrare();
 
 				} else {
@@ -424,6 +426,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					checkFacturaPF.setVisibility(View.GONE);
 					verificaTva.setVisibility(View.VISIBLE);
 					labelIDClient.setText("CUI");
+					txtCNPClient.setVisibility(View.VISIBLE);
 					txtCodJ.setText("");
 					setTextNumeClientEnabled(true);
 					clearDateLivrare();
@@ -444,7 +447,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					verificaID.setVisibility(View.VISIBLE);
 					verificaTva.setVisibility(View.GONE);
 					checkFacturaPF.setVisibility(View.VISIBLE);
-					labelIDClient.setText("CNP");
+					labelIDClient.setText("");
+					txtCNPClient.setVisibility(View.INVISIBLE);
 					setTextNumeClientEnabled(true);
 					clearDateLivrare();
 				}
@@ -465,6 +469,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				verificaID.setVisibility(View.GONE);
 				checkFacturaPF.setVisibility(View.GONE);
 				labelIDClient.setText("COD");
+				txtCNPClient.setVisibility(View.VISIBLE);
 
 				setTextNumeClientEnabled(false);
 

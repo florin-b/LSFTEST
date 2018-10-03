@@ -22,6 +22,7 @@ import beans.BeanFurnizorProduse;
 import beans.BeanInfoVenituri;
 import beans.BeanIstoricSemiactiv;
 import beans.BeanObiectivKA;
+import beans.DLExpirat;
 
 public class HandleJSONData {
 
@@ -69,6 +70,40 @@ public class HandleJSONData {
 					unDocumentCLP.setObservatii(documentCLPObject.getString("observatii"));
 
 					objectsList.add(unDocumentCLP);
+
+				}
+			}
+
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		return objectsList;
+	}
+
+	public ArrayList<DLExpirat> decodeDLExpirat() {
+		DLExpirat dlExpirat = null;
+		ArrayList<DLExpirat> objectsList = new ArrayList<DLExpirat>();
+
+		try {
+
+			Object json = new JSONTokener(JSONString).nextValue();
+
+			if (json instanceof JSONArray) {
+				jsonObject = new JSONArray(JSONString);
+
+				for (int i = 0; i < jsonObject.length(); i++) {
+					JSONObject documentCLPObject = jsonObject.getJSONObject(i);
+
+					dlExpirat = new DLExpirat();
+					dlExpirat.setNrDocument(documentCLPObject.getString("nrDocument"));
+					dlExpirat.setNumeClient(documentCLPObject.getString("numeClient"));
+					dlExpirat.setDataDocument(documentCLPObject.getString("dataDocument"));
+					dlExpirat.setNrDocumentSap(documentCLPObject.getString("nrDocumentSap"));
+					dlExpirat.setDataLivrare(documentCLPObject.getString("dataLivrare"));
+					dlExpirat.setFurnizor(documentCLPObject.getString("furnizor"));
+
+					objectsList.add(dlExpirat);
 
 				}
 			}
@@ -133,6 +168,7 @@ public class HandleJSONData {
 					unClient.setNumeClient(clienObject.getString("numeClient"));
 					unClient.setCodClient(clienObject.getString("codClient"));
 					unClient.setTipClient(clienObject.getString("tipClient"));
+					unClient.setAgenti(clienObject.getString("agenti"));
 
 					objectsList.add(unClient);
 

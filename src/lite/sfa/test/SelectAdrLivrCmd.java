@@ -32,6 +32,7 @@ import model.UserInfo;
 import utils.Exceptions;
 import utils.MapUtils;
 import utils.UtilsAddress;
+import utils.UtilsComenzi;
 import utils.UtilsDates;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
@@ -39,7 +40,9 @@ import adapters.AdapterAdreseLivrare;
 import adapters.AdapterObiective;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -134,6 +137,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private Button btnDataLivrare;
 	private CheckBox checkFactPaleti;
 	private CheckBox chkCamionDescoperit;
+	private CheckBox checkObsSofer;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -211,7 +215,13 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		txtTel.setText(listTel[0]);
 
+		checkObsSofer = (CheckBox) findViewById(R.id.chkObsSofer);
+		setListenerCheckObsSofer();
 		txtObservatii = (EditText) findViewById(R.id.txtObservatii);
+		if (DateLivrare.getInstance().getObsLivrare() != null && !DateLivrare.getInstance().getObsLivrare().trim().isEmpty()) {
+			txtObservatii.setText(DateLivrare.getInstance().getObsLivrare());
+			checkObsSofer.setChecked(true);
+		}
 
 		chkbClientLaRaft = (CheckBox) findViewById(R.id.clientRaft);
 		addListenerClientLaRaft();
@@ -377,7 +387,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		layoutPrelucrare04 = (LinearLayout) findViewById(R.id.layoutIndoire);
 		layoutPrelucrare04.setVisibility(View.INVISIBLE);
 
-		if (UtilsUser.isAgentOrSD() && UserInfo.getInstance().getCodDepart().equals("04"))
+		if (UtilsUser.isAgentOrSD() && UserInfo.getInstance().getCodDepart().startsWith("04"))
 			layoutPrelucrare04.setVisibility(View.VISIBLE);
 
 		if (UtilsUser.isKA())
@@ -411,8 +421,28 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		btnDataLivrare = (Button) findViewById(R.id.btnDataLivrare);
 		addListenerDataLivrare();
 
+		setLivrareCustodieLayout();
+
 		performGetAdreseLivrare();
 
+	}
+
+	private void setLivrareCustodieLayout() {
+		if (UtilsComenzi.isLivrareCustodie()) {
+			((LinearLayout) findViewById(R.id.layoutTipReducere)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layoutDocInsot)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layoutPlata)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layoutResponsabil)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layoutClientRaft)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layoutFactPaleti)).setVisibility(View.GONE);
+		} else {
+			((LinearLayout) findViewById(R.id.layoutTipReducere)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layoutDocInsot)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layoutPlata)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layoutResponsabil)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layoutClientRaft)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layoutFactPaleti)).setVisibility(View.VISIBLE);
+		}
 	}
 
 	private void addListenerDataLivrare() {
@@ -441,21 +471,118 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 			if (view.isShown()) {
 
-				SimpleDateFormat displayFormat = new SimpleDateFormat("dd.MM.yyyy");
 				Calendar calendar = new GregorianCalendar(selectedYear, selectedMonth, selectedDay);
 
-				StatusIntervalLivrare statusInterval = UtilsDates.getStatusIntervalLivrare(calendar.getTime());
+				Calendar calendarNow = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar
+						.getInstance().get(Calendar.DAY_OF_MONTH));
 
-				if (statusInterval.isValid()) {
-					textDataLivrare.setText(displayFormat.format(calendar.getTime()));
-					DateLivrare.getInstance().setDataLivrare(displayFormat.format(calendar.getTime()));
-				} else
-					Toast.makeText(getApplicationContext(), statusInterval.getMessage(), Toast.LENGTH_LONG).show();
+				int dayLivrare = calendar.get(Calendar.DAY_OF_WEEK);
+
+				if (dayLivrare == 7) {
+					showDialogLivrareSambata(calendar);
+				} else {
+					if (calendar.getTime().getTime() == calendarNow.getTime().getTime())
+						showDialogLivrareAstazi(calendar);
+					else
+						setDataLivrare(calendar);
+				}
+
 			}
 
 		}
 	};
 
+	private void showDialogLivrareAstazi(final Calendar dataLivrare) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+		builder.setTitle("Atentie!");
+		builder.setMessage("Ai solicitat livrare in cursul zilei de azi! Sigur este corect?");
+		builder.setCancelable(false);
+
+		builder.setPositiveButton("Da", new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+
+				setDataLivrare(dataLivrare);
+				dialog.dismiss();
+			}
+		});
+
+		builder.setNegativeButton("Nu", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				btnDataLivrare.performClick();
+				dialog.dismiss();
+			}
+		});
+
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+
+	private void setDataLivrare(Calendar dataLivrare) {
+		SimpleDateFormat displayFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+		StatusIntervalLivrare statusInterval = UtilsDates.getStatusIntervalLivrare(dataLivrare.getTime());
+
+		if (statusInterval.isValid()) {
+			textDataLivrare.setText(displayFormat.format(dataLivrare.getTime()));
+			DateLivrare.getInstance().setDataLivrare(displayFormat.format(dataLivrare.getTime()));
+		} else
+			Toast.makeText(getApplicationContext(), statusInterval.getMessage(), Toast.LENGTH_LONG).show();
+
+	}
+
+	private void showDialogLivrareSambata(final Calendar dataLivrare) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+		builder.setTitle("Atentie!");
+		builder.setMessage("Clientul are program de lucru si sambata?");
+		builder.setCancelable(false);
+
+		builder.setPositiveButton("Da", new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+
+				setDataLivrare(dataLivrare);
+				dialog.dismiss();
+			}
+		});
+
+		builder.setNegativeButton("Nu", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				textDataLivrare.setText("");
+				DateLivrare.getInstance().setDataLivrare("");
+				showInfoLivrareSambata();
+			}
+		});
+
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+
+	private void showInfoLivrareSambata() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+		builder.setTitle("Info");
+		builder.setMessage("Livrarea nu poate fi facuta sambata!");
+
+		builder.setPositiveButton("Inchide", new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+
+				dialog.dismiss();
+			}
+		});
+
+		AlertDialog alert = builder.create();
+		alert.show();
+	}	
+	
 	private void addListenerClientLaRaft() {
 
 		chkbClientLaRaft.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -544,6 +671,23 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		checkMacara.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				DateLivrare.getInstance().setMasinaMacara(isChecked);
+			}
+		});
+	}
+
+	private void setListenerCheckObsSofer() {
+		checkObsSofer.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+				if (isChecked) {
+					txtObservatii.setVisibility(View.VISIBLE);
+					checkObsSofer.setText("Da");
+				} else {
+					checkObsSofer.setText("Nu");
+					txtObservatii.setText("");
+					txtObservatii.setVisibility(View.INVISIBLE);
+				}
+
 			}
 		});
 	}
@@ -720,7 +864,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					layoutAdr1.setVisibility(View.GONE);
 					layoutAdr2.setVisibility(View.GONE);
 					layoutHarta.setVisibility(View.GONE);
-					performGetAdreseLivrare();
+
+					if (adreseList == null || adreseList.isEmpty())
+						performGetAdreseLivrare();
+					else if (selectedAddrModifCmd != -1)
+						spinnerAdreseLivrare.setSelection(selectedAddrModifCmd);
 
 				}
 
@@ -817,6 +965,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 			AdapterAdreseLivrare adapterAdrese = new AdapterAdreseLivrare(this, adreseList);
 			spinnerAdreseLivrare.setAdapter(adapterAdrese);
+
+			if (selectedAddrModifCmd != -1)
+				spinnerAdreseLivrare.setSelection(selectedAddrModifCmd);
 
 			if (!ModificareComanda.selectedCmd.equals("")) {
 				if (!adrNouaModifCmd)
@@ -1272,13 +1423,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			return;
 		}
 
-		/*
-		if (!isAdresaPozitionata()) {
-			Toast.makeText(getApplicationContext(), "Pozitionati adresa pe harta.", Toast.LENGTH_LONG).show();
-			return;
-		}
-		*/
-
 		if (!isAdresaCorecta()) {
 			Toast.makeText(getApplicationContext(), "Completati adresa corect sau pozitionati adresa pe harta.", Toast.LENGTH_LONG).show();
 			return;
@@ -1313,7 +1457,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		dateLivrareInstance.setDateLivrare(adresa + "#" + pers + "#" + telefon + "#" + cantar + "#" + dateLivrareInstance.getTipPlata() + "#"
 				+ dateLivrareInstance.getTransport() + "#" + dateLivrareInstance.getRedSeparat() + "#");
 
-		dateLivrareInstance.setTermenPlata(spinnerTermenPlata.getSelectedItem().toString());
+		if (((LinearLayout) findViewById(R.id.layoutPlata)).getVisibility() == View.VISIBLE)
+			dateLivrareInstance.setTermenPlata(spinnerTermenPlata.getSelectedItem().toString());
 
 		dateLivrareInstance.setObsLivrare(observatii.replace("#", "-").replace("@", "-"));
 		dateLivrareInstance.setObsPlata(obsPlata);
@@ -1340,6 +1485,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		dateLivrareInstance.setFactPaletSeparat(checkFactPaleti.isChecked());
 		dateLivrareInstance.setCamionDescoperit(chkCamionDescoperit.isChecked());
+
+		if (radioText.isChecked() && adresaNouaExista())
+			return;
 
 		finish();
 
@@ -1379,6 +1527,23 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			Toast.makeText(getApplicationContext(), "Pentru aceasta zona tonajul a fost preluat din sistem.", Toast.LENGTH_LONG).show();
 	}
 
+	private boolean adresaNouaExista() {
+		int posAdresa = HelperAdreseLivrare.verificaDistantaAdresaNoua(adreseList, DateLivrare.getInstance().getCoordonateAdresa());
+
+		if (posAdresa != -1) {
+
+			Toast.makeText(getApplicationContext(), "Aceasta adresa exista deja in lista de adrese.", Toast.LENGTH_LONG).show();
+
+			selectedAddrModifCmd = posAdresa;
+			radioLista.setChecked(true);
+			spinnerAdreseLivrare.setSelection(posAdresa);
+
+			return true;
+		} else
+			return false;
+
+	}
+
 	private boolean isAdresaText() {
 		return radioText != null && radioText.isChecked();
 	}
@@ -1398,14 +1563,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	private boolean isAdresaGoogleOk() {
-		//LatLng coordInit = DateLivrare.getInstance().getCoordonateAdresa();
-		
 		GeocodeAddress geoAddress = MapUtils.geocodeAddress(getAddressFromForm(), getApplicationContext());
-
-		/*
-		if (MapUtils.distanceXtoY(coordInit.latitude, coordInit.longitude, geoAddress.getCoordinates().latitude, geoAddress.getCoordinates().longitude, "K") > 1)
-			return false;
-			*/
 
 		DateLivrare.getInstance().setCoordonateAdresa(geoAddress.getCoordinates());
 

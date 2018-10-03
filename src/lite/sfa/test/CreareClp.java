@@ -65,6 +65,8 @@ public class CreareClp extends FragmentActivity {
 					if (clpPageAdapter.getItem(pageNumber).isVisible()) {
 						if (pageNumber == 0) {
 							actionBar.setTitle("CLP - Selectie client");
+							getActionBar().setCustomView(null);
+							getActionBar().setDisplayShowCustomEnabled(true);
 							menuIndex = 2;
 							invalidateOptionsMenu();
 
