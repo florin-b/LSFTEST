@@ -430,14 +430,19 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 				int dayLivrare = calendar.get(Calendar.DAY_OF_WEEK);
 
-				if (dayLivrare == 7) {
-					showDialogLivrareSambata(calendar);
-				} else {
-					if (calendar.getTime().getTime() == calendarNow.getTime().getTime())
-						showDialogLivrareAstazi(calendar);
-					else
-						setDataLivrare(calendar);
-				}
+				String tipTransport = spinnerTransp.getSelectedItem().toString();
+
+				if (tipTransport.toLowerCase().contains("trap")) {
+					if (dayLivrare == 7) {
+						showDialogLivrareSambata(calendar);
+					} else {
+						if (calendar.getTime().getTime() == calendarNow.getTime().getTime())
+							showDialogLivrareAstazi(calendar);
+						else
+							setDataLivrare(calendar);
+					}
+				} else
+					setDataLivrare(calendar);
 
 			}
 

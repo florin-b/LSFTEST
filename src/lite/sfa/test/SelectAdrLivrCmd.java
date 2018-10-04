@@ -478,14 +478,19 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 				int dayLivrare = calendar.get(Calendar.DAY_OF_WEEK);
 
-				if (dayLivrare == 7) {
-					showDialogLivrareSambata(calendar);
-				} else {
-					if (calendar.getTime().getTime() == calendarNow.getTime().getTime())
-						showDialogLivrareAstazi(calendar);
-					else
-						setDataLivrare(calendar);
-				}
+				String tipTransport = spinnerTransp.getSelectedItem().toString();
+
+				if (tipTransport.toLowerCase().contains("trap")) {
+					if (dayLivrare == 7) {
+						showDialogLivrareSambata(calendar);
+					} else {
+						if (calendar.getTime().getTime() == calendarNow.getTime().getTime())
+							showDialogLivrareAstazi(calendar);
+						else
+							setDataLivrare(calendar);
+					}
+				} else
+					setDataLivrare(calendar);
 
 			}
 
@@ -581,8 +586,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		AlertDialog alert = builder.create();
 		alert.show();
-	}	
-	
+	}
+
 	private void addListenerClientLaRaft() {
 
 		chkbClientLaRaft.setOnCheckedChangeListener(new OnCheckedChangeListener() {
