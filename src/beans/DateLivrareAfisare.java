@@ -49,6 +49,7 @@ public class DateLivrareAfisare {
 	private boolean isCamionDescoperit;
 	private String diviziiClient;
 	private String programLivrare = "0";
+	private String livrareSambata = "";
 	
 	public DateLivrareAfisare() {
 
@@ -423,6 +424,14 @@ public class DateLivrareAfisare {
 
 	public void setProgramLivrare(String programLivrare) {
 		this.programLivrare = programLivrare;
+	}
+
+	public String getLivrareSambata() {
+		return livrareSambata;
+	}
+
+	public void setLivrareSambata(String livrareSambata) {
+		this.livrareSambata = livrareSambata;
 	}
 	
 	
