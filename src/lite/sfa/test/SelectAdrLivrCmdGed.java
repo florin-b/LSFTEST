@@ -430,11 +430,14 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 				int dayLivrare = calendar.get(Calendar.DAY_OF_WEEK);
 
-				String tipTransport = spinnerTransp.getSelectedItem().toString();
+				int dayNow = calendarNow.get(Calendar.DAY_OF_WEEK);
 
-				if (tipTransport.toLowerCase().contains("trap")) {
-					if (dayLivrare == 7) {
+				String tipTransp = spinnerTransp.getSelectedItem().toString();
+
+				if (tipTransp.toLowerCase().contains("trap")) {
+					if (dayNow == 5 && dayLivrare == 6) {
 						showDialogLivrareSambata(calendar);
+						setDataLivrare(calendar);
 					} else {
 						if (calendar.getTime().getTime() == calendarNow.getTime().getTime())
 							showDialogLivrareAstazi(calendar);
@@ -458,7 +461,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		builder.setPositiveButton("Da", new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
-
 				setDataLivrare(dataLivrare);
 				dialog.dismiss();
 			}
@@ -499,8 +501,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		builder.setPositiveButton("Da", new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
-
-				setDataLivrare(dataLivrare);
+				DateLivrare.getInstance().setLivrareSambata("X");
 				dialog.dismiss();
 			}
 		});
@@ -509,28 +510,9 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				DateLivrare.getInstance().setLivrareSambata("-");
 				dialog.dismiss();
-				textDataLivrare.setText("");
-				DateLivrare.getInstance().setDataLivrare("");
-				showInfoLivrareSambata();
-			}
-		});
 
-		AlertDialog alert = builder.create();
-		alert.show();
-	}
-
-	private void showInfoLivrareSambata() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-		builder.setTitle("Info");
-		builder.setMessage("Livrarea nu poate fi facuta sambata!");
-
-		builder.setPositiveButton("Inchide", new DialogInterface.OnClickListener() {
-
-			public void onClick(DialogInterface dialog, int which) {
-
-				dialog.dismiss();
 			}
 		});
 

@@ -632,6 +632,9 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	private double getValoareTransportSap() {
 
+		if (tipClient.equals("IP"))
+			return 0.0;
+
 		NumberFormat nf3 = NumberFormat.getInstance(new Locale("en", "US"));
 		nf3.setMinimumFractionDigits(2);
 		nf3.setMaximumFractionDigits(2);
@@ -1412,7 +1415,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 				if (listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1) {
 
-					if (listArticole.get(i).getProcent() > 0){
+					if (listArticole.get(i).getProcent() > 0) {
 						alertDV = true;
 						if (!comandaFinala.getComandaBlocata().equals("21"))
 							comandaFinala.setComandaBlocata("1");
@@ -1438,10 +1441,10 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			}
 
 			if (DateLivrare.getInstance().isAdrLivrNoua() && UtilsUser.isAgentOrSD()) {
-			//	alertSD = true;
+				// alertSD = true;
 
-			//	if (!comandaFinala.getComandaBlocata().equals("21"))
-			//		comandaFinala.setComandaBlocata("1");
+				// if (!comandaFinala.getComandaBlocata().equals("21"))
+				// comandaFinala.setComandaBlocata("1");
 			}
 
 		} catch (Exception ex) {
@@ -1539,6 +1542,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			obj.put("furnizorProduse", " ");
 			obj.put("isCamionDescoperit", DateLivrare.getInstance().isCamionDescoperit());
 			obj.put("programLivrare", DateLivrare.getInstance().getProgramLivrare());
+			obj.put("livrareSambata", DateLivrare.getInstance().getLivrareSambata());
 
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
