@@ -74,6 +74,7 @@ public class DateLivrare {
 	private boolean isCamionDescoperit;
 	private String diviziiClient;
 	private String programLivrare = "0";
+	private String livrareSambata = "";
 
 	private DateLivrareAfisare dateLivrareAfisare;
 
@@ -129,6 +130,7 @@ public class DateLivrare {
 		this.isCamionDescoperit = dateLivrareAfisare.isCamionDescoperit();
 		this.diviziiClient = dateLivrareAfisare.getDiviziiClient();
 		this.programLivrare = dateLivrareAfisare.getProgramLivrare();
+		this.livrareSambata = dateLivrareAfisare.getLivrareSambata();
 	}
 
 	public boolean isClientRaft() {
@@ -552,6 +554,14 @@ public class DateLivrare {
 		this.programLivrare = programLivrare;
 	}
 
+	public String getLivrareSambata() {
+		return livrareSambata;
+	}
+
+	public void setLivrareSambata(String livrareSambata) {
+		this.livrareSambata = livrareSambata;
+	}
+
 	public void resetAll() {
 		codJudet = "";
 		numeJudet = "";
@@ -598,6 +608,7 @@ public class DateLivrare {
 		isCamionDescoperit = false;
 		diviziiClient = "";
 		programLivrare = "0";
+		livrareSambata = "";
 
 	}
 
