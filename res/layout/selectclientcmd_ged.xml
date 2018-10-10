@@ -80,6 +80,19 @@
                 android:typeface="serif" />
 
             <RadioButton
+                android:id="@+id/radioClInstPub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
+                android:text="Institutie publica"
+                android:textColor="@color/detColor4"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:visibility="invisible"
+                 />
+
+            <RadioButton
                 android:id="@+id/radioClMeserias"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

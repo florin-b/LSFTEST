@@ -49,7 +49,7 @@ public class CustodiiAdapter extends BaseAdapter {
 
 		viewHolder.textIdCmd.setText(comanda.getId());
 		viewHolder.textClient.setText(comanda.getNumeClient());
-		viewHolder.textData.setText(UtilsFormatting.formatDateFromSap(comanda.getData().split("#")[0]));
+		viewHolder.textData.setText(UtilsFormatting.formatDate(comanda.getData().split("#")[0]));
 		viewHolder.textStare.setText(InfoStrings.statusSAPMsg(Integer.valueOf(comanda.getCodStare())));
 		viewHolder.textCmdSap.setText(comanda.getCmdSap().equals("-1") ? " " : comanda.getCmdSap());
 		

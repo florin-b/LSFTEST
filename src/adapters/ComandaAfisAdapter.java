@@ -52,8 +52,15 @@ public class ComandaAfisAdapter extends BaseAdapter {
 		BeanComandaCreata comanda = getItem(position);
 
 		viewHolder.textIdCmd.setText(comanda.getId());
-		viewHolder.textClient.setText(comanda.getNumeClient());
-		viewHolder.textData.setText(UtilsFormatting.formatDate(comanda.getData()));
+
+		if (comanda.getTipComanda() != null && comanda.getTipComanda().equals("CUST")) {
+			viewHolder.textData.setText(UtilsFormatting.formatDate(comanda.getData().split("#")[0]));
+			viewHolder.textClient.setText(comanda.getNumeClient() + " (Cust)");
+		} else {
+			viewHolder.textData.setText(UtilsFormatting.formatDate(comanda.getData()));
+			viewHolder.textClient.setText(comanda.getNumeClient());
+		}
+
 		viewHolder.textSuma.setText(numberFormat.format(Double.valueOf(comanda.getSuma())));
 		viewHolder.textStare.setText(comanda.getStare());
 		viewHolder.textMoneda.setText(comanda.getMoneda());

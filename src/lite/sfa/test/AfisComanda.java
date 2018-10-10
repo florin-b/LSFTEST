@@ -608,24 +608,26 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 	private void performArtCmd() {
 
-		try {
+		HashMap<String, String> params = new HashMap<String, String>();
 
-			HashMap<String, String> params = new HashMap<String, String>();
+		String tipUser = "";
+		if (UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("35"))
+			tipUser = "KA";
 
-			String tipUser = "";
-			if (UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("35"))
-				tipUser = "KA";
+		params.put("nrCmd", selectedCmd);
+		params.put("afisCond", "1");
+		params.put("tipUser", tipUser);
 
-			params.put("nrCmd", selectedCmd);
-			params.put("afisCond", "1");
-			params.put("tipUser", tipUser);
+		comenzi.getArticoleComandaJSON(params);
 
-			comenzi.getArticoleComandaJSON(params);
+	}
+	
+	private void performArtCmdCustodie()
+	{
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("nrCmd", selectedCmd);
 
-		} catch (Exception e) {
-			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-		}
-
+		comenzi.getArticoleCustodie(params);
 	}
 
 	boolean isCVorSM() {
@@ -793,7 +795,11 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 				if (!selectedCmd.equals("-1")) {
 					comandaCurenta = (BeanComandaCreata) arg0.getAdapter().getItem(arg2);
 					selectedCmd = comandaCurenta.getId();
-					performArtCmd();
+
+					if (comandaCurenta.getTipComanda() != null && comandaCurenta.getTipComanda().equals("CUST"))
+						performArtCmdCustodie();
+					else
+						performArtCmd();
 				}
 
 			}
@@ -887,6 +893,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			showListComenzi(comenzi.getComenziDivizie(selectedDivizie));
 			break;
 		case GET_ARTICOLE_COMANDA_JSON:
+		case GET_ARTICOLE_CUSTODIE:
 			populateArtCmdList(comenzi.deserializeArticoleComanda((String) result));
 			break;
 		case GET_STARE_COMANDA:

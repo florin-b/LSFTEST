@@ -250,15 +250,14 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		// etUsername.setText("IBAT"); //superav 07
 		// etPassword.setText("2PX4cw");
 
-		//etUsername.setText("FROTARU");	//comenzi custodie
-		//etPassword.setText("89mLcn");
-		
-		//etUsername.setText("IPUSCAS"); //SDCVA
-		//etPassword.setText("4LMvYg");
-		
-		//etUsername.setText("androsd"); //ASDL
-		//etPassword.setText("112");
-		
+		// etUsername.setText("FROTARU"); //comenzi custodie
+		// etPassword.setText("89mLcn");
+
+		// etUsername.setText("IPUSCAS"); //SDCVA
+		// etPassword.setText("4LMvYg");
+
+		etUsername.setText("LARGER"); // 
+		etPassword.setText("Zu12Tp");
 
 		globalMyIP = getIPConnection();
 

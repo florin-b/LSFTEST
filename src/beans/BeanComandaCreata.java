@@ -35,7 +35,8 @@ public class BeanComandaCreata {
 	private String codStare;
 	private double avans;
 	private boolean clientRaft;
-	
+	private String tipComanda;
+
 	public BeanComandaCreata() {
 
 	}
@@ -304,6 +305,13 @@ public class BeanComandaCreata {
 		this.clientRaft = clientRaft;
 	}
 
+	public String getTipComanda() {
+		return tipComanda;
+	}
+
+	public void setTipComanda(String tipComanda) {
+		this.tipComanda = tipComanda;
+	}
 
 	@Override
 	public String toString() {

@@ -506,6 +506,9 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 					if (comandaObject.has("telAgent"))
 						comanda.setTelAgent(comandaObject.getString("telAgent"));
 
+					if (comandaObject.has("tipComanda"))
+						comanda.setTipComanda(comandaObject.getString("tipComanda"));
+					
 					listComenzi.add(comanda);
 
 				}

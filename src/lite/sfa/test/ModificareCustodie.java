@@ -197,6 +197,7 @@ public class ModificareCustodie extends Activity implements ComenziDAOListener {
 
 		params.put("codAgent", UserInfo.getInstance().getCod());
 		params.put("interval", String.valueOf(intervalAfisare));
+		params.put("tipCmd", "1");
 
 		operatiiComenzi.getLivrariCustodie(params);
 

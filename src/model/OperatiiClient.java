@@ -82,6 +82,12 @@ public class OperatiiClient implements AsyncTaskListener {
 		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
 		call.getCallResultsFromFragment();
 	}
+	
+	public void getClientiInstitPub(HashMap<String, String> params) {
+		numeComanda = EnumClienti.GET_CLIENTI_INST_PUB;
+		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
+		call.getCallResultsFromFragment();
+	}	
 
 	public ArrayList<BeanClient> deserializeListClienti(String serializedListClienti) {
 		BeanClient client = null;

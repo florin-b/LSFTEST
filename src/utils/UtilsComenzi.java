@@ -81,4 +81,8 @@ public class UtilsComenzi {
 		return DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.LIVRARE_CUSTODIE;
 	}
 
+	public static boolean isComandaInstPublica() {
+		return DateLivrare.getInstance().getTipPersClient() != null && DateLivrare.getInstance().getTipPersClient().toUpperCase().equals("IP");
+	}
+
 }
