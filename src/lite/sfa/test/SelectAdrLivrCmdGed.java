@@ -1257,7 +1257,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		}
 
-		if (spinnerProgramLivrare.getSelectedItemPosition() == 0) {
+		if (spinnerProgramLivrare.getSelectedItemPosition() == 0 && spinnerTransp.getSelectedItem().toString().toLowerCase().contains("trap")) {
 			Toast.makeText(getApplicationContext(), "Selectati perioada de livrare", Toast.LENGTH_SHORT).show();
 			return;
 		}
@@ -1339,7 +1339,11 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		dateLivrareInstance.setFactPaletSeparat(checkFactPaleti.isChecked());
 		dateLivrareInstance.setCamionDescoperit(chkCamionDescoperit.isChecked());
 
-		dateLivrareInstance.setProgramLivrare(String.valueOf(spinnerProgramLivrare.getSelectedItemPosition()));
+		if (spinnerTransp.getSelectedItem().toString().toLowerCase().contains("trap"))
+			dateLivrareInstance.setProgramLivrare(String.valueOf(spinnerProgramLivrare.getSelectedItemPosition()));
+		else
+			dateLivrareInstance.setProgramLivrare("0");
+
 		finish();
 
 	}
