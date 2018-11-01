@@ -734,7 +734,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	public void calculProcente() {
 
-		if (UtilsUser.isAgentOrSD() || UtilsUser.isConsWood())
+		if (UtilsUser.isAgentOrSD() || UtilsUser.isConsWood() || UtilsComenzi.isComandaInstPublica())
 			return;
 
 		adapter.notifyDataSetChanged();
@@ -1416,7 +1416,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 				myArray.put(obj);
 
-				if (listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1) {
+				if ((listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1) || UtilsComenzi.isComandaInstPublica()) {
 
 					if (listArticole.get(i).getProcent() > 0) {
 						alertDV = true;

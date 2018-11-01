@@ -36,6 +36,7 @@ public class BeanComandaCreata {
 	private double avans;
 	private boolean clientRaft;
 	private String tipComanda;
+	private boolean isCmdInstPublica;
 
 	public BeanComandaCreata() {
 
@@ -311,6 +312,14 @@ public class BeanComandaCreata {
 
 	public void setTipComanda(String tipComanda) {
 		this.tipComanda = tipComanda;
+	}
+
+	public boolean isCmdInstPublica() {
+		return isCmdInstPublica;
+	}
+
+	public void setCmdInstPublica(boolean isCmdInstPublica) {
+		this.isCmdInstPublica = isCmdInstPublica;
 	}
 
 	@Override

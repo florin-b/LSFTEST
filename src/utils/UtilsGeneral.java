@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import lite.sfa.test.R;
+import model.DateLivrare;
 import model.UserInfo;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import enums.EnumTipAlert;
+import enums.TipCmdDistrib;
 
 public class UtilsGeneral {
 
@@ -55,6 +57,9 @@ public class UtilsGeneral {
 		listDepozite.add("97V1");
 
 		listDepozite.add("DSCM");
+
+		if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.DISPOZITIE_LIVRARE)
+			listDepozite.remove("DESC");
 
 		return listDepozite.toArray(new String[listDepozite.size()]);
 	}
@@ -213,7 +218,7 @@ public class UtilsGeneral {
 			tipTransport = "Transport terti";
 		} else if (codTransport.equals("TERR")) {
 			tipTransport = "Curier rapid";
-		}else if (codTransport.equals("TFRN")) {
+		} else if (codTransport.equals("TFRN")) {
 			tipTransport = "Transport furnizor";
 		}
 

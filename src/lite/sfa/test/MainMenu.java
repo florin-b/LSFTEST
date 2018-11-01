@@ -135,10 +135,10 @@ public class MainMenu extends Activity {
 			R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status, R.drawable.client_info,
 			R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
-	public String[] btnNamesCONSGED = { "Utilizator", "Creare cmd GED", "Afisare comanda", "Comenzi simulate", "Retur paleti", "Stare retur paleti", "Vanzari",
+	public String[] btnNamesCONSGED = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Comenzi simulate", "Retur paleti", "Stare retur paleti", "Vanzari",
 			"Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Preturi concurenta", "Info client", "Despre", "Iesire" };
 
-	public int[] btnImageCONSGED = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.preview_icon, R.drawable.simulate,
+	public int[] btnImageCONSGED = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon,R.drawable.modif_icon, R.drawable.preview_icon, R.drawable.simulate,
 			R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon,
 			R.drawable.status, R.drawable.concurenta, R.drawable.client_info, R.drawable.despre_icon, R.drawable.exit_icon };
 

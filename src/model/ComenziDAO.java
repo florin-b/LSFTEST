@@ -509,6 +509,9 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 					if (comandaObject.has("tipComanda"))
 						comanda.setTipComanda(comandaObject.getString("tipComanda"));
 					
+					if (comandaObject.has("isCmdInstPublica"))
+						comanda.setCmdInstPublica(Boolean.valueOf(comandaObject.getString("isCmdInstPublica")));
+					
 					listComenzi.add(comanda);
 
 				}

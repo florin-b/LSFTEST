@@ -236,12 +236,12 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		adapterSpinnerDepozite.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerDepoz.setAdapter(adapterSpinnerDepozite);
 		spinnerDepoz.setOnItemSelectedListener(new OnSelectDepozit());
-		
+
 		if (isLivrareCustodie())
 			spinnerDepoz.setVisibility(View.INVISIBLE);
 		else
 			spinnerDepoz.setVisibility(View.VISIBLE);
-		
+
 		spinnerUnitMas = (Spinner) findViewById(R.id.spinnerUnitMas);
 
 		listUmVanz = new ArrayList<HashMap<String, String>>();
@@ -1317,7 +1317,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 		String cantArticol = textCant.getText().toString().trim();
 		String localUnitMas = textUM.getText().toString().trim();
-		
+
 		if (codArticol.length() == 18)
 			codArticol = codArticol.substring(10, 18);
 

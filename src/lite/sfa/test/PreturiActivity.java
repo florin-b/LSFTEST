@@ -465,7 +465,9 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 
 		// pentru directori se afiseaza si pretul GED
 		TextView labelPretGED = new TextView(this);
-		if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14")) {
+		//if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14")) {
+		//trebuie revizuite exceptiile
+		if (1 == 1) {
 			labelPretGED.setText("Pret GED");
 			labelPretGED.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
 			labelPretGED.setTextSize(16);
@@ -522,7 +524,8 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 				}
 
 				// pentru directori se afiseaza si pretul GED
-				if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14")) {
+				//if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14")) {
+				if (1 == 1) {	
 
 					labelPretGED = new TextView(this);
 					labelPretGED.setText("");

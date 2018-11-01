@@ -376,6 +376,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 					nextScreen.putExtra("rezervStoc", false);
 					nextScreen.putExtra("filialaAlternativa", selectedUnitLog);
 					nextScreen.putExtra("canalDistrib", ModificareComanda.isComandaDistrib ? "10" : "20");
+					nextScreen.putExtra("tipPersClient", comandaSelectata.isCmdInstPublica() ? "IP" : "");
 
 				} else {
 					nextScreen = new Intent(getApplicationContext(), SelectArtModificareCmd.class);
@@ -972,7 +973,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 				obj.put("valTransport", listArticoleComanda.get(i).getValTransport());
 
 				if (!UtilsUser.isAgentOrSDorKA()) {
-					if (listArticoleComanda.get(i).getNumeArticol() != null && listArticoleComanda.get(i).getPonderare() == 1) {
+					if ((listArticoleComanda.get(i).getNumeArticol() != null && listArticoleComanda.get(i).getPonderare() == 1) || comandaSelectata.isCmdInstPublica()) {
 						alertDV = true;
 						if (!comandaFinala.getComandaBlocata().equals("21"))
 							comandaFinala.setComandaBlocata("1");
@@ -1116,7 +1117,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	}
 
 	private boolean isConditiiCmdAccept() {
-		if (UtilsUser.isAgentOrSD() && isComandaGed())
+		if ((UtilsUser.isAgentOrSD() && isComandaGed()) || comandaSelectata.isCmdInstPublica())
 			return isCmdGEDOkToSave();
 		else
 			return isCommandaOkToSave();
@@ -1763,7 +1764,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 	private void calculValTransport(ArrayList<ArticolComanda> listArticole) {
 
-		if (UtilsUser.isAgentOrSDorKA() || UtilsUser.isConsWood()) {
+		if (UtilsUser.isAgentOrSDorKA() || UtilsUser.isConsWood() || comandaSelectata.isCmdInstPublica()) {
 			return;
 		}
 
@@ -1823,7 +1824,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	}
 
 	private void calculProcente(ArrayList<ArticolComanda> listArticole) {
-		if (UtilsUser.isAgentOrSDorKA() || UtilsUser.isConsWood()) {
+		if (UtilsUser.isAgentOrSDorKA() || UtilsUser.isConsWood() || comandaSelectata.isCmdInstPublica()) {
 			valTranspBtn.setVisibility(View.GONE);
 			return;
 		}

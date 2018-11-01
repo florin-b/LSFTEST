@@ -23,6 +23,7 @@ import model.OperatiiArticolFactory;
 import model.UserInfo;
 import utils.DepartamentAgent;
 import utils.UtilsArticole;
+import utils.UtilsComenzi;
 import utils.UtilsFormatting;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
@@ -152,6 +153,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		MAV1;
 	}
 
+	private String tipPersClient;
+	
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
@@ -168,6 +171,11 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		tipComanda = intent.getStringExtra("tipComanda");
 		rezervStoc = Boolean.valueOf(intent.getStringExtra("rezervStoc"));
 		filialaAlternativa = intent.getStringExtra("filialaAlternativa");
+		
+		tipPersClient = intent.getStringExtra("tipPersClient");
+		
+		if (isCV() && tipPersClient != null && !tipPersClient.isEmpty())
+			DateLivrare.getInstance().setTipPersClient(tipPersClient);
 
 		opArticol = OperatiiArticolFactory.createObject("OperatiiArticolImpl", this);
 		opArticol.setListener(this);
@@ -1399,7 +1407,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		}
 
 		if (globalDepozSel.substring(2, 3).equals("V")) {
-			if (initPrice / globalCantArt * valMultiplu < cmpArt) {
+			if (initPrice / globalCantArt * valMultiplu < cmpArt && !UtilsArticole.isArticolPermitSubCmp(codArticol)) {
 				Toast.makeText(getApplicationContext(), "Pret sub cmp!", Toast.LENGTH_LONG).show();
 				return;
 			}
@@ -1607,7 +1615,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	}
 
 	private boolean userCannotModifyPrice() {
-		return UserInfo.getInstance().getTipUserSap().equals("CONS-GED") || UserInfo.getInstance().getTipUserSap().equals("CVR");
+
+		return (UserInfo.getInstance().getTipUserSap().equals("CONS-GED") || UserInfo.getInstance().getTipUserSap().equals("CVR"))
+				&& !UtilsComenzi.isComandaInstPublica();
+
 	}
 
 	private double getProcentTVA(PretArticolGed pretArticol) {
