@@ -361,12 +361,10 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			spinnerAgenti = (Spinner) v.findViewById(R.id.spinnerAgenti);
 			setSpinnerAgentiListener();
 
-			// consilieri, se face selectie departament
 			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
 					|| UserInfo.getInstance().getTipAcces().equals("44") || UserInfo.getInstance().getTipAcces().equals("39")) {
 				layoutTipClient.setVisibility(View.VISIBLE);
-				spinnerDepartament = (Spinner) v.findViewById(R.id.spinnerDepartament);
-				loadDepartamentSpinner();
+
 			} else {
 				addListenerTextSelClient();
 				addListenerSaveClient();
