@@ -23,6 +23,10 @@ public class UtilsUser {
 		return UserInfo.getInstance().getTipUser().equals("KA");
 	}
 
+	public static boolean isUserSK() {
+		return UserInfo.getInstance().getTipUser().equals("SK");
+	}	
+	
 	public static boolean isCV() {
 		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM")
 				|| UserInfo.getInstance().getTipUser().equals("CVR") || UserInfo.getInstance().getTipUser().equals("SMR");

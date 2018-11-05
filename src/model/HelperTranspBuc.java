@@ -222,7 +222,7 @@ public class HelperTranspBuc {
 
 		
 		
-		if (UtilsUser.isUserKA()) {
+		if (UtilsUser.isUserKA() || UtilsUser.isUserSK()) {
 
 			if (!ListaArticoleComanda.getInstance().getListArticoleComanda().isEmpty())
 				codDepart = ListaArticoleComanda.getInstance().getListArticoleComanda().get(0).getDepart();
