@@ -114,7 +114,7 @@ public class UtilsComenziGed {
 			}
 
 			ArticolComanda articol = new ArticolComanda();
-			articol.setCodArticol("30101050");
+			articol.setCodArticol("30101060");
 			articol.setNumeArticol("PRESTARI SERVICII TRANSPORT");
 			articol.setCantitate(1.0);
 			articol.setDepozit(depozit);

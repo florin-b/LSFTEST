@@ -43,6 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import utils.UtilsUser;
 import adapters.ArticoleCreareAdapter;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -273,14 +274,18 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 	private void CreateMenu(Menu menu) {
 
-		MenuItem mnu0 = menu.add(0, 0, 0, "Tip");
+		if (!UserInfo.getInstance().getTipUserSap().equals("INFO") && !UtilsUser.isSMR() && !UtilsUser.isCVR() && !UtilsUser.isSSCM() && !UtilsUser.isCGED()
+				&& !UtilsUser.isOIVPD()) {
+			MenuItem mnu0 = menu.add(0, 0, 0, "Tip");
 
-		mnu0.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+			mnu0.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
-		if (tipComandaDistributie == TipCmdDistrib.DISPOZITIE_LIVRARE) {
-			MenuItem mnu1 = menu.add(0, 1, 1, "Furnizor");
+			if (tipComandaDistributie == TipCmdDistrib.DISPOZITIE_LIVRARE) {
+				MenuItem mnu1 = menu.add(0, 1, 1, "Furnizor");
 
-			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+				mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+			}
+
 		}
 
 		MenuItem mnu2 = menu.add(0, 2, 2, "Client");
@@ -769,9 +774,17 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 									if (CreareComanda.restCredit >= CreareComanda.totalComanda) {
 										goSaveCmd = true;
 									} else {
-										goSaveCmd = true;
-										alertCredite = true;
+
 										Toast.makeText(getApplicationContext(), "Limita de credit a fost depasita!", Toast.LENGTH_SHORT).show();
+
+										if (UserInfo.getInstance().getTipUserSap().equals(Constants.tipInfoAv) || UtilsUser.isSMR() || UtilsUser.isCVR()
+												|| UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD())
+											// false in prd
+											goSaveCmd = true;
+										else
+											goSaveCmd = true;
+
+										alertCredite = true;
 									}
 								} else {
 									goSaveCmd = true;
@@ -1044,7 +1057,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			String tipUser = "AV";
 			HashMap<String, String> params = new HashMap<String, String>();
 
-			if (UserInfo.getInstance().getTipAcces().equals("27"))
+			if (UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("32"))
 				tipUser = "KA";
 
 			params.put("comanda", comandaFinalaStr);
@@ -1055,6 +1068,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			params.put("JSONArt", articoleFinaleStr);
 			params.put("JSONComanda", comandaJson);
 			params.put("JSONDateLivrare", serializeDateLivrare());
+			params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 
 			comandaDAO.salveazaComandaDistrib(params);
 
@@ -1279,7 +1293,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 	// userul este agent, sd sau ka
 	boolean isUserExceptie() {
 		return UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("10")
-				|| UserInfo.getInstance().getTipAcces().equals("27");
+				|| UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("62")
+				|| UserInfo.getInstance().getTipAcces().equals("32");
 	}
 
 	private boolean isArtGedExceptie(ArticolComanda articolComanda) {
@@ -1413,6 +1428,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			obj.put("codSuperAgent", UserInfo.getInstance().getCodSuperUser());
 			obj.put("programLivrare", DateLivrare.getInstance().getProgramLivrare());
 			obj.put("livrareSambata", DateLivrare.getInstance().getLivrareSambata());
+			obj.put("blocScara", DateLivrare.getInstance().getBlocScara());
 
 		} catch (JSONException ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
@@ -1685,6 +1701,9 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		filialaAlternativa = UserInfo.getInstance().getUnitLog();
 
 		ListaArticoleComanda.getInstance().clearArticoleComanda();
+
+		if (!UserInfo.getInstance().getCodSuperUser().isEmpty())
+			UserInfo.getInstance().setCod(UserInfo.getInstance().getCodSuperUser());
 
 		initLocale();
 

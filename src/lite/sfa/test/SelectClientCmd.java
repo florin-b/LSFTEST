@@ -136,7 +136,7 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 		spinnerAgenti = ((Spinner) findViewById(R.id.spinnerAgenti));
 		setSpinnerAgentiListener();
 
-		if (UtilsUser.isSuperAv()) {
+		if (UtilsUser.isSuperAv() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD()) {
 			((LinearLayout) findViewById(R.id.layoutAgentClient)).setVisibility(View.VISIBLE);
 		}
 
@@ -224,7 +224,7 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 		codClient = client.getCodClient();
 		tipClientVar = client.getTipClient();
 
-		if (UtilsUser.isSuperAv()) {
+		if (UtilsUser.isSuperAv() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD()) {
 
 			String[] tokAgenti = client.getAgenti().split("@");
 

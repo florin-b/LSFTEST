@@ -88,6 +88,7 @@
         <item >Selectati perioada de livrare</item>
         <item >08.00 &#45; 14.00</item>
         <item >14.00 &#45; 18.00</item>
+        <item >Toata ziua</item>
     </string-array>
 
 </resources>

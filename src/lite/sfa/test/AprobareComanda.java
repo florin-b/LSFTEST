@@ -414,7 +414,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		}
 
 		conditiiComandaHeader.setId(Integer.valueOf(selectedCmd));
-		conditiiComandaHeader.setConditiiCalit(Double.valueOf(condCal));
+		conditiiComandaHeader.setConditiiCalit(Double.valueOf(condCal.replace(',','.')));
 		conditiiComandaHeader.setNrFact(nrFact);
 		conditiiComandaHeader.setObservatii(commentsCondAprob);
 

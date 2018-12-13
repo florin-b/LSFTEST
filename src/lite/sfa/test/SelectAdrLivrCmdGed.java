@@ -435,7 +435,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 				String tipTransp = spinnerTransp.getSelectedItem().toString();
 
 				if (tipTransp.toLowerCase().contains("trap")) {
-					if (dayNow == 5 && dayLivrare == 6) {
+					if ((dayNow == 5 || dayNow == 6) && dayLivrare == 6) {
 						showDialogLivrareSambata(calendar);
 						setDataLivrare(calendar);
 					} else {

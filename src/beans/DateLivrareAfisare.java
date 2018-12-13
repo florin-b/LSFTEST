@@ -50,6 +50,7 @@ public class DateLivrareAfisare {
 	private String diviziiClient;
 	private String programLivrare = "0";
 	private String livrareSambata = "";
+	private String blocScara = "";
 	
 	public DateLivrareAfisare() {
 
@@ -432,6 +433,14 @@ public class DateLivrareAfisare {
 
 	public void setLivrareSambata(String livrareSambata) {
 		this.livrareSambata = livrareSambata;
+	}
+
+	public String getBlocScara() {
+		return blocScara;
+	}
+
+	public void setBlocScara(String blocScara) {
+		this.blocScara = blocScara;
 	}
 	
 	

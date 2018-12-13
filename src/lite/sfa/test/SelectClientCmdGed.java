@@ -683,15 +683,6 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					if (radioCmdNormala.isChecked())
 						CreareComandaGed.tipComanda = "N";
 
-					if (radioCmdSimulata.isChecked())
-						CreareComandaGed.tipComanda = "S";
-
-					if (radioRezervStocDa.isChecked())
-						CreareComandaGed.rezervStoc = true;
-
-					if (radioRezervStocNu.isChecked())
-						CreareComandaGed.rezervStoc = false;
-
 					CreareComandaGed.numeClientVar = txtNumeClientGed.getText().toString().trim();
 
 					if (layoutTextJ.getVisibility() == View.VISIBLE)
@@ -723,6 +714,15 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					CreareComandaGed.tipClient = "IP";
 					DateLivrare.getInstance().setTipPersClient("IP");
 
+				}
+
+				if (radioCmdSimulata.isChecked()) {
+					CreareComandaGed.tipComanda = "S";
+
+					if (radioRezervStocDa.isChecked())
+						CreareComandaGed.rezervStoc = true;
+					else
+						CreareComandaGed.rezervStoc = false;
 				}
 
 				finish();

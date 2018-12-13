@@ -102,11 +102,29 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		addListenerUserName();
 		addListenerPassword();
 
-		etUsername.setText("androag");
+		etUsername.setText("androsd");
 		etPassword.setText("112");
 
-		etUsername.setText("AURETU"); // 
-		etPassword.setText("bfmy8k");
+		// etUsername.setText("SIONITA");
+		// etPassword.setText("SURY76");
+
+		etUsername.setText("VRATA"); //
+		etPassword.setText("TG2dR7");
+
+		etUsername.setText("luciad"); // SMR
+		etPassword.setText("1LuciA5");
+
+		etUsername.setText("TDUMITRU"); // CVR
+		etPassword.setText("d6hPY9");
+
+		etUsername.setText("IBUGACIU1"); //
+		etPassword.setText("j8ZPTD");
+
+		etUsername.setText("GMACOVEI"); //
+		etPassword.setText("6Nx9br");
+
+		etUsername.setText("CGRIGORAS1"); //
+		etPassword.setText("267Jvj");
 
 		globalMyIP = getIPConnection();
 
@@ -312,7 +330,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 
 				if (token[5].equals("8") || token[5].equals("9") || token[5].equals("10") || token[5].equals("14") || token[5].equals("12")
 						|| token[5].equals("27") || token[5].equals("35") || token[5].equals("17") || token[5].equals("18") || token[5].equals("32")
-						|| token[5].equals("41") || token[5].equals("43") || token[5].equals("44") || token[5].equals("45") || token[5].equals("39")) {
+						|| token[5].equals("41") || token[5].equals("43") || token[5].equals("44") || token[5].equals("45") || token[5].equals("39")
+						|| token[5].equals("51") || token[5].equals("50") || token[5].equals("62")) {
 
 					UserInfo uInfo = UserInfo.getInstance();
 
@@ -377,7 +396,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 					uInfo.setInitDivizie(token[14]);
 					uInfo.setCodDepart(UtilsGeneral.getDepart(token[1]));
 
-					if (uInfo.getTipUserSap().equals(Constants.tipSuperAv))
+					if (uInfo.getTipUserSap().equals(Constants.tipSuperAv) || uInfo.getTipUserSap().equals(Constants.tipInfoAv) || UtilsUser.isSMR()
+							|| UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD())
 						uInfo.setCodSuperUser(uInfo.getCod());
 
 					startMainMenuActivity();

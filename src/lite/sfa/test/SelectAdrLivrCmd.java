@@ -138,6 +138,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private CheckBox checkFactPaleti;
 	private CheckBox chkCamionDescoperit;
 	private CheckBox checkObsSofer;
+	private ArrayAdapter<String> adapterSpinnerTransp;
+	private TextView txtBlocScara;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -253,10 +255,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		}
 
 		spinnerTransp = (Spinner) findViewById(R.id.spinnerTransp);
-		ArrayAdapter<String> adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransport);
+		adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransport);
 		adapterSpinnerTransp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerTransp.setAdapter(adapterSpinnerTransp);
 		addSpinnerTranspListener();
+		setTipTranspInfoAgent();
 
 		spinnerJudet = (Spinner) findViewById(R.id.spinnerJudet);
 		spinnerJudet.setOnItemSelectedListener(new regionSelectedListener());
@@ -414,6 +417,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		layoutAdr2.setVisibility(View.GONE);
 
 		textDataLivrare = (TextView) findViewById(R.id.textDataLivrare);
+		
+		txtBlocScara = (TextView) findViewById(R.id.txtBlocScara);
+		if (!DateLivrare.getInstance().getBlocScara().isEmpty())
+			txtBlocScara.setText(DateLivrare.getInstance().getBlocScara());
+		
 
 		if (!DateLivrare.getInstance().getDataLivrare().isEmpty())
 			textDataLivrare.setText(DateLivrare.getInstance().getDataLivrare());
@@ -442,6 +450,14 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			((LinearLayout) findViewById(R.id.layoutResponsabil)).setVisibility(View.VISIBLE);
 			((LinearLayout) findViewById(R.id.layoutClientRaft)).setVisibility(View.VISIBLE);
 			((LinearLayout) findViewById(R.id.layoutFactPaleti)).setVisibility(View.VISIBLE);
+		}
+	}
+
+	private void setTipTranspInfoAgent() {
+		if (UserInfo.getInstance().getTipUserSap().equals(Constants.tipInfoAv)) {
+			DateLivrare.getInstance().setTransport("TCLI");
+			spinnerTransp.setEnabled(false);
+
 		}
 	}
 
@@ -482,7 +498,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 				String tipTransp = spinnerTransp.getSelectedItem().toString();
 
 				if (tipTransp.toLowerCase().contains("trap")) {
-					if (dayNow == 5 && dayLivrare == 6) {
+					if ((dayNow == 5 || dayNow == 6) && dayLivrare == 6) {
 						showDialogLivrareSambata(calendar);
 						setDataLivrare(calendar);
 					} else {
@@ -568,7 +584,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
-
 
 	private void addListenerClientLaRaft() {
 
@@ -1472,6 +1487,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		dateLivrareInstance.setFactPaletSeparat(checkFactPaleti.isChecked());
 		dateLivrareInstance.setCamionDescoperit(chkCamionDescoperit.isChecked());
+		dateLivrareInstance.setBlocScara(txtBlocScara.getText().toString().trim());
 
 		if (radioText.isChecked() && adresaNouaExista())
 			return;

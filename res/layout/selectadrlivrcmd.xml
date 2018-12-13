@@ -194,6 +194,37 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:gravity="left"
+                    android:paddingLeft="5dip"
+                    android:text="Bloc, scara"
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
+
+                <EditText
+                    android:id="@+id/txtBlocScara"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginRight="180dip"
+                    android:layout_weight="0.25"
+                    android:gravity="left"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="65"
+                    android:singleLine="true"
+                    android:textSize="18sp" />
+            </LinearLayout>            
+            
+            
+            <LinearLayout
                 android:id="@+id/layoutHarta"
                 android:layout_width="match_parent"
                 android:layout_height="60dip"
