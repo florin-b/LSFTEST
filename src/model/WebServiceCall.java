@@ -59,14 +59,10 @@ public class WebServiceCall extends AsyncTask<Void, Void, String> {
 			HttpTransportSE androidHttpTransport = new HttpTransportSE(ConnectionStrings.getInstance().getUrl(), 60000);
 
 			List<HeaderProperty> headerList = new ArrayList<HeaderProperty>();
-			headerList.add(new HeaderProperty("Authorization", "Basic "
-					+ org.kobjects.base64.Base64.encode("bflorin:bflorin".getBytes())));
-			androidHttpTransport
-					.call(ConnectionStrings.getInstance().getNamespace() + methodName, envelope, headerList);
+			headerList.add(new HeaderProperty("Authorization", "Basic " + org.kobjects.base64.Base64.encode("bflorin:bflorin".getBytes())));
+			androidHttpTransport.call(ConnectionStrings.getInstance().getNamespace() + methodName, envelope, headerList);
 			Object result = envelope.getResponse();
-			
-			
-			
+
 			response = result.toString();
 		} catch (Exception e) {
 			errMessage = e.getMessage();
