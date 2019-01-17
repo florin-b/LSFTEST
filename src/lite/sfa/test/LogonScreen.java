@@ -105,9 +105,11 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		etUsername.setText("androsd");
 		etPassword.setText("112");
 
-		// etUsername.setText("SIONITA");
-		// etPassword.setText("SURY76");
-
+		
+		
+		etUsername.setText("SIONITA");
+		etPassword.setText("R5JNA3");
+/*	
 		etUsername.setText("VRATA"); //
 		etPassword.setText("TG2dR7");
 
@@ -117,6 +119,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		etUsername.setText("TDUMITRU"); // CVR
 		etPassword.setText("d6hPY9");
 
+		
+	
 		etUsername.setText("IBUGACIU1"); //
 		etPassword.setText("j8ZPTD");
 
@@ -125,7 +129,12 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 
 		etUsername.setText("CGRIGORAS1"); //
 		etPassword.setText("267Jvj");
+		
+*/		
 
+		etUsername.setText("LTROFIN");
+		etPassword.setText("tXyv4W");
+		
 		globalMyIP = getIPConnection();
 
 		checkBundleExtra();

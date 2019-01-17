@@ -176,6 +176,9 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 	public static String diviziiClient;
 	private TextView labelAgentClient;
 	private Spinner spinnerAgenti;
+	private LinearLayout layoutCnp;
+	private TextView labelCui_Cnp, labelCodJ;
+	private EditText textCui_Cnp, textCodJ;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -348,6 +351,15 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 			layoutTipClient = (LinearLayout) v.findViewById(R.id.layoutTipClient);
 			layoutTipClient.setVisibility(View.GONE);
+			
+			layoutCnp = (LinearLayout) v.findViewById(R.id.layoutCnp);
+			layoutCnp.setVisibility(View.GONE);
+			
+			labelCui_Cnp = (TextView) v.findViewById(R.id.labelCui_Cnp);
+			textCui_Cnp = (EditText) v.findViewById(R.id.txtCui_Cnp);
+			
+			labelCodJ= (TextView) v.findViewById(R.id.labelCodJ);
+			textCodJ = (EditText) v.findViewById(R.id.txtCodJ);
 
 			radioClientPF = (RadioButton) v.findViewById(R.id.radioClientPF);
 			radioClientPJ = (RadioButton) v.findViewById(R.id.radioClientPJ);
@@ -364,6 +376,9 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
 					|| UserInfo.getInstance().getTipAcces().equals("44") || UserInfo.getInstance().getTipAcces().equals("39")) {
 				layoutTipClient.setVisibility(View.VISIBLE);
+				
+				layoutCnp.setVisibility(View.VISIBLE);
+				
 
 			} else {
 				addListenerTextSelClient();
@@ -392,6 +407,13 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 	}
 
+	
+	private void setTipClientLabels(String tipClient)
+	{
+		
+	}
+	
+	
 	private void setupSpinnerIndoire() {
 
 		String[] indoireValues = { "Tip prelucrare fier-beton 6 m", "TAIERE", "INDOIRE" };

@@ -16,7 +16,7 @@ public class ConnectionStrings {
 	private ConnectionStrings() {
 		
 		//ARBSQ
-		myUrl = "http://10.1.0.58/AndroidWebServices/TESTService.asmx";
+		myUrl = "http://10.1.0.57/AndroidWebServices/TESTService.asmx";
 		
 		//IIS Test
 		//myUrl = "http://10.1.0.57/AndroidWebServices/TESTService.asmx";

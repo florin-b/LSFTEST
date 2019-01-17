@@ -119,6 +119,73 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutCnp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <TextView
+                    android:id="@+id/labelCui_Cnp"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginLeft="3dip"
+                    android:gravity="left"
+                    android:text="Cnp"
+                    android:textColor="@color/detColor4"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/txtCui_Cnp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_weight="0.1"
+                    android:background="@drawable/edittext_style_1"
+                    android:gravity="left"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="65"
+                    android:nextFocusDown="@+id/txtTelefonCLP"
+                    android:singleLine="true"
+                    android:textColor="@color/editTextColor1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/labelCodJ"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginLeft="30dp"
+                    android:layout_weight="0.05"
+                    android:gravity="left"
+                    android:text="Nr. inreg."
+                    android:textColor="@color/detColor4"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/txtCodJ"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_weight="0.1"
+                    android:background="@drawable/edittext_style_1"
+                    android:gravity="left"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="65"
+                    android:nextFocusDown="@+id/txtTelefonCLP"
+                    android:singleLine="true"
+                    android:textColor="@color/editTextColor1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.11" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/layoutAdr1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
